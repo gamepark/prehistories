@@ -1,2 +1,2 @@
-export {default} from './MyBoardGame'
-export {MyBoardGameOptionsDescription} from './MyBoardGameOptions'
+export {default} from './Prehistories'
+export {PrehistoriesOptionsDescription} from './PrehistoriesOptions'
