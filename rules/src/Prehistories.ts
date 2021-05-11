@@ -1,40 +1,41 @@
-import {SecretInformation, SequentialGame} from '@gamepark/rules-api'
+import {Game, SecretInformation, SimultaneousGame} from '@gamepark/rules-api'
+import { shuffle } from 'lodash'
 import GameState from './GameState'
 import GameView from './GameView'
+import { getGoalsArray } from './material/Goals'
+import { getPolyominoList } from './material/Polyominos'
 import {drawCard} from './moves/DrawCard'
 import Move from './moves/Move'
 import MoveType from './moves/MoveType'
 import MoveView from './moves/MoveView'
 import {spendGold} from './moves/SpendGold'
 import PlayerColor from './PlayerColor'
-import {isGameOptions, PrehistoriesOptions} from './PrehistoriesOptions'
+import PlayerState, { setupCave, setupDeck } from './PlayerState'
+import {isGameOptions, PrehistoriesOptions, PrehistoriesPlayerOptions} from './PrehistoriesOptions'
+import Phase from './types/Phase'
+import Polyomino from './types/Polyomino'
 
-/**
- * Your Board Game rules must extend either "SequentialGame" or "SimultaneousGame".
- * When there is at least on situation during the game where multiple players can act at the same time, it is a "SimultaneousGame"
- * If the game contains information that players does not know (dices, hidden cards...), it must implement "IncompleteInformation".
- * If the game contains information that some players know, but the other players does not, it must implement "SecretInformation" instead.
- * Later on, you can also implement "Competitive", "Undo", "TimeLimit" and "Eliminations" to add further features to the game.
- */
-export default class Prehistories extends SequentialGame<GameState, Move, PlayerColor>
+export default class Prehistories extends SimultaneousGame<GameState, Move, PlayerColor>
   implements SecretInformation<GameState, GameView, Move, MoveView, PlayerColor> {
-  /**
-   * This constructor is called when the game "restarts" from a previously saved state.
-   * @param state The state of the game
-   */
+
   constructor(state: GameState)
-  /**
-   * This constructor is called when a new game is created. If your game has options, or a variable number of players, it will be provided here.
-   * @param options The options of the new game
-   */
   constructor(options: PrehistoriesOptions)
-  /**
-   * In here you must code the construction of your class. Use a "typeguard" to distinguish a new game from a restored game.
-   * @param arg The state of the game, or the options when starting a new game
-   */
   constructor(arg: GameState | PrehistoriesOptions) {
     if (isGameOptions(arg)) {
-      super({players: arg.players.map(player => ({color: player.id})), round: 1, deck: []})
+
+      const game:GameState = {
+        players: setupPlayers(arg.players),
+        tilesDeck: setupTilesDeck(),
+        huntingBoard: [],
+        phase: Phase.Initiative ,
+        activePlayer:undefined ,
+        playerOrder: undefined,
+        goals: []
+      }
+
+      //game.huntingBoard = setupHuntingBoard(game)      Haven't the board to setup it yet
+      game.goals = setupGoals(game, arg.isExpertGame)
+      super(game)
     } else {
       super(arg)
     }
@@ -117,7 +118,7 @@ export default class Prehistories extends SequentialGame<GameState, Move, Player
    * @return What a person can see from the game state
    */
   getView(): GameView {
-    return {...this.state, deck: this.state.deck.length}
+    return {...this.state, deck: this.state.tilesDeck.length}
   }
 
   /**
@@ -128,7 +129,7 @@ export default class Prehistories extends SequentialGame<GameState, Move, Player
   getPlayerView(playerId: PlayerColor): GameView {
     console.log(playerId)
     // Here we could, for example, return a "playerView" with only the number of cards in hand for the other player only.
-    return {...this.state, deck: this.state.deck.length}
+    return {...this.state, deck: this.state.tilesDeck.length}
   }
 
   /**
@@ -154,9 +155,32 @@ export default class Prehistories extends SequentialGame<GameState, Move, Player
    */
   getPlayerMoveView(move: Move, playerId: PlayerColor): MoveView {
     console.log(playerId)
-    if (move.type === MoveType.DrawCard && move.playerId === playerId) {
-      return {...move, card: this.state.deck[0]}
-    }
     return move
   }
+}
+
+function setupPlayers(players: PrehistoriesPlayerOptions[]): PlayerState[] {
+  return players.map((options) => ({
+    color:options.id, cave:setupCave(options.id), totemTokens:8, deck:setupDeck(options.id), discard:[], hand:[], goalsMade:[]
+  }))
+}
+
+function setupTilesDeck():Polyomino[][]{
+  return [shuffle(getPolyominoList(1)),
+          shuffle(getPolyominoList(2)),
+          shuffle(getPolyominoList(3)),
+          shuffle(getPolyominoList(4)),
+          shuffle(getPolyominoList(5))]
+}
+
+function setupGoals(game:GameState, isExpertGame:boolean):number[]{
+  const goalsIds = shuffle(Array.from(getGoalsArray(isExpertGame).keys()))
+  const numberOfGoals:number = game.players.length < 4 ? 4 : 5
+  const result:number[] = []
+  result.push(goalsIds[0])
+
+  for (let i=1;i<numberOfGoals;i++){
+    result.push(goalsIds.find(goalId => goalId > result.length || getGoalsArray(isExpertGame)[goalId].value !== result[goalId])!)
+  }
+  return result
 }
