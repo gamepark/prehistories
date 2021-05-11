@@ -2,6 +2,7 @@ import { shuffle } from 'lodash';
 import { getColoredDeck } from './material/Hunters';
 import PlayerColor from './PlayerColor'
 import Animal from './types/Animal';
+
 import Card from './types/Card';
 import Polyomino from './types/Polyomino';
 import Square from './types/Square';
