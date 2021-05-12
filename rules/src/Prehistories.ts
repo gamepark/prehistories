@@ -3,14 +3,14 @@ import { shuffle } from 'lodash'
 import GameState from './GameState'
 import GameView from './GameView'
 import { getGoalsArray } from './material/Goals'
-import { allPolyominos, getPolyominoList, PolyominosType0List } from './material/Polyominos'
+import { allPolyominos} from './material/Polyominos'
 import {drawCard} from './moves/DrawCard'
 import Move from './moves/Move'
 import MoveType from './moves/MoveType'
 import MoveView from './moves/MoveView'
 import {spendGold} from './moves/SpendGold'
 import PlayerColor from './PlayerColor'
-import PlayerState, { setupDeck } from './PlayerState'
+import PlayerState, { setupCave, setupDeck } from './PlayerState'
 import {isGameOptions, PrehistoriesOptions, PrehistoriesPlayerOptions} from './PrehistoriesOptions'
 import Phase from './types/Phase'
 
@@ -159,7 +159,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
 
 function setupPlayers(players: PrehistoriesPlayerOptions[]): PlayerState[] {
   return players.map((options) => ({
-    color:options.id, cave:[], totemTokens:8, deck:setupDeck(options.id), discard:[], hand:[], goalsMade:[]
+    color:options.id, cave:setupCave(options.id), totemTokens:8, deck:setupDeck(options.id), discard:[], hand:[], goalsMade:[]
   }))
 }
 
@@ -168,19 +168,22 @@ function setupTilesDeck():number[][]{
     
   return [shuffle(polyominosArray.filter(p => p > 1 && p < 27)),
           shuffle(polyominosArray.filter(p => p > 26 && p < 52)),
-          shuffle(polyominosArray.filter(p => p > 51 && p < 77)),
-          shuffle(polyominosArray.filter(p => p > 76 && p < 102)),
-          shuffle(polyominosArray.filter(p => p > 101 && p < 127))]
+          shuffle(polyominosArray.filter(p => p > 51 && p < 62)),
+          shuffle(polyominosArray.filter(p => p > 61 && p < 72)),
+          shuffle(polyominosArray.filter(p => p > 71 && p < 77))]
 }
 
 function setupGoals(game:GameState, isExpertGame:boolean):number[]{
   const goalsIds = shuffle(Array.from(getGoalsArray(isExpertGame).keys()))
   const numberOfGoals:number = game.players.length < 4 ? 4 : 5
-  const result:number[] = []
-  result.push(goalsIds[0])
-
-  for (let i=1;i<numberOfGoals;i++){
-    result.push(goalsIds.find(goalId => goalId > result.length || getGoalsArray(isExpertGame)[goalId].value !== result[goalId])!)
+  if (isExpertGame !== true){
+    return numberOfGoals === 4 ? [goalsIds[0],goalsIds[1],goalsIds[2],goalsIds[3]] : [goalsIds[0],goalsIds[1],goalsIds[2],goalsIds[3],goalsIds[4]]
+  } else {
+    const result : number[] = [goalsIds[0]]
+    goalsIds.forEach(elem => {
+      result.every( res => getGoalsArray(isExpertGame)[elem].idConflict !== getGoalsArray(isExpertGame)[res].idConflict ) && result.push(elem)
+    })
+    return numberOfGoals === 4 ? [result[0],result[1],result[2],result[3]] : [result[0],result[1],result[2],result[3],result[4]]
   }
-  return result
+  
 }

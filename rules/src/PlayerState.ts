@@ -41,7 +41,7 @@ export function setupCave(color:PlayerColor):PaintedPolyominos[]{
       }
     case PlayerColor.Red :
       {
-        cave.push({polyomino:polyominosArray[1],side:0, x:2, y:5})
+        cave.push({polyomino:polyominosArray[1],side:0, x:1, y:4})
         cave.push({polyomino:polyominosArray[1],side:0, x:5, y:1})
         cave.push({polyomino:polyominosArray[0],side:0, x:3, y:3})
         break
@@ -55,9 +55,9 @@ export function setupCave(color:PlayerColor):PaintedPolyominos[]{
       }
     case PlayerColor.White :
       {
-        cave.push({polyomino:polyominosArray[1],side:0, x:2, y:5})
-        cave.push({polyomino:polyominosArray[1],side:0, x:5, y:1})
-        cave.push({polyomino:polyominosArray[0],side:0, x:3, y:3})
+        cave.push({polyomino:polyominosArray[1],side:0, x:1, y:2})
+        cave.push({polyomino:polyominosArray[1],side:0, x:5, y:5})
+        cave.push({polyomino:polyominosArray[0],side:0, x:3, y:4})
         break
       }
   }
