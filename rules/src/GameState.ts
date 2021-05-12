@@ -8,12 +8,11 @@ import Polyomino from './types/Polyomino'
  */
 type GameState = {
   players: PlayerState[],
-  tilesDeck : Polyomino[][],
-  huntingBoard : Polyomino[],
-  phase : Phase | undefined, 
-  activePlayer : PlayerColor | undefined,
-  playerOrder : PlayerColor[] | undefined,
-  goals : number[]
+  tilesDeck : number[][],
+  huntingBoard : number[],
+  goals : number[],
+  phase? : Phase, 
+  activePlayer?: PlayerColor
 }
 
 export default GameState

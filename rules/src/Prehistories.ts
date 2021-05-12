@@ -3,17 +3,16 @@ import { shuffle } from 'lodash'
 import GameState from './GameState'
 import GameView from './GameView'
 import { getGoalsArray } from './material/Goals'
-import { getPolyominoList } from './material/Polyominos'
+import { allPolyominos, getPolyominoList, PolyominosType0List } from './material/Polyominos'
 import {drawCard} from './moves/DrawCard'
 import Move from './moves/Move'
 import MoveType from './moves/MoveType'
 import MoveView from './moves/MoveView'
 import {spendGold} from './moves/SpendGold'
 import PlayerColor from './PlayerColor'
-import PlayerState, { setupCave, setupDeck } from './PlayerState'
+import PlayerState, { setupDeck } from './PlayerState'
 import {isGameOptions, PrehistoriesOptions, PrehistoriesPlayerOptions} from './PrehistoriesOptions'
 import Phase from './types/Phase'
-import Polyomino from './types/Polyomino'
 
 export default class Prehistories extends SimultaneousGame<GameState, Move, PlayerColor>
   implements SecretInformation<GameState, GameView, Move, MoveView, PlayerColor> {
@@ -27,10 +26,9 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         players: setupPlayers(arg.players),
         tilesDeck: setupTilesDeck(),
         huntingBoard: [],
+        goals: [],
         phase: Phase.Initiative ,
-        activePlayer:undefined ,
-        playerOrder: undefined,
-        goals: []
+        activePlayer:undefined
       }
 
       //game.huntingBoard = setupHuntingBoard(game)      Haven't the board to setup it yet
@@ -161,16 +159,18 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
 
 function setupPlayers(players: PrehistoriesPlayerOptions[]): PlayerState[] {
   return players.map((options) => ({
-    color:options.id, cave:setupCave(options.id), totemTokens:8, deck:setupDeck(options.id), discard:[], hand:[], goalsMade:[]
+    color:options.id, cave:[], totemTokens:8, deck:setupDeck(options.id), discard:[], hand:[], goalsMade:[]
   }))
 }
 
-function setupTilesDeck():Polyomino[][]{
-  return [shuffle(getPolyominoList(1)),
-          shuffle(getPolyominoList(2)),
-          shuffle(getPolyominoList(3)),
-          shuffle(getPolyominoList(4)),
-          shuffle(getPolyominoList(5))]
+function setupTilesDeck():number[][]{
+  const polyominosArray:number[] = Array.from(allPolyominos.keys())
+    
+  return [shuffle(polyominosArray.filter(p => p > 1 && p < 27)),
+          shuffle(polyominosArray.filter(p => p > 26 && p < 52)),
+          shuffle(polyominosArray.filter(p => p > 51 && p < 77)),
+          shuffle(polyominosArray.filter(p => p > 76 && p < 102)),
+          shuffle(polyominosArray.filter(p => p > 101 && p < 127))]
 }
 
 function setupGoals(game:GameState, isExpertGame:boolean):number[]{
