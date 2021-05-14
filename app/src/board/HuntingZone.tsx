@@ -11,7 +11,7 @@ const HuntingZone : FC<Props> = ({game}) => {
 
     return(
 
-        <div css={[HuntingZonePosition, HuntingZoneStyle]}>
+        <div css={[huntingZonePosition, huntingZoneStyle]}>
             Message De Paix : {game.goals[0]}
         </div>
 
@@ -19,7 +19,7 @@ const HuntingZone : FC<Props> = ({game}) => {
 
 }
 
-const HuntingZonePosition = css`
+const huntingZonePosition = css`
     position:absolute;
     top:7%;
     left:0;
@@ -27,7 +27,7 @@ const HuntingZonePosition = css`
     height:93%;
 `
 
-const HuntingZoneStyle = css`
+const huntingZoneStyle = css`
     background-color:green;
     border: 0.2em solid black;
 `

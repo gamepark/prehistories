@@ -3,6 +3,7 @@ import {css, keyframes} from '@emotion/react'
 import GameView from '@gamepark/prehistories/GameView'
 import {Letterbox} from '@gamepark/react-components'
 import HuntingZone from './board/HuntingZone'
+import VariableObjectives from './board/VariableObjectives'
 
 type Props = {
   game: GameView
@@ -16,6 +17,9 @@ export default function GameDisplay({game}: Props) {
                     top:0;left:0;width:100%;height:100%;`}>
                       
         <HuntingZone game={game} />
+        <VariableObjectives numberOfPlayers={game.players.length}
+                            goals={game.goals}            
+        />
 
       </div>
     </Letterbox>
