@@ -3758,6 +3758,14 @@ available-typed-arrays@^1.0.2:
   dependencies:
     array-filter "^1.0.0"
 
+awesome-react-avataaars@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/awesome-react-avataaars/-/awesome-react-avataaars-1.0.3.tgz#8a1e2f4ad0ef0d4747df3b669f116cbc71279fb0"
+  integrity sha512-wnAYMIoZFuiaS+OyQ02ikljKqxj+YVpkaXCn3lFL9ZvVSFWSsjgmTm+rFyrIW6r5dQXoCY2U8gKc+QGJY1cu+Q==
+  dependencies:
+    prop-types "^15.6.0"
+    uuid "^8.3.2"
+
 aws-sign2@~0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/aws-sign2/-/aws-sign2-0.7.0.tgz#b46e890934a9591f2d2f6f86d7e6a9f1b3fe76a8"
@@ -12093,7 +12101,7 @@ promzard@^0.3.0:
   dependencies:
     read "1"
 
-prop-types@^15.7.2:
+prop-types@^15.6.0, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -14882,7 +14890,7 @@ uuid@^3.0.1, uuid@^3.3.2, uuid@^3.4.0:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
 
-uuid@^8.3.0:
+uuid@^8.3.0, uuid@^8.3.2:
   version "8.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==

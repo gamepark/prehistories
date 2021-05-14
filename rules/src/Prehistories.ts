@@ -31,7 +31,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         activePlayer:undefined
       }
 
-      //game.huntingBoard = setupHuntingBoard(game)      Haven't the board to setup it yet
+      game.huntingBoard = setupHuntingBoard(game)
       game.goals = setupGoals(game, arg.isExpertGame)
       super(game)
     } else {
@@ -186,4 +186,12 @@ function setupGoals(game:GameState, isExpertGame:boolean):number[]{
     return numberOfGoals === 4 ? [result[0],result[1],result[2],result[3]] : [result[0],result[1],result[2],result[3],result[4]]
   }
   
+}
+
+function setupHuntingBoard(game:GameState):number[]{
+  if(game.players.length < 4){
+    return([game.tilesDeck[0].pop()!, game.tilesDeck[1].pop()!, game.tilesDeck[2].pop()!, game.tilesDeck[3].pop()!, game.tilesDeck[4].pop()!]) 
+  } else {
+    return([game.tilesDeck[0].pop()!, game.tilesDeck[0].pop()!, game.tilesDeck[1].pop()!, game.tilesDeck[1].pop()!, game.tilesDeck[2].pop()!, game.tilesDeck[3].pop()!, game.tilesDeck[4].pop()!])
+  }
 }
