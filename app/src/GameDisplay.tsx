@@ -36,7 +36,7 @@ export default function GameDisplay({game}: Props) {
           />
         )}
 
-        <PlayerBoard color={playerId}
+        <PlayerBoard player={game.players[1]}
         
         />
 

@@ -1,21 +1,21 @@
 /** @jsxImportSource @emotion/react */
 
 import { css } from "@emotion/react";
-import PlayerColor from "@gamepark/prehistories/PlayerColor";
+import PlayerState from "@gamepark/prehistories/PlayerState";
 import { FC } from "react";
 import Cave from "./Cave";
 
 type Props = {
-    color:PlayerColor|undefined
+    player:PlayerState
 }
 
-const PlayerBoard : FC<Props> = ({color}) => {
+const PlayerBoard : FC<Props> = ({player}) => {
 
     return(
 
         <div css={[playerBoardPosition, playerBoardStyle]}>
 
-            <Cave color={color} />
+            <Cave player={player} />
 
         </div>
 
