@@ -33,6 +33,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
 
       game.huntingBoard = setupHuntingBoard(game)
       game.goals = setupGoals(game, arg.isExpertGame)
+      setupHandPlayer(game.players)
       super(game)
     } else {
       super(arg)
@@ -194,4 +195,12 @@ function setupHuntingBoard(game:GameState):number[]{
   } else {
     return([game.tilesDeck[0].pop()!, game.tilesDeck[0].pop()!, game.tilesDeck[1].pop()!, game.tilesDeck[1].pop()!, game.tilesDeck[2].pop()!, game.tilesDeck[3].pop()!, game.tilesDeck[4].pop()!])
   }
+}
+
+function setupHandPlayer(players:PlayerState[]):void{
+  players.forEach(p => {
+        for(let i=0;i<3;i++){
+          p.hand.push(p.deck.pop()!)
+        }
+    })
 }

@@ -62,8 +62,8 @@ const GreenHunters:Card[] = [
 ]
 
 const WhiteHunters:Card[] = [
-    {color:PlayerColor.White, power:1, speed:56},
     {color:PlayerColor.White, power:1, speed:55},
+    {color:PlayerColor.White, power:1, speed:56},
     {color:PlayerColor.White, power:2, speed:41},
     {color:PlayerColor.White, power:2, speed:50},
     {color:PlayerColor.White, power:3, speed:32},

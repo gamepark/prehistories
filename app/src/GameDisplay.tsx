@@ -36,7 +36,7 @@ export default function GameDisplay({game}: Props) {
           />
         )}
 
-        <PlayerBoard player={game.players[1]}
+        <PlayerBoard player={game.players[0]}
         
         />
 

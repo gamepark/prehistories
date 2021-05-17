@@ -23,12 +23,12 @@ const Cave : FC<Props> = ({player}) => {
 
                     paint.polyomino < 2 
                         ? <div css = {[tilePosition(paint.x, paint.y), tileSize(paint.polyomino, paint.side)]} key = {index}> 
-                            <Polyomino  polyomino={paint.polyomino}            // ADD SOME CSS HERE FOR POSITION AND SIZE
+                            <Polyomino  polyomino={paint.polyomino} 
                                         side={paint.side}
                                         color={player.color} />
                         </div>
                         : <div css = {[tilePosition(paint.x, paint.y), tileSize(paint.polyomino, paint.side)]} key = {index}>
-                            <Polyomino polyomino={paint.polyomino}            // ADD SOME CSS HERE FOR POSITION AND SIZE
+                            <Polyomino polyomino={paint.polyomino} 
                                        side={paint.side} />
                         </div>
                 )}
@@ -41,7 +41,7 @@ const Cave : FC<Props> = ({player}) => {
 
 }
 
-const tileSize = (polyomino:number, side:number) =>`
+export const tileSize = (polyomino:number, side:number) =>`
 ${polyomino <= 26 && `width:14.2857%;height:14.2857%;`};
 ${polyomino > 26 && polyomino <= 51 && side === 0 && `width:28.5714%;height:14.2857%;`};
 ${polyomino > 26 && polyomino <= 51 && side === 1 && `width:14.2857%;height:28.5714%;`};

@@ -183,4 +183,10 @@ const Images = {
 
 }
 
+export const BlueHunters = [hunterBlue1_1, hunterBlue1_2, hunterBlue2_1, hunterBlue2_2, hunterBlue3_1, hunterBlue3_2, hunterBlue4_1, hunterBlue4_2, hunterBlue5_1, hunterBlue5_2, hunterBlue6_1, hunterBlue6_2]
+export const GreenHunters = [hunterGreen1_1, hunterGreen1_2, hunterGreen2_1, hunterGreen2_2, hunterGreen3_1, hunterGreen3_2, hunterGreen4_1, hunterGreen4_2, hunterGreen5_1, hunterGreen5_2, hunterGreen6_1, hunterGreen6_2]
+export const RedHunters = [hunterRed1_1, hunterRed1_2, hunterRed2_1, hunterRed2_2, hunterRed3_1, hunterRed3_2, hunterRed4_1, hunterRed4_2, hunterRed5_1, hunterRed5_2, hunterRed6_1, hunterRed6_2]
+export const WhiteHunters = [hunterWhite1_1, hunterWhite1_2, hunterWhite2_1, hunterWhite2_2, hunterWhite3_1, hunterWhite3_2, hunterWhite4_1, hunterWhite4_2, hunterWhite5_1, hunterWhite5_2, hunterWhite6_1, hunterWhite6_2]
+export const YellowHunters = [hunterYellow1_1, hunterYellow1_2, hunterYellow2_1, hunterYellow2_2, hunterYellow3_1, hunterYellow3_2, hunterYellow4_1, hunterYellow4_2, hunterYellow5_1, hunterYellow5_2, hunterYellow6_1, hunterYellow6_2]
+
 export default Images
