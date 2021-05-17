@@ -8,6 +8,8 @@ import Cave from "./Cave";
 import { getTotem } from "./PlayerPanel";
 import Card from './Card'
 import { getColoredDeck } from "@gamepark/prehistories/material/Hunters";
+import PlayerColor from "@gamepark/prehistories/PlayerColor";
+import Images from "../utils/Images";
 
 type Props = {
     player:PlayerState
@@ -42,12 +44,51 @@ const PlayerBoard : FC<Props> = ({player}) => {
                 )}
 
             </div>
+
+            <div css={[discardZonePosition, discardZoneStyle]}>
+
+                {player.discard.length !== 0 && 
+                    <Card color={player.color}
+                          power={getColoredDeck(player.color)[player.discard[player.discard.length]].power}
+                          speed={getColoredDeck(player.color)[player.discard[player.discard.length]].speed}
+                    />}
+
+            </div>
+
+            <div css={[deckZonePosition, deckZoneStyle(getCardBack(player.color))]}> </div>
             
         </div>
 
     )
     
 }
+
+const deckZonePosition = css`
+position:absolute;
+bottom:0%;
+left:0%;
+width:12%;
+height:18%;
+`
+const deckZoneStyle = (image:string) => css`
+border:0.5em white dashed;
+
+background-image: url(${image});
+background-size: contain;
+background-repeat: no-repeat;
+background-position: top;
+`
+
+const discardZonePosition = css`
+position:absolute;
+bottom:0%;
+right:0%;
+width:12%;
+height:18%;
+`
+const discardZoneStyle = css`
+border:0.5em white dashed;
+`
 
 const cardPosition = (position:number, handLength:number) => css`
 width:20%;
@@ -100,5 +141,20 @@ height:93%;
 const playerBoardStyle = css`
 border:0.1em solid black;
 `
+
+function getCardBack(color:PlayerColor):string{
+    switch (color){
+        case PlayerColor.Blue :
+            return Images.cardBackBlue
+        case PlayerColor.Green :
+            return Images.cardBackGreen
+        case PlayerColor.Red :
+            return Images.cardBackRed
+        case PlayerColor.White :
+            return Images.cardBackWhite
+        case PlayerColor.Yellow :
+            return Images.cardBackYellow
+    }
+}
 
 export default PlayerBoard

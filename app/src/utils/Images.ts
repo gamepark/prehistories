@@ -6,6 +6,11 @@ import caveGreen from '../images/CaveGreen.png'
 import caveRed from '../images/CaveRed.png'
 import caveWhite from '../images/CaveWhite.png'
 import caveYellow from '../images/CaveYellow.png'
+import cardBackBlue from '../images/HunterBlueBack.jpg'
+import cardBackWhite from '../images/HunterWhiteBack.jpg'
+import cardBackGreen from '../images/HunterGreenBack.jpg'
+import cardBackRed from '../images/HunterRedBack.jpg'
+import cardBackYellow from '../images/HunterYellowBack.jpg'
 import hunterBlue1_1 from '../images/HunterBlue1-1.png'
 import hunterBlue1_2 from '../images/HunterBlue1-2.png'
 import hunterBlue2_1 from '../images/HunterBlue2-1.png'
@@ -166,6 +171,7 @@ const Images = {
     box,
     huntingBoard23Players, huntingBoard45Players,
     caveBlue, caveGreen, caveRed, caveWhite, caveYellow,
+    cardBackBlue, cardBackWhite, cardBackGreen, cardBackRed, cardBackYellow, 
     hunterBlue1_1, hunterBlue1_2, hunterBlue2_1, hunterBlue2_2, hunterBlue3_1, hunterBlue3_2, hunterBlue4_1, hunterBlue4_2, hunterBlue5_1, hunterBlue5_2, hunterBlue6_1, hunterBlue6_2,
     hunterWhite1_1, hunterWhite1_2, hunterWhite2_1, hunterWhite2_2, hunterWhite3_1, hunterWhite3_2, hunterWhite4_1, hunterWhite4_2, hunterWhite5_1, hunterWhite5_2, hunterWhite6_1, hunterWhite6_2, 
     hunterGreen1_1, hunterGreen1_2, hunterGreen2_1, hunterGreen2_2, hunterGreen3_1, hunterGreen3_2, hunterGreen4_1, hunterGreen4_2, hunterGreen5_1, hunterGreen5_2, hunterGreen6_1, hunterGreen6_2,
