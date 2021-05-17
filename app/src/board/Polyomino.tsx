@@ -1,19 +1,19 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
-import { FC } from "react";
+import { FC, HTMLAttributes } from "react";
 import Images from "../utils/Images";
 
 type Props = {
     polyomino:number
     color?:PlayerColor
     side:0|1
-}
+} & Omit<HTMLAttributes<HTMLDivElement>, 'color'>
 
-const Polyomino : FC<Props> = ({polyomino, side, color}) => {
+const Polyomino : FC<Props> = ({polyomino, side, color, ...props}) => {
 
     return(
-        <div css={[polyominoSize, polyominoStyle(color ? getColoredPolyominoImage(polyomino, color!): getPolyominoImage(polyomino, side))]}></div>
+        <div {...props} css={[polyominoSize, polyominoStyle(color ? getColoredPolyominoImage(polyomino, color!): getPolyominoImage(polyomino, side))]}></div>
     )
 
 }
