@@ -18,7 +18,6 @@ export default function GameDisplay({game}: Props) {
 
   const playerId = usePlayerId<PlayerColor>()
   const players = useMemo(() => getPlayersStartingWith(game, playerId), [game, playerId]) 
-
   return (
     <Letterbox css={letterBoxStyle} top={0}>
       <div css={css`position: absolute;

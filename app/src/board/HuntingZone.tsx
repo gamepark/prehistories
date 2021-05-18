@@ -39,7 +39,7 @@ top:${getTop(position, numberOfPlayers)}%;
 left:${getLeft(position, numberOfPlayers)}%;
 width:${getWidth(position, numberOfPlayers)}%;
 height:${getHeight(position, numberOfPlayers)}%;
-transform:rotateZ(${numberOfPlayers > 4 && position === 2 ? 90 : 0}deg)
+transform:rotateZ(${getRotate(position, numberOfPlayers)}deg);
 `
 
 const huntingZonePosition = css`
@@ -71,15 +71,15 @@ background-position: top;
 function getTop(pos:number, players:number):number{
     switch (pos){
         case 0 :
-            return players < 4 ? 10 : 4
+            return players < 4 ? 7 : 4
         case 1 :
-            return players < 4 ? 20 : 15
+            return players < 4 ? 14 : 15
         case 2 :
-            return players < 4 ? 30 : 7
+            return players < 4 ? 38 : 5.5
         case 3 :
-            return players < 4 ? 40 : 21
+            return players < 4 ? 64 : 21
         case 4 :
-            return players < 4 ? 50 : 41
+            return players < 4 ? 80 : 41
         case 5 :
             return players < 4 ? 0 : 67
         case 6 :
@@ -92,19 +92,19 @@ function getTop(pos:number, players:number):number{
 function getLeft(pos:number, players:number):number{
     switch (pos){
         case 0 :
-            return players < 4 ? 10 : 8
+            return players < 4 ? 20 : 10
         case 1 :
-            return players < 4 ? 60 : 6
+            return players < 4 ? 53 : 4
         case 2 :
-            return players < 4 ? 40 : 45
+            return players < 4 ? 44 : 43
         case 3 :
-            return players < 4 ? 20 : 70
+            return players < 4 ? 6 : 72
         case 4 :
-            return players < 4 ? 60 : 40
+            return players < 4 ? 68 : 45
         case 5 :
             return players < 4 ? 0 : 5
         case 6 :
-            return players < 4 ? 0 : 62
+            return players < 4 ? 0 : 68
         default :
             return 0
     } 
@@ -115,7 +115,7 @@ function getWidth(pos:number, players:number):number{
         case 0 :
             return players < 4 ? 12 : 12
         case 1 :
-            return players < 4 ? 12 : 12
+            return players < 4 ? 24 : 12
         case 2 :
             return players < 4 ? 24 : 24
         case 3 :
@@ -150,6 +150,27 @@ function getHeight(pos:number, players:number):number{
         default :
             return 0
     }  
+}
+
+function getRotate(pos:number, players:number):number{
+        switch (pos){
+        case 0 :
+            return players < 4 ? -40 : -20
+        case 1 :
+            return players < 4 ? 30 : 8
+        case 2 :
+            return players < 4 ? -10 : 100
+        case 3 :
+            return players < 4 ? 20 : -15
+        case 4 :
+            return players < 4 ? -22 : -10
+        case 5 :
+            return players < 4 ? 0 : 20
+        case 6 :
+            return players < 4 ? 0 : -22
+        default :
+            return 0
+    } 
 }
 
 export default HuntingZone
