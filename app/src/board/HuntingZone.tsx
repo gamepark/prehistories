@@ -51,7 +51,7 @@ const huntingZonePosition = css`
 `
 
 const huntingZoneStyle = css`
-    background-color:green;
+
 `
 
 const bG23Players = css`

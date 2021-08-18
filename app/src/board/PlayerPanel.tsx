@@ -1,24 +1,31 @@
 /** @jsxImportSource @emotion/react */
 
 import { css } from "@emotion/react";
+import Move from "@gamepark/prehistories/moves/Move";
+import MoveType from "@gamepark/prehistories/moves/MoveType";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
-import PlayerState from "@gamepark/prehistories/PlayerState";
 import { getPlayerName } from "@gamepark/prehistories/PrehistoriesOptions";
-import { PlayerTimer, usePlayer } from "@gamepark/react-client";
+import Phase from "@gamepark/prehistories/types/Phase";
+import { PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
+import { PlayerTimer, usePlay, usePlayer, usePlayerId } from "@gamepark/react-client";
 import { FC, HTMLAttributes } from "react";
 import { useTranslation } from "react-i18next";
+import Button from "../utils/Button";
 import Images from "../utils/Images";
 import AvatarPanel from "./AvatarPanel";
 
 type Props = {
-    player: PlayerState,
+    player: PlayerView | PlayerViewSelf,
+    phase?:Phase
     position:number
 } & HTMLAttributes<HTMLDivElement>
 
-const PlayerPanel : FC<Props> = ({player:{color, totemTokens}, position, ...props}) => {
+const PlayerPanel : FC<Props> = ({player:{color, totemTokens, isReady}, position, phase, ...props}) => {
 
     const playerInfo = usePlayer(color)
     const {t} = useTranslation()
+    const playerId = usePlayerId<PlayerColor>()
+    const play = usePlay<Move>()
 
     return (
 
@@ -34,12 +41,25 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens}, position, ...prop
             </div>
             <PlayerTimer playerId={color} css={[TimerStyle]}/>
 
+            {displayValidationButton(phase, playerId, color, isReady) && <Button css={[validationButtonPosition]} onClick={() => {play({type:MoveType.TellYouAreReady, playerId:color})}} colorButton={color} >{t('Validate')}</Button> }
+
         
         </div>
 
     )
 
 }
+
+function displayValidationButton(phase:Phase|undefined, playerId:PlayerColor|undefined, color:PlayerColor, isReady:boolean|undefined):boolean{
+    return phase === Phase.Initiative && playerId === color && isReady !== true
+}
+
+const validationButtonPosition = css`
+    position:relative;
+    width:50%;
+    height:20%;
+    font-size:3em;
+`
 
 const playerPanelPosition = (position:number) => css`
     position:absolute;

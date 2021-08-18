@@ -1,4 +1,3 @@
-import PlayerColor from "../PlayerColor"
 import Face from "./Face"
 
 type Goal = {

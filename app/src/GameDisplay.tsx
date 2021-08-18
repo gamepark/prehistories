@@ -2,13 +2,14 @@
 import {css, keyframes} from '@emotion/react'
 import GameView from '@gamepark/prehistories/GameView'
 import PlayerColor from '@gamepark/prehistories/PlayerColor'
-import { usePlayer, usePlayerId } from '@gamepark/react-client'
+import { usePlay, usePlayerId } from '@gamepark/react-client'
 import {Letterbox} from '@gamepark/react-components'
 import { useMemo } from 'react'
 import HuntingZone from './board/HuntingZone'
 import Objectives from './board/Objectives'
 import PlayerBoard from './board/PlayerBoard'
 import PlayerPanel from './board/PlayerPanel'
+import SetCaveDisplayed, { setCaveDisplayed, setCaveDisplayedMove } from './localMoves/setCaveDisplayed'
 
 type Props = {
   game: GameView
@@ -18,6 +19,10 @@ export default function GameDisplay({game}: Props) {
 
   const playerId = usePlayerId<PlayerColor>()
   const players = useMemo(() => getPlayersStartingWith(game, playerId), [game, playerId]) 
+  const playerDisplayed = game.players.find(p => p.color === game.caveDisplayed)!
+
+  const playSetCaveDisplayed = usePlay<SetCaveDisplayed>()
+
   return (
     <Letterbox css={letterBoxStyle} top={0}>
       <div css={css`position: absolute;
@@ -32,10 +37,12 @@ export default function GameDisplay({game}: Props) {
           <PlayerPanel key={player.color}
                        position={index}
                        player = {player}
+                       onClick = {() => playSetCaveDisplayed(setCaveDisplayedMove(player.color), {local:true})}
+                       phase = {game.phase}
           />
         )}
 
-        <PlayerBoard player={game.players[0]}
+        <PlayerBoard player={playerDisplayed}
         
         />
 

@@ -11,6 +11,7 @@ export default interface PlayerState {
   discard:number[]
   hand:number[]
   deck:number[]
+  played:number[]
   goalsMade:number[]
   tilesInHand?:number[]
   injuries?:number
@@ -63,3 +64,4 @@ export function setupCave(color:PlayerColor):PaintedPolyominos[]{
   }
   return cave
 }
+

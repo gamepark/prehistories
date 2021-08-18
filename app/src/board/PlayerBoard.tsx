@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
 import { css } from "@emotion/react";
-import PlayerState from "@gamepark/prehistories/PlayerState";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import Cave from "./Cave";
@@ -10,14 +9,43 @@ import Card from './Card'
 import { getColoredDeck } from "@gamepark/prehistories/material/Hunters";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import Images from "../utils/Images";
+import { isPlayerViewSelf, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
+import { useDrop } from "react-dnd";
+import CardInHand, {isCardInHand} from "@gamepark/prehistories/types/appTypes/CardInHand";
+import CardPlayed from "@gamepark/prehistories/types/appTypes/CardPlayed";
+import MoveType from "@gamepark/prehistories/moves/MoveType";
+import { usePlayerId } from "@gamepark/react-client";
 
 type Props = {
-    player:PlayerState
+    player:PlayerView | PlayerViewSelf
 }
 
 const PlayerBoard : FC<Props> = ({player}) => {
 
     const {t} = useTranslation()
+    const playerId = usePlayerId<PlayerColor>()
+
+    const [{canDrop, isOver}, dropRef] = useDrop({
+        accept: ["CardInHand", 'CardPlayed'],
+        canDrop: (item: CardInHand | CardPlayed) => {
+            if(isCardInHand(item)){
+                return player.color === playerId          
+            } else {
+                return false
+            }
+        },
+        collect: monitor => ({
+          canDrop: monitor.canDrop(),
+          isOver: monitor.isOver()
+        }),
+        drop: (item: CardInHand | CardPlayed) => {
+            if(isCardInHand(item)){
+                return {type:MoveType.PlayHuntCard, card:item.card, playerId:player.color }          
+            } else {
+                return 
+            }
+        }
+      })
 
     return(
 
@@ -26,24 +54,54 @@ const PlayerBoard : FC<Props> = ({player}) => {
             <Cave player={player} />
             <div css={totemTokenPanelPosition}>
 
-            {[...Array(player.totemTokens)].map((e, i) => <img key={i} alt={t('token')} src={getTotem(player.color)} css={totemStyle} draggable={false} />)}
+            {[...Array(player.totemTokens)].map((_, i) => <img key={i} alt={t('token')} src={getTotem(player.color)} css={totemStyle} draggable={false} />)}
 
             </div>
 
             <div css={cardHandPanelPosition}> 
             
-                {player.hand.map((card, index) => 
+                {isPlayerViewSelf(player) ? player.hand.map((card, index) => 
                 
                     <Card key={index}
                     css = {[cardPosition(index, player.hand.length), cardStyle]}
                     color={player.color}
                     power={getColoredDeck(player.color)[card].power}
                     speed={getColoredDeck(player.color)[card].speed}
+                    draggable={player.isReady !== true}
+                    draggableItem={{type:"CardInHand", card:card}}
+                    type={"CardInHand"}
                     />
                 
+                ) : [...Array(player.hand)].map((_, i) => 
+                    <Card key={i}
+                     css = {[cardPosition(i, player.hand), cardStyle]}
+                     color={player.color}   
+                    />
                 )}
 
             </div>
+
+            <div css={[cardPlayedPanelPosition, canDrop && canDropStyle, canDrop && isOver && isOverStyle]} ref = {dropRef}> 
+
+            <span css={[spanDropDisplay(canDrop)]}>{t("Drag Here")}</span>
+            
+            {isPlayerViewSelf(player) ? player.played.map((card, index) => 
+            
+                <Card key={index}
+                css = {[cardPlayedPosition(index), cardStyle]}
+                color={player.color}
+                power={getColoredDeck(player.color)[card].power}
+                speed={getColoredDeck(player.color)[card].speed}
+                />
+            
+            ) : [...Array(player.played)].map((_, i) => 
+                <Card key={i}
+                 css = {[cardPlayedPosition(i), cardStyle]}
+                 color={player.color}   
+                />
+            )}
+
+        </div>
 
             <div css={[discardZonePosition, discardZoneStyle]}>
 
@@ -63,6 +121,38 @@ const PlayerBoard : FC<Props> = ({player}) => {
     
 }
 
+const spanDropDisplay = (canDrop:boolean) => css`
+    ${canDrop ? `display:block;` : `display:none;`}
+    font-size:4em;
+    text-align:center;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translateY(-50%) translateX(-50%);
+`
+    
+
+
+const canDropStyle = css`
+border : dashed 0.6em white;
+background-color:rgba(131, 180, 65,0.5);
+
+`
+
+const isOverStyle = css`
+background-color:rgba(131, 180, 65,0.8);
+`
+
+const cardPlayedPanelPosition = css`
+position:absolute;
+top:42%;
+right:10%;
+width:18.5%;
+height:38%;
+border : solid 0.6em transparent;
+border-radius:20% / 10%;
+`
+
 const deckZonePosition = css`
 position:absolute;
 bottom:0%;
@@ -71,8 +161,6 @@ width:12%;
 height:18%;
 `
 const deckZoneStyle = (image:string) => css`
-border:0.5em white dashed;
-
 background-image: url(${image});
 background-size: contain;
 background-repeat: no-repeat;
@@ -87,7 +175,6 @@ width:12%;
 height:18%;
 `
 const discardZoneStyle = css`
-border:0.5em white dashed;
 `
 
 const cardPosition = (position:number, handLength:number) => css`
@@ -95,8 +182,15 @@ width:20%;
 height:100%;
 `
 
+const cardPlayedPosition = (key:number) => css`
+width:70%;
+height:55%;
+position:absolute;
+top:${(key%6)*10}%;
+left:${Math.floor(key/6)*30}%;
+`
+
 const cardStyle = css`
-border: 1px solid yellow;
 `
 
 const cardHandPanelPosition = css`
@@ -105,7 +199,6 @@ const cardHandPanelPosition = css`
     right:20%;
     width:60%;
     height:18%;
-    border:1px red solid;
 
     display:flex;
     flex-direction:row;
@@ -139,7 +232,7 @@ height:93%;
 `
 
 const playerBoardStyle = css`
-border:0.1em solid black;
+
 `
 
 function getCardBack(color:PlayerColor):string{

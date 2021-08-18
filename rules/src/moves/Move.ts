@@ -1,9 +1,6 @@
-import DrawCard from './DrawCard'
-import SpendGold from './SpendGold'
+import PlayHuntCard from './PlayHuntCard'
+import TellYouAreReady from './TellYouAreReady'
 
-/**
- * A "Move" is the combination of all the types of moves that exists in you game
- */
-type Move = SpendGold | DrawCard // | DoOtherStuff | ChooseCard | MovePawn...
+type Move = PlayHuntCard | TellYouAreReady
 
 export default Move

@@ -9,7 +9,7 @@ import App from './App'
 import PrehistoriesView from './PrehistoriesView'
 import translations from './translations.json'
 
-setupTranslation(translations)
+setupTranslation(translations,{debug:false})
 
 const style = css`
   html {
@@ -26,7 +26,7 @@ const style = css`
 
   body {
     margin: 0;
-    font-family: 'Oswald', "Roboto Light", serif;
+    font-family: 'Roboto Condensed', sans-serif;
     font-size: 1vh;
     @media (max-aspect-ratio: 16/9) {
       font-size: calc(9vw / 16);

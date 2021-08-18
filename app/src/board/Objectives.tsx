@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react"
+import PlayerColor from "@gamepark/prehistories/PlayerColor"
 import { FC } from "react"
 import Images from "../utils/Images"
 import Goal from "./Goal"
@@ -44,8 +45,6 @@ height:38%;
 `
 
 const permanentObjectiveStyle = css`
-background-color:orange;
-
 background-image: url(${Images.objective0});
 background-size: contain;
 background-repeat: no-repeat;
@@ -66,10 +65,10 @@ height:20%;
 
 display:flex;
 flex-direction: row;
-justify-content: center;
+justify-content: space-evenly;
 `
 const variableObjectivesStyle = css`
-background-color:orange;
+
 `
 
 export default Objectives
