@@ -6,7 +6,7 @@ import MoveType from "@gamepark/prehistories/moves/MoveType";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import { getPlayerName } from "@gamepark/prehistories/PrehistoriesOptions";
 import Phase from "@gamepark/prehistories/types/Phase";
-import { PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
+import { PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
 import { PlayerTimer, usePlay, usePlayer, usePlayerId } from "@gamepark/react-client";
 import { FC, HTMLAttributes } from "react";
 import { useTranslation } from "react-i18next";
@@ -15,7 +15,7 @@ import Images from "../utils/Images";
 import AvatarPanel from "./AvatarPanel";
 
 type Props = {
-    player: PlayerView | PlayerViewSelf,
+    player: PlayerView | PlayerViewSelf | PlayerHuntView,
     phase?:Phase
     position:number
 } & HTMLAttributes<HTMLDivElement>

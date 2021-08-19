@@ -8,6 +8,7 @@ import Move from './moves/Move'
 import MoveType from './moves/MoveType'
 import MoveView from './moves/MoveView'
 import PlayHuntCard, { playHuntCard } from './moves/PlayHuntCard'
+import { revealHuntCards } from './moves/RevealHuntCards'
 import TellYouAreReady, { tellYouAreReady } from './moves/TellYouAreReady'
 import PlayerColor from './PlayerColor'
 import PlayerState, { setupCave, setupDeck } from './PlayerState'
@@ -75,12 +76,21 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         return playHuntCard(this.state, move)
       case MoveType.TellYouAreReady:
         return tellYouAreReady(this.state, move)
+      case MoveType.RevealHuntCards:
+        return revealHuntCards(this.state)
       default: return
 
     }
   }
 
   getAutomaticMove(): void | Move {
+
+    switch(this.state.phase){
+      case Phase.Initiative:
+        if (this.state.players.every(p => p.isReady === true)){
+          return {type:MoveType.RevealHuntCards}
+        }
+    }
 
     return
   }
@@ -93,7 +103,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         if (this.state.phase === undefined || playerId === p.color){
           return {...p, deck:p.deck.length}
         } else {
-          return {...p, deck:p.deck.length, hand:p.hand.length, played:p.played.length}
+          return this.state.phase === Phase.Initiative ? {...p, deck:p.deck.length, hand:p.hand.length, played:p.played.length} : {...p, deck:p.deck.length, hand:p.hand.length}
         }
       })}
   }
@@ -110,6 +120,10 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         } else {
           return {type:MoveType.PlayHuntCard, playerId:move.playerId}
         }
+      case MoveType.RevealHuntCards:
+        const result:{color:PlayerColor, cards:number[]}[] = []
+        this.state.players.forEach(p => result.push({color:p.color, cards:p.played}))
+        return {type:MoveType.RevealHuntCards, cardsPlayed:result}
       default : return move
     }
   }

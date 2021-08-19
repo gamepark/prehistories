@@ -4,7 +4,8 @@
  */
 enum MoveType {
   PlayHuntCard,
-  TellYouAreReady
+  TellYouAreReady,
+  RevealHuntCards,
 }
 
 export default MoveType

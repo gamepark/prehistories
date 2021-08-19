@@ -1,17 +1,17 @@
 import GameState from './GameState'
 import PlayerColor from './PlayerColor'
 import PlayerState from './PlayerState'
-import { isPlayerState, isPlayerView, isPlayerViewSelf, PlayerView, PlayerViewSelf } from './types/PlayerView'
+import { isPlayerState, isPlayerView, isPlayerViewSelf, PlayerHuntView, PlayerView, PlayerViewSelf } from './types/PlayerView'
 
 type GameView = Omit<GameState, 'players'> & {
-  players: (PlayerView | PlayerViewSelf)[]
+  players: (PlayerView | PlayerViewSelf |PlayerHuntView)[]
   caveDisplayed:PlayerColor
 }
 
 export default GameView
 
 export function getPlayers(state:GameState | GameView){
-  return (state.players as (PlayerState | PlayerView | PlayerViewSelf)[]) 
+  return (state.players as (PlayerState | PlayerView | PlayerViewSelf |PlayerHuntView)[]) 
 }
 
 export function isGameView(state:GameState | GameView):state is GameView {

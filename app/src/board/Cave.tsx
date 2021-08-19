@@ -1,13 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
-import { PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
+import { PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
 import { FC } from "react";
 import Images from "../utils/Images";
 import Polyomino from "./Polyomino";
 
 type Props = {
-    player:PlayerView|PlayerViewSelf
+    player:PlayerView|PlayerViewSelf|PlayerHuntView
 
 }
 

@@ -9,7 +9,7 @@ import Card from './Card'
 import { getColoredDeck } from "@gamepark/prehistories/material/Hunters";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import Images from "../utils/Images";
-import { isPlayerViewSelf, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
+import { isPlayerViewSelf, PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
 import { useDrop } from "react-dnd";
 import CardInHand, {isCardInHand} from "@gamepark/prehistories/types/appTypes/CardInHand";
 import CardPlayed from "@gamepark/prehistories/types/appTypes/CardPlayed";
@@ -17,7 +17,7 @@ import MoveType from "@gamepark/prehistories/moves/MoveType";
 import { usePlayerId } from "@gamepark/react-client";
 
 type Props = {
-    player:PlayerView | PlayerViewSelf
+    player:PlayerView | PlayerViewSelf | PlayerHuntView
 }
 
 const PlayerBoard : FC<Props> = ({player}) => {
@@ -85,7 +85,7 @@ const PlayerBoard : FC<Props> = ({player}) => {
 
             <span css={[spanDropDisplay(canDrop)]}>{t("Drag Here")}</span>
             
-            {isPlayerViewSelf(player) ? player.played.map((card, index) => 
+            {Array.isArray(player.played) ? player.played.map((card, index) => 
             
                 <Card key={index}
                 css = {[cardPlayedPosition(index), cardStyle]}
