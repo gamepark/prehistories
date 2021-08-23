@@ -6,6 +6,7 @@ import {playHuntCardInView} from '@gamepark/prehistories/moves/PlayHuntCard'
 import { tellYouAreReady } from '@gamepark/prehistories/moves/TellYouAreReady'
 import SetCaveDisplayed, { setCaveDisplayed } from './localMoves/setCaveDisplayed'
 import { revealHuntCardsInView } from '@gamepark/prehistories/moves/RevealHuntCards'
+import {takePolyomino} from '@gamepark/prehistories/moves/TakePolyomino'
 
 type LocalMove = MoveView | SetCaveDisplayed
 
@@ -28,6 +29,8 @@ export default class PrehistoriesView implements Game<GameView, MoveView> {
         return tellYouAreReady(this.state, move)
       case MoveType.RevealHuntCards:
         return revealHuntCardsInView(this.state, move)
+      case MoveType.TakePolyomino:
+        return takePolyomino(this.state, move)
       case 'SetCaveDisplayed':
         return setCaveDisplayed(this.state, move)
     }

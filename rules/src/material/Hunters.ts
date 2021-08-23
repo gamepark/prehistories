@@ -1,7 +1,7 @@
 import Card from "../types/Card";
 import PlayerColor from "../PlayerColor";
 
-const YellowHunters:Card[] = [
+export const YellowHunters:Card[] = [
     {color:PlayerColor.Yellow, power:1, speed:51},
     {color:PlayerColor.Yellow, power:1, speed:60},
     {color:PlayerColor.Yellow, power:2, speed:42},

@@ -6,10 +6,11 @@ enum MoveType {
   PlayHuntCard,
   TellYouAreReady,
   RevealHuntCards,
+  TakePolyomino,
 }
 
 export default MoveType
 
 // Moves to code !
 
-// PlayHuntCard | TellYouAreReady | RevealHuntCard | TakePolyomino | PlacePolyomino | PaintObjectives
+// TakePolyomino | PlacePolyomino | PaintObjectives

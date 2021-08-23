@@ -9,6 +9,7 @@ import MoveType from './moves/MoveType'
 import MoveView from './moves/MoveView'
 import PlayHuntCard, { playHuntCard } from './moves/PlayHuntCard'
 import { revealHuntCards } from './moves/RevealHuntCards'
+import { takePolyomino } from './moves/TakePolyomino'
 import TellYouAreReady, { tellYouAreReady } from './moves/TellYouAreReady'
 import PlayerColor from './PlayerColor'
 import PlayerState, { setupCave, setupDeck } from './PlayerState'
@@ -29,7 +30,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         huntingBoard: [],
         goals: [],
         phase: Phase.Initiative ,
-        activePlayer:undefined
+        sortedPlayers:undefined
       }
 
       game.huntingBoard = setupHuntingBoard(game)
@@ -49,7 +50,8 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
     switch (this.state.phase){
       case Phase.Initiative:
         return this.state.players.find(p => p.color === playerId)!.isReady !== true
-      
+      case Phase.Hunt:
+        return this.state.sortedPlayers![0] === playerId
       default: return false
     }
   }
@@ -67,7 +69,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         playHuntCardMoves.push({type:MoveType.TellYouAreReady, playerId:color})
         return playHuntCardMoves
       }
-    } else return []
+    }  else return []
   }
 
   play(move: Move): void {
@@ -78,6 +80,8 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         return tellYouAreReady(this.state, move)
       case MoveType.RevealHuntCards:
         return revealHuntCards(this.state)
+      case MoveType.TakePolyomino:
+        return takePolyomino(this.state, move)
       default: return
 
     }

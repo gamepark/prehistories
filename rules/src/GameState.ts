@@ -12,7 +12,7 @@ type GameState = {
   huntingBoard : number[],
   goals : number[],
   phase? : Phase, 
-  activePlayer?: PlayerColor
+  sortedPlayers?: PlayerColor[]
 }
 
 export default GameState
