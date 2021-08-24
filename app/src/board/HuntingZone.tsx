@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import GameView from "@gamepark/prehistories/GameView";
-import { allPolyominos } from "@gamepark/prehistories/material/Polyominos";
 import { FC } from "react";
 import Images from "../utils/Images";
 import Polyomino from "./Polyomino";
@@ -19,7 +18,7 @@ const HuntingZone : FC<Props> = ({game, numberOfPlayers}) => {
 
             {game.huntingBoard.map((polyomino, index) => 
             
-                <Polyomino key = {index}
+                polyomino !== null && <Polyomino key = {index}
                            css = {polyominoToHuntPosition(index, numberOfPlayers)}
                            polyomino={polyomino} 
                            side={0}

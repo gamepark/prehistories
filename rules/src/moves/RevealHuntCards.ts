@@ -4,10 +4,10 @@ import PlayerColor from "../PlayerColor";
 import PlayerState from "../PlayerState";
 import Phase from "../types/Phase";
 import { PlayerHuntView, PlayerView, PlayerViewSelf } from "../types/PlayerView";
+import teamPower from "../utils/teamPower";
 import Move from "./Move";
 import MoveType from "./MoveType";
 import MoveView from "./MoveView";
-import { teamPower } from "./TakePolyomino";
 
 type RevealHuntCards = {
     type: MoveType.RevealHuntCards
