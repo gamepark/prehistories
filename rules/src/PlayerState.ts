@@ -13,7 +13,7 @@ export default interface PlayerState {
   deck:number[]
   played:number[]
   goalsMade:number[]
-  tilesInHand?:number[]
+  tilesInHand:boolean
   injuries?:number
   isReady?:boolean
 }

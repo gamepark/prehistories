@@ -9,7 +9,7 @@ import Polyomino from './types/Polyomino'
 type GameState = {
   players: PlayerState[],
   tilesDeck : number[][],
-  huntingBoard : number[],
+  huntingBoard : (number|null)[],
   goals : number[],
   phase? : Phase, 
   sortedPlayers?: PlayerColor[]

@@ -8,13 +8,17 @@ import Move from './moves/Move'
 import MoveType from './moves/MoveType'
 import MoveView from './moves/MoveView'
 import PlayHuntCard, { playHuntCard } from './moves/PlayHuntCard'
+import PlayPolyomino, { playPolyomino } from './moves/PlayPolyomino'
 import { revealHuntCards } from './moves/RevealHuntCards'
-import { takePolyomino } from './moves/TakePolyomino'
 import TellYouAreReady, { tellYouAreReady } from './moves/TellYouAreReady'
 import PlayerColor from './PlayerColor'
 import PlayerState, { setupCave, setupDeck } from './PlayerState'
 import {isGameOptions, PrehistoriesOptions, PrehistoriesPlayerOptions} from './PrehistoriesOptions'
+import Coordinates from './types/Coordinates'
 import Phase from './types/Phase'
+import getSquaresStartLeft, { getFreeSquaresFromPath, getOccupiedSquares, isCoordFree, isCoordOutOfBorders } from './utils/getSquaresStartLeft'
+import powerLevels from './utils/powerLevels'
+import teamPower from './utils/teamPower'
 
 export default class Prehistories extends SimultaneousGame<GameState, Move, PlayerColor>
   implements SecretInformation<GameState, GameView, Move, MoveView, PlayerColor> {
@@ -57,8 +61,8 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
   }
 
   getLegalMoves(color:PlayerColor): Move[] {
+    const player = this.state.players.find(p => p.color === color)!
     if (this.state.phase === Phase.Initiative){
-      const player = this.state.players.find(p => p.color === color)!
       if (player.isReady === true){
         return []
       } else {
@@ -69,7 +73,29 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         playHuntCardMoves.push({type:MoveType.TellYouAreReady, playerId:color})
         return playHuntCardMoves
       }
-    }  else return []
+    } else {
+      const playPolyominoMoves:PlayPolyomino[] = []
+      const accessibleSquares:Coordinates[] = getFreeSquaresFromPath(getSquaresStartLeft(player.cave),player.cave)
+      this.state.huntingBoard.forEach((tile, index) => {
+        if (tile !== null && teamPower(player.played) >= powerLevels(this.state.players.length, index)[0]){
+          ([0,1] as (0|1)[]).forEach(side => {
+            for (let x = 0;x<7;x++){
+              for (let y = 0;y<7;y++){
+
+                if(allPolyominos[tile][side].coordinates.some(coord => accessibleSquares.find(square => square.x === x+coord.x && square.y === y+coord.y))
+                && allPolyominos[tile][side].coordinates.every(coord => !isCoordOutOfBorders({x:coord.x+x,y:coord.y+y}) && isCoordFree({x:coord.x+x,y:coord.y+y}, getOccupiedSquares(player.cave)))){
+                  playPolyominoMoves.push({type:MoveType.PlayPolyomino, huntSpot:index, playerId:color, polyomino:tile, side, square:{x,y}})
+                }
+              }
+            }
+          })
+        }
+      })
+
+      
+      
+      return []
+    }
   }
 
   play(move: Move): void {
@@ -80,8 +106,8 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         return tellYouAreReady(this.state, move)
       case MoveType.RevealHuntCards:
         return revealHuntCards(this.state)
-      case MoveType.TakePolyomino:
-        return takePolyomino(this.state, move)
+      case MoveType.PlayPolyomino:
+        return playPolyomino(this.state, move)
       default: return
 
     }
@@ -139,7 +165,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
 
 function setupPlayers(players: PrehistoriesPlayerOptions[]): PlayerState[] {
   return players.map((options) => ({
-    color:options.id, cave:setupCave(options.id), totemTokens:8, deck:setupDeck(options.id), discard:[], hand:[], played:[], goalsMade:[]
+    color:options.id, cave:setupCave(options.id), totemTokens:8, deck:setupDeck(options.id), discard:[], hand:[], played:[], goalsMade:[], tilesInHand:false
   }))
 }
 

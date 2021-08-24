@@ -1,8 +1,8 @@
 import PlayHuntCard from './PlayHuntCard'
+import PlayPolyomino from './PlayPolyomino'
 import RevealHuntCards from './RevealHuntCards'
-import TakePolyomino from './TakePolyomino'
 import TellYouAreReady from './TellYouAreReady'
 
-type Move = PlayHuntCard | TellYouAreReady | RevealHuntCards |TakePolyomino
+type Move = PlayHuntCard | TellYouAreReady | RevealHuntCards | PlayPolyomino
 
 export default Move
