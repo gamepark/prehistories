@@ -1,19 +1,40 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
+import Move from "@gamepark/prehistories/moves/Move";
+import PlayPolyomino from "@gamepark/prehistories/moves/PlayPolyomino";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
+import { usePlay } from "@gamepark/react-client";
 import { FC, HTMLAttributes } from "react";
 import Images from "../utils/Images";
+import PolyominoToHunt from "@gamepark/prehistories/types/appTypes/PolyominoToHunt"
+import { Draggable } from "@gamepark/react-components";
 
 type Props = {
     polyomino:number
     color?:PlayerColor
     side:0|1
+    draggable?:boolean
+    type?:'PolyominoToHunt'
+    draggableItem?:PolyominoToHunt
 } & Omit<HTMLAttributes<HTMLDivElement>, 'color'>
 
-const Polyomino : FC<Props> = ({polyomino, side, color, ...props}) => {
+const Polyomino : FC<Props> = ({polyomino, side, color, draggable = false, type='', draggableItem, ...props}) => {
+
+    const play = usePlay<Move>()
+    const item = {...draggableItem}
+    const onDrop = (move:PlayPolyomino) => {
+        play(move)
+    }
 
     return(
-        <div {...props} css={[polyominoSize, polyominoStyle(color ? getColoredPolyominoImage(polyomino, color!): getPolyominoImage(polyomino, side))]}></div>
+        <Draggable canDrag={draggable}
+                   type={type}
+                   item={item}
+                   drop={onDrop}
+                   {...props}
+                   css={[polyominoSize, polyominoStyle(color ? getColoredPolyominoImage(polyomino, color!): getPolyominoImage(polyomino, side))]}>
+
+        </Draggable>
     )
 
 }

@@ -1,9 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
+import MoveType from "@gamepark/prehistories/moves/MoveType";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
+import PolyominoToHunt from "@gamepark/prehistories/types/appTypes/PolyominoToHunt";
 import { PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
+import { usePlayerId } from "@gamepark/react-client";
 import { FC } from "react";
+import { useDrop } from "react-dnd";
 import Images from "../utils/Images";
+import DropSquare from "./DropSquare";
 import Polyomino from "./Polyomino";
 
 type Props = {
@@ -18,6 +23,16 @@ const Cave : FC<Props> = ({player}) => {
         <div css={[cavePosition, caveStyle(player.color)]}>
 
             <div css={canvasExcludingBorders}>
+
+                {[0,1,2,3,4,5,6].map((x, index1) => 
+                    [0,1,2,3,4,5,6].map((y, index2) =>
+                        <DropSquare x={x}
+                                  y={y}
+                                  key={index1+' '+index2}
+                                  player={player}
+                        />
+                    )
+                )}
 
                 {player.cave.map((paint, index) => 
 

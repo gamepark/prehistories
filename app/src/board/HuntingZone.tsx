@@ -1,6 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import GameView from "@gamepark/prehistories/GameView";
+import GameView, { getPlayers } from "@gamepark/prehistories/GameView";
+import PlayerColor from "@gamepark/prehistories/PlayerColor";
+import Phase from "@gamepark/prehistories/types/Phase";
+import { isPlayerHuntView, isPlayerViewSelf, PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
+import powerLevels from "@gamepark/prehistories/utils/powerLevels";
+import teamPower from "@gamepark/prehistories/utils/teamPower";
+import { usePlayerId } from "@gamepark/react-client";
 import { FC } from "react";
 import Images from "../utils/Images";
 import Polyomino from "./Polyomino";
@@ -12,6 +18,8 @@ type Props = {
 
 const HuntingZone : FC<Props> = ({game, numberOfPlayers}) => {
 
+    const playerId = usePlayerId<PlayerColor>()
+
     return(
 
         <div css={[huntingZonePosition, huntingZoneStyle, numberOfPlayers < 4 ? bG23Players : bG45Players]}>
@@ -22,6 +30,9 @@ const HuntingZone : FC<Props> = ({game, numberOfPlayers}) => {
                            css = {polyominoToHuntPosition(index, numberOfPlayers)}
                            polyomino={polyomino} 
                            side={0}
+                           draggable={isPolyominoHuntable(game.players.find(p => p.color === playerId), game.phase, index, game.players.length,game.sortedPlayers !== undefined ? game.sortedPlayers[0] : undefined)}
+                           type={'PolyominoToHunt'}
+                           draggableItem={{type:"PolyominoToHunt", huntSpot:index, polyomino, side:0}}
                 />
             
             )}
@@ -30,6 +41,17 @@ const HuntingZone : FC<Props> = ({game, numberOfPlayers}) => {
 
     )
 
+    
+
+}
+
+function isPolyominoHuntable(player:(PlayerView|PlayerViewSelf|PlayerHuntView|undefined), phase:Phase|undefined, huntSpot:number, nbPlayers:number, firstPlayer:PlayerColor|undefined):boolean{
+
+    return phase === Phase.Hunt 
+    && player !== undefined 
+    && firstPlayer !== undefined && player.color === firstPlayer
+    && (isPlayerHuntView(player) || isPlayerViewSelf(player)) 
+    && teamPower(player.played) >= powerLevels(nbPlayers, huntSpot)[0]
 }
 
 const polyominoToHuntPosition = (position:number, numberOfPlayers:number) => css`
@@ -38,7 +60,6 @@ top:${getTop(position, numberOfPlayers)}%;
 left:${getLeft(position, numberOfPlayers)}%;
 width:${getWidth(position, numberOfPlayers)}%;
 height:${getHeight(position, numberOfPlayers)}%;
-transform:rotateZ(${getRotate(position, numberOfPlayers)}deg);
 `
 
 const huntingZonePosition = css`

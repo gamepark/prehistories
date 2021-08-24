@@ -92,9 +92,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         }
       })
 
-      
-      
-      return []
+      return playPolyominoMoves
     }
   }
 
