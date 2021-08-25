@@ -62,6 +62,7 @@ const squarePosition = (x:number, y:number) => css`
 position:absolute;
 top:${x*14.2857}%;
 left:${y*14.2857}%;
+z-index:2;
 `
 
 const squareStyle = css`

@@ -61,14 +61,9 @@ ${polyomino <= 26 && `width:14.2857%;height:14.2857%;`};
 ${polyomino > 26 && polyomino <= 51 && side === 0 && `width:28.5714%;height:14.2857%;`};
 ${polyomino > 26 && polyomino <= 51 && side === 1 && `width:14.2857%;height:28.5714%;`};
 ${polyomino > 51 && polyomino <= 61 && `width:28.5714%;height:28.5714%;`};
-${polyomino > 61 && polyomino <= 63 && `width:42.8571%;height:28.5714%;`};
-${polyomino > 63 && polyomino <= 69 && `width:28.5714%;height:42.8571%;`};
-${polyomino > 69 && polyomino <= 73 && `width:42.8571%;height:28.5714%;`};
-${polyomino > 73 && polyomino <= 76 && `width:28.5714%;height:42.8571%;`};
-${polyomino === 77 && `width:42.8571%;height:28.5714%;`};
-${polyomino > 77 && polyomino <= 79 && `width:28.5714%;height:42.8571%;`};
-${polyomino > 79 && polyomino <= 81 && `width:42.8571%;height:28.5714%;`};
-${polyomino > 81 && polyomino <= 86 && `width:28.5714%;height:28.5714%;`};
+${(polyomino === 62 || polyomino === 66 || polyomino === 67 || polyomino === 71 || (polyomino === 69 && side === 1)) && `width:42.8571%;height:28.5714%;` };
+${(polyomino === 63 || polyomino === 64 || polyomino === 65 || polyomino === 68 || polyomino === 70 || (polyomino === 69 && side === 0)) && `width:28.5714%;height:42.8571%;` };
+${polyomino > 71 && polyomino <= 75 && `width:28.5714%;height:28.5714%;`};
 border:1px red solid;
 `
 

@@ -98,7 +98,7 @@ const PolyominosType4List:Polyomino[] = [       // S, then T
     [{animal:Animal.Mammoth,coordinates:[{x:0,y:1},{x:1,y:1},{x:1,y:0},{x:2,y:0}]},{animal:Animal.Mammoth,coordinates:[{x:0,y:0},{x:1,y:0},{x:1,y:1},{x:2,y:1}]}],
     [{animal:Animal.Mammoth,coordinates:[{x:0,y:1},{x:1,y:1},{x:1,y:0},{x:2,y:1}]},{animal:Animal.Mammoth,coordinates:[{x:0,y:0},{x:1,y:0},{x:1,y:1},{x:2,y:0}]}],
 
-    [{animal:Animal.Ibex,coordinates:[{x:0,y:0},{x:0,y:1},{x:1,y:1},{x:0,y:2}]},{animal:Animal.Ibex,coordinates:[{x:1,y:0},{x:1,y:1},{x:0,y:1},{x:0,y:2}]}],
+    [{animal:Animal.Ibex,coordinates:[{x:0,y:0},{x:0,y:1},{x:1,y:1},{x:1,y:2}]},{animal:Animal.Ibex,coordinates:[{x:1,y:0},{x:1,y:1},{x:0,y:1},{x:0,y:2}]}],
     [{animal:Animal.Ibex,coordinates:[{x:1,y:0},{x:1,y:1},{x:0,y:1},{x:1,y:2}]},{animal:Animal.Ibex,coordinates:[{x:0,y:0},{x:0,y:1},{x:1,y:1},{x:0,y:2}]}],
 
     [{animal:Animal.Yak,coordinates:[{x:0,y:1},{x:1,y:1},{x:1,y:0},{x:2,y:0}]},{animal:Animal.Yak,coordinates:[{x:0,y:0},{x:1,y:0},{x:1,y:1},{x:2,y:1}]}],
