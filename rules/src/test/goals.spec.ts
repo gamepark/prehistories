@@ -53,6 +53,13 @@ describe('Test getSquaresStartLeft.ts', () => {
         {polyomino:polyominosArray[52],side:0, x:4, y:2},
         {polyomino:polyominosArray[54],side:0, x:5, y:1},
         {polyomino:polyominosArray[57],side:1, x:1, y:2},
+    ]
+
+    const cave5:PaintedPolyominos[] = [
+        {polyomino:polyominosArray[1],side:0, x:1, y:1},
+        {polyomino:polyominosArray[1],side:0, x:5, y:4},
+        {polyomino:polyominosArray[0],side:0, x:3, y:2},
+        {polyomino:polyominosArray[62],side:1, x:5, y:0},
 
     ]
 
@@ -65,12 +72,16 @@ describe('Test getSquaresStartLeft.ts', () => {
         expect(getOccupiedSquares(cave3).length).toBe([{x:1,y:0},{x:1,y:1},{x:1,y:2},{x:1,y:3},{x:1,y:4},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:5,y:1},{x:5,y:3},{x:5,y:4},{x:3,y:5},{x:3,y:6}].length)
         expect(getOccupiedSquares(cave4)).toEqual(expect.arrayContaining([{x:1,y:0},{x:1,y:1},{x:1,y:2},{x:1,y:3},{x:1,y:4},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:5,y:1},{x:5,y:3},{x:5,y:4},{x:6,y:1},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:3,y:6},{x:5,y:6}]))
         expect(getOccupiedSquares(cave4).length).toBe([{x:1,y:0},{x:1,y:1},{x:1,y:2},{x:1,y:3},{x:1,y:4},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:5,y:1},{x:5,y:3},{x:5,y:4},{x:6,y:1},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:3,y:6},{x:5,y:6}].length)
+        expect(getOccupiedSquares(cave5)).toEqual(expect.arrayContaining([{x:1,y:1},{x:5,y:4},{x:3,y:2},{x:6,y:0},{x:6,y:1},{x:5,y:1},{x:5, y:2}]))
+        expect(getOccupiedSquares(cave5).length).toBe([{x:1,y:1},{x:5,y:4},{x:3,y:2},{x:6,y:0},{x:6,y:1},{x:5,y:1},{x:5, y:2}].length)
+    
     })
 
     const answer1_1:Coordinates[] = []
     const answer2_1:Coordinates[] = [{x:1,y:0},{x:1,y:1},{x:1,y:2},{x:2,y:2},{x:3,y:2},{x:3,y:3},{x:3,y:4},{x:4,y:4},{x:5,y:4}]
     const answer3_1:Coordinates[] = [{x:1,y:0},{x:1,y:1},{x:1,y:2},{x:1,y:3},{x:1,y:4},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:5,y:1},{x:5,y:3},{x:5,y:4}]
     const answer4_1:Coordinates[] = [{x:1,y:0},{x:1,y:1},{x:1,y:2},{x:1,y:3},{x:1,y:4},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:5,y:1},{x:5,y:3},{x:5,y:4},{x:6,y:1},{x:2,y:4},{x:3,y:4},{x:4,y:4}]
+    const answer5_1:Coordinates[] = [{x:6,y:0},{x:6,y:1},{x:5,y:1},{x:5, y:2}]
 
     test('getSquaresStartLeft', () => {
         expect(getSquaresStartLeft(cave1)).toEqual(expect.arrayContaining(answer1_1))
@@ -81,6 +92,8 @@ describe('Test getSquaresStartLeft.ts', () => {
         expect(getSquaresStartLeft(cave3).length).toBe(answer3_1.length)
         expect(getSquaresStartLeft(cave4)).toEqual(expect.arrayContaining(answer4_1))
         expect(getSquaresStartLeft(cave4).length).toBe(answer4_1.length)
+        expect(getSquaresStartLeft(cave5)).toEqual(expect.arrayContaining(answer5_1))
+        expect(getSquaresStartLeft(cave5).length).toBe(answer5_1.length)
     })
     
     const answer1_2:Coordinates[] = [{x:0,y:0},{x:1,y:0},{x:2,y:0},{x:3,y:0},{x:4,y:0},{x:5,y:0},{x:6,y:0}]

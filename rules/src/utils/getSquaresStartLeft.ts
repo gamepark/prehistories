@@ -9,7 +9,7 @@ function getSquaresStartLeft(cave:PaintedPolyominos[]):Coordinates[]{
     if (isFirstColumnEmpty(cave)){
         return []
     } else {
-        const coordOfFirstTile = {x:cave.find(polyo => polyo.y === 0)!.x, y:cave.find(polyo => polyo.y === 0)!.y}
+        const coordOfFirstTile = {x:getOccupiedSquares(cave).find(polyo => polyo.y ===0)!.x, y:getOccupiedSquares(cave).find(polyo => polyo.y ===0)!.y}
         return [coordOfFirstTile].concat(getTilesFromTarget(coordOfFirstTile, [coordOfFirstTile], getOccupiedSquares(cave)))
     }
 }
@@ -61,7 +61,7 @@ function getTilesFromTarget(target:Coordinates,list:Coordinates[], occupiedSquar
 }
 
 export function isFirstColumnEmpty(cave:PaintedPolyominos[]):boolean{
-    return cave.every(polyo => polyo.y !== 0)
+    return getOccupiedSquares(cave).every(polyo => polyo.y !== 0)
 }
 
 export function getOccupiedSquares(cave:PaintedPolyominos[]):Coordinates[]{
