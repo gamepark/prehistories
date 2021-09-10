@@ -6,6 +6,7 @@ import normalize from 'emotion-normalize'
 import {StrictMode} from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
+import prehistoriesAnimations from './PrehistoriesAnimations'
 import PrehistoriesView from './PrehistoriesView'
 import translations from './translations.json'
 
@@ -59,7 +60,11 @@ const style = css`
 
 ReactDOM.render(
   <StrictMode>
-    <GameProvider game="prehistories" Rules={Prehistories} RulesView={PrehistoriesView} optionsDescription={PrehistoriesOptionsDescription}>
+    <GameProvider game="prehistories" 
+                  Rules={Prehistories} 
+                  RulesView={PrehistoriesView} 
+                  optionsDescription={PrehistoriesOptionsDescription}
+                  animations={prehistoriesAnimations}>
       <App/>
     </GameProvider>
     <Global styles={[normalize, style]}/>

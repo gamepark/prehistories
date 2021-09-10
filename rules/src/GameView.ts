@@ -1,11 +1,14 @@
 import GameState from './GameState'
 import PlayerColor from './PlayerColor'
 import PlayerState from './PlayerState'
+import PolyominoToHunt from './types/appTypes/PolyominoToHunt'
 import { isPlayerState, isPlayerView, isPlayerViewSelf, PlayerHuntView, PlayerView, PlayerViewSelf } from './types/PlayerView'
 
-type GameView = Omit<GameState, 'players'> & {
+type GameView = Omit<GameState, 'players' | 'tilesDeck'> & {
   players: (PlayerView | PlayerViewSelf |PlayerHuntView)[]
+  tilesDeck: number[]
   caveDisplayed:PlayerColor
+  polyominoSelected?:PolyominoToHunt
 }
 
 export default GameView

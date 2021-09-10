@@ -4,18 +4,29 @@ import GameState from './GameState'
 import GameView, { getPlayers } from './GameView'
 import { getGoalsArray } from './material/Goals'
 import { allPolyominos} from './material/Polyominos'
+import { changeActivePlayer } from './moves/ChangeActivePlayer'
+import { checkPermanentObjectives } from './moves/CheckPermanentObjectives'
+import { checkVariableObjectives } from './moves/CheckVariableObjectives'
+import { drawXCards } from './moves/DrawXCards'
+import EndTurn, { endTurn } from './moves/EndTurn'
 import Move from './moves/Move'
 import MoveType from './moves/MoveType'
 import MoveView from './moves/MoveView'
 import PlayHuntCard, { playHuntCard } from './moves/PlayHuntCard'
 import PlayPolyomino, { playPolyomino } from './moves/PlayPolyomino'
+import { refillHuntingBoard } from './moves/RefillHuntingBoard'
 import { revealHuntCards } from './moves/RevealHuntCards'
+import { shuffleDiscardPile } from './moves/ShuffleDiscardPile'
+import SpendHunter, { spendHunter } from './moves/SpendHunter'
+import { takeBackPlayedCards } from './moves/TakeBackPlayedCards'
 import TellYouAreReady, { tellYouAreReady } from './moves/TellYouAreReady'
+import ValidateSpendedHunters, { validateSpendedHunters } from './moves/ValidateSpendedHunters'
 import PlayerColor from './PlayerColor'
 import PlayerState, { setupCave, setupDeck } from './PlayerState'
 import {isGameOptions, PrehistoriesOptions, PrehistoriesPlayerOptions} from './PrehistoriesOptions'
 import Coordinates from './types/Coordinates'
-import Phase from './types/Phase'
+import Phase, { HuntPhase } from './types/Phase'
+import { PlayerHuntView, PlayerView, PlayerViewSelf } from './types/PlayerView'
 import getSquaresStartLeft, { getFreeSquaresFromPath, getOccupiedSquares, isCoordFree, isCoordOutOfBorders } from './utils/getSquaresStartLeft'
 import powerLevels from './utils/powerLevels'
 import teamPower from './utils/teamPower'
@@ -55,7 +66,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
       case Phase.Initiative:
         return this.state.players.find(p => p.color === playerId)!.isReady !== true
       case Phase.Hunt:
-        return this.state.sortedPlayers![0] === playerId
+        return this.state.sortedPlayers !== undefined ? this.state.sortedPlayers![0] === playerId : false
       default: return false
     }
   }
@@ -74,25 +85,44 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         return playHuntCardMoves
       }
     } else {
-      const playPolyominoMoves:PlayPolyomino[] = []
-      const accessibleSquares:Coordinates[] = getFreeSquaresFromPath(getSquaresStartLeft(player.cave),player.cave)
-      this.state.huntingBoard.forEach((tile, index) => {
-        if (tile !== null && teamPower(player.played) >= powerLevels(this.state.players.length, index)[0]){
-          ([0,1] as (0|1)[]).forEach(side => {
-            for (let x = 0;x<7;x++){
-              for (let y = 0;y<7;y++){
-
-                if(allPolyominos[tile][side].coordinates.some(coord => accessibleSquares.find(square => square.x === x+coord.x && square.y === y+coord.y))
-                && allPolyominos[tile][side].coordinates.every(coord => !isCoordOutOfBorders({x:coord.x+x,y:coord.y+y}) && isCoordFree({x:coord.x+x,y:coord.y+y}, getOccupiedSquares(player.cave)))){
-                  playPolyominoMoves.push({type:MoveType.PlayPolyomino, huntSpot:index, playerId:color, polyomino:tile, side, square:{x,y}})
+      switch (player.huntPhase){
+        case HuntPhase.Hunt : {
+          const playPolyominoMoves:(PlayPolyomino|EndTurn)[] = []
+          const accessibleSquares:Coordinates[] = getFreeSquaresFromPath(getSquaresStartLeft(player.cave),player.cave)
+          this.state.huntingBoard.forEach((tile, index) => {
+            if (tile !== null && teamPower(player.played) >= powerLevels(this.state.players.length, index)[0]){
+              ([0,1] as (0|1)[]).forEach(side => {
+                for (let x = 0;x<7;x++){
+                  for (let y = 0;y<7;y++){
+    
+                    if(allPolyominos[tile][side].coordinates.some(coord => accessibleSquares.find(square => square.x === x+coord.x && square.y === y+coord.y))
+                    && allPolyominos[tile][side].coordinates.every(coord => !isCoordOutOfBorders({x:coord.x+x,y:coord.y+y}) && isCoordFree({x:coord.x+x,y:coord.y+y}, getOccupiedSquares(player.cave)))){
+                      playPolyominoMoves.push({type:MoveType.PlayPolyomino, huntSpot:index, playerId:color, polyomino:tile, side, square:{x,y}})
+                    }
+                  }
                 }
-              }
+              })
             }
           })
+          
+          const endTurnMove:EndTurn[] = [{type:MoveType.EndTurn, playerId:color}]
+          return playPolyominoMoves.concat(endTurnMove)
         }
-      })
+        case HuntPhase.Pay : {
+          const spendHuntersAndValidateMoves:(SpendHunter|ValidateSpendedHunters)[] = [] 
+          player.played.forEach(card => {
+            spendHuntersAndValidateMoves.push({type:MoveType.SpendHunter, playerId:this.state.sortedPlayers![0], card})
+          })
+          if (player.huntSpotTakenLevels![0] <= 0){
+            spendHuntersAndValidateMoves.push({type:MoveType.ValidateSpendedHunters, playerId:this.state.sortedPlayers![0]})
+          }
+          return spendHuntersAndValidateMoves
+        }
+        default : {
+          return []
+        }
+      }
 
-      return playPolyominoMoves
     }
   }
 
@@ -106,18 +136,76 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         return revealHuntCards(this.state)
       case MoveType.PlayPolyomino:
         return playPolyomino(this.state, move)
+      case MoveType.SpendHunter:
+        return spendHunter(this.state, move)
+      case MoveType.ValidateSpendedHunters:
+        return validateSpendedHunters(this.state, move)
+      case MoveType.CheckPermanentObjectives:
+        return checkPermanentObjectives(this.state, move)
+      case MoveType.CheckVariableObjectives:
+        return checkVariableObjectives(this.state, move)
+      case MoveType.RefillHuntingBoard:
+        return refillHuntingBoard(this.state)
+      case MoveType.EndTurn:
+        return endTurn(this.state, move)
+      case MoveType.TakeBackPlayedCards:
+        return takeBackPlayedCards(this.state, move)
+      case MoveType.DrawXCards:
+        return drawXCards(this.state, move)
+      case MoveType.ShuffleDiscardPile:
+        return shuffleDiscardPile(this.state, move)
+      case MoveType.ChangeActivePlayer:
+        return changeActivePlayer(this.state, move)
       default: return
-
     }
   }
 
   getAutomaticMove(): void | Move {
 
     switch(this.state.phase){
-      case Phase.Initiative:
+      case Phase.Initiative:{
         if (this.state.players.every(p => p.isReady === true)){
           return {type:MoveType.RevealHuntCards}
+        } else return
+      } 
+      case Phase.Hunt:{
+        if (this.state.sortedPlayers!.length === 0){
+          return {type:MoveType.RefillHuntingBoard}
         }
+        const player = this.state.players.find(p => p.color === this.state.sortedPlayers![0])!
+        switch(player.huntPhase){
+          case HuntPhase.Pay:{
+            if (player.huntSpotTakenLevels![1] <= 0){
+              return {type:MoveType.ValidateSpendedHunters, playerId:player.color}
+            } else return
+          }
+          case HuntPhase.PermanentObjectives:{
+            return {type:MoveType.CheckPermanentObjectives, playerId:player.color}
+          }
+          case HuntPhase.VariableObjectives:{
+            return {type:MoveType.CheckVariableObjectives, playerId:player.color}
+          }
+          case HuntPhase.DrawCards:{
+            if (player.played.length !== 0){
+              return {type:MoveType.TakeBackPlayedCards, playerId:player.color, cards:player.played}
+            } else {
+              const cardsToDraw:number = howManyCardToDraw(player)
+              console.log("cards to draw : ", cardsToDraw)
+              if (player.deck.length < cardsToDraw){
+
+                const shuffledDiscardPile = shuffle(player.discard)
+                return {type:MoveType.ShuffleDiscardPile,playerId:player.color,newDeck:shuffledDiscardPile}
+              } else {
+                return {type:MoveType.DrawXCards, playerId:player.color, cards:getCardsToDraw(player)}
+              }
+            }
+          }
+          case HuntPhase.ChangeActivePlayer:{
+            return {type:MoveType.ChangeActivePlayer}
+          }
+        }
+      }
+
     }
 
     return
@@ -127,11 +215,12 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
     return {
       ...this.state,
       caveDisplayed:playerId === undefined ? PlayerColor.Yellow : playerId,
+      tilesDeck:this.state.tilesDeck.map(pile => pile.length),
       players:this.state.players.map(p => {
         if (this.state.phase === undefined || playerId === p.color){
           return {...p, deck:p.deck.length}
         } else {
-          return this.state.phase === Phase.Initiative ? {...p, deck:p.deck.length, hand:p.hand.length, played:p.played.length} : {...p, deck:p.deck.length, hand:p.hand.length}
+          return (this.state.phase === Phase.Initiative || (this.state.sortedPlayers !== undefined && this.state.sortedPlayers.find(sp => sp === p.color) === undefined)) ? {...p, deck:p.deck.length, hand:p.hand.length, played:p.played.length} : {...p, deck:p.deck.length, hand:p.hand.length}
         }
       })}
   }
@@ -152,6 +241,22 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         const result:{color:PlayerColor, cards:number[]}[] = []
         this.state.players.forEach(p => result.push({color:p.color, cards:p.played}))
         return {type:MoveType.RevealHuntCards, cardsPlayed:result}
+      case MoveType.RefillHuntingBoard:
+        return {...move, newBoard:this.state.huntingBoard}
+      case MoveType.TakeBackPlayedCards:
+        if (playerId === move.playerId){
+          return move
+        } else {
+          return {type:MoveType.TakeBackPlayedCards, playerId:move.playerId}
+        }
+      case MoveType.DrawXCards:
+        if (playerId === move.playerId){
+          return move
+        } else {
+          return {type:MoveType.DrawXCards, playerId:move.playerId}
+        }
+      case MoveType.ShuffleDiscardPile:
+        return {type:MoveType.ShuffleDiscardPile, playerId:move.playerId,newDeckLength:move.newDeck.length}
       default : return move
     }
   }
@@ -163,7 +268,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
 
 function setupPlayers(players: PrehistoriesPlayerOptions[]): PlayerState[] {
   return players.map((options) => ({
-    color:options.id, cave:setupCave(options.id), totemTokens:8, deck:setupDeck(options.id), discard:[], hand:[], played:[], goalsMade:[], tilesInHand:false
+    color:options.id, cave:setupCave(options.id), totemTokens:8, deck:setupDeck(options.id), discard:[], hand:[], played:[], goalsMade:[]
   }))
 }
 
@@ -206,4 +311,21 @@ function setupHandPlayer(players:PlayerState[]):void{
           p.hand.push(p.deck.pop()!)
         }
     })
+}
+
+function getCardsToDraw(player:PlayerState):number[]{
+  const result:number[] = []
+  for (let i=0;i<howManyCardToDraw(player);i++){
+    result.push(player.deck[player.deck.length-1-i])
+  }
+  return result
+}
+
+function takeBackDiscardPile(color:PlayerColor, players:PlayerState[]):number[]{
+  const player = players.find(p => p.color === color)!
+  return shuffle(player.discard)
+}
+
+export function howManyCardToDraw(player:PlayerState|PlayerView|PlayerViewSelf|PlayerHuntView):number{
+  return player.tilesHunted === undefined ? 3 : (player.injuries === undefined ? 2 : Math.max(0, 2 - player.injuries))
 }

@@ -2,8 +2,10 @@ import GameState from "../GameState";
 import GameView from "../GameView";
 import { allPolyominos } from "../material/Polyominos";
 import PlayerColor from "../PlayerColor";
+import Animal from "../types/Animal";
 import Coordinates from "../types/Coordinates";
 import PaintedPolyominos from "../types/PaintedPolyominos";
+import {PaintedSquare} from "../types/Polyomino"
 
 function getSquaresStartLeft(cave:PaintedPolyominos[]):Coordinates[]{
     if (isFirstColumnEmpty(cave)){
@@ -18,7 +20,7 @@ export default getSquaresStartLeft
 
 export function getFreeSquaresFromPath(path:Coordinates[], cave:PaintedPolyominos[]):Coordinates[]{
     const result:Coordinates[] = []
-    const occupiedSquares:Coordinates[] = getOccupiedSquares(cave)
+    const occupiedSquares:PaintedSquare[] = getOccupiedSquares(cave)
     if (path.length === 0){
         return [{x:0,y:0},{x:1,y:0},{x:2,y:0},{x:3,y:0},{x:4,y:0},{x:5,y:0},{x:6,y:0}]
     }
@@ -38,11 +40,11 @@ export function isCoordOutOfBorders(coord:Coordinates):boolean{
     return coord.x < 0 || coord.x > 6 || coord.y < 0 || coord.y > 6
 }
 
-export function isCoordFree(coord:Coordinates, occupiedSquares:Coordinates[]):boolean{
+export function isCoordFree(coord:Coordinates, occupiedSquares:PaintedSquare[]):boolean{
     return occupiedSquares.every(square => square.x !== coord.x || square.y !== coord.y)
 }
 
-function getTilesFromTarget(target:Coordinates,list:Coordinates[], occupiedSquares:Coordinates[]):Coordinates[]{
+export function getTilesFromTarget(target:Coordinates,list:Coordinates[], occupiedSquares:PaintedSquare[]):Coordinates[]{
     const coordIterator:Coordinates[] = [{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}]
     const newList:Coordinates[] = []
     let result:Coordinates[] = []
@@ -64,12 +66,12 @@ export function isFirstColumnEmpty(cave:PaintedPolyominos[]):boolean{
     return getOccupiedSquares(cave).every(polyo => polyo.y !== 0)
 }
 
-export function getOccupiedSquares(cave:PaintedPolyominos[]):Coordinates[]{
-    const result:Coordinates[] = []
+export function getOccupiedSquares(cave:PaintedPolyominos[]):PaintedSquare[]{
+    const result:PaintedSquare[] = []
     cave.forEach(paint => {
         const polyo = allPolyominos[paint.polyomino][paint.side]
         polyo.coordinates.forEach(coord => {
-            result.push({x:paint.x+coord.x,y:paint.y+coord.y})
+            result.push({animal:polyo.animal, x:paint.x+coord.x,y:paint.y+coord.y})
         })
     })
 

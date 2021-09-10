@@ -15,6 +15,7 @@ import CardInHand, {isCardInHand} from "@gamepark/prehistories/types/appTypes/Ca
 import CardPlayed from "@gamepark/prehistories/types/appTypes/CardPlayed";
 import MoveType from "@gamepark/prehistories/moves/MoveType";
 import { usePlayerId } from "@gamepark/react-client";
+import { HuntPhase } from "@gamepark/prehistories/types/Phase";
 
 type Props = {
     player:PlayerView | PlayerViewSelf | PlayerHuntView
@@ -25,7 +26,7 @@ const PlayerBoard : FC<Props> = ({player}) => {
     const {t} = useTranslation()
     const playerId = usePlayerId<PlayerColor>()
 
-    const [{canDrop, isOver}, dropRef] = useDrop({
+    const [{canDropPlayed, isOverPlayed}, dropRefPlayed] = useDrop({
         accept: ["CardInHand", 'CardPlayed'],
         canDrop: (item: CardInHand | CardPlayed) => {
             if(isCardInHand(item)){
@@ -35,8 +36,8 @@ const PlayerBoard : FC<Props> = ({player}) => {
             }
         },
         collect: monitor => ({
-          canDrop: monitor.canDrop(),
-          isOver: monitor.isOver()
+          canDropPlayed: monitor.canDrop(),
+          isOverPlayed: monitor.isOver()
         }),
         drop: (item: CardInHand | CardPlayed) => {
             if(isCardInHand(item)){
@@ -44,6 +45,20 @@ const PlayerBoard : FC<Props> = ({player}) => {
             } else {
                 return 
             }
+        }
+      })
+
+      const [{canDropDiscard, isOverDiscard}, dropRefDiscard] = useDrop({
+        accept: ['CardPlayed'],
+        canDrop: (item:CardPlayed) => {
+            return true
+        },
+        collect: monitor => ({
+          canDropDiscard: monitor.canDrop(),
+          isOverDiscard: monitor.isOver()
+        }),
+        drop: (item: CardPlayed) => {
+            return {type:MoveType.SpendHunter, card:item.card, playerId:player.color}          
         }
       })
 
@@ -81,9 +96,9 @@ const PlayerBoard : FC<Props> = ({player}) => {
 
             </div>
 
-            <div css={[cardPlayedPanelPosition, canDrop && canDropStyle, canDrop && isOver && isOverStyle]} ref = {dropRef}> 
+            <div css={[cardPlayedPanelPosition, canDropPlayed && canDropStyle, canDropPlayed && isOverPlayed && isOverStyle]} ref = {dropRefPlayed}> 
 
-            <span css={[spanDropDisplay(canDrop)]}>{t("Drag Here")}</span>
+            <span css={[spanDropDisplay(canDropPlayed)]}>{t("Drag Here")}</span>
             
             {Array.isArray(player.played) ? player.played.map((card, index) => 
             
@@ -92,6 +107,9 @@ const PlayerBoard : FC<Props> = ({player}) => {
                 color={player.color}
                 power={getColoredDeck(player.color)[card].power}
                 speed={getColoredDeck(player.color)[card].speed}
+                draggable={player.huntPhase === HuntPhase.Pay && player.color === playerId}
+                draggableItem={{type:"CardPlayed", card:card}}
+                type={"CardPlayed"}
                 />
             
             ) : [...Array(player.played)].map((_, i) => 
@@ -103,12 +121,12 @@ const PlayerBoard : FC<Props> = ({player}) => {
 
         </div>
 
-            <div css={[discardZonePosition, discardZoneStyle]}>
+            <div css={[discardZonePosition, discardZoneStyle, canDropDiscard && canDropStyle, canDropDiscard && isOverDiscard && isOverStyle]} ref = {dropRefDiscard}>
 
                 {player.discard.length !== 0 && 
                     <Card color={player.color}
-                          power={getColoredDeck(player.color)[player.discard[player.discard.length]].power}
-                          speed={getColoredDeck(player.color)[player.discard[player.discard.length]].speed}
+                          power={getColoredDeck(player.color)[player.discard[player.discard.length-1]].power}
+                          speed={getColoredDeck(player.color)[player.discard[player.discard.length-1]].speed}
                     />}
 
             </div>

@@ -19,6 +19,10 @@ export function isPlayerState(state:PlayerState | PlayerView | PlayerViewSelf | 
     return Array.isArray(state.deck)
 }
 
+export function isNotPlayerState(state:PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView):state is (PlayerView | PlayerViewSelf | PlayerHuntView) {
+    return typeof state.deck === 'number'
+}
+
 export function isPlayerViewSelf(state:PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView):state is PlayerViewSelf {
     return Array.isArray(state.hand) && typeof state.deck === 'number' && Array.isArray(state.played)
 }

@@ -5,7 +5,7 @@ import Move from "@gamepark/prehistories/moves/Move";
 import MoveType from "@gamepark/prehistories/moves/MoveType";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import { getPlayerName } from "@gamepark/prehistories/PrehistoriesOptions";
-import Phase from "@gamepark/prehistories/types/Phase";
+import Phase, { HuntPhase } from "@gamepark/prehistories/types/Phase";
 import { PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
 import { PlayerTimer, usePlay, usePlayer, usePlayerId } from "@gamepark/react-client";
 import { FC, HTMLAttributes } from "react";
@@ -20,12 +20,14 @@ type Props = {
     position:number
 } & HTMLAttributes<HTMLDivElement>
 
-const PlayerPanel : FC<Props> = ({player:{color, totemTokens, isReady}, position, phase, ...props}) => {
+const PlayerPanel : FC<Props> = ({player:{color, totemTokens, isReady, huntPhase, huntSpotTakenLevels, deck}, position, phase, ...props}) => {
 
     const playerInfo = usePlayer(color)
     const {t} = useTranslation()
     const playerId = usePlayerId<PlayerColor>()
     const play = usePlay<Move>()
+
+    console.log("deck/length : ", deck)
 
     return (
 
@@ -42,16 +44,25 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, isReady}, position
             <PlayerTimer playerId={color} css={[TimerStyle]}/>
 
             {displayValidationButton(phase, playerId, color, isReady) && <Button css={[validationButtonPosition]} onClick={() => {play({type:MoveType.TellYouAreReady, playerId:color})}} colorButton={color} >{t('Validate')}</Button> }
+            {displayTakeWithInjuryButton(phase, playerId, color, huntPhase, huntSpotTakenLevels !== undefined && huntSpotTakenLevels[0] <= 0) && <Button css={[validationButtonPosition]} onClick={() => {play({type:MoveType.ValidateSpendedHunters, playerId:color})}} colorButton={color} >{t('Take With Injury')}</Button> }
+            {displayEndTurnButton(phase, playerId, color, huntPhase) && <Button css={[validationButtonPosition]} onClick={() => {play({type:MoveType.EndTurn, playerId:color})}} colorButton={color} >{t('End your Turn')}</Button>}
 
-        
         </div>
 
     )
 
 }
 
+function displayEndTurnButton(phase:Phase|undefined, playerId:PlayerColor|undefined, color:PlayerColor, huntPhase:HuntPhase|undefined):boolean{
+    return phase === Phase.Hunt && playerId === color && huntPhase === HuntPhase.Hunt
+}
+
 function displayValidationButton(phase:Phase|undefined, playerId:PlayerColor|undefined, color:PlayerColor, isReady:boolean|undefined):boolean{
     return phase === Phase.Initiative && playerId === color && isReady !== true
+}
+
+function displayTakeWithInjuryButton(phase:Phase|undefined, playerId:PlayerColor|undefined, color:PlayerColor, huntPhase:HuntPhase | undefined, canPay:boolean):boolean{
+    return phase === Phase.Hunt && playerId === color && huntPhase === HuntPhase.Pay && canPay
 }
 
 const validationButtonPosition = css`

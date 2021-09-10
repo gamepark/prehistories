@@ -18,6 +18,9 @@ type Props = {
 
 const Cave : FC<Props> = ({player}) => {
 
+    const sizeTileW = 14.2857 // % unit
+    const sizeTileH = 14.2857 // % unit
+
     return(
 
         <div css={[cavePosition, caveStyle(player.color)]}>
@@ -37,12 +40,12 @@ const Cave : FC<Props> = ({player}) => {
                 {player.cave.map((paint, index) => 
 
                     paint.polyomino < 2 
-                        ? <div css = {[tilePosition(paint.x, paint.y), tileSize(paint.polyomino, paint.side)]} key = {index}> 
+                        ? <div css = {[tilePosition(paint.x, paint.y), tileSize(paint.polyomino, paint.side,sizeTileW, sizeTileH)]} key = {index}> 
                             <Polyomino  polyomino={paint.polyomino} 
                                         side={paint.side}
                                         color={player.color} />
                         </div>
-                        : <div css = {[tilePosition(paint.x, paint.y), tileSize(paint.polyomino, paint.side)]} key = {index}>
+                        : <div css = {[tilePosition(paint.x, paint.y), tileSize(paint.polyomino, paint.side,sizeTileW, sizeTileH)]} key = {index}>
                             <Polyomino polyomino={paint.polyomino} 
                                        side={paint.side} />
                         </div>
@@ -56,15 +59,15 @@ const Cave : FC<Props> = ({player}) => {
 
 }
 
-export const tileSize = (polyomino:number, side:number) =>`
-${polyomino <= 26 && `width:14.2857%;height:14.2857%;`};
-${polyomino > 26 && polyomino <= 51 && side === 0 && `width:28.5714%;height:14.2857%;`};
-${polyomino > 26 && polyomino <= 51 && side === 1 && `width:14.2857%;height:28.5714%;`};
-${polyomino > 51 && polyomino <= 61 && `width:28.5714%;height:28.5714%;`};
-${(polyomino === 62 || polyomino === 66 || polyomino === 67 || polyomino === 71 || (polyomino === 69 && side === 1)) && `width:42.8571%;height:28.5714%;` };
-${(polyomino === 63 || polyomino === 64 || polyomino === 65 || polyomino === 68 || polyomino === 70 || (polyomino === 69 && side === 0)) && `width:28.5714%;height:42.8571%;` };
-${polyomino > 71 && polyomino <= 75 && `width:28.5714%;height:28.5714%;`};
-border:1px red solid;
+export const tileSize = (polyomino:number, side:number, sizeBaseW:number, sizeBaseH:number) =>`
+
+${polyomino <= 26 && `width:${sizeBaseW}%;height:${sizeBaseH}%;`};
+${polyomino > 26 && polyomino <= 51 && side === 0 && `width:${sizeBaseW*2}%;height:${sizeBaseH}%;`};
+${polyomino > 26 && polyomino <= 51 && side === 1 && `width:${sizeBaseW}%;height:${sizeBaseH*2}%;`};
+${polyomino > 51 && polyomino <= 61 && `width:${sizeBaseW*2}%;height:${sizeBaseH*2}%;`};
+${(polyomino === 62 || polyomino === 66 || polyomino === 67 || polyomino === 71 || (polyomino === 69 && side === 1)) && `width:${sizeBaseW*3}%;height:${sizeBaseH*2}%;` };
+${(polyomino === 63 || polyomino === 64 || polyomino === 65 || polyomino === 68 || polyomino === 70 || (polyomino === 69 && side === 0)) && `width:${sizeBaseW*2}%;height:${sizeBaseH*3}%;` };
+${polyomino > 71 && polyomino <= 76 && `width:${sizeBaseW*2}%;height:${sizeBaseH*2}%;`};
 `
 
 const tilePosition = (x:number, y:number) => css`

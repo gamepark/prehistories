@@ -1,15 +1,13 @@
 import GameState from "../GameState";
-import { getColoredDeck } from "../material/Hunters";
 import { allPolyominos } from "../material/Polyominos";
 import PlayerColor, { playerColors } from "../PlayerColor";
 import PlayerState from "../PlayerState";
 import PaintedPolyominos from "../types/PaintedPolyominos";
 import Phase from "../types/Phase";
 import getSquaresStartLeft, { getFreeSquaresFromPath, getOccupiedSquares } from "../utils/getSquaresStartLeft";
-import {YellowHunters} from '../material/Hunters'
 import Coordinates from "../types/Coordinates";
 
-describe('Test getSquaresStartLeft.ts', () => {
+describe('Test Pathfinding', () => {
 
     const polyominosArray :number[] = Array.from(allPolyominos.keys())
     const cave1:PaintedPolyominos[] = [
@@ -70,17 +68,17 @@ describe('Test getSquaresStartLeft.ts', () => {
     ]
 
     test('getOccupiedSquares', () => {   
-        expect(getOccupiedSquares(cave1)).toEqual(expect.arrayContaining([{x:1, y:1},{x:5, y:4},{x:3, y:2}]))
+        expect(getOccupiedSquares(cave1).map(square => ({x:square.x,y:square.y}))).toEqual(expect.arrayContaining([{x:1, y:1},{x:5, y:4},{x:3, y:2}]))
         expect(getOccupiedSquares(cave1).length).toBe([{x:1, y:1},{x:5, y:4},{x:3, y:2}].length)
-        expect(getOccupiedSquares(cave2)).toEqual(expect.arrayContaining([{x:1,y:0},{x:1,y:1},{x:1,y:2},{x:2,y:2},{x:3,y:2},{x:3,y:3},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:1,y:5},{x:1,y:6}]))
+        expect(getOccupiedSquares(cave2).map(square => ({x:square.x,y:square.y}))).toEqual(expect.arrayContaining([{x:1,y:0},{x:1,y:1},{x:1,y:2},{x:2,y:2},{x:3,y:2},{x:3,y:3},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:1,y:5},{x:1,y:6}]))
         expect(getOccupiedSquares(cave2).length).toBe([{x:1,y:0},{x:1,y:1},{x:1,y:2},{x:2,y:2},{x:3,y:2},{x:3,y:3},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:1,y:5},{x:1,y:6}].length)
-        expect(getOccupiedSquares(cave3)).toEqual(expect.arrayContaining([{x:1,y:0},{x:1,y:1},{x:1,y:2},{x:1,y:3},{x:1,y:4},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:5,y:1},{x:5,y:3},{x:5,y:4},{x:3,y:5},{x:3,y:6}]))
+        expect(getOccupiedSquares(cave3).map(square => ({x:square.x,y:square.y}))).toEqual(expect.arrayContaining([{x:1,y:0},{x:1,y:1},{x:1,y:2},{x:1,y:3},{x:1,y:4},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:5,y:1},{x:5,y:3},{x:5,y:4},{x:3,y:5},{x:3,y:6}]))
         expect(getOccupiedSquares(cave3).length).toBe([{x:1,y:0},{x:1,y:1},{x:1,y:2},{x:1,y:3},{x:1,y:4},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:5,y:1},{x:5,y:3},{x:5,y:4},{x:3,y:5},{x:3,y:6}].length)
-        expect(getOccupiedSquares(cave4)).toEqual(expect.arrayContaining([{x:1,y:0},{x:1,y:1},{x:1,y:2},{x:1,y:3},{x:1,y:4},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:5,y:1},{x:5,y:3},{x:5,y:4},{x:6,y:1},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:3,y:6},{x:5,y:6}]))
+        expect(getOccupiedSquares(cave4).map(square => ({x:square.x,y:square.y}))).toEqual(expect.arrayContaining([{x:1,y:0},{x:1,y:1},{x:1,y:2},{x:1,y:3},{x:1,y:4},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:5,y:1},{x:5,y:3},{x:5,y:4},{x:6,y:1},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:3,y:6},{x:5,y:6}]))
         expect(getOccupiedSquares(cave4).length).toBe([{x:1,y:0},{x:1,y:1},{x:1,y:2},{x:1,y:3},{x:1,y:4},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:5,y:1},{x:5,y:3},{x:5,y:4},{x:6,y:1},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:3,y:6},{x:5,y:6}].length)
-        expect(getOccupiedSquares(cave5)).toEqual(expect.arrayContaining([{x:1,y:1},{x:5,y:4},{x:3,y:2},{x:6,y:0},{x:6,y:1},{x:5,y:1},{x:5, y:2}]))
+        expect(getOccupiedSquares(cave5).map(square => ({x:square.x,y:square.y}))).toEqual(expect.arrayContaining([{x:1,y:1},{x:5,y:4},{x:3,y:2},{x:6,y:0},{x:6,y:1},{x:5,y:1},{x:5, y:2}]))
         expect(getOccupiedSquares(cave5).length).toBe([{x:1,y:1},{x:5,y:4},{x:3,y:2},{x:6,y:0},{x:6,y:1},{x:5,y:1},{x:5, y:2}].length)
-        expect(getOccupiedSquares(cave6)).toEqual(expect.arrayContaining([{x:5,y:1},{x:2,y:5},{x:3,y:3},{x:3,y:0},{x:3,y:1},{x:4,y:1},{x:4,y:2}]))
+        expect(getOccupiedSquares(cave6).map(square => ({x:square.x,y:square.y}))).toEqual(expect.arrayContaining([{x:5,y:1},{x:2,y:5},{x:3,y:3},{x:3,y:0},{x:3,y:1},{x:4,y:1},{x:4,y:2}]))
         expect(getOccupiedSquares(cave6).length).toBe([{x:5,y:1},{x:2,y:5},{x:3,y:3},{x:3,y:0},{x:3,y:1},{x:4,y:1},{x:4,y:2}].length)
    
     })
@@ -138,7 +136,7 @@ const anyState: GameState = {
 }
 
 function withCave(cave:PaintedPolyominos[], color:PlayerColor ):PlayerState{
-    return {cave,color,deck:[],discard:[], goalsMade:[], hand:[], played:[], totemTokens:8, tilesInHand:false}
+    return {cave,color,deck:[],discard:[], goalsMade:[], hand:[], played:[], totemTokens:8}
 }
 
 function createGameWithCave(...caves:PaintedPolyominos[][]):GameState{
@@ -146,8 +144,4 @@ function createGameWithCave(...caves:PaintedPolyominos[][]):GameState{
         ...anyState,
         players:caves.map((cave, index) => withCave(cave, playerColors[index]))
     }
-}
-
-function sum(a:number, b:number) {
-    return a + b;
 }

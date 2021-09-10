@@ -2,13 +2,15 @@
 import { css } from "@emotion/react";
 import GameView, { getPlayers } from "@gamepark/prehistories/GameView";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
-import Phase from "@gamepark/prehistories/types/Phase";
+import Phase, { HuntPhase } from "@gamepark/prehistories/types/Phase";
 import { isPlayerHuntView, isPlayerViewSelf, PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
 import powerLevels from "@gamepark/prehistories/utils/powerLevels";
 import teamPower from "@gamepark/prehistories/utils/teamPower";
-import { usePlayerId } from "@gamepark/react-client";
+import { usePlay, usePlayerId } from "@gamepark/react-client";
 import { FC } from "react";
+import SetSelectedPolyomino, { setSelectedPolyominoMove } from "../localMoves/setSelectedPolyomino";
 import Images from "../utils/Images";
+import { tileSize } from "./Cave";
 import Polyomino from "./Polyomino";
 
 type Props = {
@@ -19,6 +21,7 @@ type Props = {
 const HuntingZone : FC<Props> = ({game, numberOfPlayers}) => {
 
     const playerId = usePlayerId<PlayerColor>()
+    const playSetSelectedPolyomino = usePlay<SetSelectedPolyomino>()
 
     return(
 
@@ -27,12 +30,13 @@ const HuntingZone : FC<Props> = ({game, numberOfPlayers}) => {
             {game.huntingBoard.map((polyomino, index) => 
             
                 polyomino !== null && <Polyomino key = {index}
-                           css = {polyominoToHuntPosition(index, numberOfPlayers)}
+                           css = {[polyominoToHuntPosition(index, numberOfPlayers, polyomino), polyominoToHuntSize(index, numberOfPlayers, polyomino, game.polyominoSelected?.polyomino === polyomino ? game.polyominoSelected.side : 0, 6,12)]}
                            polyomino={polyomino} 
-                           side={0}
+                           side={game.polyominoSelected?.polyomino === polyomino ? game.polyominoSelected.side : 0}
                            draggable={isPolyominoHuntable(game.players.find(p => p.color === playerId), game.phase, index, game.players.length,game.sortedPlayers !== undefined ? game.sortedPlayers[0] : undefined)}
                            type={'PolyominoToHunt'}
-                           draggableItem={{type:"PolyominoToHunt", huntSpot:index, polyomino, side:0}}
+                           draggableItem={{type:"PolyominoToHunt", huntSpot:index, polyomino, side:(game.polyominoSelected?.polyomino === polyomino ? game.polyominoSelected.side : 0)}}
+                           onClick = {() => playSetSelectedPolyomino(setSelectedPolyominoMove({polyomino, huntSpot:index, side:game.polyominoSelected?.polyomino === polyomino ? game.polyominoSelected.side : 0, type:"PolyominoToHunt"}), {local:true})}
                 />
             
             )}
@@ -50,16 +54,15 @@ function isPolyominoHuntable(player:(PlayerView|PlayerViewSelf|PlayerHuntView|un
     return phase === Phase.Hunt 
     && player !== undefined 
     && firstPlayer !== undefined && player.color === firstPlayer
+    && player.huntPhase === HuntPhase.Hunt
     && (isPlayerHuntView(player) || isPlayerViewSelf(player)) 
     && teamPower(player.played) >= powerLevels(nbPlayers, huntSpot)[0]
 }
 
-const polyominoToHuntPosition = (position:number, numberOfPlayers:number) => css`
+const polyominoToHuntPosition = (position:number, numberOfPlayers:number, polyomino:number) => css`
 position:absolute;
 top:${getTop(position, numberOfPlayers)}%;
 left:${getLeft(position, numberOfPlayers)}%;
-width:${getWidth(position, numberOfPlayers)}%;
-height:${getHeight(position, numberOfPlayers)}%;
 `
 
 const huntingZonePosition = css`
@@ -130,46 +133,8 @@ function getLeft(pos:number, players:number):number{
     } 
 }
 
-function getWidth(pos:number, players:number):number{
-    switch (pos){
-        case 0 :
-            return players < 4 ? 12 : 12
-        case 1 :
-            return players < 4 ? 24 : 12
-        case 2 :
-            return players < 4 ? 24 : 24
-        case 3 :
-            return players < 4 ? 36 : 24
-        case 4 :
-            return players < 4 ? 24 : 24
-        case 5 :
-            return players < 4 ? 0 : 36
-        case 6 :
-            return players < 4 ? 0 : 24
-        default :
-            return 0
-    }     
-}
-
-function getHeight(pos:number, players:number):number{
-    switch (pos){
-        case 0 :
-            return players < 4 ? 12 : 12
-        case 1 :
-            return players < 4 ? 24 : 12
-        case 2 :
-            return players < 4 ? 24 : 12
-        case 3 :
-            return players < 4 ? 24 : 12
-        case 4 :
-            return players < 4 ? 24 : 24
-        case 5 :
-            return players < 4 ? 0 : 24
-        case 6 :
-            return players < 4 ? 0 : 24
-        default :
-            return 0
-    }  
+const polyominoToHuntSize = (pos:number, players:number, polyomino:number, side:(0|1), sizeBaseH:number, sizeBaseW:number) => {
+    return tileSize(polyomino, side, sizeBaseW, sizeBaseH)    
 }
 
 function getRotate(pos:number, players:number):number{

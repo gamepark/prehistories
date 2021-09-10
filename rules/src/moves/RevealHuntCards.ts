@@ -1,10 +1,11 @@
 import GameState from "../GameState";
-import GameView from "../GameView";
+import GameView, { getPlayers } from "../GameView";
 import PlayerColor from "../PlayerColor";
 import PlayerState from "../PlayerState";
-import Phase from "../types/Phase";
+import Phase, { HuntPhase } from "../types/Phase";
 import { PlayerHuntView, PlayerView, PlayerViewSelf } from "../types/PlayerView";
 import teamPower from "../utils/teamPower";
+import teamSpeed from "../utils/teamSpeed";
 import Move from "./Move";
 import MoveType from "./MoveType";
 import MoveView from "./MoveView";
@@ -25,6 +26,7 @@ export function revealHuntCards(state:GameState){
     state.phase = Phase.Hunt
     state.players.forEach(p => delete p.isReady)
     state.sortedPlayers = sortPlayers(state.players)
+    state.players.find(p => p.color === state.sortedPlayers![0])!.huntPhase = HuntPhase.Hunt
 }
 
 export function revealHuntCardsInView(state:GameView, move:RevealHuntCardsView){
@@ -33,7 +35,8 @@ export function revealHuntCardsInView(state:GameView, move:RevealHuntCardsView){
         delete p.isReady
     })
     state.phase = Phase.Hunt
-    state.sortedPlayers = sortPlayers(state.players as PlayerState[] | (PlayerViewSelf | PlayerHuntView)[])
+    state.sortedPlayers = sortPlayers(state.players as PlayerState[] | (PlayerViewSelf | PlayerHuntView)[]) ;
+    getPlayers(state).find(p => p.color === state.sortedPlayers![0])!.huntPhase = HuntPhase.Hunt
 }
 
 export function isRevealHuntCards(move: Move |MoveView):move is RevealHuntCards{
@@ -41,7 +44,11 @@ export function isRevealHuntCards(move: Move |MoveView):move is RevealHuntCards{
 }
 
 function sortPlayers(players:PlayerState[] | (PlayerViewSelf | PlayerHuntView)[]):PlayerColor[]{
-    const result:(PlayerState | PlayerViewSelf | PlayerHuntView)[] = players
+    const result:(PlayerState | PlayerViewSelf | PlayerHuntView)[] = []
+    for (const elem of players){
+        result.push(elem)
+    }
+    result.sort((a,b) => teamSpeed(b.played) - teamSpeed(a.played))
     result.sort((a,b) => teamPower(a.played) - teamPower(b.played))
     return result.map(p => p.color)
 }

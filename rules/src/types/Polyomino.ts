@@ -8,4 +8,8 @@ type PolyominoSide = {
     coordinates:Coordinates[]
 }
 
+export type PaintedSquare = {
+    animal : Animal
+} & Coordinates
+
 export default Polyomino

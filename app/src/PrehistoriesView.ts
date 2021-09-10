@@ -7,8 +7,19 @@ import { tellYouAreReady } from '@gamepark/prehistories/moves/TellYouAreReady'
 import SetCaveDisplayed, { setCaveDisplayed } from './localMoves/setCaveDisplayed'
 import { revealHuntCardsInView } from '@gamepark/prehistories/moves/RevealHuntCards'
 import { playPolyomino } from '@gamepark/prehistories/moves/PlayPolyomino'
+import SetSelectedPolyomino, { ResetSelectedPolyomino, resetSelectedPolyomino, setSelectedPolyomino } from './localMoves/setSelectedPolyomino'
+import { spendHunter } from '@gamepark/prehistories/moves/SpendHunter'
+import { validateSpendedHunters } from '@gamepark/prehistories/moves/ValidateSpendedHunters'
+import { checkPermanentObjectives } from '@gamepark/prehistories/moves/CheckPermanentObjectives'
+import { checkVariableObjectives } from '@gamepark/prehistories/moves/CheckVariableObjectives'
+import { refillHuntingBoardInView } from '@gamepark/prehistories/moves/RefillHuntingBoard'
+import { endTurn } from '@gamepark/prehistories/moves/EndTurn'
+import { takeBackPlayedCardsInView } from '@gamepark/prehistories/moves/TakeBackPlayedCards'
+import { drawXCardsInView } from '@gamepark/prehistories/moves/DrawXCards'
+import { shuffleDiscardPileInView } from '@gamepark/prehistories/moves/ShuffleDiscardPile'
+import { changeActivePlayer } from '@gamepark/prehistories/moves/ChangeActivePlayer'
 
-type LocalMove = MoveView | SetCaveDisplayed
+type LocalMove = MoveView | SetCaveDisplayed | SetSelectedPolyomino | ResetSelectedPolyomino
 
 export default class PrehistoriesView implements Game<GameView, MoveView> {
   state: GameView
@@ -31,8 +42,36 @@ export default class PrehistoriesView implements Game<GameView, MoveView> {
         return revealHuntCardsInView(this.state, move)
       case MoveType.PlayPolyomino:
         return playPolyomino(this.state, move)
+      case MoveType.SpendHunter:
+        return spendHunter(this.state, move)
+      case MoveType.ValidateSpendedHunters:
+        return validateSpendedHunters(this.state, move)
+      case MoveType.CheckPermanentObjectives:
+        return checkPermanentObjectives(this.state, move)
+      case MoveType.CheckVariableObjectives:
+        return checkVariableObjectives(this.state, move)
+      case MoveType.EndTurn:
+        return endTurn(this.state, move)
+      case MoveType.TakeBackPlayedCards:
+        return takeBackPlayedCardsInView(this.state, move)
+      case MoveType.DrawXCards:
+        return drawXCardsInView(this.state, move)
+      case MoveType.ShuffleDiscardPile:
+        return shuffleDiscardPileInView(this.state, move)
+      case MoveType.ChangeActivePlayer:
+        return changeActivePlayer(this.state, move)
+
+
+
+      case MoveType.RefillHuntingBoard:
+        return refillHuntingBoardInView(this.state, move)
       case 'SetCaveDisplayed':
         return setCaveDisplayed(this.state, move)
+      case 'SetSelectedPolyomino':
+        return setSelectedPolyomino(this.state, move)
+      case 'ResetSelectedPolyomino':
+        return resetSelectedPolyomino(this.state)
+      
     }
   }
 
