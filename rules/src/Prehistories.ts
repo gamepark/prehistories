@@ -3,6 +3,7 @@ import { shuffle } from 'lodash'
 import GameState from './GameState'
 import GameView, { getPlayers } from './GameView'
 import { getGoalsArray } from './material/Goals'
+import getHandPrintsCoords from './material/HandPrints'
 import { allPolyominos} from './material/Polyominos'
 import { changeActivePlayer } from './moves/ChangeActivePlayer'
 import { checkPermanentObjectives } from './moves/CheckPermanentObjectives'
@@ -26,7 +27,7 @@ import PlayerState, { setupCave, setupDeck } from './PlayerState'
 import {isGameOptions, PrehistoriesOptions, PrehistoriesPlayerOptions} from './PrehistoriesOptions'
 import Coordinates from './types/Coordinates'
 import Phase, { HuntPhase } from './types/Phase'
-import { PlayerHuntView, PlayerView, PlayerViewSelf } from './types/PlayerView'
+import { isPlayerState, PlayerHuntView, PlayerView, PlayerViewSelf } from './types/PlayerView'
 import getSquaresStartLeft, { getFreeSquaresFromPath, getOccupiedSquares, isCoordFree, isCoordOutOfBorders } from './utils/getSquaresStartLeft'
 import powerLevels from './utils/powerLevels'
 import teamPower from './utils/teamPower'
@@ -190,8 +191,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
               return {type:MoveType.TakeBackPlayedCards, playerId:player.color, cards:player.played}
             } else {
               const cardsToDraw:number = howManyCardToDraw(player)
-              console.log("cards to draw : ", cardsToDraw)
-              if (player.deck.length < cardsToDraw){
+              if (player.deck.length < cardsToDraw && player.deck.length + player.discard.length >= cardsToDraw){
 
                 const shuffledDiscardPile = shuffle(player.discard)
                 return {type:MoveType.ShuffleDiscardPile,playerId:player.color,newDeck:shuffledDiscardPile}
@@ -327,5 +327,33 @@ function takeBackDiscardPile(color:PlayerColor, players:PlayerState[]):number[]{
 }
 
 export function howManyCardToDraw(player:PlayerState|PlayerView|PlayerViewSelf|PlayerHuntView):number{
-  return player.tilesHunted === undefined ? 3 : (player.injuries === undefined ? 2 : Math.max(0, 2 - player.injuries))
+  return player.tilesHunted === undefined ? 3 : (player.injuries === undefined ? 2 + areHandPrintsRecovered(player) : Math.max(0, 2 - player.injuries) + areHandPrintsRecovered(player))
+}
+
+function howManyCardToDraw2(player:PlayerState|PlayerView|PlayerViewSelf|PlayerHuntView):number{
+  if (isPlayerState(player)){
+    return player.tilesHunted === undefined ? Math.min(3, player.deck.length+player.discard.length) : (player.injuries === undefined ? Math.min(2, player.deck.length+player.discard.length) : Math.min(Math.max(0, 2 - player.injuries), player.deck.length+player.discard.length))
+  } else {
+    return player.tilesHunted === undefined ? Math.min(3, player.deck+player.discard.length) : (player.injuries === undefined ? Math.min(2, player.deck+player.discard.length) : Math.min(Math.max(0, 2 - player.injuries), player.deck+player.discard.length))
+  }
+}
+
+export function areHandPrintsRecovered(player:PlayerState|PlayerView|PlayerViewSelf|PlayerHuntView):number{
+  let result:number = 0
+  if (player.tilesHunted === undefined) {return result}
+  else {
+    for (let i=0;i<player.tilesHunted;i++){
+      const tile = player.cave[player.cave.length-1-i]
+      allPolyominos[tile.polyomino][tile.side].coordinates.forEach(coord => {
+        if (tile.x+coord.x === getHandPrintsCoords(player.color)[0].x && tile.y+coord.y === getHandPrintsCoords(player.color)[0].y){
+          result++
+        }
+        if (tile.x+coord.x === getHandPrintsCoords(player.color)[1].x && tile.y+coord.y === getHandPrintsCoords(player.color)[1].y){
+          result+=2
+        }
+      })
+    }
+    return result
+  }
+
 }

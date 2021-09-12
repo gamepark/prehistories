@@ -28,19 +28,19 @@ export function checkPermanentObjectives(state:GameState|GameView, move:CheckPer
     squaresPainted.forEach(square => {
         if(linesChecked.find(x => square.x === x) === undefined){
             if ([0,1,2,3,4,5,6].every(x => occupiedSquares.find(square => square.x === x) !== undefined)){
-                player.totemTokens --
+                player.totemTokens--
             }
             linesChecked.push(square.x)
         }
         if(columnsChecked.find(y => square.y === y) === undefined){
             if ([0,1,2,3,4,5,6].every(y => occupiedSquares.find(square => square.y === y) !== undefined)){
-                player.totemTokens --
+                player.totemTokens--
             }
             columnsChecked.push(square.y)
         }
     })
     if (lastTilePlayed.polyomino >= 72){
-        player.totemTokens --
+        player.totemTokens--
     }
     player.huntPhase = HuntPhase.VariableObjectives
 

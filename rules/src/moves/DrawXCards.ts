@@ -21,30 +21,29 @@ export type DrawXCardsView = {
 }
 
 export function drawXCards(state:GameState, move:DrawXCards){
-    console.log("here in State !")
     const player = state.players.find(p => p.color === move.playerId)!
     for (let i=0;i<howManyCardToDraw(player);i++){
-        player.hand.push(player.deck.pop()!)
+        if (player.deck.length !== 0){
+            player.hand.push(player.deck.pop()!)
+        }
     }
     player.huntPhase = HuntPhase.ChangeActivePlayer
 }
 
 export function drawXCardsInView(state:GameView, move:DrawXCards|DrawXCardsView){
-    console.log("In DrawXCards")
     if (isNotDrawXCardsView(move)){
         const player = getPlayers(state).filter(isPlayerViewSelf).find(p => p.color === move.playerId)!
-        player.hand = player.hand.concat(move.cards)
-        player.deck-=howManyCardToDraw(player)
+        player.hand = player.hand.concat(move.cards.filter(elem => elem !== undefined && elem !== null))
+        player.deck = Math.max(player.deck -howManyCardToDraw(player),0)
         player.huntPhase = HuntPhase.ChangeActivePlayer
-        console.log("player.deck : ", player.deck)
     } else {
 
         if (getPlayers(state).filter(isPlayerView).find(p => p.color === move.playerId) === undefined){
             getPlayers(state).find(p => p.color === move.playerId)!.played = 0
         }
         const player = getPlayers(state).filter(isPlayerView).find(p => p.color === move.playerId)!
-        player.hand+=howManyCardToDraw(player) 
-        player.deck-=howManyCardToDraw(player)
+        player.hand = Math.min(howManyCardToDraw(player),player.deck )
+        player.deck = Math.max(player.deck -howManyCardToDraw(player),0)
         player.huntPhase = HuntPhase.ChangeActivePlayer
     }
 }

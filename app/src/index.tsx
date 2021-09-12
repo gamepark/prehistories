@@ -1,6 +1,6 @@
 import {css, Global} from '@emotion/react'
 import Prehistories from '@gamepark/prehistories/Prehistories'
-import {PrehistoriesOptionsDescription} from '@gamepark/prehistories/PrehistoriesOptions'
+import {PrehistoriesOptionsSpec} from '@gamepark/prehistories/PrehistoriesOptions'
 import {GameProvider, setupTranslation} from '@gamepark/react-client'
 import normalize from 'emotion-normalize'
 import {StrictMode} from 'react'
@@ -63,7 +63,7 @@ ReactDOM.render(
     <GameProvider game="prehistories" 
                   Rules={Prehistories} 
                   RulesView={PrehistoriesView} 
-                  optionsDescription={PrehistoriesOptionsDescription}
+                  optionsSpec={PrehistoriesOptionsSpec}
                   animations={prehistoriesAnimations}>
       <App/>
     </GameProvider>

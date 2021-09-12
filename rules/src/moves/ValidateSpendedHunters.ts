@@ -15,7 +15,11 @@ export function validateSpendedHunters(state:GameState|GameView, move:ValidateSp
    
     const player = isGameView(state) ? getPlayers(state).find(p => p.color === move.playerId)! : state.players.find(p => p.color === move.playerId)!
     if (player.huntSpotTakenLevels![1] > 0){
-        player.injuries = player.injuries === undefined ? 1 : player.injuries ++
+        if (player.injuries === undefined || player.injuries === 0){
+            player.injuries = 1
+        } else {
+            player.injuries++
+        }
     }
     delete player.huntSpotTakenLevels
     player.huntPhase = HuntPhase.PermanentObjectives

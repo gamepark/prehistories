@@ -20,12 +20,12 @@ export function checkVariableObjectives(state:GameState | GameView, move:CheckVa
     state.goals.forEach(goal => {
 
         if (!isPlayerAlreadyCompleteObjective(player, goal) && getGoalsArray(true)[goal].rule(player)){
-            player.goalsMade.push(goal)
             if(anyPlayerCompleteObjective(goal, state.players)){
-                player.totemTokens-=getGoalsArray(true)[goal].value-1
+                player.totemTokens-=Math.min(getGoalsArray(true)[goal].value-1, player.totemTokens)
             } else {
-                player.totemTokens-=getGoalsArray(true)[goal].value
+                player.totemTokens-=Math.min(getGoalsArray(true)[goal].value,player.totemTokens)
             }
+            player.goalsMade.push(goal)
         }
 
     })

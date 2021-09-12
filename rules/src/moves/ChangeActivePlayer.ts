@@ -10,7 +10,6 @@ type ChangeActivePlayer = {
 export default ChangeActivePlayer
 
 export function changeActivePlayer(state:GameState|GameView, move:ChangeActivePlayer){
-    console.log("dans changeActivePlayer")
     const passingPlayer = getPlayers(state).find(p => p.color === state.sortedPlayers![0])! 
     delete passingPlayer.huntPhase
     delete passingPlayer.huntSpotTakenLevels
@@ -21,5 +20,4 @@ export function changeActivePlayer(state:GameState|GameView, move:ChangeActivePl
     if (state.sortedPlayers!.length !== 0){
         getPlayers(state).find(p => p.color === state.sortedPlayers![0])!.huntPhase = HuntPhase.Hunt
     } 
-    console.log("sortedPlayer after shift", state.sortedPlayers)
 }

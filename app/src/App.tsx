@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import GameView from '@gamepark/prehistories/GameView'
 import {FailuresDialog, FullscreenDialog, Menu, useGame} from '@gamepark/react-client'
-import {Header, LoadingScreen} from '@gamepark/react-components'
+import {Header, ImagesLoader, LoadingScreen} from '@gamepark/react-components'
 import {useEffect, useState} from 'react'
 import {DndProvider} from 'react-dnd-multi-backend'
 import HTML5ToTouch from 'react-dnd-multi-backend/dist/cjs/HTML5toTouch'
@@ -19,8 +19,9 @@ export default function App() {
   return (
     <DndProvider options={HTML5ToTouch}>
       {game && <GameDisplay game={game}/>}
-      <LoadingScreen display={loading} gameBox={Images.box} author="Someone" artist="Somebody" publisher="Nobody" developer="You"/>
+      <LoadingScreen display={loading} gameBox={Images.polyominoType1_2} author="Someone" artist="Somebody" publisher="Nobody" developer="You"/>
       <Header><HeaderText loading={loading} game={game}/></Header>
+      <ImagesLoader images={Object.values(Images)} />
       <Menu/>
       <FailuresDialog/>
       <FullscreenDialog/>

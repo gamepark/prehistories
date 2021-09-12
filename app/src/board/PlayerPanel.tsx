@@ -8,6 +8,7 @@ import { getPlayerName } from "@gamepark/prehistories/PrehistoriesOptions";
 import Phase, { HuntPhase } from "@gamepark/prehistories/types/Phase";
 import { PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
 import { PlayerTimer, usePlay, usePlayer, usePlayerId } from "@gamepark/react-client";
+import { Picture } from "@gamepark/react-components";
 import { FC, HTMLAttributes } from "react";
 import { useTranslation } from "react-i18next";
 import Button from "../utils/Button";
@@ -27,8 +28,6 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, isReady, huntPhase
     const playerId = usePlayerId<PlayerColor>()
     const play = usePlay<Move>()
 
-    console.log("deck/length : ", deck)
-
     return (
 
         <div {...props} css={[playerPanelStyle, playerPanelPosition(position)]}>
@@ -38,7 +37,7 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, isReady, huntPhase
             <h1 css={[nameStyle]}>{playerInfo?.name === undefined ? getPlayerName(color, t) : playerInfo?.name}</h1>
             <div css={totemRemainingPosition}>
 
-                {[...Array(totemTokens)].map((e, i) => <img key={i} alt={t('token')} src={getTotem(color)} css={totemStyle(totemTokens)} draggable={false} />)}
+                {[...Array(totemTokens)].map((e, i) => <Picture key={i} alt={t('token')} src={getTotem(color)} css={totemStyle(totemTokens)} draggable={false} />)}
 
             </div>
             <PlayerTimer playerId={color} css={[TimerStyle]}/>

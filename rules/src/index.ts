@@ -1,2 +1,2 @@
 export {default} from './Prehistories'
-export {PrehistoriesOptionsDescription} from './PrehistoriesOptions'
+export {PrehistoriesOptionsSpec} from './PrehistoriesOptions'

@@ -168,7 +168,6 @@ import polyominoType5_5 from '../images/PolyominoType5-5.png'
 
 const Images = {
 
-    box,
     huntingBoard23Players, huntingBoard45Players,
     caveBlue, caveGreen, caveRed, caveWhite, caveYellow,
     cardBackBlue, cardBackWhite, cardBackGreen, cardBackRed, cardBackYellow, 

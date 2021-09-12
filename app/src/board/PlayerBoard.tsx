@@ -16,6 +16,7 @@ import CardPlayed from "@gamepark/prehistories/types/appTypes/CardPlayed";
 import MoveType from "@gamepark/prehistories/moves/MoveType";
 import { usePlayerId } from "@gamepark/react-client";
 import { HuntPhase } from "@gamepark/prehistories/types/Phase";
+import { Picture } from "@gamepark/react-components";
 
 type Props = {
     player:PlayerView | PlayerViewSelf | PlayerHuntView
@@ -69,7 +70,7 @@ const PlayerBoard : FC<Props> = ({player}) => {
             <Cave player={player} />
             <div css={totemTokenPanelPosition}>
 
-            {[...Array(player.totemTokens)].map((_, i) => <img key={i} alt={t('token')} src={getTotem(player.color)} css={totemStyle} draggable={false} />)}
+            {[...Array(player.totemTokens)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={totemStyle} draggable={false} />)}
 
             </div>
 

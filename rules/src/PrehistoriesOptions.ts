@@ -1,32 +1,30 @@
-import {GameOptions, OptionsDescription, OptionType} from '@gamepark/rules-api'
+import {OptionsSpec} from '@gamepark/rules-api'
 import {TFunction} from 'i18next'
 import GameState from './GameState'
 import PlayerColor, {playerColors} from './PlayerColor'
 
-export type PrehistoriesGameOptions = {
-  isExpertGame:boolean
-}
-
 export type PrehistoriesPlayerOptions = { id: PlayerColor }
 
-export type PrehistoriesOptions = GameOptions<PrehistoriesGameOptions, PrehistoriesPlayerOptions>
+export type PrehistoriesOptions = {
+  players:PrehistoriesPlayerOptions[]
+  isExpertGame:boolean      // To reduce
+}
 
 export function isGameOptions(arg: GameState | PrehistoriesOptions): arg is PrehistoriesOptions {
   return typeof (arg as GameState).tilesDeck === 'undefined'
 }
 
-export const PrehistoriesOptionsDescription: OptionsDescription<PrehistoriesGameOptions, PrehistoriesPlayerOptions> = {
+export const PrehistoriesOptionsSpec: OptionsSpec<PrehistoriesOptions> = {
   isExpertGame:{
-    type:OptionType.BOOLEAN,
-    getLabel:(t:Function) => t('Cartes Objectifs Jour et Nuit')
+    label:(t:Function) => t('Cartes Objectifs Jour et Nuit'),
+    subscriberRequired:true
   },
   
   players: {
     id: {
-      type: OptionType.LIST,
-      getLabel: (t: TFunction) => t('Color'),
+      label: (t: TFunction) => t('Color'),
       values: playerColors,
-      getValueLabel: getPlayerName
+      valueSpec: color => ({label:t => getPlayerName(color, t)})
     }
   }
 

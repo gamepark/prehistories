@@ -2,6 +2,7 @@
 import { css } from "@emotion/react";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import { Player } from "@gamepark/react-client";
+import { Picture } from "@gamepark/react-components";
 import Avatar from "awesome-react-avataaars";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
@@ -22,7 +23,7 @@ const AvatarPanel : FC<Props> = ({playerInfo, color}) => {
         <div css={avatarStyle}>
             {playerInfo?.avatar 
                 ? <Avatar style={{width:'100%', height:'100%'}} avatarStyle="Circle" {...playerInfo.avatar}/> 
-                : <img alt={t('Player avatar')} src={getTotem(color)} css={alternativeAvatarStyle} draggable={false}/>
+                : <Picture alt={t('Player avatar')} src={getTotem(color)} css={alternativeAvatarStyle} draggable={false}/>
             }
         </div>
 
