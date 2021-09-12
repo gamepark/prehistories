@@ -14,6 +14,7 @@ enum MoveType {
   ShuffleDiscardPile,
   ChangeActivePlayer,
   RefillHuntingBoard,
+  EndGame
 
 }
 

@@ -30,7 +30,7 @@ const HuntingZone : FC<Props> = ({game, numberOfPlayers}) => {
             {game.huntingBoard.map((polyomino, index) => 
             
                 polyomino !== null && <Polyomino key = {index}
-                           css = {[polyominoToHuntPosition(index, numberOfPlayers, polyomino), polyominoToHuntSize(index, numberOfPlayers, polyomino, game.polyominoSelected?.polyomino === polyomino ? game.polyominoSelected.side : 0, 6,12)]}
+                           css = {[polyominoToHuntPosition(index, numberOfPlayers, polyomino), polyominoToHuntSize(index, numberOfPlayers, polyomino, game.polyominoSelected?.polyomino === polyomino ? game.polyominoSelected.side : 0, 8,16)]}
                            polyomino={polyomino} 
                            side={game.polyominoSelected?.polyomino === polyomino ? game.polyominoSelected.side : 0}
                            draggable={isPolyominoHuntable(game.players.find(p => p.color === playerId), game.phase, index, game.players.length,game.sortedPlayers !== undefined ? game.sortedPlayers[0] : undefined)}
@@ -63,6 +63,8 @@ const polyominoToHuntPosition = (position:number, numberOfPlayers:number, polyom
 position:absolute;
 top:${getTop(position, numberOfPlayers)}%;
 left:${getLeft(position, numberOfPlayers)}%;
+transform:scale(0.8);
+transition:transform 0.2s linear;
 `
 
 const huntingZonePosition = css`

@@ -23,7 +23,7 @@ export function fillHuntingBoard(state:GameState){
     const tilesDeck = state.tilesDeck
     newBoard.forEach((tile, spot) => {
       if (tile === null){
-        newBoard[spot] = getNewTile(state.players.length, spot, tilesDeck)
+        newBoard[spot] = getNewTile(state.players.length, spot, tilesDeck, false, undefined)
       }
     })
     state.huntingBoard = newBoard
@@ -47,27 +47,31 @@ export function refillHuntingBoardInView(state: GameView, move:RefillHuntingBoar
     state.phase = Phase.Initiative
 }
 
-function getNewTile(nbPlayers:number, spot:number, tilesDeck:number[][]):number|null{
+export function getNewTile(nbPlayers:number, spot:number, tilesDeck:number[][], isView:boolean, previousState:undefined|(number|null)[]):number|null{
     switch(spot){
       case 0 :
-        return nbPlayers < 4 ? isTileDeckEmpty(0, tilesDeck) : isTileDeckEmpty(0, tilesDeck)
+        return nbPlayers < 4 ? isTileDeckEmpty(0, tilesDeck, isView, false) : isTileDeckEmpty(0, tilesDeck, isView, false)
       case 1 :
-        return nbPlayers < 4 ? isTileDeckEmpty(1, tilesDeck) : isTileDeckEmpty(0, tilesDeck)
+        return nbPlayers < 4 ? isTileDeckEmpty(1, tilesDeck, isView, false) : isTileDeckEmpty(0, tilesDeck, isView, previousState !== undefined && previousState[0] === null)
       case 2 :
-        return nbPlayers < 4 ? isTileDeckEmpty(2, tilesDeck) : isTileDeckEmpty(1, tilesDeck)
+        return nbPlayers < 4 ? isTileDeckEmpty(2, tilesDeck, isView, false) : isTileDeckEmpty(1, tilesDeck, isView, false)
       case 3 :
-        return nbPlayers < 4 ? isTileDeckEmpty(3, tilesDeck) : isTileDeckEmpty(1, tilesDeck)
+        return nbPlayers < 4 ? isTileDeckEmpty(3, tilesDeck, isView, false) : isTileDeckEmpty(1, tilesDeck, isView, previousState !== undefined && previousState[2] === null)
       case 4 :
-        return nbPlayers < 4 ? isTileDeckEmpty(4, tilesDeck) : isTileDeckEmpty(2, tilesDeck)
+        return nbPlayers < 4 ? isTileDeckEmpty(4, tilesDeck, isView, false) : isTileDeckEmpty(2, tilesDeck, isView, false)
       case 5 :
-        return nbPlayers < 4 ? null : isTileDeckEmpty(3, tilesDeck)
+        return nbPlayers < 4 ? null : isTileDeckEmpty(3, tilesDeck, isView, false)
       case 6 :
-        return nbPlayers < 4 ? null : isTileDeckEmpty(4, tilesDeck)
+        return nbPlayers < 4 ? null : isTileDeckEmpty(4, tilesDeck, isView, false)
       default:
         return null
     }
   }
   
-  function isTileDeckEmpty(pile:number, tileDeck:number[][]):number|null{
+  function isTileDeckEmpty(pile:number, tileDeck:number[][], isView:boolean, mustTakeSecond:boolean):number|null{
+    if (isView === false){
       return tileDeck[pile].length !== 0 ? tileDeck[pile].pop()! : null
+    } else {
+      return tileDeck[pile].length !== 0 ? ( mustTakeSecond === false ? tileDeck[pile][tileDeck[pile].length-1] : tileDeck[pile][tileDeck[pile].length-2]) : null
+    }
   }

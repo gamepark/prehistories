@@ -60,9 +60,6 @@ export default class PrehistoriesView implements Game<GameView, MoveView> {
         return shuffleDiscardPileInView(this.state, move)
       case MoveType.ChangeActivePlayer:
         return changeActivePlayer(this.state, move)
-
-
-
       case MoveType.RefillHuntingBoard:
         return refillHuntingBoardInView(this.state, move)
       case 'SetCaveDisplayed':

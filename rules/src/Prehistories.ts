@@ -15,7 +15,7 @@ import MoveType from './moves/MoveType'
 import MoveView from './moves/MoveView'
 import PlayHuntCard, { playHuntCard } from './moves/PlayHuntCard'
 import PlayPolyomino, { playPolyomino } from './moves/PlayPolyomino'
-import { refillHuntingBoard } from './moves/RefillHuntingBoard'
+import { getNewTile, refillHuntingBoard } from './moves/RefillHuntingBoard'
 import { revealHuntCards } from './moves/RevealHuntCards'
 import { shuffleDiscardPile } from './moves/ShuffleDiscardPile'
 import SpendHunter, { spendHunter } from './moves/SpendHunter'
@@ -59,7 +59,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
   }
 
   isOver(): boolean {
-    return false
+    return this.state.phase === undefined
   }
 
   isActive(playerId:PlayerColor): boolean {
@@ -173,7 +173,13 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         if (this.state.sortedPlayers!.length === 0){
           return {type:MoveType.RefillHuntingBoard}
         }
+
+        if (this.state.players.some(p => p.totemTokens === 0)){
+          return {type:MoveType.EndGame}
+        }
+
         const player = this.state.players.find(p => p.color === this.state.sortedPlayers![0])!
+
         switch(player.huntPhase){
           case HuntPhase.Pay:{
             if (player.huntSpotTakenLevels![1] <= 0){
@@ -242,7 +248,17 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         this.state.players.forEach(p => result.push({color:p.color, cards:p.played}))
         return {type:MoveType.RevealHuntCards, cardsPlayed:result}
       case MoveType.RefillHuntingBoard:
-        return {...move, newBoard:this.state.huntingBoard}
+
+        const newBoard:(number|null)[] = []
+        this.state.huntingBoard.forEach((tile, spot) => {
+          if (tile === null){
+            newBoard.push(getNewTile(this.state.players.length, spot, this.state.tilesDeck, true, this.state.huntingBoard))
+          } else {
+            newBoard.push(tile)
+          }
+        })
+        return {...move, newBoard}
+
       case MoveType.TakeBackPlayedCards:
         if (playerId === move.playerId){
           return move
