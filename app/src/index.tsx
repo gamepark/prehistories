@@ -9,6 +9,7 @@ import App from './App'
 import prehistoriesAnimations from './PrehistoriesAnimations'
 import PrehistoriesView from './PrehistoriesView'
 import translations from './translations.json'
+import Images from './utils/Images'
 
 setupTranslation(translations,{debug:false})
 
@@ -40,7 +41,7 @@ const style = css`
     width: 100vw;
     user-select: none;
     overflow: hidden;
-    background-color: white;
+    background-image: url();
     background-size: cover;
     background-position: center;
     color: #eee;

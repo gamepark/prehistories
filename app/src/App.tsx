@@ -8,6 +8,8 @@ import HTML5ToTouch from 'react-dnd-multi-backend/dist/cjs/HTML5toTouch'
 import GameDisplay from './GameDisplay'
 import HeaderText from './HeaderText'
 import Images from './utils/Images'
+import Box from './images/Box.png'
+import { css } from '@emotion/react'
 
 export default function App() {
   const game = useGame<GameView>()
@@ -19,7 +21,7 @@ export default function App() {
   return (
     <DndProvider options={HTML5ToTouch}>
       {game && <GameDisplay game={game}/>}
-      <LoadingScreen display={loading} gameBox={Images.polyominoType1_2} author="Someone" artist="Somebody" publisher="Nobody" developer="You"/>
+      <LoadingScreen display={loading} gameBox={Box} author="Alexandre Emerit & Benoit Turpin" artist="Camille Chaussy" publisher="The Flying Games" developer="Théo Gregorio"/>
       <Header><HeaderText loading={loading} game={game}/></Header>
       <ImagesLoader images={Object.values(Images)} />
       <Menu/>

@@ -31,6 +31,9 @@ const goalStyle = (goal:number) => css`
     background-size: contain;
     background-repeat: no-repeat;
     background-position: top;
+
+    border-radius:8% / 5%;
+    box-shadow:0 0 0.5em black;
 `
 
 function getGoalCardImage(goal:number):string{

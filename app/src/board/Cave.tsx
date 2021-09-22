@@ -3,20 +3,22 @@ import { css } from "@emotion/react";
 import MoveType from "@gamepark/prehistories/moves/MoveType";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import PolyominoToHunt from "@gamepark/prehistories/types/appTypes/PolyominoToHunt";
+import Phase from "@gamepark/prehistories/types/Phase";
 import { PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
-import { usePlayerId } from "@gamepark/react-client";
-import { FC } from "react";
-import { useDrop } from "react-dnd";
+import { usePlay, usePlayerId } from "@gamepark/react-client";
+import { FC, useRef } from "react";
+import { DropTargetMonitor, useDrop } from "react-dnd";
+import { useTranslation } from "react-i18next/*";
 import Images from "../utils/Images";
 import DropSquare from "./DropSquare";
 import Polyomino from "./Polyomino";
 
 type Props = {
     player:PlayerView|PlayerViewSelf|PlayerHuntView
-
+    phase:Phase | undefined
 }
 
-const Cave : FC<Props> = ({player}) => {
+const Cave : FC<Props> = ({player, phase}) => {
 
     const sizeTileW = 14.2857 // % unit
     const sizeTileH = 14.2857 // % unit
@@ -43,11 +45,19 @@ const Cave : FC<Props> = ({player}) => {
                         ? <div css = {[tilePosition(paint.x, paint.y), tileSize(paint.polyomino, paint.side,sizeTileW, sizeTileH)]} key = {index}> 
                             <Polyomino  polyomino={paint.polyomino} 
                                         side={paint.side}
-                                        color={player.color} />
+                                        color={player.color} 
+                                        isAlreadyPlaced={true}
+                                        phase={phase}
+                                        />
+
+
                         </div>
                         : <div css = {[tilePosition(paint.x, paint.y), tileSize(paint.polyomino, paint.side,sizeTileW, sizeTileH)]} key = {index}>
                             <Polyomino polyomino={paint.polyomino} 
-                                       side={paint.side} />
+                                       side={paint.side}
+                                       isAlreadyPlaced={true}
+                                       phase={phase}
+                                       />
                         </div>
                 )}
 
@@ -97,6 +107,8 @@ background-image: url(${getCave(color)});
 background-size: contain;
 background-repeat: no-repeat;
 background-position: top;
+filter:drop-shadow(0 0 2em black);
+border-radius:10%;
 `
 
 function getCave(color:PlayerColor|undefined):string{

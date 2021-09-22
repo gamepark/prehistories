@@ -4,7 +4,7 @@ import GameView from '@gamepark/prehistories/GameView'
 import PlayerColor from '@gamepark/prehistories/PlayerColor'
 import { usePlay, usePlayerId } from '@gamepark/react-client'
 import {Letterbox} from '@gamepark/react-components'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import HuntingZone from './board/HuntingZone'
 import Objectives from './board/Objectives'
 import PlayerBoard from './board/PlayerBoard'
@@ -42,7 +42,9 @@ export default function GameDisplay({game}: Props) {
           />
         )}
 
-        <PlayerBoard player={playerDisplayed}
+        <PlayerBoard player={playerDisplayed} 
+                     players={game.players}
+                     phase={game.phase}
         
         />
 

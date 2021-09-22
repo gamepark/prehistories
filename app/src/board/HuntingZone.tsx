@@ -37,6 +37,10 @@ const HuntingZone : FC<Props> = ({game, numberOfPlayers}) => {
                            type={'PolyominoToHunt'}
                            draggableItem={{type:"PolyominoToHunt", huntSpot:index, polyomino, side:(game.polyominoSelected?.polyomino === polyomino ? game.polyominoSelected.side : 0)}}
                            onClick = {() => playSetSelectedPolyomino(setSelectedPolyominoMove({polyomino, huntSpot:index, side:game.polyominoSelected?.polyomino === polyomino ? game.polyominoSelected.side : 0, type:"PolyominoToHunt"}), {local:true})}
+                           isAlreadyPlaced = {false}
+                           phase = {game.phase}
+                           huntPosition={index}
+                           nbPlayers = {numberOfPlayers}
                 />
             
             )}
@@ -63,21 +67,20 @@ const polyominoToHuntPosition = (position:number, numberOfPlayers:number, polyom
 position:absolute;
 top:${getTop(position, numberOfPlayers)}%;
 left:${getLeft(position, numberOfPlayers)}%;
-transform:scale(0.8);
-transition:transform 0.2s linear;
 `
 
 const huntingZonePosition = css`
     position:absolute;
     top:7%;
     left:0;
-    width:24%;
+    width:24.5%;
     height:93%;
 `
 
 const huntingZoneStyle = css`
 
 `
+
 
 const bG23Players = css`
 background-image: url(${Images.huntingBoard23Players});
@@ -96,19 +99,19 @@ background-position: top;
 function getTop(pos:number, players:number):number{
     switch (pos){
         case 0 :
-            return players < 4 ? 7 : 4
+            return players < 4 ? 6.5 : 3
         case 1 :
-            return players < 4 ? 14 : 15
+            return players < 4 ? 14 : 13
         case 2 :
-            return players < 4 ? 38 : 5.5
+            return players < 4 ? 37 : 8
         case 3 :
             return players < 4 ? 64 : 21
         case 4 :
-            return players < 4 ? 80 : 41
+            return players < 4 ? 80 : 38
         case 5 :
-            return players < 4 ? 0 : 67
+            return players < 4 ? 0 : 65
         case 6 :
-            return players < 4 ? 0 : 82
+            return players < 4 ? 0 : 80
         default :
             return 0
     } 
@@ -117,19 +120,19 @@ function getTop(pos:number, players:number):number{
 function getLeft(pos:number, players:number):number{
     switch (pos){
         case 0 :
-            return players < 4 ? 20 : 10
+            return players < 4 ? 14.7 : 7
         case 1 :
-            return players < 4 ? 53 : 4
+            return players < 4 ? 60 : 4
         case 2 :
-            return players < 4 ? 44 : 43
+            return players < 4 ? 37 : 44
         case 3 :
-            return players < 4 ? 6 : 72
+            return players < 4 ? 6 : 65
         case 4 :
-            return players < 4 ? 68 : 45
+            return players < 4 ? 60 : 38
         case 5 :
             return players < 4 ? 0 : 5
         case 6 :
-            return players < 4 ? 0 : 68
+            return players < 4 ? 0 : 60
         default :
             return 0
     } 
@@ -139,25 +142,6 @@ const polyominoToHuntSize = (pos:number, players:number, polyomino:number, side:
     return tileSize(polyomino, side, sizeBaseW, sizeBaseH)    
 }
 
-function getRotate(pos:number, players:number):number{
-        switch (pos){
-        case 0 :
-            return players < 4 ? -40 : -20
-        case 1 :
-            return players < 4 ? 30 : 8
-        case 2 :
-            return players < 4 ? -10 : 100
-        case 3 :
-            return players < 4 ? 20 : -15
-        case 4 :
-            return players < 4 ? -22 : -10
-        case 5 :
-            return players < 4 ? 0 : 20
-        case 6 :
-            return players < 4 ? 0 : -22
-        default :
-            return 0
-    } 
-}
+
 
 export default HuntingZone

@@ -263,7 +263,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         if (playerId === move.playerId){
           return move
         } else {
-          return {type:MoveType.TakeBackPlayedCards, playerId:move.playerId}
+          return {type:MoveType.TakeBackPlayedCards, playerId:move.playerId, playedLength:this.state.players.find(p => p.color === move.playerId)!.played.length}
         }
       case MoveType.DrawXCards:
         if (playerId === move.playerId){
@@ -343,6 +343,7 @@ function takeBackDiscardPile(color:PlayerColor, players:PlayerState[]):number[]{
 }
 
 export function howManyCardToDraw(player:PlayerState|PlayerView|PlayerViewSelf|PlayerHuntView):number{
+  console.log("HowManyCards : ", player.tilesHunted === undefined ? 3 : (player.injuries === undefined ? 2 + areHandPrintsRecovered(player) : Math.max(0, 2 - player.injuries) + areHandPrintsRecovered(player)) )
   return player.tilesHunted === undefined ? 3 : (player.injuries === undefined ? 2 + areHandPrintsRecovered(player) : Math.max(0, 2 - player.injuries) + areHandPrintsRecovered(player))
 }
 

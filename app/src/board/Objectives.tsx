@@ -15,10 +15,10 @@ const Objectives : FC<Props> = ({goals}) => {
 
         <>
 
-        <div css={[variableObjectivesPosition, variableObjectivesStyle]}>
+        <div css={[variableObjectivesPosition]}>
             {goals.map((goal, index) => 
                 <div key={index} css={goalPosition(index)}>  
-                    <Goal goal={goal} />
+                    <Goal goal={goal}/>
                 </div>
             )}
         </div>
@@ -52,8 +52,9 @@ background-position: top;
 `
 
 const goalPosition = (index:number) => css`
-width:20%;
-height:100%;
+width:18%;
+height:88%;
+margin:0 0.5em;
 `
 
 const variableObjectivesPosition = css`
@@ -65,10 +66,11 @@ height:20%;
 
 display:flex;
 flex-direction: row;
-justify-content: space-evenly;
+justify-content: center;
 `
 const variableObjectivesStyle = css`
-
+border-radius:10%;
+box-shadow:0 0 0.5em black;
 `
 
 export default Objectives

@@ -8,6 +8,8 @@ import { FC, HTMLAttributes } from "react";
 import Images from "../utils/Images";
 import PolyominoToHunt from "@gamepark/prehistories/types/appTypes/PolyominoToHunt"
 import { Draggable } from "@gamepark/react-components";
+import Phase from "@gamepark/prehistories/types/Phase";
+import { DragSourceMonitor, DropTargetMonitor, useDrop } from "react-dnd";
 
 type Props = {
     polyomino:number
@@ -16,9 +18,13 @@ type Props = {
     draggable?:boolean
     type?:'PolyominoToHunt'
     draggableItem?:PolyominoToHunt
+    isAlreadyPlaced:boolean
+    phase:Phase | undefined
+    huntPosition?:number
+    nbPlayers?:number
 } & Omit<HTMLAttributes<HTMLDivElement>, 'color'>
 
-const Polyomino : FC<Props> = ({polyomino, side, color, draggable = false, type='', draggableItem, ...props}) => {
+const Polyomino : FC<Props> = ({polyomino, side, color, draggable = false, type='', draggableItem, isAlreadyPlaced, phase, huntPosition, nbPlayers, ...props}) => {
 
     const play = usePlay<Move>()
     const item = {...draggableItem}
@@ -26,18 +32,46 @@ const Polyomino : FC<Props> = ({polyomino, side, color, draggable = false, type=
         play(move)
     }
 
+    const [{isDragging}, ref] = useDrop({           // Only to check the item currently dragged
+        accept: ["PolyominoToHunt"],
+        canDrop: (item: PolyominoToHunt) => {
+            return item.polyomino === polyomino && item.side === side && item.huntSpot === huntPosition
+        },
+        collect: (monitor:DropTargetMonitor) => ({
+          isDragging: monitor.canDrop(),
+        }),
+      })
+
     return(
         <Draggable canDrag={draggable}
                    type={type}
                    item={item}
                    drop={onDrop}
                    {...props}
-                   css={[polyominoSize, polyominoStyle(color ? getColoredPolyominoImage(polyomino, color!): getPolyominoImage(polyomino, side))]}>
+                   css={[polyominoSize]}>
+
+            <div ref={ref} css={[css`width:100;height:100%;`, huntPosition !== undefined && nbPlayers !== undefined && displayHuntPolyomino(isDragging, huntPosition, polyomino, nbPlayers), polyominoStyle(color ? getColoredPolyominoImage(polyomino, color!): getPolyominoImage(polyomino, side)), dragStyle(draggable, isAlreadyPlaced, phase === Phase.Hunt)]}>
+
+
+
+            </div>
 
         </Draggable>
     )
 
 }
+
+const displayHuntPolyomino = (isDragging:boolean, pos:number, polyomino:number, nbPlayers:number) => css`
+transform:scale(${isDragging ? 1 : 0.8}) rotateZ(${isDragging ? 0 : getRotate(pos, nbPlayers)}deg);
+transition:transform 0.1s linear;
+`
+
+const dragStyle = (draggable:boolean, isAlreadyPlaced: boolean, huntPhase:boolean) => css`
+${(huntPhase === false || isAlreadyPlaced === true) && `filter:drop-shadow(0 0 0.2em black);`}
+${(huntPhase === true && isAlreadyPlaced === false && draggable === false) && `filter:drop-shadow(0 0 0.3em red);`}
+${(huntPhase === true && isAlreadyPlaced === false && draggable === true) && `filter:drop-shadow(0 0 0.3em green);`}
+
+`
 
 const polyominoSize = css`
 width:100%;
@@ -49,7 +83,29 @@ background-image: url(${image});
 background-size: contain;
 background-repeat: no-repeat;
 background-position: top;
+filter:drop-shadow(0 0 0.2em black);
 `
+
+function getRotate(pos:number, players:number):number{
+    switch (pos){
+    case 0 :
+        return players < 4 ? -40 : -20
+    case 1 :
+        return players < 4 ? 30 : 8
+    case 2 :
+        return players < 4 ? -7 : 100
+    case 3 :
+        return players < 4 ? 20 : -15
+    case 4 :
+        return players < 4 ? -22 : -8
+    case 5 :
+        return players < 4 ? 0 : 20
+    case 6 :
+        return players < 4 ? 0 : -22
+    default :
+        return 0
+} 
+}
 
 function getColoredPolyominoImage(polyomino:number, color:PlayerColor):string{
 switch (color){

@@ -9,7 +9,7 @@ import Phase, { HuntPhase } from "@gamepark/prehistories/types/Phase";
 import { PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
 import { PlayerTimer, usePlay, usePlayer, usePlayerId } from "@gamepark/react-client";
 import { Picture } from "@gamepark/react-components";
-import { FC, HTMLAttributes } from "react";
+import { FC, HTMLAttributes, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Button from "../utils/Button";
 import Images from "../utils/Images";
@@ -28,9 +28,10 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, isReady, huntPhase
     const playerId = usePlayerId<PlayerColor>()
     const play = usePlay<Move>()
 
+
     return (
 
-        <div {...props} css={[playerPanelStyle, playerPanelPosition(position)]}>
+        <div {...props} css={[playerPanelStyle(getBG(color)), playerPanelPosition(position)]}>
 
             <AvatarPanel playerInfo={playerInfo} color={color} />
 
@@ -79,8 +80,11 @@ const playerPanelPosition = (position:number) => css`
     width:20%;
 `
 
-const playerPanelStyle = css`
-    background-color:teal;
+const playerPanelStyle = (image:string) => css`
+    background-image: url(${image});
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: top;
     border:0.1em solid black;
 `
 
@@ -124,6 +128,21 @@ export function getTotem(color:PlayerColor):string{
             return Images.totemWhite
         case PlayerColor.Yellow:
             return Images.totemYellow
+    }
+}
+
+export function getBG(color:PlayerColor):string{
+    switch(color){
+        case PlayerColor.Blue:
+            return Images.blueBGtest
+        case PlayerColor.Green:
+            return Images.greenBGtest
+        case PlayerColor.Red:
+            return Images.redBGtest
+        case PlayerColor.White:
+            return Images.whiteBGtest
+        case PlayerColor.Yellow:
+            return Images.yellowBGtest
     }
 }
 

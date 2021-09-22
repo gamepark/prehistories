@@ -165,6 +165,13 @@ import polyominoType5_2 from '../images/PolyominoType5-2.png'
 import polyominoType5_3 from '../images/PolyominoType5-3.png'
 import polyominoType5_4 from '../images/PolyominoType5-4.png'
 import polyominoType5_5 from '../images/PolyominoType5-5.png'
+import whiteBGtest from '../images/whiteBGtest.jpg'
+import blueBGtest from '../images/blueBGtest.jpg'
+import yellowBGtest from '../images/yellowBGtest.jpg'
+import redBGtest from '../images/redBGtest.jpg'
+import greenBGtest from '../images/greenBGtest.jpg'
+import hunterBG from '../images/hunterBG.png'
+import caveBGYellow from '../images/bgCaveYellowTest.jpg'
 
 const Images = {
 
@@ -185,6 +192,8 @@ const Images = {
     polyominoType3_1A, polyominoType3_2A, polyominoType3_3A, polyominoType3_4A, polyominoType3_5A, polyominoType3_6A, polyominoType3_7A, polyominoType3_8A, polyominoType3_9A, polyominoType3_10A, polyominoType3_1B, polyominoType3_2B, polyominoType3_3B, polyominoType3_4B, polyominoType3_5B, polyominoType3_6B, polyominoType3_7B, polyominoType3_8B, polyominoType3_9B, polyominoType3_10B, 
     polyominoType4_1A, polyominoType4_2A, polyominoType4_3A, polyominoType4_4A, polyominoType4_5A, polyominoType4_6A, polyominoType4_7A, polyominoType4_8A, polyominoType4_9A, polyominoType4_10A, polyominoType4_1B, polyominoType4_2B, polyominoType4_3B, polyominoType4_4B, polyominoType4_5B, polyominoType4_6B, polyominoType4_7B, polyominoType4_8B, polyominoType4_9B, polyominoType4_10B, 
     polyominoType5_1, polyominoType5_2, polyominoType5_3, polyominoType5_4, polyominoType5_5, 
+
+    whiteBGtest, blueBGtest, yellowBGtest, redBGtest, greenBGtest, hunterBG, caveBGYellow
 
 }
 
