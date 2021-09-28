@@ -6,11 +6,11 @@ function powerLevels(nbPlayers:number, spot:number):number[]{
         case 0:
             return nbPlayers < 4 ? [1,4] : [2,3]
         case 1:
-            return nbPlayers < 4 ? [4,7] : [1.4]
+            return nbPlayers < 4 ? [4,7] : [1,4]
         case 2:
             return nbPlayers < 4 ? [7,10] : [4,7]
         case 3:
-            return nbPlayers < 4 ? [10,13] : [5.8]
+            return nbPlayers < 4 ? [10,13] : [5,8]
         case 4:
             return nbPlayers < 4 ? [13,15] : [7,10]
         case 5:

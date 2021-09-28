@@ -75,7 +75,7 @@ const PolyominosType2List:Polyomino[] = [
 
 const PolyominosType3List:Polyomino[] = [       // L // 52
     [{animal:Animal.Fish,coordinates:[{x:0,y:0},{x:1,y:0},{x:1,y:1}]},{animal:Animal.Fish,coordinates:[{x:0,y:0},{x:0,y:1},{x:1,y:0}]}],
-    [{animal:Animal.Fish,coordinates:[{x:0,y:0},{x:0,y:1},{x:1,y:1}]},{animal:Animal.Fish,coordinates:[{x:1,y:0},{x:0,y:1},{x:1,y:1}]}],
+    [{animal:Animal.Fish,coordinates:[{x:1,y:0},{x:0,y:1},{x:1,y:1}]},{animal:Animal.Fish,coordinates:[{x:0,y:0},{x:0,y:1},{x:1,y:1}]}],
 
     [{animal:Animal.Mammoth,coordinates:[{x:0,y:0},{x:1,y:0},{x:1,y:1}]},{animal:Animal.Mammoth,coordinates:[{x:0,y:0},{x:0,y:1},{x:1,y:0}]}],
     [{animal:Animal.Mammoth,coordinates:[{x:1,y:0},{x:0,y:1},{x:1,y:1}]},{animal:Animal.Mammoth,coordinates:[{x:0,y:0},{x:0,y:1},{x:1,y:1}]}],

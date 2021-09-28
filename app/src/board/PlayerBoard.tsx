@@ -188,7 +188,7 @@ position:absolute;
 top:0;
 left:40%;
 height:100%;
-width:20%;
+width:20.5%;
 `
 
 const spanDropDisplay = (canDrop:boolean) => css`
