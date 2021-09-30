@@ -9,6 +9,7 @@ import { changeActivePlayer } from './moves/ChangeActivePlayer'
 import { checkPermanentObjectives } from './moves/CheckPermanentObjectives'
 import { checkVariableObjectives } from './moves/CheckVariableObjectives'
 import { drawXCards } from './moves/DrawXCards'
+import { endGame } from './moves/EndGame'
 import EndTurn, { endTurn } from './moves/EndTurn'
 import Move from './moves/Move'
 import MoveType from './moves/MoveType'
@@ -105,7 +106,6 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
               })
             }
           })
-          
           const endTurnMove:EndTurn[] = [{type:MoveType.EndTurn, playerId:color}]
           return playPolyominoMoves.concat(endTurnMove)
         }
@@ -157,6 +157,8 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         return shuffleDiscardPile(this.state, move)
       case MoveType.ChangeActivePlayer:
         return changeActivePlayer(this.state, move)
+      case MoveType.EndGame:
+        return endGame(this.state)
       default: return
     }
   }
@@ -356,7 +358,9 @@ function howManyCardToDraw2(player:PlayerState|PlayerView|PlayerViewSelf|PlayerH
 
 export function areHandPrintsRecovered(player:PlayerState|PlayerView|PlayerViewSelf|PlayerHuntView):number{
   let result:number = 0
-  if (player.tilesHunted === undefined) {return result}
+  if (player.tilesHunted === undefined) {
+    return result
+  }
   else {
     for (let i=0;i<player.tilesHunted;i++){
       const tile = player.cave[player.cave.length-1-i]

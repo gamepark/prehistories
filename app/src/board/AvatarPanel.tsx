@@ -4,23 +4,22 @@ import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import { Player } from "@gamepark/react-client";
 import { Picture } from "@gamepark/react-components";
 import Avatar from "awesome-react-avataaars";
-import { FC } from "react";
+import { FC, HTMLAttributes } from "react";
 import { useTranslation } from "react-i18next";
-import Images from "../utils/Images";
 import { getTotem } from "./PlayerPanel";
 
 type Props = {
     playerInfo : Player<PlayerColor> | undefined
     color:PlayerColor
-}
+} & Omit<HTMLAttributes<HTMLDivElement>, 'color'>
 
-const AvatarPanel : FC<Props> = ({playerInfo, color}) => {
+const AvatarPanel : FC<Props> = ({playerInfo, color, ...props}) => {
 
     const {t} = useTranslation()
 
     return(
 
-        <div css={avatarStyle}>
+        <div {...props} css={avatarStyle}>
             {playerInfo?.avatar 
                 ? <Avatar style={{width:'100%', height:'100%'}} avatarStyle="Circle" {...playerInfo.avatar}/> 
                 : <Picture alt={t('Player avatar')} src={getTotem(color)} css={alternativeAvatarStyle} draggable={false}/>

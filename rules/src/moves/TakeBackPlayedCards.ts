@@ -30,10 +30,8 @@ export function takeBackPlayedCardsInView(state:GameView, move:TakeBackPlayedCar
         playerTakeBackPlayedCards(state.players.find(isPlayerViewSelf)!)
     } else {
         const player = getPlayers(state).filter(isPlayerHuntView).find(p => p.color === move.playerId)!
-        console.log("takeBackCards : ", player.hand, player.played.length)
         player.hand += move.playedLength
         getPlayers(state).find(p => p.color === move.playerId)!.played = 0 
-        console.log("takeBackCardsAfter : ", getPlayers(state).find(p => p.color === move.playerId)!.hand, getPlayers(state).find(p => p.color === move.playerId)!.played)
     }
 }
 

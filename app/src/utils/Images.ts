@@ -172,6 +172,33 @@ import redBGtest from '../images/redBGtest.jpg'
 import greenBGtest from '../images/greenBGtest.jpg'
 import hunterBG from '../images/hunterBG.png'
 import caveBGYellow from '../images/bgCaveYellowTest.jpg'
+import powerBlue1 from '../images/powerBlue1.png'
+import powerBlue2 from '../images/powerBlue2.png'
+import powerBlue3 from '../images/powerBlue3.png'
+import powerBlue4 from '../images/powerBlue4.png'
+import powerBlue5 from '../images/powerBlue5.png'
+import powerRed1 from '../images/powerRed1.png'
+import powerRed2 from '../images/powerRed2.png'
+import powerRed3 from '../images/powerRed3.png'
+import powerRed4 from '../images/powerRed4.png'
+import powerRed5 from '../images/powerRed5.png'
+import powerWhite1 from '../images/powerWhite1.png'
+import powerWhite2 from '../images/powerWhite2.png'
+import powerWhite3 from '../images/powerWhite3.png'
+import powerWhite4 from '../images/powerWhite4.png'
+import powerWhite5 from '../images/powerWhite5.png'
+import powerGreen1 from '../images/powerGreen1.png'
+import powerGreen2 from '../images/powerGreen2.png'
+import powerGreen3 from '../images/powerGreen3.png'
+import powerGreen4 from '../images/powerGreen4.png'
+import powerGreen5 from '../images/powerGreen5.png'
+import powerYellow1 from '../images/powerYellow1.png'
+import powerYellow2 from '../images/powerYellow2.png'
+import powerYellow3 from '../images/powerYellow3.png'
+import powerYellow4 from '../images/powerYellow4.png'
+import powerYellow5 from '../images/powerYellow5.png'
+import arrowCleanIcon from '../images/arrow.jpg'
+import arrowBrokenIcon from '../images/brokenArrow.jpg'
 
 const Images = {
 
@@ -193,9 +220,22 @@ const Images = {
     polyominoType4_1A, polyominoType4_2A, polyominoType4_3A, polyominoType4_4A, polyominoType4_5A, polyominoType4_6A, polyominoType4_7A, polyominoType4_8A, polyominoType4_9A, polyominoType4_10A, polyominoType4_1B, polyominoType4_2B, polyominoType4_3B, polyominoType4_4B, polyominoType4_5B, polyominoType4_6B, polyominoType4_7B, polyominoType4_8B, polyominoType4_9B, polyominoType4_10B, 
     polyominoType5_1, polyominoType5_2, polyominoType5_3, polyominoType5_4, polyominoType5_5, 
 
-    whiteBGtest, blueBGtest, yellowBGtest, redBGtest, greenBGtest, hunterBG, caveBGYellow
+    whiteBGtest, blueBGtest, yellowBGtest, redBGtest, greenBGtest, hunterBG, caveBGYellow,
+
+    powerBlue1, powerBlue2, powerBlue3, powerBlue4, powerBlue5,
+    powerRed1, powerRed2, powerRed3, powerRed4, powerRed5,
+    powerWhite1, powerWhite2, powerWhite3, powerWhite4, powerWhite5,
+    powerGreen1, powerGreen2, powerGreen3, powerGreen4, powerGreen5,
+    powerYellow1, powerYellow2, powerYellow3, powerYellow4, powerYellow5,
+    arrowCleanIcon, arrowBrokenIcon
 
 }
+
+export const bluePowerBanners = [powerBlue1, powerBlue2, powerBlue3, powerBlue4, powerBlue5]
+export const redPowerBanners = [powerRed1, powerRed2, powerRed3, powerRed4, powerRed5]
+export const whitePowerBanners = [powerWhite1, powerWhite2, powerWhite3, powerWhite4, powerWhite5]
+export const greenPowerBanners = [powerGreen1, powerGreen2, powerGreen3, powerGreen4, powerGreen5]
+export const yellowPowerBanners = [powerYellow1, powerYellow2, powerYellow3, powerYellow4, powerYellow5]
 
 export const BlueHunters = [hunterBlue1_1, hunterBlue1_2, hunterBlue2_1, hunterBlue2_2, hunterBlue3_1, hunterBlue3_2, hunterBlue4_1, hunterBlue4_2, hunterBlue5_1, hunterBlue5_2, hunterBlue6_1, hunterBlue6_2]
 export const GreenHunters = [hunterGreen1_1, hunterGreen1_2, hunterGreen2_1, hunterGreen2_2, hunterGreen3_1, hunterGreen3_2, hunterGreen4_1, hunterGreen4_2, hunterGreen5_1, hunterGreen5_2, hunterGreen6_1, hunterGreen6_2]

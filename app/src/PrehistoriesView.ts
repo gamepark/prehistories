@@ -18,6 +18,7 @@ import { takeBackPlayedCardsInView } from '@gamepark/prehistories/moves/TakeBack
 import { drawXCardsInView } from '@gamepark/prehistories/moves/DrawXCards'
 import { shuffleDiscardPileInView } from '@gamepark/prehistories/moves/ShuffleDiscardPile'
 import { changeActivePlayer } from '@gamepark/prehistories/moves/ChangeActivePlayer'
+import { endGame } from '@gamepark/prehistories/moves/EndGame'
 
 type LocalMove = MoveView | SetCaveDisplayed | SetSelectedPolyomino | ResetSelectedPolyomino
 
@@ -62,6 +63,8 @@ export default class PrehistoriesView implements Game<GameView, MoveView> {
         return changeActivePlayer(this.state, move)
       case MoveType.RefillHuntingBoard:
         return refillHuntingBoardInView(this.state, move)
+      case MoveType.EndGame:
+        return endGame(this.state)
       case 'SetCaveDisplayed':
         return setCaveDisplayed(this.state, move)
       case 'SetSelectedPolyomino':

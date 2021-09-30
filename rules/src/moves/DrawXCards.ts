@@ -42,7 +42,7 @@ export function drawXCardsInView(state:GameView, move:DrawXCards|DrawXCardsView)
             getPlayers(state).find(p => p.color === move.playerId)!.played = 0
         }
         const player = getPlayers(state).filter(isPlayerView).find(p => p.color === move.playerId)!
-        player.hand = Math.min(player.hand+howManyCardToDraw(player),player.deck )
+        player.hand = Math.min(player.hand + howManyCardToDraw(player),player.hand+player.deck)
         player.deck = Math.max(player.deck -howManyCardToDraw(player),0)
         player.huntPhase = HuntPhase.ChangeActivePlayer
     }

@@ -8,6 +8,6 @@ type EndGame = {
 
 export default EndGame
 
-export function endGame(state:GameState|GameView, move:EndGame){
+export function endGame(state:GameState|GameView){
     delete state.phase
 }

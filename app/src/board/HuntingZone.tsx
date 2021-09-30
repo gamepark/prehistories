@@ -70,10 +70,6 @@ left:${getLeft(position, numberOfPlayers, side, polyomino)}%;
 transition:top 0.1s linear, left 0.1s linear;
 `
 
-const getSpecialRotate = (side:0|1, polyo:number, spot:number) => css`
-${polyo>26 && polyo<52 && side===0 && `transform:rotateZ(90deg);`};
-`
-
 const huntingZonePosition = css`
     position:absolute;
     top:7%;

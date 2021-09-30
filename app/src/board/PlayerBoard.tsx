@@ -24,9 +24,10 @@ type Props = {
     player:PlayerView | PlayerViewSelf | PlayerHuntView,
     phase:Phase | undefined,
     players:(PlayerView | PlayerViewSelf | PlayerHuntView)[]
+    isActiveHuntingPlayer:boolean
 }
 
-const PlayerBoard : FC<Props> = ({player, players, phase}) => {
+const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer}) => {
 
     const {t} = useTranslation()
     const playerId = usePlayerId<PlayerColor>()
@@ -165,12 +166,36 @@ const PlayerBoard : FC<Props> = ({player, players, phase}) => {
                 {[...Array(player.deck)].map((_, i) => <Picture key={i} alt={t('token')} src={getCardBack(player.color)} css={[cardStyle, deckOffset(i), deckCardSize]} draggable={false} />)}
             
             </div>
+
+            {isActiveHuntingPlayer === true && player.injuries !== undefined &&
+                <div css={injuriesndicatorPosition}>
+                    {[...Array(player.injuries)].map((_,i) => <Picture key={i} alt={t('injuries')} src={Images.arrowBrokenIcon} draggable={false} css={brokenArrowIconStyle(i+1)} /> )}
+                </div>
+            }
             
         </div>
 
     )
     
 }
+
+const injuriesndicatorPosition = css`
+position:absolute;
+top:22%;
+left:1%;
+width:14%;
+text-align:center;
+`
+
+const brokenArrowIconStyle = (index:number) => css`
+margin:-0.4em 0em;
+width:80%;
+height:50%;
+border:0.5em solid orange;
+border-radius:15%;
+box-shadow:0 0 0.5em black;
+transform:rotateZ(${Math.pow(-1, index)*2*index}deg);
+`
 
 const deckCardSize = css`
 width:100%;

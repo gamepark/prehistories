@@ -12,16 +12,17 @@ import { Picture } from "@gamepark/react-components";
 import { FC, HTMLAttributes, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Button from "../utils/Button";
-import Images from "../utils/Images";
+import Images, { bluePowerBanners, greenPowerBanners, redPowerBanners, whitePowerBanners, yellowPowerBanners } from "../utils/Images";
 import AvatarPanel from "./AvatarPanel";
 
 type Props = {
     player: PlayerView | PlayerViewSelf | PlayerHuntView,
     phase?:Phase
     position:number
+    huntOrder?:PlayerColor[] 
 } & HTMLAttributes<HTMLDivElement>
 
-const PlayerPanel : FC<Props> = ({player:{color, totemTokens, isReady, huntPhase, huntSpotTakenLevels, deck}, position, phase, ...props}) => {
+const PlayerPanel : FC<Props> = ({player:{color, totemTokens, isReady, huntPhase, huntSpotTakenLevels}, position, phase, huntOrder, ...props}) => {
 
     const playerInfo = usePlayer(color)
     const {t} = useTranslation()
@@ -33,7 +34,9 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, isReady, huntPhase
 
         <div {...props} css={[playerPanelStyle(getBG(color)), playerPanelPosition(position)]}>
 
-            <AvatarPanel playerInfo={playerInfo} color={color} />
+            {huntOrder !== undefined && <div css={[powerPosition, powerStyle(getPowerBanner(color)[huntOrder.findIndex(c => c === color)])]}> </div>}
+
+            <AvatarPanel playerInfo={playerInfo} color={color} css={css`z-index:5;`}/>
 
             <h1 css={[nameStyle]}>{playerInfo?.name === undefined ? getPlayerName(color, t) : playerInfo?.name}</h1>
             <div css={totemRemainingPosition}>
@@ -53,6 +56,39 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, isReady, huntPhase
 
 }
 
+function getPowerBanner(color:PlayerColor):string[]{
+    switch(color){
+        case PlayerColor.Yellow :
+            return yellowPowerBanners
+        case PlayerColor.Blue :
+            return bluePowerBanners
+        case PlayerColor.Red :
+            return redPowerBanners
+        case PlayerColor.Green :
+            return greenPowerBanners
+        case PlayerColor.White :
+            return whitePowerBanners
+    }
+}
+
+const powerPosition = css`
+position:absolute;
+top:43%;
+left:3%;
+z-index:-1;
+width:18%;
+height:33%;
+transform:rotateZ(5deg);
+`
+
+const powerStyle = (image:string) => css`
+background-image: url(${image});
+background-size: contain;
+background-repeat: no-repeat;
+background-position: top;
+filter:drop-shadow(0 0 0.2em black);
+`
+
 function displayEndTurnButton(phase:Phase|undefined, playerId:PlayerColor|undefined, color:PlayerColor, huntPhase:HuntPhase|undefined):boolean{
     return phase === Phase.Hunt && playerId === color && huntPhase === HuntPhase.Hunt
 }
@@ -66,8 +102,10 @@ function displayTakeWithInjuryButton(phase:Phase|undefined, playerId:PlayerColor
 }
 
 const validationButtonPosition = css`
-    position:relative;
-    width:50%;
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    width:fit-content;
     height:20%;
     font-size:3em;
 `
@@ -75,6 +113,7 @@ const validationButtonPosition = css`
 const playerPanelPosition = (position:number) => css`
     position:absolute;
     top:${7+18.6*position}%;
+    z-index:0;
     right:0;
     height:18.6%;
     width:20%;

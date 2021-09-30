@@ -25,15 +25,15 @@ export function checkPermanentObjectives(state:GameState|GameView, move:CheckPer
     const linesChecked :number[] = []
     const columnsChecked :number[] = []
     const occupiedSquares :Coordinates[] = getOccupiedSquares(player.cave)
-    squaresPainted.forEach(square => {
-        if(linesChecked.find(x => square.x === x) === undefined){
-            if ([0,1,2,3,4,5,6].every(x => occupiedSquares.find(square => square.x === x) !== undefined)){
+    squaresPainted.forEach(square => {      
+        if(linesChecked.find(x => square.x === x) === undefined){               // Don't check same lines in the same loop !
+            if ([0,1,2,3,4,5,6].every(y => occupiedSquares.find(occ => occ.x === square.x && occ.y === y) !== undefined)){
                 player.totemTokens--
             }
             linesChecked.push(square.x)
         }
         if(columnsChecked.find(y => square.y === y) === undefined){
-            if ([0,1,2,3,4,5,6].every(y => occupiedSquares.find(square => square.y === y) !== undefined)){
+            if ([0,1,2,3,4,5,6].every(x => occupiedSquares.find(occ => occ.y === square.y && occ.x === x) !== undefined)){
                 player.totemTokens--
             }
             columnsChecked.push(square.y)

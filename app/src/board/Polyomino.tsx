@@ -175,7 +175,7 @@ function getLRotation(polyomino:number, side:0|1):number{
     if(polyomino%2 === 0){
         return side === 0 ? 0 : (polyomino === 56 || polyomino === 60 ? -180 : 90)
     } else {
-        return side === 0 ? 180 : ((polyomino === 53 || polyomino === 55 || polyomino === 59) ? -90 : 90)
+        return side === 0 ? 90 : ((polyomino === 53 || polyomino === 55 || polyomino === 59) ? 180 : 90)
     }
 }
 
