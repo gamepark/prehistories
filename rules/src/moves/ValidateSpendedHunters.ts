@@ -22,6 +22,6 @@ export function validateSpendedHunters(state:GameState|GameView, move:ValidateSp
         }
     }
     delete player.huntSpotTakenLevels
-    player.huntPhase = HuntPhase.PermanentObjectives
+    player.huntPhase = HuntPhase.CheckPermanentObjectives
 
 }

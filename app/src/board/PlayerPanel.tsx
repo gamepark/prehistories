@@ -108,6 +108,7 @@ const validationButtonPosition = css`
     width:fit-content;
     height:20%;
     font-size:3em;
+    font-family:'Reggae One', sans-serif;
 `
 
 const playerPanelPosition = (position:number) => css`
@@ -128,8 +129,8 @@ const playerPanelStyle = (image:string) => css`
 `
 
 const nameStyle = css`
-    font-size:3.0em;
-    font-family:'Mulish', sans-serif;
+    font-size:2.9em;
+    font-family:'Reggae One', sans-serif;
     margin : 0.2em 1em;
 `
 

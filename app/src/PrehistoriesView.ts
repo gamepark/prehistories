@@ -10,8 +10,8 @@ import { playPolyomino } from '@gamepark/prehistories/moves/PlayPolyomino'
 import SetSelectedPolyomino, { ResetSelectedPolyomino, resetSelectedPolyomino, setSelectedPolyomino } from './localMoves/setSelectedPolyomino'
 import { spendHunter } from '@gamepark/prehistories/moves/SpendHunter'
 import { validateSpendedHunters } from '@gamepark/prehistories/moves/ValidateSpendedHunters'
-import { checkPermanentObjectives } from '@gamepark/prehistories/moves/CheckPermanentObjectives'
-import { checkVariableObjectives } from '@gamepark/prehistories/moves/CheckVariableObjectives'
+import { checkPermanentObjectives, resolvePermanentObjectives } from '@gamepark/prehistories/moves/CheckPermanentObjectives'
+import { checkVariableObjectives, resolveVariableObjectives } from '@gamepark/prehistories/moves/CheckVariableObjectives'
 import { refillHuntingBoardInView } from '@gamepark/prehistories/moves/RefillHuntingBoard'
 import { endTurn } from '@gamepark/prehistories/moves/EndTurn'
 import { takeBackPlayedCardsInView } from '@gamepark/prehistories/moves/TakeBackPlayedCards'
@@ -19,6 +19,7 @@ import { drawXCardsInView } from '@gamepark/prehistories/moves/DrawXCards'
 import { shuffleDiscardPileInView } from '@gamepark/prehistories/moves/ShuffleDiscardPile'
 import { changeActivePlayer } from '@gamepark/prehistories/moves/ChangeActivePlayer'
 import { endGame } from '@gamepark/prehistories/moves/EndGame'
+import { setHuntPhase } from '@gamepark/prehistories/moves/SetHuntPhase'
 
 type LocalMove = MoveView | SetCaveDisplayed | SetSelectedPolyomino | ResetSelectedPolyomino
 
@@ -47,10 +48,12 @@ export default class PrehistoriesView implements Game<GameView, MoveView> {
         return spendHunter(this.state, move)
       case MoveType.ValidateSpendedHunters:
         return validateSpendedHunters(this.state, move)
-      case MoveType.CheckPermanentObjectives:
-        return checkPermanentObjectives(this.state, move)
-      case MoveType.CheckVariableObjectives:
-        return checkVariableObjectives(this.state, move)
+      case MoveType.ResolvePermanentObjectives:
+        return resolvePermanentObjectives(this.state, move)
+      case MoveType.ResolveVariableObjectives:
+        return resolveVariableObjectives(this.state, move)
+      case MoveType.SetHuntPhase:
+        return setHuntPhase(this.state, move);
       case MoveType.EndTurn:
         return endTurn(this.state, move)
       case MoveType.TakeBackPlayedCards:

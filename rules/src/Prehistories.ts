@@ -6,8 +6,8 @@ import { getGoalsArray } from './material/Goals'
 import getHandPrintsCoords from './material/HandPrints'
 import { allPolyominos} from './material/Polyominos'
 import { changeActivePlayer } from './moves/ChangeActivePlayer'
-import { checkPermanentObjectives } from './moves/CheckPermanentObjectives'
-import { checkVariableObjectives } from './moves/CheckVariableObjectives'
+import { checkPermanentObjectives, resolvePermanentObjectives } from './moves/CheckPermanentObjectives'
+import { checkVariableObjectives, resolveVariableObjectives } from './moves/CheckVariableObjectives'
 import { drawXCards } from './moves/DrawXCards'
 import { endGame } from './moves/EndGame'
 import EndTurn, { endTurn } from './moves/EndTurn'
@@ -18,6 +18,7 @@ import PlayHuntCard, { playHuntCard } from './moves/PlayHuntCard'
 import PlayPolyomino, { playPolyomino } from './moves/PlayPolyomino'
 import { getNewTile, refillHuntingBoard } from './moves/RefillHuntingBoard'
 import { revealHuntCards } from './moves/RevealHuntCards'
+import { setHuntPhase } from './moves/SetHuntPhase'
 import { shuffleDiscardPile } from './moves/ShuffleDiscardPile'
 import SpendHunter, { spendHunter } from './moves/SpendHunter'
 import { takeBackPlayedCards } from './moves/TakeBackPlayedCards'
@@ -141,10 +142,12 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         return spendHunter(this.state, move)
       case MoveType.ValidateSpendedHunters:
         return validateSpendedHunters(this.state, move)
-      case MoveType.CheckPermanentObjectives:
-        return checkPermanentObjectives(this.state, move)
-      case MoveType.CheckVariableObjectives:
-        return checkVariableObjectives(this.state, move)
+      case MoveType.ResolvePermanentObjectives:
+        return resolvePermanentObjectives(this.state, move)
+      case MoveType.ResolveVariableObjectives:
+        return resolveVariableObjectives(this.state, move)
+      case MoveType.SetHuntPhase:
+        return setHuntPhase(this.state, move)
       case MoveType.RefillHuntingBoard:
         return refillHuntingBoard(this.state)
       case MoveType.EndTurn:
@@ -188,12 +191,25 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
               return {type:MoveType.ValidateSpendedHunters, playerId:player.color}
             } else return
           }
-          case HuntPhase.PermanentObjectives:{
-            return {type:MoveType.CheckPermanentObjectives, playerId:player.color}
+          case HuntPhase.CheckPermanentObjectives:{
+
+            const result = checkPermanentObjectives(this.state, player)
+            if (result[0].length !== 0 || result[1].length !== 0 || result[2] === true){
+              return {type:MoveType.ResolvePermanentObjectives, playerId:player.color, objectivesCompleted:result}
+            } else {
+              return {type:MoveType.SetHuntPhase, playerId:player.color}
+            }
           }
-          case HuntPhase.VariableObjectives:{
-            return {type:MoveType.CheckVariableObjectives, playerId:player.color}
+
+          case HuntPhase.CheckVariableObjectives:{
+            const result = checkVariableObjectives(this.state, player)
+            if (result !== false){
+              return {type:MoveType.ResolveVariableObjectives, playerId:player.color, goal:result[0],tokens:result[1]}
+            } else {
+              return {type:MoveType.SetHuntPhase, playerId:player.color}
+            }
           }
+
           case HuntPhase.DrawCards:{
             if (player.played.length !== 0){
               return {type:MoveType.TakeBackPlayedCards, playerId:player.color, cards:player.played}

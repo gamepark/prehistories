@@ -58,11 +58,11 @@ const Polyomino : FC<Props> = ({polyomino, side, color, draggable = false, type=
 
                 <div css={[css`position:absolute;width:100%;height:100%;`, flipTile(polyominoSelected, polyomino)]}> 
 
-                    <div ref={ref} css={[css`position:absolute;width:100%;height:100%;`, frontSide, huntPosition !== undefined && nbPlayers !== undefined && displayHuntPolyomino(isDragging, huntPosition, polyomino, nbPlayers, side ?? 0, "front"), polyominoStyle(color ? getColoredPolyominoImage(polyomino, color!): getPolyominoImage(polyomino, side ?? 0)), dragStyle(draggable, isAlreadyPlaced, phase === Phase.Hunt)]}>
+                    <div ref={ref} css={[css`position:absolute;width:100%;height:100%;`, frontSide, huntPosition !== undefined && nbPlayers !== undefined && displayHuntPolyomino(isDragging, huntPosition, polyomino, nbPlayers, side ?? 0, "front"), polyominoStyle(color ? getColoredPolyominoImage(polyomino, color!): getPolyominoImage(polyomino, side ?? 0)), dragStyle(draggable, isAlreadyPlaced, phase === Phase.Hunt, polyomino === polyominoSelected?.polyomino)]}>
 
                     </div>
 
-                    {side === undefined && <div ref={ref} css={[css`position:absolute;width:100%;height:100%;`, backSide, huntPosition !== undefined && nbPlayers !== undefined && displayHuntPolyomino(isDragging, huntPosition, polyomino, nbPlayers, 1, "back"), polyominoStyle(color ? getColoredPolyominoImage(polyomino, color!): getPolyominoImage(polyomino, 1)), dragStyle(draggable, isAlreadyPlaced, phase === Phase.Hunt)]}>
+                    {side === undefined && <div ref={ref} css={[css`position:absolute;width:100%;height:100%;`, backSide, huntPosition !== undefined && nbPlayers !== undefined && displayHuntPolyomino(isDragging, huntPosition, polyomino, nbPlayers, 1, "back"), polyominoStyle(color ? getColoredPolyominoImage(polyomino, color!): getPolyominoImage(polyomino, 1)), dragStyle(draggable, isAlreadyPlaced, phase === Phase.Hunt, polyomino === polyominoSelected?.polyomino)]}>
 
                     </div>}
 
@@ -94,10 +94,12 @@ transform:scale(${isDragging ? 1 : 0.8}) rotateZ(${isDragging ? 0 : getRotate(po
 transition:transform 0.1s linear;
 `
 
-const dragStyle = (draggable:boolean, isAlreadyPlaced: boolean, huntPhase:boolean) => css`
+const dragStyle = (draggable:boolean, isAlreadyPlaced: boolean, huntPhase:boolean, selected:boolean) => css`
 ${(huntPhase === false || isAlreadyPlaced === true) && `filter:drop-shadow(0 0 0.2em black);`}
 ${(huntPhase === true && isAlreadyPlaced === false && draggable === false) && `filter:drop-shadow(0 0 0.3em red);`}
 ${(huntPhase === true && isAlreadyPlaced === false && draggable === true) && `filter:drop-shadow(0 0 0.3em green);`}
+${(huntPhase === true && isAlreadyPlaced === false && selected === true) && `filter:drop-shadow(0 0 0.3em white);`}
+
 
 `
 

@@ -41,7 +41,7 @@ const style = css`
     width: 100vw;
     user-select: none;
     overflow: hidden;
-    background-image: url();
+    background-image: url(${Images.caveBGYellow});
     background-size: cover;
     background-position: center;
     color: #eee;

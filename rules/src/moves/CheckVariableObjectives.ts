@@ -7,30 +7,37 @@ import { HuntPhase } from "../types/Phase";
 import { PlayerHuntView, PlayerView, PlayerViewSelf } from "../types/PlayerView";
 import MoveType from "./MoveType";
 
-type CheckVariableObjectives = {
-    type : MoveType.CheckVariableObjectives
+type ResolveVariableObjectives = {
+    type : MoveType.ResolveVariableObjectives
     playerId:PlayerColor
+    goal:number
+    tokens:number
 }
 
-export default CheckVariableObjectives
+export default ResolveVariableObjectives
 
-export function checkVariableObjectives(state:GameState | GameView, move:CheckVariableObjectives){
+export function resolveVariableObjectives(state:GameState | GameView, move:ResolveVariableObjectives){
     const player = isGameView(state) ? getPlayers(state).find(p => p.color === move.playerId)! : state.players.find(p => p.color === move.playerId)!
+    for(let i=0; i<move.tokens;i++){
+        player.goalsMade.push(move.goal)
+        player.totemTokens = Math.max(0, player.totemTokens -1)
+    }
+    
+}
 
-    state.goals.forEach(goal => {
+export function checkVariableObjectives(state:GameState | GameView, player:PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView):(false | [number, number]){
 
+    for(const goal of state.goals){
         if (!isPlayerAlreadyCompleteObjective(player, goal) && getGoalsArray(true)[goal].rule(player)){
             if(anyPlayerCompleteObjective(goal, state.players)){
-                player.totemTokens-=Math.min(getGoalsArray(true)[goal].value-1, player.totemTokens)
+                return [goal, getGoalsArray(true)[goal].value-1]
             } else {
-                player.totemTokens-=Math.min(getGoalsArray(true)[goal].value,player.totemTokens)
+                return [goal, getGoalsArray(true)[goal].value]
             }
-            player.goalsMade.push(goal)
         }
+    }
 
-    })
-
-    player.huntPhase = HuntPhase.Hunt
+    return false
 }
 
 function anyPlayerCompleteObjective(goal:number, players:(PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView)[]):boolean{
