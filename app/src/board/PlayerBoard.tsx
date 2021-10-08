@@ -9,7 +9,7 @@ import Card from './Card'
 import { getColoredDeck } from "@gamepark/prehistories/material/Hunters";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import Images from "../utils/Images";
-import { isPlayerViewSelf, PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
+import { isPlayerHuntView, isPlayerViewSelf, PlayerHuntView, PlayerView, isPlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
 import { DropTargetMonitor, useDrop, XYCoord } from "react-dnd";
 import CardInHand, {isCardInHand} from "@gamepark/prehistories/types/appTypes/CardInHand";
 import CardPlayed from "@gamepark/prehistories/types/appTypes/CardPlayed";
@@ -20,6 +20,7 @@ import { Hand, Picture } from "@gamepark/react-components";
 import Move from "@gamepark/prehistories/moves/Move";
 import ResolvePermanentObjectives, { isResolvePermanentObjectives } from "@gamepark/prehistories/moves/CheckPermanentObjectives";
 import ResolveVariableObjectives from "@gamepark/prehistories/moves/CheckVariableObjectives";
+import PlayHuntCard, { isPlayHuntCard, PlayHuntCardView } from "@gamepark/prehistories/moves/PlayHuntCard";
 
 type Props = {
     player:PlayerView | PlayerViewSelf | PlayerHuntView,
@@ -37,6 +38,8 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
 
     const totemAnimationPermanent = useAnimation<ResolvePermanentObjectives>(animation => isResolvePermanentObjectives(animation.move))
     const totemAnimationVariable = useAnimation<ResolveVariableObjectives>(animation => isResolvePermanentObjectives(animation.move))
+
+    const playHuntCardAnimation = useAnimation<PlayHuntCardView>(animation => isPlayHuntCard(animation.move))
     
     function howManyTotemToMove(move:ResolvePermanentObjectives):number{
         return move.objectivesCompleted[0].length + move.objectivesCompleted[1].length + (move.objectivesCompleted[2] === true ? 1 : 0)
@@ -81,15 +84,21 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
       })
 
       const getItemProps = (index: number) => {
-        const card:number = player.hand[index]      // Can't be a PlayerView
+        const card:number = player.hand[index]      // if playerView ==> undefined
         return ({
-          hoverStyle: css`transform: translateY(-25%) scale(1.7);`,
+          ignore:isPlayerView(player) && playHuntCardAnimation && index === 0,
+          hoverStyle: isPlayerViewSelf(player) ? css`transform: translateY(-25%) scale(1.7);` : undefined,
           drag: {
             type: "CardInHand",
             item: {type:"CardInHand", card},
             canDrag: player.color === playerId && phase === Phase.Initiative ,
             drop: () => play({type:MoveType.PlayHuntCard, card:card, playerId:player.color })
           },
+          animation:playHuntCardAnimation ? {
+            seconds:playHuntCardAnimation.duration,
+            delay:0,
+            fromNeutralPosition:false
+          } : undefined
         })
       }
 
@@ -116,13 +125,13 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
 
             <div css={cardHandPanelPosition}> 
 
-                <Hand css={[handPosition]} rotationOrigin={10} gapMaxAngle={isPlayerViewSelf(player) ? 3.2 - 0.12*player.hand.length : 3.2 - 0.12*player.hand} maxAngle={80} sizeRatio={11/8} getItemProps={isPlayerViewSelf(player) ? getItemProps : undefined} >
+                <Hand css={[handPosition]} rotationOrigin={10} gapMaxAngle={isPlayerViewSelf(player) ? 3.2 - 0.12*player.hand.length : 3.2 - 0.12*player.hand} maxAngle={80} sizeRatio={11/8} getItemProps={getItemProps} >
             
                     {isPlayerViewSelf(player) ? player.hand.map((card, index) => 
                     
                         <Card key={index}
                         color={player.color}
-                        css={cardStyle}
+                        css={[cardStyle, playHuntCardAnimation && index === 0 && playHuntCardAnimationStyle(playHuntCardAnimation.duration,player.played.length)]}
                         power={getColoredDeck(player.color)[card].power}
                         speed={getColoredDeck(player.color)[card].speed}
                         draggable={player.isReady !== true}
@@ -132,7 +141,7 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
                     
                     ) : [...Array(player.hand)].map((_, i) => 
                         <Card key={i}
-                        css = {cardStyle}
+                        css = {[cardStyle,playHuntCardAnimation && i === 0 && playHuntCardAnimationStyle(playHuntCardAnimation.duration, isPlayerHuntView(player) ? player.played.length : player.played)]}
                         color={player.color}   
                         />
                     )}
@@ -195,6 +204,19 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
     )
     
 }
+
+const playHuntCardKeyframes = (lengthPlayed:number) => keyframes`
+from{
+
+}
+to{
+    transform:translate(${lengthPlayed > 6 ? 270 : 229 }%,${-219+(lengthPlayed%6)*20.5}%);
+}
+`
+
+const playHuntCardAnimationStyle = (duration:number, lengthPlayed:number) => css`
+    animation:${playHuntCardKeyframes(lengthPlayed)} ${duration}s ease-out;
+`
 
 const placeTotemKeyframes = (totemMoved:number, playerIndex:number, howManyTotemAlreadyPlaced:number) => keyframes`
     from{
@@ -346,6 +368,7 @@ const cardHandPanelPosition = css`
     right:20%;
     width:60%;
     height:18%;
+    z-index:1;
 `
 
 const totemStyle = (i:number) => css`
