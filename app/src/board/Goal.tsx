@@ -1,19 +1,31 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react"
+import { PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView"
+import { Picture } from "@gamepark/react-components"
 import { FC } from "react"
+import { useTranslation } from "react-i18next/"
 import Images from "../utils/Images"
+import { getTotem } from "./PlayerPanel"
 
 type Props = {
     goal:number
+    players:(PlayerView | PlayerViewSelf | PlayerHuntView)[]
 }
 
-const Goal : FC<Props> = ({goal}) => {
+const Goal : FC<Props> = ({goal, players}) => {
+    
+    const playerNewArray = players.filter(p => p)
+    const sortedPlayers = playerNewArray.sort((a,b) => -a.goalsMade.filter(g => g === goal).length+b.goalsMade.filter(g => g === goal).length)
+
+    const {t} = useTranslation()
 
     return(
 
         <div css={[goalStyle(goal), goalPosition]}>
 
-
+            {sortedPlayers.map((player, indexPlayer) => 
+                [...Array(player.goalsMade.filter(g => g === goal).length)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={totemStyle(indexPlayer,i)} draggable={false} />)
+            )}
 
         </div>
 
@@ -21,7 +33,19 @@ const Goal : FC<Props> = ({goal}) => {
 
 }
 
+const totemStyle = (iPlayer:number, iToken:number) => css`
+    position:absolute;
+    bottom:${iPlayer === 0 ? 2 : 2 + (iPlayer - 1)*10}%;
+    left:${iPlayer === 0 ? 3+iToken*10 : 72-iToken*10}%;
+    height:3em;
+    width:3em;
+    box-shadow:0 0 0.5em black;
+    border-radius:100%;
+    margin:0.5em auto;
+`
+
 const goalPosition = css`
+    position:relative;
     width:100%;
     height:100%;
 `

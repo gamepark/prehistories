@@ -11,13 +11,17 @@ const prehistoriesAnimations : Animations<GameView, MoveView, PlayerColor> = {
         if (move.type === MoveType.DrawXCards){
             return 0
         } else if (move.type === MoveType.PlayPolyomino){
-            return 0
+            return action.playerId === playerId ? 0 : 5
         } else if (move.type === MoveType.SpendHunter){
             return 0
         } else if (move.type === MoveType.ShuffleDiscardPile){
             return 0
         } else if (move.type === MoveType.PlayHuntCard){
             return 0
+        } else if (move.type === MoveType.ResolvePermanentObjectives){
+            return 2
+        } else if(move.type === MoveType.ResolveVariableObjectives){
+            return 2
         }
 
         return 0

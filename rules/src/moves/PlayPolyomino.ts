@@ -5,6 +5,7 @@ import Coordinates from "../types/Coordinates";
 import { HuntPhase } from "../types/Phase";
 import {PlayerHuntView, PlayerViewSelf } from "../types/PlayerView";
 import powerLevels from "../utils/powerLevels";
+import Move from "./Move";
 import MoveType from "./MoveType";
 
 type PlayPolyomino = {
@@ -30,4 +31,8 @@ export function playPolyomino(state:GameState | GameView, move:PlayPolyomino){
         player.tilesHunted = player.tilesHunted === undefined ? 1 : player.tilesHunted++
     }
     state.huntingBoard[move.huntSpot] = null
+}
+
+export function isPlayPolyomino(move: Move):move is PlayPolyomino{
+    return move.type === MoveType.PlayPolyomino
 }

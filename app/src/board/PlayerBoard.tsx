@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-import { css } from "@emotion/react";
+import { css, keyframes } from "@emotion/react";
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Cave from "./Cave";
@@ -14,24 +14,34 @@ import { DropTargetMonitor, useDrop, XYCoord } from "react-dnd";
 import CardInHand, {isCardInHand} from "@gamepark/prehistories/types/appTypes/CardInHand";
 import CardPlayed from "@gamepark/prehistories/types/appTypes/CardPlayed";
 import MoveType from "@gamepark/prehistories/moves/MoveType";
-import { usePlay, usePlayerId } from "@gamepark/react-client";
+import { useAnimation, usePlay, usePlayerId } from "@gamepark/react-client";
 import Phase, { HuntPhase } from "@gamepark/prehistories/types/Phase";
 import { Hand, Picture } from "@gamepark/react-components";
 import Move from "@gamepark/prehistories/moves/Move";
-import { getGoalsArray } from "@gamepark/prehistories/material/Goals";
+import ResolvePermanentObjectives, { isResolvePermanentObjectives } from "@gamepark/prehistories/moves/CheckPermanentObjectives";
+import ResolveVariableObjectives from "@gamepark/prehistories/moves/CheckVariableObjectives";
 
 type Props = {
     player:PlayerView | PlayerViewSelf | PlayerHuntView,
     phase:Phase | undefined,
     players:(PlayerView | PlayerViewSelf | PlayerHuntView)[]
     isActiveHuntingPlayer:boolean
+    goals:number[]
 }
 
-const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer}) => {
+const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer, goals}) => {
 
     const {t} = useTranslation()
     const playerId = usePlayerId<PlayerColor>()
     const play = usePlay<Move>()
+
+    const totemAnimationPermanent = useAnimation<ResolvePermanentObjectives>(animation => isResolvePermanentObjectives(animation.move))
+    const totemAnimationVariable = useAnimation<ResolveVariableObjectives>(animation => isResolvePermanentObjectives(animation.move))
+    
+    function howManyTotemToMove(move:ResolvePermanentObjectives):number{
+        return move.objectivesCompleted[0].length + move.objectivesCompleted[1].length + (move.objectivesCompleted[2] === true ? 1 : 0)
+    }
+
 
     const [{canDropPlayed, isOverPlayed}, dropRefPlayed] = useDrop({
         accept: ["CardInHand", 'CardPlayed'],
@@ -93,7 +103,14 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer}
 
             <div css={totemTokenPanelPosition}>
 
-            {[...Array(player.totemTokens)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={totemStyle} draggable={false} />)}
+                {[...Array(player.totemTokens)].map((_, i) => <Picture 
+                        key={i} alt={t('token')} 
+                        src={getTotem(player.color)} 
+                        css={[totemStyle(i),
+                            totemAnimationPermanent && (howManyTotemToMove(totemAnimationPermanent.move) >= player.totemTokens-i) && placeTotemAnimation(player.totemTokens - i,totemAnimationPermanent.duration, players.findIndex(p => p.color === player.color), 8-player.goalsMade.length-player.totemTokens),
+                            totemAnimationVariable && totemAnimationVariable.move.tokens >= player.totemTokens - i && placeTotemAnimationVariable(player.totemTokens - i, totemAnimationVariable.duration, players.findIndex(p => p.color === player.color), goals.findIndex(g => g === totemAnimationVariable.move.goal), goals.length)
+                        ]} 
+                        draggable={false} />)}
 
             </div>
 
@@ -178,6 +195,36 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer}
     )
     
 }
+
+const placeTotemKeyframes = (totemMoved:number, playerIndex:number, howManyTotemAlreadyPlaced:number) => keyframes`
+    from{
+        transform:scale(1);
+    }
+    80%,to{
+        top:${playerIndex%2 === 1 ? 30-(howManyTotemAlreadyPlaced*2.35+totemMoved*2.5) : -2+(howManyTotemAlreadyPlaced*3+totemMoved*2.5)}em;
+        right:${(playerIndex === 0 || playerIndex === 3) ? 21.1-3*playerIndex - ((howManyTotemAlreadyPlaced%2+totemMoved%2) * 2.2) : (playerIndex === 1 || playerIndex === 4) ? 21.1-3*playerIndex + ((howManyTotemAlreadyPlaced%2+totemMoved%2) * 2.2): 21.1-3*playerIndex }em;
+        transform:scale(0.6);
+    }
+`
+
+const placeTotemVariableKeyframes = (totemMoved:number, playerIndex:number, goalIndex:number, goalNumber:number) => keyframes`
+    from{
+        transform:scale(1);
+    }
+    80%,to{
+        top:${10.8 + (playerIndex > 1 ? -1.75*(playerIndex-1) : 0)}em;
+        right:${goalNumber === 5 ? 36.5+(4-goalIndex)*13.75 - (playerIndex === 0 ? totemMoved*1.2 : 8.5 - totemMoved*1.2) : 43.3+(3-goalIndex)*13.75 - (playerIndex === 0 ? totemMoved*1.2 : 8.5 - totemMoved*1.2)}em;
+        transform:scale(0.42);
+    }
+`
+
+const placeTotemAnimation = (totemMoved:number, duration:number, playerIndex:number, howManyTotemAlreadyPlaced:number) => css`
+    animation:${placeTotemKeyframes(totemMoved-1, playerIndex, howManyTotemAlreadyPlaced)} ${duration}s ease-in-out;
+`
+
+const placeTotemAnimationVariable = (totemMoved:number, duration:number, playerIndex:number, goalIndex:number, goalNumber:number) => css`
+    animation:${placeTotemVariableKeyframes(totemMoved-1, playerIndex, 0, goalNumber)} ${duration}s ease-in-out;
+`
 
 const injuriesndicatorPosition = css`
 position:absolute;
@@ -301,7 +348,10 @@ const cardHandPanelPosition = css`
     height:18%;
 `
 
-const totemStyle = css`
+const totemStyle = (i:number) => css`
+    position:absolute;
+    right:10%;
+    top:${i*12}%;
     height:7em;
     width:7em;
     box-shadow:0 0 0.5em black;
@@ -321,9 +371,6 @@ const totemTokenPanelPosition = css`
     right:1%;
     width:8%;
     height:80%;
-
-    display:flex;
-    flex-direction:column;
 `
 
 const playerBoardPosition = css`

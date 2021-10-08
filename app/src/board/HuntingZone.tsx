@@ -17,9 +17,11 @@ import Polyomino from "./Polyomino";
 type Props = {
     game:GameView
     numberOfPlayers:number
+    indexOfDisplayedPlayer:number
+    indexListDisplayedPlayers:PlayerColor[]
 }
 
-const HuntingZone : FC<Props> = ({game, numberOfPlayers}) => {
+const HuntingZone : FC<Props> = ({game, numberOfPlayers, indexOfDisplayedPlayer, indexListDisplayedPlayers}) => {
 
     const playerId = usePlayerId<PlayerColor>()
 
@@ -41,6 +43,8 @@ const HuntingZone : FC<Props> = ({game, numberOfPlayers}) => {
                            huntPosition={index}
                            nbPlayers = {numberOfPlayers}
                            polyominoSelected = {game.polyominoSelected}
+                           indexOfDisplayedPlayer={indexOfDisplayedPlayer}
+                           indexListDisplayedPlayers={indexListDisplayedPlayers}
                 />
 
             )}

@@ -59,3 +59,7 @@ export function checkPermanentObjectives(state:GameState|GameView, player:Player
     return result
 
 }
+
+export function isResolvePermanentObjectives(move: Move):move is ResolvePermanentObjectives{
+    return move.type === MoveType.ResolvePermanentObjectives
+}

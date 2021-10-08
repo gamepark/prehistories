@@ -5,6 +5,7 @@ import PlayerColor from "../PlayerColor";
 import PlayerState from "../PlayerState";
 import { HuntPhase } from "../types/Phase";
 import { PlayerHuntView, PlayerView, PlayerViewSelf } from "../types/PlayerView";
+import Move from "./Move";
 import MoveType from "./MoveType";
 
 type ResolveVariableObjectives = {
@@ -48,5 +49,7 @@ function isPlayerAlreadyCompleteObjective(player:PlayerState | PlayerView | Play
     return player.goalsMade.find(g => g === goal) !== undefined
 }
 
-
+export function isResolveVariableObjectives(move: Move):move is ResolveVariableObjectives{
+    return move.type === MoveType.ResolveVariableObjectives
+}
 

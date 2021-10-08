@@ -29,9 +29,12 @@ export default function GameDisplay({game}: Props) {
                     top:0;left:0;width:100%;height:100%;`}>
                       
         <HuntingZone game={game}
-                     numberOfPlayers={game.players.length}          
+                     numberOfPlayers={game.players.length}    
+                     indexOfDisplayedPlayer={players.findIndex(p => p.color === playerDisplayed.color)} 
+                     indexListDisplayedPlayers={players.map(p => p.color)}     
         />
-        <Objectives goals={game.goals}            
+        <Objectives goals={game.goals}    
+                    players={game.players}        
         />
         {players.map((player, index) =>
           <PlayerPanel key={player.color}
@@ -47,7 +50,7 @@ export default function GameDisplay({game}: Props) {
                      players={game.players}
                      phase={game.phase}
                      isActiveHuntingPlayer={game.sortedPlayers !== undefined && game.sortedPlayers[0] === playerDisplayed.color}
-        
+                     goals={game.goals}
         />
 
 

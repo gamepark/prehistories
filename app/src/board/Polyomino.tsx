@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
+import { css, keyframes } from "@emotion/react";
 import Move from "@gamepark/prehistories/moves/Move";
-import PlayPolyomino from "@gamepark/prehistories/moves/PlayPolyomino";
+import PlayPolyomino, { isPlayPolyomino } from "@gamepark/prehistories/moves/PlayPolyomino";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
-import { usePlay, usePlayerId } from "@gamepark/react-client";
+import { useAnimation, usePlay, usePlayerId } from "@gamepark/react-client";
 import { FC, HTMLAttributes } from "react";
 import Images from "../utils/Images";
 import PolyominoToHunt from "@gamepark/prehistories/types/appTypes/PolyominoToHunt"
@@ -24,9 +24,11 @@ type Props = {
     huntPosition?:number
     nbPlayers?:number
     polyominoSelected?:PolyominoToHunt
+    indexOfDisplayedPlayer?:number
+    indexListDisplayedPlayers?:PlayerColor[]
 } & Omit<HTMLAttributes<HTMLDivElement>, 'color'>
 
-const Polyomino : FC<Props> = ({polyomino, side, color, draggable = false, type='', draggableItem, isAlreadyPlaced, phase, huntPosition, nbPlayers, polyominoSelected, ...props}) => {
+const Polyomino : FC<Props> = ({polyomino, side, color, draggable = false, type='', draggableItem, isAlreadyPlaced, phase, huntPosition, nbPlayers, polyominoSelected, indexOfDisplayedPlayer, indexListDisplayedPlayers, ...props}) => {
 
     const play = usePlay<Move>()
     const item = {...draggableItem}
@@ -46,23 +48,33 @@ const Polyomino : FC<Props> = ({polyomino, side, color, draggable = false, type=
         }),
       })
 
+      const playPolyominoAnimation = useAnimation<PlayPolyomino>(animation => isPlayPolyomino(animation.move))
+      
+
     return(
         <Draggable canDrag={draggable}
                    type={type}
                    item={item}
                    drop={onDrop}
                    {...props}
-                   css={[polyominoSize]}
+                   css={[polyominoSize, playPolyominoAnimation !== undefined && huntPosition !== undefined && playPolyominoAnimation.move.huntSpot === huntPosition && nbPlayers !== undefined && indexListDisplayedPlayers !== undefined && playPolyominoAnimationStyle(playPolyominoAnimation.duration, indexOfDisplayedPlayer, indexListDisplayedPlayers, playPolyominoAnimation.move.playerId,playPolyominoAnimation.move.square.x,playPolyominoAnimation.move.square.y)]}
                    onClick = {() => huntPosition !== undefined && side === undefined && playSetSelectedPolyomino(setSelectedPolyominoMove({polyomino, huntSpot:huntPosition, side:polyominoSelected?.polyomino === polyomino ? polyominoSelected.side : 0, type:"PolyominoToHunt"}), {local:true})}
                    >
 
-                <div css={[css`position:absolute;width:100%;height:100%;`, flipTile(polyominoSelected, polyomino)]}> 
+                <div css={[css`position:absolute;width:100%;height:100%;`, flipTile(polyominoSelected, polyomino, playPolyominoAnimation?.move.side, playPolyominoAnimation?.move.polyomino) ]}> 
 
-                    <div ref={ref} css={[css`position:absolute;width:100%;height:100%;`, frontSide, huntPosition !== undefined && nbPlayers !== undefined && displayHuntPolyomino(isDragging, huntPosition, polyomino, nbPlayers, side ?? 0, "front"), polyominoStyle(color ? getColoredPolyominoImage(polyomino, color!): getPolyominoImage(polyomino, side ?? 0)), dragStyle(draggable, isAlreadyPlaced, phase === Phase.Hunt, polyomino === polyominoSelected?.polyomino)]}>
+                    <div ref={ref} 
+                         css={[
+                             css`position:absolute;width:100%;height:100%;`,
+                             frontSide,
+                             huntPosition !== undefined && nbPlayers !== undefined && displayHuntPolyomino(isDragging, huntPosition, polyomino, nbPlayers, side ?? 0, "front", playPolyominoAnimation !== undefined && playPolyominoAnimation.move.huntSpot === huntPosition),
+                             polyominoStyle(color ? getColoredPolyominoImage(polyomino, color!): getPolyominoImage(polyomino, side ?? 0)),
+                             dragStyle(draggable, isAlreadyPlaced, phase === Phase.Hunt, polyomino === polyominoSelected?.polyomino),
+                             ]}>
 
                     </div>
 
-                    {side === undefined && <div ref={ref} css={[css`position:absolute;width:100%;height:100%;`, backSide, huntPosition !== undefined && nbPlayers !== undefined && displayHuntPolyomino(isDragging, huntPosition, polyomino, nbPlayers, 1, "back"), polyominoStyle(color ? getColoredPolyominoImage(polyomino, color!): getPolyominoImage(polyomino, 1)), dragStyle(draggable, isAlreadyPlaced, phase === Phase.Hunt, polyomino === polyominoSelected?.polyomino)]}>
+                    {side === undefined && <div ref={ref} css={[css`position:absolute;width:100%;height:100%;`, backSide, huntPosition !== undefined && nbPlayers !== undefined && displayHuntPolyomino(isDragging, huntPosition, polyomino, nbPlayers, 1, "back", playPolyominoAnimation !== undefined && playPolyominoAnimation.move.huntSpot === huntPosition), polyominoStyle(color ? getColoredPolyominoImage(polyomino, color!): getPolyominoImage(polyomino, 1)), dragStyle(draggable, isAlreadyPlaced, phase === Phase.Hunt, polyomino === polyominoSelected?.polyomino)]}>
 
                     </div>}
 
@@ -72,6 +84,25 @@ const Polyomino : FC<Props> = ({polyomino, side, color, draggable = false, type=
     )
 
 }
+
+const playPolyominoKeyframes = (isGoodDisplayedCave:number|undefined, indexListDisplayedPlayers:PlayerColor[], player:PlayerColor,x:number,y:number) => keyframes`
+from{
+    transform:scale(0.8);
+}
+20%{
+    transform:scale(1.5);
+}
+to{
+    transform:scale(${isGoodDisplayedCave === indexListDisplayedPlayers.findIndex(p => p === player) ? 1.26 : 0});
+    top:${isGoodDisplayedCave === indexListDisplayedPlayers.findIndex(p => p === player) ? 24 + x*7.2: 27+((indexListDisplayedPlayers.findIndex(p => p === player))-1)*19 }em;
+    left:${isGoodDisplayedCave === indexListDisplayedPlayers.findIndex(p => p === player) ? 60.5 +y*7.0: 150}em;
+}
+`
+
+const playPolyominoAnimationStyle = (duration:number, isGoodDisplayedCave:number|undefined, indexListDisplayedPlayers:PlayerColor[], player:PlayerColor,x:number,y:number) => css`
+z-index:10!important;
+animation: ${playPolyominoKeyframes(isGoodDisplayedCave, indexListDisplayedPlayers, player,x,y)} ${duration}s ease-in-out;
+`
 
 const frontSide = css`
 transform-style: preserve-3d;
@@ -83,14 +114,14 @@ transform-style: preserve-3d;
 backface-visibility:hidden;
 `
 
-const flipTile = (select:PolyominoToHunt|undefined, polyomino:number|null) => css`
+const flipTile = (select:PolyominoToHunt|undefined, polyomino:number|null, animationSide:0|1|undefined, animationPolyo:number|undefined) => css`
 transform-style:preserve-3d;
-transform:rotateY(${select !== undefined && select.polyomino === polyomino && select?.side === 1 ? 180 : 0}deg);
+transform:rotateY(${animationSide !== undefined && animationPolyo === polyomino ? 180*animationSide : select !== undefined && select.polyomino === polyomino && select?.side === 1 ? 180 : 0}deg);
 transition:transform 0.2s linear, top 0.2s linear, left 0.2s linear;
 `
 
-const displayHuntPolyomino = (isDragging:boolean, pos:number, polyomino:number, nbPlayers:number, side:0|1, face:"front"|"back") => css`
-transform:scale(${isDragging ? 1 : 0.8}) rotateZ(${isDragging ? 0 : getRotate(pos, nbPlayers, side, polyomino)}deg) rotateY(${face === "front" ? 0 : 180}deg);
+const displayHuntPolyomino = (isDragging:boolean, pos:number, polyomino:number, nbPlayers:number, side:0|1, face:"front"|"back", isAnimation:boolean) => css`
+transform:scale(${isDragging ? 1 : 0.8}) rotateZ(${isDragging ||isAnimation ? 0 : getRotate(pos, nbPlayers, side, polyomino)}deg) rotateY(${face === "front" ? 0 : 180}deg);
 transition:transform 0.1s linear;
 `
 
