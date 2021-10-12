@@ -2,7 +2,7 @@
 import { css } from "@emotion/react"
 import { PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView"
 import { Picture } from "@gamepark/react-components"
-import { FC } from "react"
+import { FC, HTMLAttributes } from "react"
 import { useTranslation } from "react-i18next";
 import Images from "../utils/Images"
 import Goal from "./Goal"
@@ -11,9 +11,9 @@ import { getTotem } from "./PlayerPanel"
 type Props = {
     goals:number[],
     players:(PlayerView | PlayerViewSelf | PlayerHuntView)[]
-}
+} & HTMLAttributes<HTMLDivElement>
 
-const Objectives : FC<Props> = ({goals,players}) => {
+const Objectives : FC<Props> = ({goals,players, ...props}) => {
 
     const {t} = useTranslation()
 
@@ -21,7 +21,7 @@ const Objectives : FC<Props> = ({goals,players}) => {
 
         <>
 
-        <div css={[variableObjectivesPosition]}>
+        <div css={[variableObjectivesPosition]} {...props}>
             {goals.map((goal, index) => 
                 <div key={index} css={goalPosition(index)}>  
                     <Goal goal={goal}
@@ -84,6 +84,8 @@ top:7%;
 left:24%;
 width:40%;
 height:20%;
+z-index:1;
+cursor:pointer;
 
 display:flex;
 flex-direction: row;

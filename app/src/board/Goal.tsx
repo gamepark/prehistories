@@ -2,7 +2,7 @@
 import { css } from "@emotion/react"
 import { PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView"
 import { Picture } from "@gamepark/react-components"
-import { FC } from "react"
+import { FC, HTMLAttributes } from "react"
 import { useTranslation } from "react-i18next/"
 import Images from "../utils/Images"
 import { getTotem } from "./PlayerPanel"
@@ -10,9 +10,9 @@ import { getTotem } from "./PlayerPanel"
 type Props = {
     goal:number
     players:(PlayerView | PlayerViewSelf | PlayerHuntView)[]
-}
+} & HTMLAttributes<HTMLDivElement>
 
-const Goal : FC<Props> = ({goal, players}) => {
+const Goal : FC<Props> = ({goal, players, ...props}) => {
     
     const playerNewArray = players.filter(p => p)
     const sortedPlayers = playerNewArray.sort((a,b) => -a.goalsMade.filter(g => g === goal).length+b.goalsMade.filter(g => g === goal).length)
@@ -21,7 +21,7 @@ const Goal : FC<Props> = ({goal, players}) => {
 
     return(
 
-        <div css={[goalStyle(goal), goalPosition]}>
+        <div css={[goalStyle(goal), goalPosition]} {...props}>
 
             {sortedPlayers.map((player, indexPlayer) => 
                 [...Array(player.goalsMade.filter(g => g === goal).length)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={totemStyle(indexPlayer,i)} draggable={false} />)

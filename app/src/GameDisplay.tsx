@@ -10,6 +10,7 @@ import Objectives from './board/Objectives'
 import PlayerBoard from './board/PlayerBoard'
 import PlayerPanel from './board/PlayerPanel'
 import SetCaveDisplayed, { setCaveDisplayed, setCaveDisplayedMove } from './localMoves/setCaveDisplayed'
+import WelcomePopUp from './utils/WelcomePopUp'
 
 type Props = {
   game: GameView
@@ -23,6 +24,11 @@ export default function GameDisplay({game}: Props) {
 
   const playSetCaveDisplayed = usePlay<SetCaveDisplayed>()
 
+  const [welcomePopUpClosed, setWelcomePopUpClosed] = useState(false)
+  const showWelcomePopup = !welcomePopUpClosed
+
+
+
   return (
     <Letterbox css={letterBoxStyle} top={0}>
       <div css={css`position: absolute;
@@ -34,7 +40,8 @@ export default function GameDisplay({game}: Props) {
                      indexListDisplayedPlayers={players.map(p => p.color)}     
         />
         <Objectives goals={game.goals}    
-                    players={game.players}        
+                    players={game.players} 
+                    onClick={() => setWelcomePopUpClosed(false)}       
         />
         {players.map((player, index) =>
           <PlayerPanel key={player.color}
@@ -52,6 +59,9 @@ export default function GameDisplay({game}: Props) {
                      isActiveHuntingPlayer={game.sortedPlayers !== undefined && game.sortedPlayers[0] === playerDisplayed.color}
                      goals={game.goals}
         />
+
+        {showWelcomePopup && <WelcomePopUp player={playerId} game={game} close={() => setWelcomePopUpClosed(true)} />}
+
 
 
       </div>
