@@ -31,8 +31,8 @@ export default function GameDisplay({game}: Props) {
 
   return (
     <Letterbox css={letterBoxStyle} top={0}>
-      <div css={css`position: absolute;
-                    top:0;left:0;width:100%;height:100%;`}>
+      <div css={[css`position: absolute;
+                    top:0;left:0;width:100%;height:100%;`, perspective]}>
                       
         <HuntingZone game={game}
                      numberOfPlayers={game.players.length}    
@@ -68,6 +68,10 @@ export default function GameDisplay({game}: Props) {
     </Letterbox>
   )
 }
+
+const perspective = css`
+
+`
 
 export const getPlayersStartingWith = (game: GameView, playerId?: PlayerColor) => {
   if (playerId) {

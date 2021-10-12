@@ -23,6 +23,7 @@ import ResolveVariableObjectives from "@gamepark/prehistories/moves/CheckVariabl
 import PlayHuntCard, { isPlayHuntCard, PlayHuntCardView } from "@gamepark/prehistories/moves/PlayHuntCard";
 import { RevealHuntCardsView, isRevealHuntCards } from "@gamepark/prehistories/moves/RevealHuntCards";
 import SpendHunter, { isSpendHunter } from "@gamepark/prehistories/moves/SpendHunter";
+import ShuffleDiscardPile, { isShuffleDiscardPile, ShuffleDiscardPileView } from "@gamepark/prehistories/moves/ShuffleDiscardPile";
 
 type Props = {
     player:PlayerView | PlayerViewSelf | PlayerHuntView,
@@ -45,7 +46,8 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
     const revealCardsAnimation = useAnimation<RevealHuntCardsView>(animation => isRevealHuntCards(animation.move))
 
     const spendCardAnimation = useAnimation<SpendHunter>(animation => isSpendHunter(animation.move))
-    
+    const shuffleDiscardAnimation = useAnimation<ShuffleDiscardPileView>(animation => isShuffleDiscardPile(animation.move))
+
     function howManyTotemToMove(move:ResolvePermanentObjectives):number{
         return move.objectivesCompleted[0].length + move.objectivesCompleted[1].length + (move.objectivesCompleted[2] === true ? 1 : 0)
     }
@@ -189,7 +191,7 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
                           color={player.color}
                           power={getColoredDeck(player.color)[card].power}
                           speed={getColoredDeck(player.color)[card].speed}
-                          css={[deckOffset(index), cardStyle]}
+                          css={[deckOffset(index), cardStyle, shuffleDiscardAnimation && shufflingAnimation(index, shuffleDiscardAnimation.duration, player.discard.length)]}
                     />)}
 
             </div>
@@ -216,9 +218,24 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
     
 }
 
+const shufflingKeyFrames = (index:number) => keyframes`
+from{
+
+}
+to{
+  transform:rotateY(-180deg) ;
+  left:${-718+index}%;  
+}
+`
+
+const shufflingAnimation = (index:number, duration:number, discardLength:number) => css`
+
+animation:${shufflingKeyFrames(discardLength - index)} ${duration-0.2}s linear ${(discardLength - index)/60}s forwards;
+`
+
 const spendHunterKeyFrames = (discardLength:number) => keyframes`
 from{z-index:11}
-to{
+80%,to{
     top:${108-discardLength*0.5}%;
     left:${92+discardLength*0.5}%;
     z-index:11;
@@ -226,7 +243,7 @@ to{
 `
 
 const spendAnimation = (discardLength:number, duration:number) => css`
-animation: ${spendHunterKeyFrames(discardLength)} ${duration}s ease-in infinite;
+animation: ${spendHunterKeyFrames(discardLength)} ${duration}s ease-in;
 `
 
 const dragKeyFrames = keyframes`
@@ -383,6 +400,9 @@ bottom:0%;
 right:0%;
 width:12%;
 height:18%;
+transform-style: preserve-3d;
+transform: perspective(200em);
+z-index:1;
 `
 const discardZoneStyle = css`
 

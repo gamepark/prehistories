@@ -4,6 +4,7 @@ import PlayerColor from "../PlayerColor";
 import { isNotPlayerState, isPlayerHuntView, isPlayerView, isPlayerViewSelf } from "../types/PlayerView";
 import Move from "./Move";
 import MoveType from "./MoveType";
+import MoveView from "./MoveView";
 
 type ShuffleDiscardPile = {
     type:MoveType.ShuffleDiscardPile
@@ -31,6 +32,6 @@ export function shuffleDiscardPileInView(state:GameView, move:ShuffleDiscardPile
     player.discard = []
 }
 
-export function isShuffleDiscardPile(move:Move):move is ShuffleDiscardPile{
+export function isShuffleDiscardPile(move:Move|MoveView):move is ShuffleDiscardPile{
     return move.type === MoveType.ShuffleDiscardPile
 }

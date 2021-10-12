@@ -15,7 +15,7 @@ const prehistoriesAnimations : Animations<GameView, MoveView, PlayerColor> = {
         } else if (move.type === MoveType.SpendHunter){
             return action.playerId === playerId ? 0 : (state.caveDisplayed === action.playerId ? 0.7 : 0)
         } else if (move.type === MoveType.ShuffleDiscardPile){
-            return 0
+            return 1
         } else if (move.type === MoveType.PlayHuntCard){
             return action.playerId === playerId ? 0 : (state.caveDisplayed === action.playerId ? 1 : 0)
         } else if (move.type === MoveType.ResolvePermanentObjectives){
