@@ -3,7 +3,9 @@ import GameView, { getPlayers, isGameView } from "../GameView";
 import { getColoredDeck } from "../material/Hunters";
 import PlayerColor from "../PlayerColor";
 import { isPlayerHuntView, isPlayerState, isPlayerViewSelf } from "../types/PlayerView";
+import Move from "./Move";
 import MoveType from "./MoveType";
+import MoveView from "./MoveView";
 
 type SpendHunter = {
     type:MoveType.SpendHunter
@@ -23,4 +25,8 @@ export function spendHunter(state:GameState|GameView, move:SpendHunter){
         player.huntSpotTakenLevels![1] -= getColoredDeck(move.playerId)[move.card].power
     }
 
+}
+
+export function isSpendHunter(move: Move |MoveView):move is SpendHunter{
+    return move.type === MoveType.SpendHunter
 }

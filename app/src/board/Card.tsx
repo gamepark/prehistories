@@ -1,16 +1,17 @@
 /** @jsxImportSource @emotion/react */
 
-import { css } from "@emotion/react"
+import { css, keyframes } from "@emotion/react"
 import { getColoredDeck } from "@gamepark/prehistories/material/Hunters"
-import PlayerColor from "@gamepark/prehistories/PlayerColor"
+import PlayerColor, { playerColors } from "@gamepark/prehistories/PlayerColor"
 import { FC, HTMLAttributes } from "react"
 import Images, { BlueHunters, GreenHunters, RedHunters, WhiteHunters, YellowHunters } from "../utils/Images"
 import CardPlayed from "@gamepark/prehistories/types/appTypes/CardPlayed"
 import CardInHand from "@gamepark/prehistories/types/appTypes/CardInHand"
-import { usePlay } from "@gamepark/react-client"
+import { useAnimation, usePlay } from "@gamepark/react-client"
 import Move from "@gamepark/prehistories/moves/Move"
 import PlayHuntCard from "@gamepark/prehistories/moves/PlayHuntCard"
 import { Draggable } from "@gamepark/react-components"
+import { isRevealHuntCards, RevealHuntCardsView } from "@gamepark/prehistories/moves/RevealHuntCards"
 
 
 type Props = {
@@ -30,6 +31,8 @@ const Card : FC<Props> = ({color, power, speed, draggable=false, type='', dragga
         play(move)
     }
 
+    const revealCardsAnimation = useAnimation<RevealHuntCardsView>(animation => isRevealHuntCards(animation.move))
+
     return(
 
         <Draggable canDrag={draggable}
@@ -37,16 +40,44 @@ const Card : FC<Props> = ({color, power, speed, draggable=false, type='', dragga
                    item={item}
                    drop={onDrop}
                    {...props}
-                   css={[cardPosition, cardStyle(getCardImage(color, power, speed))]}>
+                   css={[cardPosition]}>
+
+            <div css={[cardPosition, faceToShow(power, revealCardsAnimation !== undefined, revealCardsAnimation?.duration ?? 0)]}>
+
+                <div css={[cardPosition, front, cardStyle(getCardImage(color, power, speed))]}></div>
+                <div css={[cardPosition, back, cardStyle(getCardImage(color, undefined, undefined))]}></div>
+
+            </div>
+
         </Draggable>
 
     )
 
 }
 
+const faceToShow = (power:undefined|number, isAnimation:boolean, duration:number) => css`
+transform:rotateY(${power === undefined ? 180 : 0}deg);
+${isAnimation ? `transition:transform ${duration}s linear;` : `transition:none;`}
+
+`
+
+const front = css`
+transform-style: preserve-3d;
+backface-visibility:hidden;
+`
+
+const back = css`
+transform-style: preserve-3d;
+backface-visibility:hidden;
+transform:rotateY(180deg);
+`
+
 const cardPosition = css`
+transform-style:preserve-3d;
+position:absolute;
 width:100%;
 height:100%;
+border-radius:8%;
 `
 const cardStyle = (image:string) => css`
 background-image: url(${image});

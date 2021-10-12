@@ -1,13 +1,14 @@
 /** @jsxImportSource @emotion/react */
 
-import { css } from "@emotion/react";
+import { css, keyframes } from "@emotion/react";
 import Move from "@gamepark/prehistories/moves/Move";
 import MoveType from "@gamepark/prehistories/moves/MoveType";
+import { isRevealHuntCards, RevealHuntCardsView } from "@gamepark/prehistories/moves/RevealHuntCards";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import { getPlayerName } from "@gamepark/prehistories/PrehistoriesOptions";
 import Phase, { HuntPhase } from "@gamepark/prehistories/types/Phase";
 import { PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
-import { PlayerTimer, usePlay, usePlayer, usePlayerId } from "@gamepark/react-client";
+import { PlayerTimer, useAnimation, usePlay, usePlayer, usePlayerId } from "@gamepark/react-client";
 import { Picture } from "@gamepark/react-components";
 import { FC, HTMLAttributes, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -29,12 +30,11 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, isReady, huntPhase
     const playerId = usePlayerId<PlayerColor>()
     const play = usePlay<Move>()
 
-
     return (
 
         <div {...props} css={[playerPanelStyle(getBG(color)), playerPanelPosition(position)]}>
 
-            {huntOrder !== undefined && <div css={[powerPosition, powerStyle(getPowerBanner(color)[huntOrder.findIndex(c => c === color)])]}> </div>}
+            {huntOrder !== undefined && <div css={[powerPosition, powerStyle(getPowerBanner(color)[huntOrder.findIndex(c => c === color)]), entryBannerAnim]}> </div>}
 
             <AvatarPanel playerInfo={playerInfo} color={color} css={css`z-index:5;`}/>
 
@@ -55,6 +55,25 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, isReady, huntPhase
     )
 
 }
+
+const entryBannerKeyframes = keyframes`
+from{
+    top:27%;
+    left:12.5%;
+    transform-origin:top;
+    transform:rotateZ(95deg);
+}
+to{
+    top:43%;
+    left:3%;
+    transform-origin:center;
+    transform:rotateZ(5deg);
+}
+`
+
+const entryBannerAnim = css`
+animation: ${entryBannerKeyframes} 1s ease-out ;
+`
 
 function getPowerBanner(color:PlayerColor):string[]{
     switch(color){
@@ -126,6 +145,7 @@ const playerPanelStyle = (image:string) => css`
     background-repeat: no-repeat;
     background-position: top;
     border:0.1em solid black;
+    cursor:pointer;
 `
 
 const nameStyle = css`

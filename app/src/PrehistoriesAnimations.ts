@@ -13,7 +13,7 @@ const prehistoriesAnimations : Animations<GameView, MoveView, PlayerColor> = {
         } else if (move.type === MoveType.PlayPolyomino){
             return action.playerId === playerId ? 0 : 5
         } else if (move.type === MoveType.SpendHunter){
-            return 0
+            return action.playerId === playerId ? 0 : (state.caveDisplayed === action.playerId ? 0.7 : 0)
         } else if (move.type === MoveType.ShuffleDiscardPile){
             return 0
         } else if (move.type === MoveType.PlayHuntCard){
@@ -22,6 +22,8 @@ const prehistoriesAnimations : Animations<GameView, MoveView, PlayerColor> = {
             return 2
         } else if(move.type === MoveType.ResolveVariableObjectives){
             return 2
+        } else if(move.type === MoveType.RevealHuntCards){
+            return state.caveDisplayed === playerId ? 0 : 2
         }
 
         return 0

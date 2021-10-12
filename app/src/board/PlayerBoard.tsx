@@ -21,6 +21,8 @@ import Move from "@gamepark/prehistories/moves/Move";
 import ResolvePermanentObjectives, { isResolvePermanentObjectives } from "@gamepark/prehistories/moves/CheckPermanentObjectives";
 import ResolveVariableObjectives from "@gamepark/prehistories/moves/CheckVariableObjectives";
 import PlayHuntCard, { isPlayHuntCard, PlayHuntCardView } from "@gamepark/prehistories/moves/PlayHuntCard";
+import { RevealHuntCardsView, isRevealHuntCards } from "@gamepark/prehistories/moves/RevealHuntCards";
+import SpendHunter, { isSpendHunter } from "@gamepark/prehistories/moves/SpendHunter";
 
 type Props = {
     player:PlayerView | PlayerViewSelf | PlayerHuntView,
@@ -40,6 +42,9 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
     const totemAnimationVariable = useAnimation<ResolveVariableObjectives>(animation => isResolvePermanentObjectives(animation.move))
 
     const playHuntCardAnimation = useAnimation<PlayHuntCardView>(animation => isPlayHuntCard(animation.move))
+    const revealCardsAnimation = useAnimation<RevealHuntCardsView>(animation => isRevealHuntCards(animation.move))
+
+    const spendCardAnimation = useAnimation<SpendHunter>(animation => isSpendHunter(animation.move))
     
     function howManyTotemToMove(move:ResolvePermanentObjectives):number{
         return move.objectivesCompleted[0].length + move.objectivesCompleted[1].length + (move.objectivesCompleted[2] === true ? 1 : 0)
@@ -157,7 +162,7 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
             {Array.isArray(player.played) ? player.played.map((card, index) => 
             
                 <Card key={index}
-                css = {[cardPlayedPosition(index), cardStyle]}
+                css = {[cardPlayedPosition(index), cardStyle, player.color === playerId && player.huntPhase === HuntPhase.Pay && dragStyle, spendCardAnimation && index === (player.played as number[]).findIndex(card => card === spendCardAnimation.move.card) && spendAnimation(player.discard.length, spendCardAnimation.duration)]}
                 color={player.color}
                 power={getColoredDeck(player.color)[card].power}
                 speed={getColoredDeck(player.color)[card].speed}
@@ -170,12 +175,14 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
                 <Card key={i}
                  css = {[cardPlayedPosition(i), cardStyle]}
                  color={player.color}   
+                 power={revealCardsAnimation ? getColoredDeck(player.color)[revealCardsAnimation.move.cardsPlayed.find(obj => obj.color === player.color)!.cards[i]].power : undefined}
+                 speed={revealCardsAnimation ? getColoredDeck(player.color)[revealCardsAnimation.move.cardsPlayed.find(obj => obj.color === player.color)!.cards[i]].speed : undefined}
                 />
             )}
 
         </div>
 
-            <div css={[discardZonePosition, discardZoneStyle, canDropDiscard && canDropStyle, canDropDiscard && isOverDiscard && isOverStyle]} ref = {dropRefDiscard}>
+            <div css={[discardZonePosition]}>
 
                 {player.discard.map((card, index) =>  
                     <Card key={index}
@@ -186,6 +193,10 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
                     />)}
 
             </div>
+
+            {player.color === playerId && player.huntPhase === HuntPhase.Pay && <div css={[discardZonePosition, canDropStyle, canDropDiscard && isOverDiscard && isOverStyle]} ref = {dropRefDiscard}>
+                    <span css={arrowStyle}>↓</span>
+            </div>}
 
             <div css={[deckZonePosition]}> 
             
@@ -204,6 +215,32 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
     )
     
 }
+
+const spendHunterKeyFrames = (discardLength:number) => keyframes`
+from{z-index:11}
+to{
+    top:${108-discardLength*0.5}%;
+    left:${92+discardLength*0.5}%;
+    z-index:11;
+}
+`
+
+const spendAnimation = (discardLength:number, duration:number) => css`
+animation: ${spendHunterKeyFrames(discardLength)} ${duration}s ease-in infinite;
+`
+
+const dragKeyFrames = keyframes`
+0% {
+    box-shadow: 0 0 0.5em 0.1em gold;
+  }
+  90%, 100% {
+    box-shadow: 0 0 0.7em 0.5em gold;
+  }
+`
+
+const dragStyle = css`
+animation: ${dragKeyFrames} 2s ease-in-out alternate infinite;
+`
 
 const playHuntCardKeyframes = (lengthPlayed:number) => keyframes`
 from{
@@ -295,12 +332,21 @@ const spanDropDisplay = (canDrop:boolean) => css`
     transform:translateY(-50%) translateX(-50%);
 `
     
-
+const arrowStyle = css`
+    font-size:10em;
+    text-align:center;
+    color:white;
+    text-shadow:0 0.1em 0.1em black;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translateY(-50%) translateX(-50%);
+`
 
 const canDropStyle = css`
-border : dashed 0.6em white;
+outline : dashed 0.6em white;
 background-color:rgba(131, 180, 65,0.5);
-
+transition:all 0.2s linear;
 `
 
 const isOverStyle = css`
@@ -339,6 +385,7 @@ width:12%;
 height:18%;
 `
 const discardZoneStyle = css`
+
 `
 
 const cardPosition = (position:number, handLength:number) => css`

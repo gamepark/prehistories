@@ -18,6 +18,7 @@ const Button : FC<ButtonHTMLAttributes<HTMLButtonElement> & Props> = ({children,
 
 
 const style = (color:string) => css`
+cursor:pointer;
 --color: #000000;
 --background-color: ${color};
 --border-color: darken(${color}, 7.5%);
