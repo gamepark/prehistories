@@ -6,6 +6,7 @@ import { HuntPhase } from "../types/Phase";
 import { isPlayerHuntView, isPlayerView, isPlayerViewSelf } from "../types/PlayerView";
 import Move from "./Move";
 import MoveType from "./MoveType";
+import MoveView from "./MoveView";
 
 type DrawXCards = {
     type:MoveType.DrawXCards
@@ -48,7 +49,7 @@ export function drawXCardsInView(state:GameView, move:DrawXCards|DrawXCardsView)
     }
 }
 
-export function isDrawXCards(move:Move):move is DrawXCards{
+export function isDrawXCards(move:Move| MoveView):move is DrawXCards{
     return move.type === MoveType.DrawXCards
 }
 

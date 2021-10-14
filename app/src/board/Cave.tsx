@@ -96,10 +96,10 @@ height:89%;
 
 const cavePosition = css`
 position:absolute;
-top:22%;
-left:15%;
-width:56%;
-height:60%;
+top:28%;
+left:3%;
+width:42%;
+height:45%;
 `
 
 const caveStyle = (color:PlayerColor|undefined) => css`

@@ -24,6 +24,9 @@ import PlayHuntCard, { isPlayHuntCard, PlayHuntCardView } from "@gamepark/prehis
 import { RevealHuntCardsView, isRevealHuntCards } from "@gamepark/prehistories/moves/RevealHuntCards";
 import SpendHunter, { isSpendHunter } from "@gamepark/prehistories/moves/SpendHunter";
 import ShuffleDiscardPile, { isShuffleDiscardPile, ShuffleDiscardPileView } from "@gamepark/prehistories/moves/ShuffleDiscardPile";
+import DrawXCards, { DrawXCardsView, isDrawXCards } from "@gamepark/prehistories/moves/DrawXCards";
+import { getPlayerColor } from "../utils/getterFunctions";
+import Button from "../utils/Button";
 
 type Props = {
     player:PlayerView | PlayerViewSelf | PlayerHuntView,
@@ -41,15 +44,22 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
 
     const totemAnimationPermanent = useAnimation<ResolvePermanentObjectives>(animation => isResolvePermanentObjectives(animation.move))
     const totemAnimationVariable = useAnimation<ResolveVariableObjectives>(animation => isResolvePermanentObjectives(animation.move))
-
     const playHuntCardAnimation = useAnimation<PlayHuntCardView>(animation => isPlayHuntCard(animation.move))
     const revealCardsAnimation = useAnimation<RevealHuntCardsView>(animation => isRevealHuntCards(animation.move))
-
     const spendCardAnimation = useAnimation<SpendHunter>(animation => isSpendHunter(animation.move))
     const shuffleDiscardAnimation = useAnimation<ShuffleDiscardPileView>(animation => isShuffleDiscardPile(animation.move))
+    const drawXCardsAnimation = useAnimation<DrawXCardsView|DrawXCards>(animation => isDrawXCards(animation.move))
 
     function howManyTotemToMove(move:ResolvePermanentObjectives):number{
         return move.objectivesCompleted[0].length + move.objectivesCompleted[1].length + (move.objectivesCompleted[2] === true ? 1 : 0)
+    }
+
+    function displayValidationButton(phase:Phase|undefined, playerId:PlayerColor|undefined, color:PlayerColor, isReady:boolean|undefined):boolean{
+        return phase === Phase.Initiative && playerId === color && isReady !== true
+    }
+
+    function displayEndTurnButton(phase:Phase|undefined, playerId:PlayerColor|undefined, color:PlayerColor, huntPhase:HuntPhase|undefined):boolean{
+        return phase === Phase.Hunt && playerId === color && huntPhase === HuntPhase.Hunt
     }
 
 
@@ -117,22 +127,11 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
                   phase={phase}
             />
 
-            <div css={totemTokenPanelPosition}>
 
-                {[...Array(player.totemTokens)].map((_, i) => <Picture 
-                        key={i} alt={t('token')} 
-                        src={getTotem(player.color)} 
-                        css={[totemStyle(i),
-                            totemAnimationPermanent && (howManyTotemToMove(totemAnimationPermanent.move) >= player.totemTokens-i) && placeTotemAnimation(player.totemTokens - i,totemAnimationPermanent.duration, players.findIndex(p => p.color === player.color), 8-player.goalsMade.length-player.totemTokens),
-                            totemAnimationVariable && totemAnimationVariable.move.tokens >= player.totemTokens - i && placeTotemAnimationVariable(player.totemTokens - i, totemAnimationVariable.duration, players.findIndex(p => p.color === player.color), goals.findIndex(g => g === totemAnimationVariable.move.goal), goals.length)
-                        ]} 
-                        draggable={false} />)}
-
-            </div>
 
             <div css={cardHandPanelPosition}> 
 
-                <Hand css={[handPosition]} rotationOrigin={10} gapMaxAngle={isPlayerViewSelf(player) ? 3.2 - 0.12*player.hand.length : 3.2 - 0.12*player.hand} maxAngle={80} sizeRatio={11/8} getItemProps={getItemProps} >
+                <Hand css={[handPosition]} rotationOrigin={10} gapMaxAngle={isPlayerViewSelf(player) ? 3.2 - 0.12*player.hand.length : 3.2 - 0.12*player.hand} maxAngle={80} sizeRatio={8/11} getItemProps={getItemProps} >
             
                     {isPlayerViewSelf(player) ? player.hand.map((card, index) => 
                     
@@ -157,7 +156,12 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
 
             </div>
 
-            <div css={[cardPlayedPanelPosition, canDropPlayed && canDropStyle, canDropPlayed && isOverPlayed && isOverStyle]} ref = {dropRefPlayed}> 
+            <div css={[cardPlayedPanelPosition(player.color), canDropPlayed && canDropStyle, canDropPlayed && isOverPlayed && isOverStyle]} ref = {dropRefPlayed}> 
+
+            {displayValidationButton(phase, playerId, player.color, player.isReady) && <Button css={[validationButtonPosition]} onClick={() => {play({type:MoveType.TellYouAreReady, playerId:player.color})}} colorButton={player.color} >{t('Validate')}</Button> }
+            {displayEndTurnButton(phase, playerId, player.color, player.huntPhase) && <Button css={[validationButtonPosition]} onClick={() => {play({type:MoveType.EndTurn, playerId:player.color})}} colorButton={player.color} >{t('End your Turn')}</Button>}
+
+
 
             <span css={[spanDropDisplay(canDropPlayed)]}>{t("Drag Here")}</span>
             
@@ -205,18 +209,24 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
                 {[...Array(player.deck)].map((_, i) => <Picture key={i} alt={t('token')} src={getCardBack(player.color)} css={[cardStyle, deckOffset(i), deckCardSize]} draggable={false} />)}
             
             </div>
-
-            {isActiveHuntingPlayer === true && player.injuries !== undefined &&
-                <div css={injuriesndicatorPosition}>
-                    {[...Array(player.injuries)].map((_,i) => <Picture key={i} alt={t('injuries')} src={Images.arrowBrokenIcon} draggable={false} css={brokenArrowIconStyle(i+1)} /> )}
-                </div>
-            }
             
         </div>
 
     )
     
 }
+
+const validationButtonPosition = css`
+    position:absolute;
+    left:50%;
+    top:-18%;
+    transform:translateX(-50%);
+    width:fit-content;
+    height:15%;
+    font-size:3em;
+    font-family:'Reggae One', sans-serif;
+    z-index:1;
+`
 
 const shufflingKeyFrames = (index:number) => keyframes`
 from{
@@ -336,7 +346,7 @@ position:absolute;
 top:0;
 left:40%;
 height:100%;
-width:20.5%;
+width:25.5%;
 `
 
 const spanDropDisplay = (canDrop:boolean) => css`
@@ -361,7 +371,6 @@ const arrowStyle = css`
 `
 
 const canDropStyle = css`
-outline : dashed 0.6em white;
 background-color:rgba(131, 180, 65,0.5);
 transition:all 0.2s linear;
 `
@@ -370,22 +379,23 @@ const isOverStyle = css`
 background-color:rgba(131, 180, 65,0.8);
 `
 
-const cardPlayedPanelPosition = css`
+const cardPlayedPanelPosition = (color:PlayerColor) => css`
 position:absolute;
-top:42%;
-right:10%;
-width:18.5%;
-height:38%;
-border : solid 0.6em transparent;
-border-radius:20% / 10%;
+top:28%;
+left:46%;
+width:53%;
+height:45%;
+background-color:rgba(131, 180, 65,0.1);
+border : solid 0.6em ${getPlayerColor(color)};
+border-radius:5%;
 `
 
 const deckZonePosition = css`
 position:absolute;
 bottom:0%;
 left:2%;
-width:12%;
-height:18%;
+width:16%;
+height:24%;
 `
 const deckZoneStyle = (image:string) => css`
 background-image: url(${image});
@@ -397,9 +407,9 @@ background-position: top;
 const discardZonePosition = css`
 position:absolute;
 bottom:0%;
-right:0%;
-width:12%;
-height:18%;
+right:1%;
+width:16%;
+height:24%;
 transform-style: preserve-3d;
 transform: perspective(200em);
 z-index:1;
@@ -417,11 +427,11 @@ width:20%;
 `
 
 const cardPlayedPosition = (key:number) => css`
-width:70%;
-height:49%;
+width:30%;
+height:52%;
 position:absolute;
-top:${(key%6)*10}%;
-left:${Math.floor(key/6)*30}%;
+top:${(key%3)*24}%;
+left:${2+Math.floor(key/3)*22}%;
 `
 
 const cardStyle = css`
@@ -433,8 +443,8 @@ const cardHandPanelPosition = css`
     position:absolute;
     bottom:0%;
     right:20%;
-    width:60%;
-    height:18%;
+    width:65%;
+    height:24%;
     z-index:1;
 `
 

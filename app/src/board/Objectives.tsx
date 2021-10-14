@@ -60,9 +60,9 @@ const totemStyle = (iPlayer:number, iToken:number) => css`
 const permanentObjectivePosition = css`
 position:absolute;
 top:7%;
-left:64%;
-width:10%;
-height:38%;
+right:0%;
+width:20%;
+height:15.9%;
 `
 
 const permanentObjectiveStyle = css`
@@ -80,10 +80,10 @@ margin:0 0.5em;
 
 const variableObjectivesPosition = css`
 position:absolute;
-top:7%;
+top:8%;
 left:24%;
-width:40%;
-height:20%;
+width:56%;
+height:27.8%;
 z-index:1;
 cursor:pointer;
 

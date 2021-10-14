@@ -46,9 +46,7 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, isReady, huntPhase
             </div>
             <PlayerTimer playerId={color} css={[TimerStyle]}/>
 
-            {displayValidationButton(phase, playerId, color, isReady) && <Button css={[validationButtonPosition]} onClick={() => {play({type:MoveType.TellYouAreReady, playerId:color})}} colorButton={color} >{t('Validate')}</Button> }
             {displayTakeWithInjuryButton(phase, playerId, color, huntPhase, huntSpotTakenLevels !== undefined && huntSpotTakenLevels[0] <= 0) && <Button css={[validationButtonPosition]} onClick={() => {play({type:MoveType.ValidateSpendedHunters, playerId:color})}} colorButton={color} >{t('Take With Injury')}</Button> }
-            {displayEndTurnButton(phase, playerId, color, huntPhase) && <Button css={[validationButtonPosition]} onClick={() => {play({type:MoveType.EndTurn, playerId:color})}} colorButton={color} >{t('End your Turn')}</Button>}
 
         </div>
 
@@ -108,13 +106,9 @@ background-position: top;
 filter:drop-shadow(0 0 0.2em black);
 `
 
-function displayEndTurnButton(phase:Phase|undefined, playerId:PlayerColor|undefined, color:PlayerColor, huntPhase:HuntPhase|undefined):boolean{
-    return phase === Phase.Hunt && playerId === color && huntPhase === HuntPhase.Hunt
-}
 
-function displayValidationButton(phase:Phase|undefined, playerId:PlayerColor|undefined, color:PlayerColor, isReady:boolean|undefined):boolean{
-    return phase === Phase.Initiative && playerId === color && isReady !== true
-}
+
+
 
 function displayTakeWithInjuryButton(phase:Phase|undefined, playerId:PlayerColor|undefined, color:PlayerColor, huntPhase:HuntPhase | undefined, canPay:boolean):boolean{
     return phase === Phase.Hunt && playerId === color && huntPhase === HuntPhase.Pay && canPay
@@ -132,16 +126,16 @@ const validationButtonPosition = css`
 
 const playerPanelPosition = (position:number) => css`
     position:absolute;
-    top:${7+18.6*position}%;
+    top:${7+16+15*position}%;
     z-index:0;
     right:0;
-    height:18.6%;
+    height:15%;
     width:20%;
 `
 
 const playerPanelStyle = (image:string) => css`
     background-image: url(${image});
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: top;
     border:0.1em solid black;
