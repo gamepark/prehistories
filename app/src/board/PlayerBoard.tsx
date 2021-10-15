@@ -62,6 +62,17 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
         return phase === Phase.Hunt && playerId === color && huntPhase === HuntPhase.Hunt
     }
 
+    function displayHuntingButtons(phase:Phase|undefined, playerId:PlayerColor|undefined, color:PlayerColor, huntPhase:HuntPhase|undefined):boolean{
+        return phase === Phase.Hunt && playerId === color && huntPhase === HuntPhase.Pay
+    }
+
+    function validateHunters(isLegal:boolean){
+        if (isLegal === true){
+
+            play({type:MoveType.ValidateSpendedHunters, playerId:player.color})
+        }
+    }
+
 
     const [{canDropPlayed, isOverPlayed}, dropRefPlayed] = useDrop({
         accept: ["CardInHand", 'CardPlayed'],
@@ -161,7 +172,14 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
             {displayValidationButton(phase, playerId, player.color, player.isReady) && <Button css={[validationButtonPosition]} onClick={() => {play({type:MoveType.TellYouAreReady, playerId:player.color})}} colorButton={player.color} >{t('Validate')}</Button> }
             {displayEndTurnButton(phase, playerId, player.color, player.huntPhase) && <Button css={[validationButtonPosition]} onClick={() => {play({type:MoveType.EndTurn, playerId:player.color})}} colorButton={player.color} >{t('End your Turn')}</Button>}
 
+            {displayHuntingButtons(phase, playerId, player.color, player.huntPhase) && 
+                <div css={huntingButtonsPosition(player.color)}>
 
+                    <div css={[injuryStyle, player.huntSpotTakenLevels![0] > 0 && desactivateStyle]} onClick={() => validateHunters(player.huntSpotTakenLevels![0] <= 0)} > <span>{player.huntSpotTakenLevels![0] > 0 && player.huntSpotTakenLevels![0]}</span></div>
+                    <div css={[noInjuryStyle,  player.huntSpotTakenLevels![1] > 0 && desactivateStyle]} onClick={() => validateHunters(player.huntSpotTakenLevels![1] <= 0)} > <span>{player.huntSpotTakenLevels![1] > 0 && player.huntSpotTakenLevels![1]}</span> </div>
+                    
+                </div>
+            }
 
             <span css={[spanDropDisplay(canDropPlayed)]}>{t("Drag Here")}</span>
             
@@ -215,6 +233,85 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
     )
     
 }
+
+const desactivateStyle = css`
+filter: grayscale(80%);
+cursor:not-allowed;
+`
+
+const noInjuryStyle = css`
+position:absolute;
+top:0%;
+right:10%;
+width:35%;
+height:100%;
+background-image: url(${Images.arrowCleanIcon});
+background-size: cover;
+background-repeat: no-repeat;
+background-position: center;
+border:0.5em solid orange;
+border-radius:15%;
+cursor:pointer;
+display:flex;
+flex-direction:row;
+align-items:center;
+justify-content:center;
+box-shadow:0 0.2em 0.5em black;
+box-shadow:0 0.2em 0.5em black;
+&:active{
+    box-shadow:0 0.2em 0.2em black;
+    top:1%;
+}
+span{
+    font-size:6em;
+    font-family:'Reggae One', sans-serif;
+    color:black;
+}
+`
+
+const injuryStyle = css`
+cursor:pointer;
+position:absolute;
+top:0%;
+left:10%;
+width:35%;
+height:100%;
+background-image: url(${Images.arrowBrokenIcon});
+background-size: cover;
+background-repeat: no-repeat;
+background-position: center;
+border:0.5em solid orange;
+border-radius:15%;
+display:flex;
+flex-direction:row;
+align-items:center;
+justify-content:center;
+box-shadow:0 0.2em 0.5em black;
+&:active{
+    box-shadow:0 0.2em 0.2em black;
+    top:1%;
+}
+span{
+    font-size:6em;
+    font-family:'Reggae One', sans-serif;
+    color:black;
+}
+`
+
+const huntingButtonsPosition = (color:PlayerColor) => css`
+width:80%;
+height:30%;
+position:absolute;
+left:50%;
+top:-30.5%;
+transform:translateX(-50%);
+z-index:1;
+border:0.6em solid ${getPlayerColor(color)};
+background-color:rgba(0,0,0,0.5);
+border-top-left-radius:5% 15%;
+border-top-right-radius:5% 15%;
+
+`
 
 const validationButtonPosition = css`
     position:absolute;
@@ -392,7 +489,7 @@ border-radius:5%;
 
 const deckZonePosition = css`
 position:absolute;
-bottom:0%;
+bottom:1%;
 left:2%;
 width:16%;
 height:24%;
@@ -406,7 +503,7 @@ background-position: top;
 
 const discardZonePosition = css`
 position:absolute;
-bottom:0%;
+bottom:1%;
 right:1%;
 width:16%;
 height:24%;
@@ -441,7 +538,7 @@ box-shadow:0 0 0.5em black;
 
 const cardHandPanelPosition = css`
     position:absolute;
-    bottom:0%;
+    bottom:1%;
     right:20%;
     width:65%;
     height:24%;

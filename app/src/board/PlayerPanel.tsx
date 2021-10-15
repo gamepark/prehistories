@@ -46,8 +46,6 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, isReady, huntPhase
             </div>
             <PlayerTimer playerId={color} css={[TimerStyle]}/>
 
-            {displayTakeWithInjuryButton(phase, playerId, color, huntPhase, huntSpotTakenLevels !== undefined && huntSpotTakenLevels[0] <= 0) && <Button css={[validationButtonPosition]} onClick={() => {play({type:MoveType.ValidateSpendedHunters, playerId:color})}} colorButton={color} >{t('Take With Injury')}</Button> }
-
         </div>
 
     )

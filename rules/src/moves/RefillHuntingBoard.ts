@@ -39,7 +39,19 @@ export function refillHuntingBoard(state:GameState){
 export function refillHuntingBoardInView(state: GameView, move:RefillHuntingBoardView){
     state.huntingBoard.forEach((spot, index) => {
       if (spot === null && state.tilesDeck[index] !== 0){
-        state.tilesDeck[index]--
+        if (state.players.length < 4){
+          state.tilesDeck[index]--
+        } else {
+          if (index<2){
+            state.tilesDeck[0]--
+          } else if (index<4){
+            state.tilesDeck[1]--
+          } else {
+            state.tilesDeck[index-2]--
+          }
+        }
+        
+        
       }
     })
     state.huntingBoard = move.newBoard
