@@ -9,6 +9,7 @@ type GameView = Omit<GameState, 'players' | 'tilesDeck'> & {
   tilesDeck: number[]
   caveDisplayed:PlayerColor
   polyominoSelected?:PolyominoToHunt
+  huntersSelected?:number[]
 }
 
 export default GameView

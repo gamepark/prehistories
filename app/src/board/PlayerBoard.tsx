@@ -27,6 +27,7 @@ import ShuffleDiscardPile, { isShuffleDiscardPile, ShuffleDiscardPileView } from
 import DrawXCards, { DrawXCardsView, isDrawXCards } from "@gamepark/prehistories/moves/DrawXCards";
 import { getPlayerColor } from "../utils/getterFunctions";
 import Button from "../utils/Button";
+import SetSelectedHunters, { ResetSelectedHunters, resetSelectedHuntersMove, setSelectedHunterMove } from "../localMoves/setSelectedHunters";
 
 type Props = {
     player:PlayerView | PlayerViewSelf | PlayerHuntView,
@@ -34,9 +35,10 @@ type Props = {
     players:(PlayerView | PlayerViewSelf | PlayerHuntView)[]
     isActiveHuntingPlayer:boolean
     goals:number[]
+    selectedHunters:number[]|undefined
 }
 
-const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer, goals}) => {
+const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer, goals, selectedHunters}) => {
 
     const {t} = useTranslation()
     const playerId = usePlayerId<PlayerColor>()
@@ -49,6 +51,7 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
     const spendCardAnimation = useAnimation<SpendHunter>(animation => isSpendHunter(animation.move))
     const shuffleDiscardAnimation = useAnimation<ShuffleDiscardPileView>(animation => isShuffleDiscardPile(animation.move))
     const drawXCardsAnimation = useAnimation<DrawXCardsView|DrawXCards>(animation => isDrawXCards(animation.move))
+    const powerOfSelectedHunters:number = selectedHunters !== undefined ? selectedHunters.reduce((acc, cv) => acc + getColoredDeck(player.color)[cv].power,0) : 0
 
     function howManyTotemToMove(move:ResolvePermanentObjectives):number{
         return move.objectivesCompleted[0].length + move.objectivesCompleted[1].length + (move.objectivesCompleted[2] === true ? 1 : 0)
@@ -66,12 +69,21 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
         return phase === Phase.Hunt && playerId === color && huntPhase === HuntPhase.Pay
     }
 
-    function validateHunters(isLegal:boolean){
-        if (isLegal === true){
-
-            play({type:MoveType.ValidateSpendedHunters, playerId:player.color})
+    function validateHunters(hunters:number[]|undefined, injury:boolean){
+        if (hunters !== undefined){
+            hunters?.forEach(card => {
+                play({type:MoveType.SpendHunter, playerId:player.color, card})
+            })
+            if (injury){
+                play({type:MoveType.ValidateSpendedHunters, playerId:player.color})
+            }
+            playResetHunters(resetSelectedHuntersMove(), {local:true})
         }
     }
+
+    const playSelectHunter = usePlay<SetSelectedHunters>()
+    const playResetHunters = usePlay<ResetSelectedHunters>()
+
 
 
     const [{canDropPlayed, isOverPlayed}, dropRefPlayed] = useDrop({
@@ -94,20 +106,6 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
             } else {
                 return 
             }
-        }
-      })
-
-      const [{canDropDiscard, isOverDiscard}, dropRefDiscard] = useDrop({
-        accept: ['CardPlayed'],
-        canDrop: (item:CardPlayed) => {
-            return true
-        },
-        collect: monitor => ({
-          canDropDiscard: monitor.canDrop(),
-          isOverDiscard: monitor.isOver()
-        }),
-        drop: (item: CardPlayed) => {
-            return {type:MoveType.SpendHunter, card:item.card, playerId:player.color}          
         }
       })
 
@@ -175,8 +173,8 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
             {displayHuntingButtons(phase, playerId, player.color, player.huntPhase) && 
                 <div css={huntingButtonsPosition(player.color)}>
 
-                    <div css={[injuryStyle, player.huntSpotTakenLevels![0] > 0 && desactivateStyle]} onClick={() => validateHunters(player.huntSpotTakenLevels![0] <= 0)} > <span>{player.huntSpotTakenLevels![0] > 0 && player.huntSpotTakenLevels![0]}</span></div>
-                    <div css={[noInjuryStyle,  player.huntSpotTakenLevels![1] > 0 && desactivateStyle]} onClick={() => validateHunters(player.huntSpotTakenLevels![1] <= 0)} > <span>{player.huntSpotTakenLevels![1] > 0 && player.huntSpotTakenLevels![1]}</span> </div>
+                    <div css={[injuryStyle, (powerOfSelectedHunters < player.huntSpotTakenLevels![0] || powerOfSelectedHunters > player.huntSpotTakenLevels![1]) && desactivateStyle]} onClick={() => powerOfSelectedHunters >= player.huntSpotTakenLevels![0] && powerOfSelectedHunters < player.huntSpotTakenLevels![1] && validateHunters(selectedHunters, true)} > <span>{Math.max(player.huntSpotTakenLevels![0] - powerOfSelectedHunters,0)}</span></div>
+                    <div css={[noInjuryStyle, powerOfSelectedHunters < player.huntSpotTakenLevels![1] && desactivateStyle]} onClick={() => powerOfSelectedHunters >= player.huntSpotTakenLevels![1] && validateHunters(selectedHunters, false)} > <span>{Math.max(player.huntSpotTakenLevels![1] - powerOfSelectedHunters,0)}</span> </div>
                     
                 </div>
             }
@@ -186,13 +184,15 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
             {Array.isArray(player.played) ? player.played.map((card, index) => 
             
                 <Card key={index}
-                css = {[cardPlayedPosition(index), cardStyle, player.color === playerId && player.huntPhase === HuntPhase.Pay && dragStyle, spendCardAnimation && index === (player.played as number[]).findIndex(card => card === spendCardAnimation.move.card) && spendAnimation(player.discard.length, spendCardAnimation.duration)]}
+                css = {[cardPlayedPosition(index), cardStyle,
+                        spendCardAnimation && index === (player.played as number[]).findIndex(card => card === spendCardAnimation.move.card) && spendAnimation(player.discard.length, spendCardAnimation.duration),
+                        selectedHunters?.find(c => c === card) !== undefined && selectedCard
+                    ]}
                 color={player.color}
                 power={getColoredDeck(player.color)[card].power}
                 speed={getColoredDeck(player.color)[card].speed}
-                draggable={player.huntPhase === HuntPhase.Pay && player.color === playerId}
-                draggableItem={{type:"CardPlayed", card:card}}
-                type={"CardPlayed"}
+                onClick={() => player.color === playerId && playSelectHunter(setSelectedHunterMove(card), {local:true})}
+                
                 />
             
             ) : [...Array(player.played)].map((_, i) => 
@@ -218,10 +218,6 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
 
             </div>
 
-            {player.color === playerId && player.huntPhase === HuntPhase.Pay && <div css={[discardZonePosition, canDropStyle, canDropDiscard && isOverDiscard && isOverStyle]} ref = {dropRefDiscard}>
-                    <span css={arrowStyle}>↓</span>
-            </div>}
-
             <div css={[deckZonePosition]}> 
             
                 {[...Array(player.deck)].map((_, i) => <Picture key={i} alt={t('token')} src={getCardBack(player.color)} css={[cardStyle, deckOffset(i), deckCardSize]} draggable={false} />)}
@@ -234,9 +230,19 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
     
 }
 
+const selectedCard = css`
+box-shadow:0 0 1em 0.2em lime;
+transform-origin:bottom left;
+transform:rotateZ(-20deg);
+`
+
 const desactivateStyle = css`
 filter: grayscale(80%);
 cursor:not-allowed;
+&:active{
+    box-shadow:0 0.2em 0.5em black;
+    top:0%;
+}
 `
 
 const noInjuryStyle = css`
@@ -257,10 +263,9 @@ flex-direction:row;
 align-items:center;
 justify-content:center;
 box-shadow:0 0.2em 0.5em black;
-box-shadow:0 0.2em 0.5em black;
 &:active{
     box-shadow:0 0.2em 0.2em black;
-    top:1%;
+    top:2%;
 }
 span{
     font-size:6em;
@@ -289,7 +294,7 @@ justify-content:center;
 box-shadow:0 0.2em 0.5em black;
 &:active{
     box-shadow:0 0.2em 0.2em black;
-    top:1%;
+    top:2%;
 }
 span{
     font-size:6em;
@@ -529,6 +534,9 @@ height:52%;
 position:absolute;
 top:${(key%3)*24}%;
 left:${2+Math.floor(key/3)*22}%;
+transform-origin:bottom left;
+z-index:1;
+cursor:pointer;
 `
 
 const cardStyle = css`

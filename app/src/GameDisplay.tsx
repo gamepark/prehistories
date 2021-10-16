@@ -27,8 +27,6 @@ export default function GameDisplay({game}: Props) {
   const [welcomePopUpClosed, setWelcomePopUpClosed] = useState(false)
   const showWelcomePopup = !welcomePopUpClosed
 
-
-
   return (
     <Letterbox css={letterBoxStyle} top={0}>
       <div css={[css`position: absolute;
@@ -58,6 +56,7 @@ export default function GameDisplay({game}: Props) {
                      phase={game.phase}
                      isActiveHuntingPlayer={game.sortedPlayers !== undefined && game.sortedPlayers[0] === playerDisplayed.color}
                      goals={game.goals}
+                     selectedHunters={game.huntersSelected}
         />
 
         {showWelcomePopup && <WelcomePopUp player={playerId} game={game} close={() => setWelcomePopUpClosed(true)} />}

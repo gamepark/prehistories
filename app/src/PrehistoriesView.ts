@@ -20,8 +20,9 @@ import { shuffleDiscardPileInView } from '@gamepark/prehistories/moves/ShuffleDi
 import { changeActivePlayer } from '@gamepark/prehistories/moves/ChangeActivePlayer'
 import { endGame } from '@gamepark/prehistories/moves/EndGame'
 import { setHuntPhase } from '@gamepark/prehistories/moves/SetHuntPhase'
+import SetSelectedHunters, { resetSelectedHunters, ResetSelectedHunters, setSelectedHunters } from './localMoves/setSelectedHunters'
 
-type LocalMove = MoveView | SetCaveDisplayed | SetSelectedPolyomino | ResetSelectedPolyomino
+type LocalMove = MoveView | SetCaveDisplayed | SetSelectedPolyomino | ResetSelectedPolyomino |SetSelectedHunters | ResetSelectedHunters
 
 export default class PrehistoriesView implements Game<GameView, MoveView> {
   state: GameView
@@ -74,6 +75,10 @@ export default class PrehistoriesView implements Game<GameView, MoveView> {
         return setSelectedPolyomino(this.state, move)
       case 'ResetSelectedPolyomino':
         return resetSelectedPolyomino(this.state)
+      case 'SetSelectedHunters':
+        return setSelectedHunters(this.state, move)
+      case 'ResetSelectedHunters':
+        return resetSelectedHunters(this.state)
       
     }
   }

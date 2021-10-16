@@ -121,7 +121,7 @@ transition:transform 0.2s linear, top 0.2s linear, left 0.2s linear;
 `
 
 const displayHuntPolyomino = (isDragging:boolean, pos:number, polyomino:number, nbPlayers:number, side:0|1, face:"front"|"back", isAnimation:boolean) => css`
-transform:scale(${isDragging ? 1 : 0.8}) rotateZ(${isDragging ||isAnimation ? 0 : getRotate(pos, nbPlayers, side, polyomino)}deg) rotateY(${face === "front" ? 0 : 180}deg);
+transform:scale(0.8) rotateZ(${isDragging ||isAnimation ? 0 : getRotate(pos, nbPlayers, side, polyomino)}deg) rotateY(${face === "front" ? 0 : 180}deg);
 transition:transform 0.1s linear;
 `
 
