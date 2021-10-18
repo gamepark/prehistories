@@ -1,13 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import GameView, { getPlayers } from "@gamepark/prehistories/GameView";
+import PlayPolyomino, { isPlayPolyomino } from "@gamepark/prehistories/moves/PlayPolyomino";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import PolyominoToHunt from "@gamepark/prehistories/types/appTypes/PolyominoToHunt";
 import Phase, { HuntPhase } from "@gamepark/prehistories/types/Phase";
 import { isPlayerHuntView, isPlayerViewSelf, PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
 import powerLevels from "@gamepark/prehistories/utils/powerLevels";
 import teamPower from "@gamepark/prehistories/utils/teamPower";
-import { usePlay, usePlayerId } from "@gamepark/react-client";
+import { useAnimation, usePlay, usePlayerId } from "@gamepark/react-client";
 import { FC } from "react";
 import SetSelectedPolyomino, { setSelectedPolyominoMove } from "../localMoves/setSelectedPolyomino";
 import Images from "../utils/Images";
@@ -24,6 +25,7 @@ type Props = {
 const HuntingZone : FC<Props> = ({game, numberOfPlayers, indexOfDisplayedPlayer, indexListDisplayedPlayers}) => {
 
     const playerId = usePlayerId<PlayerColor>()
+    const playPolyominoAnimation = useAnimation<PlayPolyomino>(animation => isPlayPolyomino(animation.move))
 
     return(
 
@@ -33,7 +35,7 @@ const HuntingZone : FC<Props> = ({game, numberOfPlayers, indexOfDisplayedPlayer,
             
                 polyomino !== null && <Polyomino 
                            key = {index}
-                           css = {[polyominoToHuntSize(index, numberOfPlayers, polyomino, (game.polyominoSelected?.polyomino === polyomino ? game.polyominoSelected.side : 0), 8,16), polyominoToHuntPosition(index, numberOfPlayers, polyomino, (game.polyominoSelected?.polyomino === polyomino ? game.polyominoSelected.side : 0))]}
+                           css = {[polyominoToHuntSize(index, numberOfPlayers, polyomino, (playPolyominoAnimation !== undefined && playPolyominoAnimation.move.huntSpot === index ? 1 : (game.polyominoSelected?.polyomino === polyomino ? game.polyominoSelected!.side : 0)), 8,16), polyominoToHuntPosition(index, numberOfPlayers, polyomino, (game.polyominoSelected?.polyomino === polyomino ? game.polyominoSelected.side : 0))]}
                            polyomino={polyomino} 
                            draggable={isPolyominoHuntable(game.players.find(p => p.color === playerId), game.phase, index, game.players.length,game.sortedPlayers !== undefined ? game.sortedPlayers[0] : undefined)}
                            type={'PolyominoToHunt'}

@@ -87,21 +87,21 @@ const Polyomino : FC<Props> = ({polyomino, side, color, draggable = false, type=
 
 const playPolyominoKeyframes = (isGoodDisplayedCave:number|undefined, indexListDisplayedPlayers:PlayerColor[], player:PlayerColor,x:number,y:number) => keyframes`
 from{
-    transform:scale(0.8);
+    transform:scale(0.6);
 }
 20%{
-    transform:scale(1.5);
+    transform:scale(1.3);
 }
-to{
-    transform:scale(${isGoodDisplayedCave === indexListDisplayedPlayers.findIndex(p => p === player) ? 1.26 : 0});
-    top:${isGoodDisplayedCave === indexListDisplayedPlayers.findIndex(p => p === player) ? 24 + x*7.2: 27+((indexListDisplayedPlayers.findIndex(p => p === player))-1)*19 }em;
-    left:${isGoodDisplayedCave === indexListDisplayedPlayers.findIndex(p => p === player) ? 60.5 +y*7.0: 150}em;
+80%,to{
+    transform:scale(${isGoodDisplayedCave === indexListDisplayedPlayers.findIndex(p => p === player) ? 1 : 0});
+    top:${isGoodDisplayedCave === indexListDisplayedPlayers.findIndex(p => p === player) ? 26.5 + x*5.3: 32+((indexListDisplayedPlayers.findIndex(p => p === player)-1))*15 }em;
+    left:${isGoodDisplayedCave === indexListDisplayedPlayers.findIndex(p => p === player) ? 47.5 +y*5.2: 150}em;
 }
 `
 
 const playPolyominoAnimationStyle = (duration:number, isGoodDisplayedCave:number|undefined, indexListDisplayedPlayers:PlayerColor[], player:PlayerColor,x:number,y:number) => css`
 z-index:10!important;
-animation: ${playPolyominoKeyframes(isGoodDisplayedCave, indexListDisplayedPlayers, player,x,y)} ${duration}s ease-in-out;
+animation: ${playPolyominoKeyframes(isGoodDisplayedCave, indexListDisplayedPlayers, player,x,y)} ${duration}s ease-in;
 `
 
 const frontSide = css`
