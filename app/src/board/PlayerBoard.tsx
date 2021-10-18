@@ -14,7 +14,7 @@ import { DropTargetMonitor, useDrop, XYCoord } from "react-dnd";
 import CardInHand, {isCardInHand} from "@gamepark/prehistories/types/appTypes/CardInHand";
 import CardPlayed from "@gamepark/prehistories/types/appTypes/CardPlayed";
 import MoveType from "@gamepark/prehistories/moves/MoveType";
-import { useAnimation, usePlay, usePlayerId } from "@gamepark/react-client";
+import { useAnimation, useAnimations, usePlay, usePlayerId } from "@gamepark/react-client";
 import Phase, { HuntPhase } from "@gamepark/prehistories/types/Phase";
 import { Hand, Picture } from "@gamepark/react-components";
 import Move from "@gamepark/prehistories/moves/Move";
@@ -48,7 +48,7 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
     const totemAnimationVariable = useAnimation<ResolveVariableObjectives>(animation => isResolvePermanentObjectives(animation.move))
     const playHuntCardAnimation = useAnimation<PlayHuntCardView>(animation => isPlayHuntCard(animation.move))
     const revealCardsAnimation = useAnimation<RevealHuntCardsView>(animation => isRevealHuntCards(animation.move))
-    const spendCardAnimation = useAnimation<SpendHunter>(animation => isSpendHunter(animation.move))
+    const spendCardAnimations = useAnimations<SpendHunter>(animation => isSpendHunter(animation.move))
     const shuffleDiscardAnimation = useAnimation<ShuffleDiscardPileView>(animation => isShuffleDiscardPile(animation.move))
     const drawXCardsAnimation = useAnimation<DrawXCardsView|DrawXCards>(animation => isDrawXCards(animation.move))
     const powerOfSelectedHunters:number = selectedHunters !== undefined ? selectedHunters.reduce((acc, cv) => acc + getColoredDeck(player.color)[cv].power,0) : 0
@@ -75,7 +75,7 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
                 play({type:MoveType.SpendHunter, playerId:player.color, card})
             })
             if (injury){
-                play({type:MoveType.ValidateSpendedHunters, playerId:player.color})
+                play({type:MoveType.ValidateSpendedHunters, playerId:player.color}, {delayed:true})
             }
             playResetHunters(resetSelectedHuntersMove(), {local:true})
         }
@@ -181,9 +181,9 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
 
             <span css={[spanDropDisplay(canDropPlayed)]}>{t("Drag Here")}</span>
             
-            {Array.isArray(player.played) ? player.played.map((card, index) => 
-            
-                <Card key={index}
+            {Array.isArray(player.played) ? player.played.map((card, index) => {
+                const spendCardAnimation = spendCardAnimations.find(a => a.move.card === card)
+                return <Card key={index}
                 css = {[cardPlayedPosition(index), cardStyle,
                         spendCardAnimation && index === (player.played as number[]).findIndex(card => card === spendCardAnimation.move.card) && spendAnimation(player.discard.length, spendCardAnimation.duration),
                         selectedHunters?.find(c => c === card) !== undefined && selectedCard
@@ -195,7 +195,7 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
                 
                 />
             
-            ) : [...Array(player.played)].map((_, i) => 
+           } ) : [...Array(player.played)].map((_, i) => 
                 <Card key={i}
                  css = {[cardPlayedPosition(i), cardStyle]}
                  color={player.color}   
@@ -341,21 +341,21 @@ to{
 `
 
 const shufflingAnimation = (index:number, duration:number, discardLength:number) => css`
-
 animation:${shufflingKeyFrames(discardLength - index)} ${duration-0.2}s linear ${(discardLength - index)/60}s forwards;
 `
 
 const spendHunterKeyFrames = (discardLength:number) => keyframes`
 from{z-index:11}
-80%,to{
+to{
+    transform:rotateZ(0) scale(1.02);
     top:${108-discardLength*0.5}%;
-    left:${92+discardLength*0.5}%;
+    left:${71+discardLength*0.5}%;
     z-index:11;
 }
 `
 
 const spendAnimation = (discardLength:number, duration:number) => css`
-animation: ${spendHunterKeyFrames(discardLength)} ${duration}s ease-in;
+animation: ${spendHunterKeyFrames(discardLength)} ${duration}s ease-in forwards;
 `
 
 const dragKeyFrames = keyframes`
@@ -511,7 +511,7 @@ position:absolute;
 bottom:1%;
 right:1%;
 width:16%;
-height:24%;
+height:23%;
 transform-style: preserve-3d;
 transform: perspective(200em);
 z-index:1;

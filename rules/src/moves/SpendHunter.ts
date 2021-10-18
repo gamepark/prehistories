@@ -16,7 +16,6 @@ type SpendHunter = {
 export default SpendHunter
 
 export function spendHunter(state:GameState|GameView, move:SpendHunter){
-
     const player = isGameView(state) ? getPlayers(state).find(p => p.color === move.playerId)! : state.players.find(p => p.color === move.playerId)!
     if (isPlayerState(player) || isPlayerHuntView(player) || isPlayerViewSelf(player)){
         player.played.splice(player.played.findIndex(card => card === move.card),1)
