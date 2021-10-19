@@ -50,7 +50,7 @@ const WelcomePopUp : FC<{player:PlayerColor | undefined, game:GameView, close: (
                     )}
                 </div>
 
-                <p> {goalSelected === -1 ? t("goal.default.text") : getGoalsArray(true)[goalSelected].text } </p>
+                <p> {goalSelected === -1 ? t("goal.default.text") : t(getGoalsArray(true)[goalSelected].text) } </p>
 
                 <Button css={buttonPosition} colorButton={player ?? PlayerColor.White} onClick={close}>{t("Let's Hunt !")}</Button>
 

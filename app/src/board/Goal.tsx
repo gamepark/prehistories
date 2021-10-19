@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react"
+import { css, keyframes } from "@emotion/react"
 import { PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView"
 import { Picture } from "@gamepark/react-components"
 import { FC, HTMLAttributes } from "react"
@@ -24,7 +24,7 @@ const Goal : FC<Props> = ({goal, players, ...props}) => {
         <div css={[goalStyle(goal), goalPosition]} {...props}>
 
             {sortedPlayers.map((player, indexPlayer) => 
-                [...Array(player.goalsMade.filter(g => g === goal).length)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={totemStyle(indexPlayer,i)} draggable={false} />)
+                [...Array(player.goalsMade.filter(g => g === goal).length)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[totemStyle(indexPlayer,i), incomingAnimation]} draggable={false} />)
             )}
 
         </div>
@@ -33,12 +33,21 @@ const Goal : FC<Props> = ({goal, players, ...props}) => {
 
 }
 
+const incomingKeyframes = keyframes`
+from{bottom:150%;}
+to{}
+`
+
+const incomingAnimation = css`
+animation:${incomingKeyframes} 1s linear;
+`
+
 const totemStyle = (iPlayer:number, iToken:number) => css`
     position:absolute;
     bottom:${iPlayer === 0 ? 2 : 2 + (iPlayer - 1)*10}%;
-    left:${iPlayer === 0 ? 3+iToken*10 : 72-iToken*10}%;
-    height:3em;
-    width:3em;
+    left:${iPlayer === 0 ? 9.5+iToken*10 : 73.5-iToken*10}%;
+    height:12.3%;
+    width:17%;
     box-shadow:0 0 0.5em black;
     border-radius:100%;
     margin:0.5em auto;
@@ -52,7 +61,7 @@ const goalPosition = css`
 
 const goalStyle = (goal:number) => css`
     background-image: url(${getGoalCardImage(goal)});
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: top;
 
