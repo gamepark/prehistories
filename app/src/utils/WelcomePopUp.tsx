@@ -44,8 +44,8 @@ const WelcomePopUp : FC<{player:PlayerColor | undefined, game:GameView, close: (
                         <Goal key={index}
                               goal={goal}
                               players={game.players}
-                              css={[goalSize, goalSelected === index && selectEffect]}
-                              onClick={() => setGoalSelected(index)}
+                              css={[goalSize, goalSelected === goal && selectEffect]}
+                              onClick={() => setGoalSelected(goal)}
                         />
                     )}
                 </div>

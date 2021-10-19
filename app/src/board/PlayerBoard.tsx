@@ -373,15 +373,14 @@ animation: ${dragKeyFrames} 2s ease-in-out alternate infinite;
 
 const playHuntCardKeyframes = (lengthPlayed:number) => keyframes`
 from{
-
 }
 to{
-    transform:translate(${lengthPlayed > 6 ? 270 : 229 }%,${-219+(lengthPlayed%6)*20.5}%);
+    transform:translate(${38+Math.floor(lengthPlayed/3)*68.5 }%,${-195+(lengthPlayed%3)*43.5}%) scale(0.94);
 }
 `
 
 const playHuntCardAnimationStyle = (duration:number, lengthPlayed:number) => css`
-    animation:${playHuntCardKeyframes(lengthPlayed)} ${duration}s ease-out;
+    animation:${playHuntCardKeyframes(lengthPlayed)} ${duration}s linear;
 `
 
 const placeTotemKeyframes = (totemMoved:number, playerIndex:number, howManyTotemAlreadyPlaced:number) => keyframes`
@@ -535,7 +534,7 @@ position:absolute;
 top:${(key%3)*24}%;
 left:${2+Math.floor(key/3)*22}%;
 transform-origin:bottom left;
-z-index:1;
+z-index:0;
 cursor:pointer;
 `
 
