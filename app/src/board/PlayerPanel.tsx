@@ -24,7 +24,7 @@ type Props = {
     nbPlayers:number
 } & HTMLAttributes<HTMLDivElement>
 
-const PlayerPanel : FC<Props> = ({player:{color, totemTokens, isReady, huntPhase, huntSpotTakenLevels}, position, phase, huntOrder, nbPlayers, ...props}) => {
+const PlayerPanel : FC<Props> = ({player:{color, totemTokens, isReady, huntPhase, huntSpotTakenLevels, injuries}, position, phase, huntOrder, nbPlayers, ...props}) => {
 
     const playerInfo = usePlayer(color)
     const {t} = useTranslation()
@@ -47,11 +47,37 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, isReady, huntPhase
             </div>
             <PlayerTimer playerId={color} css={[TimerStyle]}/>
 
+            {(injuries !== undefined) &&  
+                <div css={injuriesIndicatorPosition}>
+                    {[...Array(injuries)].map((_,i) => <Picture key={i} alt={t('injuries')} src={Images.arrowBrokenIcon} draggable={false} css={brokenArrowIconStyle(i)} /> )}
+                </div>}
+
         </div>
 
     )
 
 }
+
+const injuriesIndicatorPosition = css`
+position:absolute;
+bottom:5%;
+left:5%;
+width:50%;
+height:32%;
+text-align:center;
+`
+
+const brokenArrowIconStyle = (index:number) => css`
+position:absolute;
+top:0;
+left:${index*25}%;
+width:38%;
+height:100%;
+border:0.1em solid orange;
+border-radius:15%;
+box-shadow:0 0 0.5em black;
+transform:rotateZ(-10deg);
+`
 
 const entryBannerKeyframes = keyframes`
 from{
