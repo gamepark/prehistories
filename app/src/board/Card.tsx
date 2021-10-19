@@ -81,7 +81,7 @@ border-radius:8%;
 `
 const cardStyle = (image:string) => css`
 background-image: url(${image});
-background-size: contain;
+background-size: cover;
 background-repeat: no-repeat;
 background-position: top;
 `

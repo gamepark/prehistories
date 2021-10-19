@@ -9,7 +9,7 @@ const prehistoriesAnimations : Animations<GameView, MoveView, PlayerColor> = {
     getAnimationDuration(move:MoveView,{action, state, playerId}){
 
         if (move.type === MoveType.DrawXCards){
-            return 2
+            return 0
         } else if (move.type === MoveType.PlayPolyomino){
             return action.playerId === playerId ? 0 : 5
         } else if (move.type === MoveType.SpendHunter){

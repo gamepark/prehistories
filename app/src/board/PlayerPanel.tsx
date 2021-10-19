@@ -21,9 +21,10 @@ type Props = {
     phase?:Phase
     position:number
     huntOrder?:PlayerColor[] 
+    nbPlayers:number
 } & HTMLAttributes<HTMLDivElement>
 
-const PlayerPanel : FC<Props> = ({player:{color, totemTokens, isReady, huntPhase, huntSpotTakenLevels}, position, phase, huntOrder, ...props}) => {
+const PlayerPanel : FC<Props> = ({player:{color, totemTokens, isReady, huntPhase, huntSpotTakenLevels}, position, phase, huntOrder, nbPlayers, ...props}) => {
 
     const playerInfo = usePlayer(color)
     const {t} = useTranslation()
@@ -34,7 +35,7 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, isReady, huntPhase
 
         <div {...props} css={[playerPanelStyle(getBG(color)), playerPanelPosition(position)]}>
 
-            {huntOrder !== undefined && <div css={[powerPosition, powerStyle(getPowerBanner(color)[huntOrder.findIndex(c => c === color)]), entryBannerAnim]}> </div>}
+            {huntOrder !== undefined && <div css={[powerPosition, powerStyle(getPowerBanner(color)[huntOrder.findIndex(c => c === color) !== -1 ? huntOrder.findIndex(c => c === color) + (nbPlayers - huntOrder.length) : -1]), entryBannerAnim]}> </div>}
 
             <AvatarPanel playerInfo={playerInfo} color={color} css={css`z-index:5;`}/>
 
@@ -60,7 +61,7 @@ from{
     transform:rotateZ(95deg);
 }
 to{
-    top:43%;
+    top:55%;
     left:3%;
     transform-origin:center;
     transform:rotateZ(5deg);
@@ -68,7 +69,7 @@ to{
 `
 
 const entryBannerAnim = css`
-animation: ${entryBannerKeyframes} 1s ease-out ;
+animation: ${entryBannerKeyframes} 1s ease-out;
 `
 
 function getPowerBanner(color:PlayerColor):string[]{
@@ -88,11 +89,11 @@ function getPowerBanner(color:PlayerColor):string[]{
 
 const powerPosition = css`
 position:absolute;
-top:43%;
+top:55%;
 left:3%;
 z-index:-1;
 width:18%;
-height:33%;
+height:40%;
 transform:rotateZ(5deg);
 `
 

@@ -48,6 +48,7 @@ export default function GameDisplay({game}: Props) {
                        onClick = {() => playSetCaveDisplayed(setCaveDisplayedMove(player.color), {local:true})}
                        phase = {game.phase}
                        huntOrder = {game.sortedPlayers}
+                       nbPlayers = {game.players.length}
           />
         )}
 

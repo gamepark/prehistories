@@ -334,14 +334,14 @@ const shufflingKeyFrames = (index:number) => keyframes`
 from{
 
 }
-to{
+50%,to{
   transform:rotateY(-180deg) ;
-  left:${-718+index}%;  
+  left:${-500-index}%;  
 }
 `
 
 const shufflingAnimation = (index:number, duration:number, discardLength:number) => css`
-animation:${shufflingKeyFrames(discardLength - index)} ${duration-0.2}s linear ${(discardLength - index)/60}s forwards;
+animation:${shufflingKeyFrames(discardLength - index)} ${duration-0.2}s linear ${(discardLength - index)/60}s forwards ;
 `
 
 const spendHunterKeyFrames = (discardLength:number) => keyframes`
@@ -369,6 +369,17 @@ const dragKeyFrames = keyframes`
 
 const dragStyle = css`
 animation: ${dragKeyFrames} 2s ease-in-out alternate infinite;
+`
+
+const drawHuntCardKeyframes = keyframes`
+from{
+    transform:translate(-50%;0%);
+}
+to{}
+`
+
+const drawHuntCardAnimation = (duration:number) => css`
+animation:${drawHuntCardKeyframes} ${duration}s ease-in-out infinite;
 `
 
 const playHuntCardKeyframes = (lengthPlayed:number) => keyframes`
