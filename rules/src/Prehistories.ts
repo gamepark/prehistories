@@ -287,7 +287,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         if (playerId === move.playerId){
           return move
         } else {
-          return {type:MoveType.DrawXCards, playerId:move.playerId}
+          return {type:MoveType.DrawXCards, playerId:move.playerId, cards:howManyCardToDraw(this.state.players.find(p => p.color === move.playerId)!)}
         }
       case MoveType.ShuffleDiscardPile:
         return {type:MoveType.ShuffleDiscardPile, playerId:move.playerId,newDeckLength:move.newDeck.length}

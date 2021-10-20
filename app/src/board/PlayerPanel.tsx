@@ -60,8 +60,8 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, isReady, huntPhase
 
 const injuriesIndicatorPosition = css`
 position:absolute;
-bottom:5%;
-left:5%;
+bottom:7%;
+left:25%;
 width:50%;
 height:32%;
 text-align:center;

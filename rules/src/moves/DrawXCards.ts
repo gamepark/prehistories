@@ -19,6 +19,7 @@ export default DrawXCards
 export type DrawXCardsView = {
     playerId:PlayerColor
     type:MoveType.DrawXCards
+    cards:number
 }
 
 export function drawXCards(state:GameState, move:DrawXCards){
@@ -53,10 +54,10 @@ export function isDrawXCards(move:Move| MoveView):move is DrawXCards{
     return move.type === MoveType.DrawXCards
 }
 
-export function isDrawXCardsView(move:DrawXCards | DrawXCardsView): move is DrawXCards{
-    return (move as DrawXCards).cards === undefined
+export function isDrawXCardsView(move:DrawXCards | DrawXCardsView): move is DrawXCardsView{
+    return typeof move.cards === 'number'
 }
 
 export function isNotDrawXCardsView(move:DrawXCards | DrawXCardsView): move is DrawXCards{
-    return (move as DrawXCards).cards !== undefined
+    return Array.isArray(move.cards) 
 }

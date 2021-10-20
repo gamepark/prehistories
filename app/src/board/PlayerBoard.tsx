@@ -51,11 +51,15 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
     const spendCardAnimations = useAnimations<SpendHunter>(animation => isSpendHunter(animation.move))
     const shuffleDiscardAnimation = useAnimation<ShuffleDiscardPileView>(animation => isShuffleDiscardPile(animation.move))
     const powerOfSelectedHunters:number = selectedHunters !== undefined ? selectedHunters.reduce((acc, cv) => acc + getColoredDeck(player.color)[cv].power,0) : 0
-    const drawXCardsAnimation = useAnimation<DrawXCards|DrawXCardsView>(animation => isDrawXCards(animation.move) && animation.move.playerId === player.color)
-    const playerHand:number|number[] = isPlayerViewSelf(player) ? [...player.hand] : player.hand
+    const drawXCardsAnimation = useAnimation<DrawXCards|DrawXCardsView>(animation => isDrawXCards(animation.move))
+    let playerHand:number|number[] = isPlayerViewSelf(player) ? [...player.hand] : player.hand
 
-    if(drawXCardsAnimation && isNotDrawXCardsView(drawXCardsAnimation.move) && Array.isArray(playerHand)){
-        playerHand.push(...drawXCardsAnimation.move.cards)
+    if(drawXCardsAnimation){
+        if(isNotDrawXCardsView(drawXCardsAnimation.move) && Array.isArray(playerHand)){
+            playerHand.push(...drawXCardsAnimation.move.cards)
+        } else if(isDrawXCardsView(drawXCardsAnimation.move) && typeof playerHand === 'number'){
+            playerHand +=drawXCardsAnimation.move.cards
+        }
     }
 
     function howManyTotemToMove(move:ResolvePermanentObjectives):number{
@@ -132,7 +136,9 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
           } : ( drawXCardsAnimation ? {
             seconds:drawXCardsAnimation.duration,
             delay:0,
-            fromNeutralPosition:isNotDrawXCardsView(drawXCardsAnimation.move) && Array.isArray(playerHand) && index > playerHand.length - drawXCardsAnimation.move.cards.length -1
+            fromNeutralPosition:(isNotDrawXCardsView(drawXCardsAnimation.move) && Array.isArray(playerHand)) 
+                ? index > playerHand.length - drawXCardsAnimation.move.cards.length -1
+                : isDrawXCardsView(drawXCardsAnimation.move) && typeof playerHand ==='number' && index > playerHand - drawXCardsAnimation.move.cards -1
           } : undefined)
         })
       }
@@ -155,7 +161,7 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
                         ? playerHand.map((card, index) => 
                             <Card key={index}
                             color={player.color}
-                            css={[cardStyle, playHuntCardAnimation && index === 0 && playHuntCardAnimationStyle(playHuntCardAnimation.duration,player.played.length), drawXCardsAnimation && isNotDrawXCardsView(drawXCardsAnimation.move) && drawXCardsAnimation.move.cards.find(c => c === card) && drawXCardsAnimStyle(drawXCardsAnimation.duration)]}
+                            css={[cardStyle, playHuntCardAnimation && index === 0 && playHuntCardAnimationStyle(playHuntCardAnimation.duration,player.played.length), drawXCardsAnimation && isNotDrawXCardsView(drawXCardsAnimation.move) && drawXCardsAnimation.move.cards.find(c => c === card) && drawXCardsAnimStyle(drawXCardsAnimation.duration, false)]}
                             power={getColoredDeck(player.color)[card].power}
                             speed={getColoredDeck(player.color)[card].speed}
                             draggable={player.isReady !== true}
@@ -164,9 +170,9 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
                             />
                     )
 
-                        : [...Array(player.hand)].map((_, i) => 
+                        : typeof playerHand === 'number' && [...Array(playerHand)].map((_, i) => 
                             <Card key={i}
-                            css = {[cardStyle,playHuntCardAnimation && i === 0 && playHuntCardAnimationStyle(playHuntCardAnimation.duration, (player.played as number))]}
+                            css = {[cardStyle,playHuntCardAnimation && i === 0 && playHuntCardAnimationStyle(playHuntCardAnimation.duration, (player.played as number)), drawXCardsAnimation && isDrawXCardsView(drawXCardsAnimation.move) && i >= (playerHand as number) - drawXCardsAnimation.move.cards && drawXCardsAnimStyle(drawXCardsAnimation.duration, true) ]}
                             color={player.color}   
                             />
                         )
@@ -241,50 +247,19 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
     
 }
 
-type PlayerCardsProps = {
-    player:PlayerViewSelf
-}
-
-const PlayerCards : FC<PlayerCardsProps> = ({player}) => {
-
-    const playHuntCardAnimation = useAnimation<PlayHuntCardView>(animation => isPlayHuntCard(animation.move) && animation.move.playerId === player.color)
-    const drawXCardsAnimation = useAnimation<DrawXCards>(animation => isDrawXCards(animation.move) && animation.move.playerId === player.color)
-    const playerHand = [...player.hand]
-    if(drawXCardsAnimation){
-        playerHand.push(...drawXCardsAnimation.move.cards)
-    }
-    
-        return <>
-        {
-        playerHand.map((card, index) => 
-                    
-            <Card key={index}
-            color={player.color}
-            css={[cardStyle, playHuntCardAnimation && index === 0 && playHuntCardAnimationStyle(playHuntCardAnimation.duration,player.played.length), drawXCardsAnimation && drawXCardsAnimation.move.cards.find(c => c === card) && drawXCardsAnimStyle(60)]}
-            power={getColoredDeck(player.color)[card].power}
-            speed={getColoredDeck(player.color)[card].speed}
-            draggable={player.isReady !== true}
-            draggableItem={{type:"CardInHand", card:card}}
-            type={"CardInHand"}
-            />
-        
-        )}
-    </>
-}
-
-const drawHuntCardKeyframes = keyframes`
+const drawHuntCardKeyframes = (isHidden:boolean) => keyframes`
 from{
-    transform:translate(-230%,-7%) rotateY(-180deg);
+    transform:translate(-230%,-7%) rotateY(${isHidden ? 0 : -180}deg);
 }
 50%{
-    transform:translate(-230%,-7%) rotateY(-180deg);
+    transform:translate(-230%,-7%) rotateY(${isHidden ? 0 : -180}deg);
 }
 to{}
 `
 
-const drawXCardsAnimStyle = (duration:number) => css`
+const drawXCardsAnimStyle = (duration:number, isHidden:boolean) => css`
 transform-style:preserve-3d;
-animation:${drawHuntCardKeyframes} ${duration}s ease-in-out forwards;
+animation:${drawHuntCardKeyframes(isHidden)} ${duration}s ease-in-out forwards;
 `
 
 const selectedCard = css`
