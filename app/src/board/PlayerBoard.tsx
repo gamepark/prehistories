@@ -24,7 +24,7 @@ import PlayHuntCard, { isPlayHuntCard, PlayHuntCardView } from "@gamepark/prehis
 import { RevealHuntCardsView, isRevealHuntCards } from "@gamepark/prehistories/moves/RevealHuntCards";
 import SpendHunter, { isSpendHunter } from "@gamepark/prehistories/moves/SpendHunter";
 import ShuffleDiscardPile, { isShuffleDiscardPile, ShuffleDiscardPileView } from "@gamepark/prehistories/moves/ShuffleDiscardPile";
-import DrawXCards, { DrawXCardsView, isDrawXCards } from "@gamepark/prehistories/moves/DrawXCards";
+import DrawXCards, { DrawXCardsView, isDrawXCards, isDrawXCardsView, isNotDrawXCardsView } from "@gamepark/prehistories/moves/DrawXCards";
 import { getPlayerColor } from "../utils/getterFunctions";
 import Button from "../utils/Button";
 import SetSelectedHunters, { ResetSelectedHunters, resetSelectedHuntersMove, setSelectedHunterMove } from "../localMoves/setSelectedHunters";
@@ -50,8 +50,13 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
     const revealCardsAnimation = useAnimation<RevealHuntCardsView>(animation => isRevealHuntCards(animation.move))
     const spendCardAnimations = useAnimations<SpendHunter>(animation => isSpendHunter(animation.move))
     const shuffleDiscardAnimation = useAnimation<ShuffleDiscardPileView>(animation => isShuffleDiscardPile(animation.move))
-    const drawXCardsAnimation = useAnimation<DrawXCardsView|DrawXCards>(animation => isDrawXCards(animation.move))
     const powerOfSelectedHunters:number = selectedHunters !== undefined ? selectedHunters.reduce((acc, cv) => acc + getColoredDeck(player.color)[cv].power,0) : 0
+    const drawXCardsAnimation = useAnimation<DrawXCards|DrawXCardsView>(animation => isDrawXCards(animation.move) && animation.move.playerId === player.color)
+    const playerHand:number|number[] = isPlayerViewSelf(player) ? [...player.hand] : player.hand
+
+    if(drawXCardsAnimation && isNotDrawXCardsView(drawXCardsAnimation.move) && Array.isArray(playerHand)){
+        playerHand.push(...drawXCardsAnimation.move.cards)
+    }
 
     function howManyTotemToMove(move:ResolvePermanentObjectives):number{
         return move.objectivesCompleted[0].length + move.objectivesCompleted[1].length + (move.objectivesCompleted[2] === true ? 1 : 0)
@@ -124,7 +129,11 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
             seconds:playHuntCardAnimation.duration,
             delay:0,
             fromNeutralPosition:false
-          } : undefined
+          } : ( drawXCardsAnimation ? {
+            seconds:drawXCardsAnimation.duration,
+            delay:0,
+            fromNeutralPosition:isNotDrawXCardsView(drawXCardsAnimation.move) && Array.isArray(playerHand) && index > playerHand.length - drawXCardsAnimation.move.cards.length -1
+          } : undefined)
         })
       }
 
@@ -142,24 +151,26 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
 
                 <Hand css={[handPosition]} rotationOrigin={10} gapMaxAngle={isPlayerViewSelf(player) ? 3.2 - 0.12*player.hand.length : 3.2 - 0.12*player.hand} maxAngle={80} sizeRatio={8/11} getItemProps={getItemProps} >
             
-                    {isPlayerViewSelf(player) ? player.hand.map((card, index) => 
-                    
-                        <Card key={index}
-                        color={player.color}
-                        css={[cardStyle, playHuntCardAnimation && index === 0 && playHuntCardAnimationStyle(playHuntCardAnimation.duration,player.played.length)]}
-                        power={getColoredDeck(player.color)[card].power}
-                        speed={getColoredDeck(player.color)[card].speed}
-                        draggable={player.isReady !== true}
-                        draggableItem={{type:"CardInHand", card:card}}
-                        type={"CardInHand"}
-                        />
-                    
-                    ) : [...Array(player.hand)].map((_, i) => 
-                        <Card key={i}
-                        css = {[cardStyle,playHuntCardAnimation && i === 0 && playHuntCardAnimationStyle(playHuntCardAnimation.duration, isPlayerHuntView(player) ? player.played.length : player.played)]}
-                        color={player.color}   
-                        />
-                    )}
+                    {(isPlayerViewSelf(player) && Array.isArray(playerHand))
+                        ? playerHand.map((card, index) => 
+                            <Card key={index}
+                            color={player.color}
+                            css={[cardStyle, playHuntCardAnimation && index === 0 && playHuntCardAnimationStyle(playHuntCardAnimation.duration,player.played.length), drawXCardsAnimation && isNotDrawXCardsView(drawXCardsAnimation.move) && drawXCardsAnimation.move.cards.find(c => c === card) && drawXCardsAnimStyle(drawXCardsAnimation.duration)]}
+                            power={getColoredDeck(player.color)[card].power}
+                            speed={getColoredDeck(player.color)[card].speed}
+                            draggable={player.isReady !== true}
+                            draggableItem={{type:"CardInHand", card:card}}
+                            type={"CardInHand"}
+                            />
+                    )
+
+                        : [...Array(player.hand)].map((_, i) => 
+                            <Card key={i}
+                            css = {[cardStyle,playHuntCardAnimation && i === 0 && playHuntCardAnimationStyle(playHuntCardAnimation.duration, (player.played as number))]}
+                            color={player.color}   
+                            />
+                        )
+                    }
 
                 </Hand>
 
@@ -220,7 +231,7 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
 
             <div css={[deckZonePosition]}> 
             
-                {[...Array(player.deck)].map((_, i) => <Picture key={i} alt={t('token')} src={getCardBack(player.color)} css={[cardStyle, deckOffset(i), deckCardSize]} draggable={false} />)}
+                {[...Array(player.deck - (drawXCardsAnimation ? (isNotDrawXCardsView(drawXCardsAnimation.move) ? drawXCardsAnimation.move.cards.length : 0) : 0))].map((_, i) => <Picture key={i} alt={t('token')} src={getCardBack(player.color)} css={[cardStyle, deckOffset(i), deckCardSize]} draggable={false} />)}
             
             </div>
             
@@ -229,6 +240,52 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
     )
     
 }
+
+type PlayerCardsProps = {
+    player:PlayerViewSelf
+}
+
+const PlayerCards : FC<PlayerCardsProps> = ({player}) => {
+
+    const playHuntCardAnimation = useAnimation<PlayHuntCardView>(animation => isPlayHuntCard(animation.move) && animation.move.playerId === player.color)
+    const drawXCardsAnimation = useAnimation<DrawXCards>(animation => isDrawXCards(animation.move) && animation.move.playerId === player.color)
+    const playerHand = [...player.hand]
+    if(drawXCardsAnimation){
+        playerHand.push(...drawXCardsAnimation.move.cards)
+    }
+    
+        return <>
+        {
+        playerHand.map((card, index) => 
+                    
+            <Card key={index}
+            color={player.color}
+            css={[cardStyle, playHuntCardAnimation && index === 0 && playHuntCardAnimationStyle(playHuntCardAnimation.duration,player.played.length), drawXCardsAnimation && drawXCardsAnimation.move.cards.find(c => c === card) && drawXCardsAnimStyle(60)]}
+            power={getColoredDeck(player.color)[card].power}
+            speed={getColoredDeck(player.color)[card].speed}
+            draggable={player.isReady !== true}
+            draggableItem={{type:"CardInHand", card:card}}
+            type={"CardInHand"}
+            />
+        
+        )}
+    </>
+}
+
+const drawHuntCardKeyframes = keyframes`
+from{
+    transform:translate(-230%,-7%) rotateY(-180deg);
+}
+50%{
+    transform:translate(-230%,-7%) rotateY(-180deg);
+}
+to{}
+`
+
+const drawXCardsAnimStyle = (duration:number) => css`
+transform-style:preserve-3d;
+animation:${drawHuntCardKeyframes} ${duration}s ease-in-out forwards;
+`
 
 const selectedCard = css`
 box-shadow:0 0 1em 0.2em lime;
@@ -371,17 +428,6 @@ const dragStyle = css`
 animation: ${dragKeyFrames} 2s ease-in-out alternate infinite;
 `
 
-const drawHuntCardKeyframes = keyframes`
-from{
-    transform:translate(-50%;0%);
-}
-to{}
-`
-
-const drawHuntCardAnimation = (duration:number) => css`
-animation:${drawHuntCardKeyframes} ${duration}s ease-in-out infinite;
-`
-
 const playHuntCardKeyframes = (lengthPlayed:number) => keyframes`
 from{
 }
@@ -392,54 +438,6 @@ to{
 
 const playHuntCardAnimationStyle = (duration:number, lengthPlayed:number) => css`
     animation:${playHuntCardKeyframes(lengthPlayed)} ${duration}s linear;
-`
-
-const placeTotemKeyframes = (totemMoved:number, playerIndex:number, howManyTotemAlreadyPlaced:number) => keyframes`
-    from{
-        transform:scale(1);
-    }
-    80%,to{
-        top:${playerIndex%2 === 1 ? 30-(howManyTotemAlreadyPlaced*2.35+totemMoved*2.5) : -2+(howManyTotemAlreadyPlaced*3+totemMoved*2.5)}em;
-        right:${(playerIndex === 0 || playerIndex === 3) ? 21.1-3*playerIndex - ((howManyTotemAlreadyPlaced%2+totemMoved%2) * 2.2) : (playerIndex === 1 || playerIndex === 4) ? 21.1-3*playerIndex + ((howManyTotemAlreadyPlaced%2+totemMoved%2) * 2.2): 21.1-3*playerIndex }em;
-        transform:scale(0.6);
-    }
-`
-
-const placeTotemVariableKeyframes = (totemMoved:number, playerIndex:number, goalIndex:number, goalNumber:number) => keyframes`
-    from{
-        transform:scale(1);
-    }
-    80%,to{
-        top:${10.8 + (playerIndex > 1 ? -1.75*(playerIndex-1) : 0)}em;
-        right:${goalNumber === 5 ? 36.5+(4-goalIndex)*13.75 - (playerIndex === 0 ? totemMoved*1.2 : 8.5 - totemMoved*1.2) : 43.3+(3-goalIndex)*13.75 - (playerIndex === 0 ? totemMoved*1.2 : 8.5 - totemMoved*1.2)}em;
-        transform:scale(0.42);
-    }
-`
-
-const placeTotemAnimation = (totemMoved:number, duration:number, playerIndex:number, howManyTotemAlreadyPlaced:number) => css`
-    animation:${placeTotemKeyframes(totemMoved-1, playerIndex, howManyTotemAlreadyPlaced)} ${duration}s ease-in-out;
-`
-
-const placeTotemAnimationVariable = (totemMoved:number, duration:number, playerIndex:number, goalIndex:number, goalNumber:number) => css`
-    animation:${placeTotemVariableKeyframes(totemMoved-1, playerIndex, 0, goalNumber)} ${duration}s ease-in-out;
-`
-
-const injuriesndicatorPosition = css`
-position:absolute;
-top:22%;
-left:1%;
-width:14%;
-text-align:center;
-`
-
-const brokenArrowIconStyle = (index:number) => css`
-margin:-0.4em 0em;
-width:80%;
-height:50%;
-border:0.5em solid orange;
-border-radius:15%;
-box-shadow:0 0 0.5em black;
-transform:rotateZ(${Math.pow(-1, index)*2*index}deg);
 `
 
 const deckCardSize = css`
@@ -459,23 +457,13 @@ top:0;
 left:40%;
 height:100%;
 width:25.5%;
+
 `
 
 const spanDropDisplay = (canDrop:boolean) => css`
     ${canDrop ? `display:block;` : `display:none;`}
     font-size:4em;
     text-align:center;
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translateY(-50%) translateX(-50%);
-`
-    
-const arrowStyle = css`
-    font-size:10em;
-    text-align:center;
-    color:white;
-    text-shadow:0 0.1em 0.1em black;
     position:absolute;
     top:50%;
     left:50%;
@@ -509,12 +497,6 @@ left:2%;
 width:16%;
 height:24%;
 `
-const deckZoneStyle = (image:string) => css`
-background-image: url(${image});
-background-size: contain;
-background-repeat: no-repeat;
-background-position: top;
-`
 
 const discardZonePosition = css`
 position:absolute;
@@ -525,17 +507,6 @@ height:23%;
 transform-style: preserve-3d;
 transform: perspective(200em);
 z-index:1;
-`
-const discardZoneStyle = css`
-
-`
-
-const cardPosition = (position:number, handLength:number) => css`
-position:absolute;
-top:0;
-height:100%;
-width:20%;
-
 `
 
 const cardPlayedPosition = (key:number) => css`
@@ -561,31 +532,6 @@ const cardHandPanelPosition = css`
     width:65%;
     height:24%;
     z-index:1;
-`
-
-const totemStyle = (i:number) => css`
-    position:absolute;
-    right:10%;
-    top:${i*12}%;
-    height:7em;
-    width:7em;
-    box-shadow:0 0 0.5em black;
-    border-radius:100%;
-    margin:1em auto;
-`
-
-const totemPosition = (token:number|false, index:number) => css`
-position:absolute;
-${token === false && `top:${index*10}%; right:2%;`};
-${token === -1 && `display:none;`};
-`
-
-const totemTokenPanelPosition = css`
-    position:absolute;
-    top:0%;
-    right:1%;
-    width:8%;
-    height:80%;
 `
 
 const playerBoardPosition = css`
