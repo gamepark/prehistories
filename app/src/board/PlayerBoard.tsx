@@ -155,7 +155,7 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
 
             <div css={cardHandPanelPosition}> 
 
-                <Hand css={[handPosition]} rotationOrigin={10} gapMaxAngle={isPlayerViewSelf(player) ? 3.2 - 0.12*player.hand.length : 3.2 - 0.12*player.hand} maxAngle={80} sizeRatio={8/11} getItemProps={getItemProps} >
+                <Hand css={[handPosition]} rotationOrigin={10} gapMaxAngle={3.8} maxAngle={20} sizeRatio={8/11} getItemProps={getItemProps} >
             
                     {(isPlayerViewSelf(player) && Array.isArray(playerHand))
                         ? playerHand.map((card, index) => 
