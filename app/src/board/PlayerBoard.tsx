@@ -506,7 +506,7 @@ const cardHandPanelPosition = css`
     right:20%;
     width:65%;
     height:24%;
-    z-index:1;
+    z-index:2;
 `
 
 const playerBoardPosition = css`

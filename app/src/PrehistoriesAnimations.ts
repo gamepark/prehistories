@@ -19,9 +19,9 @@ const prehistoriesAnimations : Animations<GameView, MoveView, PlayerColor> = {
         } else if (move.type === MoveType.PlayHuntCard){
             return action.playerId === playerId ? 0 : (state.caveDisplayed === action.playerId ? 1 : 0)
         } else if (move.type === MoveType.ResolvePermanentObjectives){
-            return 0
+            return 1
         } else if(move.type === MoveType.ResolveVariableObjectives){
-            return 0
+            return 1
         } else if(move.type === MoveType.RevealHuntCards){
             return state.caveDisplayed === playerId ? 0 : 2
         }

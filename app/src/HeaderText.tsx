@@ -1,7 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import GameView from '@gamepark/prehistories/GameView'
 import PlayerColor from '@gamepark/prehistories/PlayerColor'
+import { howManyCardToDraw } from '@gamepark/prehistories/Prehistories'
 import { getPlayerName } from '@gamepark/prehistories/PrehistoriesOptions'
+import Phase, { HuntPhase } from '@gamepark/prehistories/types/Phase'
 import { Player as PlayerInfo, usePlayerId, usePlayers } from '@gamepark/react-client'
 import { TFunction } from 'i18next'
 import {useTranslation} from 'react-i18next'
@@ -47,7 +49,48 @@ function HeaderGameOverText({game}:{game:GameView}){
 function HeaderOnGoingGameText({game}:{game:GameView}){
   const {t} = useTranslation()
   const playerId = usePlayerId<PlayerColor>()
+  const player = game.players.find(p => p.color === playerId)!
   const players = usePlayers<PlayerColor>()
 
-  return <> {t("Hunting the text bar...")} </>
+  switch(game.phase){
+    case Phase.Initiative:{
+      if(player.isReady === true){
+        if(game.players.every(p => p.isReady === true)){
+          return <> {t("initiative.reveal")} </>
+        } else if (game.players.filter(p => p.isReady).length === 1){
+          return <> {t("initiative.one.player.play.and.validate",{player:getPseudo(game.players.find(p => p.isReady === false)!.color,players,t)})} </>
+        } else {
+          return <> {t("initiative.other.players.play.and.validate")} </>
+        }
+      } else {
+        return <> {t("initiative.you.play.and.validate")} </>
+      }
+    }
+    case Phase.Hunt:{
+      const activePlayer = game.players.find(p => p.color === game.sortedPlayers![0])!
+      switch(activePlayer.huntPhase){
+        case HuntPhase.Hunt:{
+          return activePlayer.color === playerId ? <> {t("hunt.you.hunt.tile")} </> : <> {t("hunt.player.hunt.tile",{player:getPseudo(activePlayer.color,players,t)})} </>
+        }
+        case HuntPhase.Pay:{
+          return activePlayer.color === playerId ? <> {t("hunt.you.pay.tile")} </> : <> {t("hunt.player.pay.tile",{player:getPseudo(activePlayer.color,players,t)})} </>
+        }
+        case HuntPhase.DrawCards:{
+          const cardsDraw:number = howManyCardToDraw(activePlayer)
+          if (cardsDraw !== 0){
+            return activePlayer.color === playerId ? <> {t("hunt.you.draw.cards", {cards:cardsDraw})} </> : <> {t("hunt.player.draw.cards",{player:getPseudo(activePlayer.color,players,t), cards:cardsDraw})} </>
+          } else {
+            return activePlayer.color === playerId ? <> {t("hunt.you.draw.no.card")} </> : <> {t("hunt.player.draw.no.card",{player:getPseudo(activePlayer.color,players,t)})} </>
+          }
+        }
+        default:{
+          return activePlayer.color === playerId ? <> {t("hunt.you.complete.objectives")} </> : <> {t("hunt.you.complete.objectives",{player:getPseudo(activePlayer.color,players,t)})} </>
+        }
+      }
+    } 
+    default:{
+      return <> {t("Hunting the text bar...")} </>
+    }
+  }
+
 }
