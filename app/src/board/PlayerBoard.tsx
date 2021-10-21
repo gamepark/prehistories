@@ -199,7 +199,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters}) => {
                 color={player.color}
                 power={getColoredDeck(player.color)[card].power}
                 speed={getColoredDeck(player.color)[card].speed}
-                onClick={() => player.color === playerId && playSelectHunter(setSelectedHunterMove(card), {local:true})}
+                onClick={() => player.color === playerId && player.huntPhase === HuntPhase.Pay && playSelectHunter(setSelectedHunterMove(card), {local:true})}
                 
                 />
             
@@ -264,7 +264,7 @@ filter: grayscale(80%);
 cursor:not-allowed;
 &:active{
     box-shadow:0 0.2em 0.5em black;
-    top:0%;
+    top:2.5%;
 }
 `
 
@@ -288,7 +288,7 @@ justify-content:center;
 box-shadow:0 0.2em 0.5em black;
 &:active{
     box-shadow:0 0.2em 0.2em black;
-    top:2%;
+    top:4%;
 }
 span{
     font-size:6em;
@@ -317,7 +317,7 @@ justify-content:center;
 box-shadow:0 0.2em 0.5em black;
 &:active{
     box-shadow:0 0.2em 0.2em black;
-    top:2%;
+    top:4%;
 }
 span{
     font-size:6em;

@@ -8,7 +8,7 @@ import { isPlayerHuntView, isPlayerViewSelf, PlayerHuntView, PlayerView, PlayerV
 import powerLevels from "@gamepark/prehistories/utils/powerLevels";
 import teamPower from "@gamepark/prehistories/utils/teamPower";
 import { useAnimation, usePlayerId } from "@gamepark/react-client";
-import { FC } from "react";
+import { FC, useState } from "react";
 import Images from "../utils/Images";
 import { tileSize } from "./Cave";
 import Polyomino from "./Polyomino";
@@ -24,6 +24,15 @@ const HuntingZone : FC<Props> = ({game, numberOfPlayers, indexOfDisplayedPlayer,
 
     const playerId = usePlayerId<PlayerColor>()
     const playPolyominoAnimation = useAnimation<PlayPolyomino>(animation => isPlayPolyomino(animation.move))
+    const startHook:(0|1)[] = numberOfPlayers < 4 ? [0,0,0,0,0] : [0,0,0,0,0,0,0] 
+
+    function createSideArray(index:number, side:number):(0|1)[]{
+        const array:(0|1)[] = numberOfPlayers < 4 ? [0,0,0,0,0] : [0,0,0,0,0,0,0] 
+        array[index] = side === 0 ? 1 : 0
+        return array
+    }
+
+    const [sideArray,setSideArray] = useState(startHook)
 
     return(
 
@@ -33,18 +42,20 @@ const HuntingZone : FC<Props> = ({game, numberOfPlayers, indexOfDisplayedPlayer,
             
                 polyomino !== null && <Polyomino 
                            key = {index}
-                           css = {[polyominoToHuntSize(index, numberOfPlayers, polyomino, (playPolyominoAnimation !== undefined && playPolyominoAnimation.move.huntSpot === index ? 1 : (game.polyominoSelected?.polyomino === polyomino ? game.polyominoSelected!.side : 0)), 8,16), polyominoToHuntPosition(index, numberOfPlayers, polyomino, (game.polyominoSelected?.polyomino === polyomino ? game.polyominoSelected.side : 0))]}
+                           css = {[polyominoToHuntSize(index, numberOfPlayers, polyomino, (playPolyominoAnimation !== undefined && playPolyominoAnimation.move.huntSpot === index ? 1 : sideArray[index]), 8,16), polyominoToHuntPosition(index, numberOfPlayers, polyomino, sideArray[index])]}
+                           side = {sideArray[index]}
                            polyomino={polyomino} 
                            draggable={isPolyominoHuntable(game.players.find(p => p.color === playerId), game.phase, index, game.players.length,game.sortedPlayers !== undefined ? game.sortedPlayers[0] : undefined)}
                            type={'PolyominoToHunt'}
-                           draggableItem={{type:"PolyominoToHunt", huntSpot:index, polyomino, side:(game.polyominoSelected?.polyomino === polyomino ? game.polyominoSelected.side : 0)}}
+                           draggableItem={{type:"PolyominoToHunt", huntSpot:index, polyomino, side:(sideArray[index])}}
                            isAlreadyPlaced = {false}
                            phase = {game.phase}
                            huntPosition={index}
                            nbPlayers = {numberOfPlayers}
-                           polyominoSelected = {game.polyominoSelected}
                            indexOfDisplayedPlayer={indexOfDisplayedPlayer}
                            indexListDisplayedPlayers={indexListDisplayedPlayers}
+
+                           onClick={() => setSideArray(createSideArray(index, sideArray[index]))}
                 />
 
             )}

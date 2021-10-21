@@ -7,7 +7,6 @@ import { tellYouAreReady } from '@gamepark/prehistories/moves/TellYouAreReady'
 import SetCaveDisplayed, { setCaveDisplayed } from './localMoves/setCaveDisplayed'
 import { revealHuntCardsInView } from '@gamepark/prehistories/moves/RevealHuntCards'
 import { playPolyomino } from '@gamepark/prehistories/moves/PlayPolyomino'
-import SetSelectedPolyomino, { ResetSelectedPolyomino, resetSelectedPolyomino, setSelectedPolyomino } from './localMoves/setSelectedPolyomino'
 import { spendHunter } from '@gamepark/prehistories/moves/SpendHunter'
 import { validateSpendedHunters } from '@gamepark/prehistories/moves/ValidateSpendedHunters'
 import { resolvePermanentObjectives } from '@gamepark/prehistories/moves/CheckPermanentObjectives'
@@ -22,7 +21,7 @@ import { endGame } from '@gamepark/prehistories/moves/EndGame'
 import { setHuntPhase } from '@gamepark/prehistories/moves/SetHuntPhase'
 import SetSelectedHunters, { resetSelectedHunters, ResetSelectedHunters, setSelectedHunters } from './localMoves/setSelectedHunters'
 
-type LocalMove = MoveView | SetCaveDisplayed | SetSelectedPolyomino | ResetSelectedPolyomino |SetSelectedHunters | ResetSelectedHunters
+type LocalMove = MoveView | SetCaveDisplayed | SetSelectedHunters | ResetSelectedHunters
 
 export default class PrehistoriesView implements Game<GameView, MoveView> {
   state: GameView
@@ -71,10 +70,6 @@ export default class PrehistoriesView implements Game<GameView, MoveView> {
         return endGame(this.state)
       case 'SetCaveDisplayed':
         return setCaveDisplayed(this.state, move)
-      case 'SetSelectedPolyomino':
-        return setSelectedPolyomino(this.state, move)
-      case 'ResetSelectedPolyomino':
-        return resetSelectedPolyomino(this.state)
       case 'SetSelectedHunters':
         return setSelectedHunters(this.state, move)
       case 'ResetSelectedHunters':
