@@ -175,14 +175,14 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters}) => {
 
             <div css={[cardPlayedPanelPosition(player.color), canDropPlayed && canDropStyle, canDropPlayed && isOverPlayed && isOverStyle]} ref = {dropRefPlayed}> 
 
-            {displayValidationButton(phase, playerId, player.color, player.isReady) && <Button css={[validationButtonPosition]} onClick={() => {play({type:MoveType.TellYouAreReady, playerId:player.color})}} colorButton={player.color} >{t('Validate')}</Button> }
-            {displayEndTurnButton(phase, playerId, player.color, player.huntPhase) && <Button css={[validationButtonPosition]} onClick={() => {play({type:MoveType.EndTurn, playerId:player.color})}} colorButton={player.color} >{t('End your Turn')}</Button>}
+            {(displayHuntingButtons(phase, playerId, player.color, player.huntPhase) || displayValidationButton(phase, playerId, player.color, player.isReady) || displayEndTurnButton(phase, playerId, player.color, player.huntPhase)) && 
+                <div css={[huntingButtonsPosition(player.color, (displayValidationButton(phase, playerId, player.color, player.isReady) || displayEndTurnButton(phase, playerId, player.color, player.huntPhase)) ? 20 : 30), spendCardAnimations.length !== 0 && disapperingAnim]}>
+                    
+                    {displayValidationButton(phase, playerId, player.color, player.isReady) && <Button css={[validationButtonPosition]} onClick={() => {play({type:MoveType.TellYouAreReady, playerId:player.color})}} colorButton={player.color} >{t('Validate')}</Button> }
+                    {displayEndTurnButton(phase, playerId, player.color, player.huntPhase) && <Button css={[validationButtonPosition]} onClick={() => {play({type:MoveType.EndTurn, playerId:player.color})}} colorButton={player.color} >{t('End your Turn')}</Button>}
 
-            {displayHuntingButtons(phase, playerId, player.color, player.huntPhase) && 
-                <div css={huntingButtonsPosition(player.color)}>
-
-                    <div css={[injuryStyle, (powerOfSelectedHunters < player.huntSpotTakenLevels![0] || powerOfSelectedHunters > player.huntSpotTakenLevels![1]) && desactivateStyle]} onClick={() => powerOfSelectedHunters >= player.huntSpotTakenLevels![0] && powerOfSelectedHunters < player.huntSpotTakenLevels![1] && validateHunters(selectedHunters, true)} > <span>{Math.max(player.huntSpotTakenLevels![0] - powerOfSelectedHunters,0)}</span></div>
-                    <div css={[noInjuryStyle, powerOfSelectedHunters < player.huntSpotTakenLevels![1] && desactivateStyle]} onClick={() => powerOfSelectedHunters >= player.huntSpotTakenLevels![1] && validateHunters(selectedHunters, false)} > <span>{Math.max(player.huntSpotTakenLevels![1] - powerOfSelectedHunters,0)}</span> </div>
+                    {displayHuntingButtons(phase, playerId, player.color, player.huntPhase) && <div css={[injuryStyle, (powerOfSelectedHunters < player.huntSpotTakenLevels![0] || powerOfSelectedHunters > player.huntSpotTakenLevels![1]) && desactivateStyle]} onClick={() => powerOfSelectedHunters >= player.huntSpotTakenLevels![0] && powerOfSelectedHunters < player.huntSpotTakenLevels![1] && validateHunters(selectedHunters, true)} > <span>{Math.max(player.huntSpotTakenLevels![0] - powerOfSelectedHunters,0)}</span></div>}
+                    {displayHuntingButtons(phase, playerId, player.color, player.huntPhase) && <div css={[noInjuryStyle, powerOfSelectedHunters < player.huntSpotTakenLevels![1] && desactivateStyle]} onClick={() => powerOfSelectedHunters >= player.huntSpotTakenLevels![1] && validateHunters(selectedHunters, false)} > <span>{Math.max(player.huntSpotTakenLevels![1] - powerOfSelectedHunters,0)}</span> </div>}
                     
                 </div>
             }
@@ -270,10 +270,10 @@ cursor:not-allowed;
 
 const noInjuryStyle = css`
 position:absolute;
-top:0%;
+top:2.5%;
 right:10%;
 width:35%;
-height:100%;
+height:95%;
 background-image: url(${Images.arrowCleanIcon});
 background-size: cover;
 background-repeat: no-repeat;
@@ -300,10 +300,10 @@ span{
 const injuryStyle = css`
 cursor:pointer;
 position:absolute;
-top:0%;
+top:2.5%;
 left:10%;
 width:35%;
-height:100%;
+height:95%;
 background-image: url(${Images.arrowBrokenIcon});
 background-size: cover;
 background-repeat: no-repeat;
@@ -326,31 +326,54 @@ span{
 }
 `
 
-const huntingButtonsPosition = (color:PlayerColor) => css`
+const panelAppear = (height:number) => keyframes`
+from{height:0%;}
+to{height:${height}%;}
+`
+
+const panelDisappear = keyframes`
+from{opacity:1;}
+to{opacity:0;}
+`
+
+const disapperingAnim = css`
+animation:${panelDisappear} 1s linear forwards;
+`
+
+const huntingButtonsPosition = (color:PlayerColor, height:number) => css`
 width:80%;
-height:30%;
+height:${height}%;
 position:absolute;
 left:50%;
-top:-30.5%;
+bottom:101.5%;
 transform:translateX(-50%);
 z-index:1;
-border:0.6em solid ${getPlayerColor(color)};
+border-top:0.6em solid ${getPlayerColor(color)};
+border-left:0.6em solid ${getPlayerColor(color)};
+border-right:0.6em solid ${getPlayerColor(color)};
 background-color:rgba(0,0,0,0.5);
 border-top-left-radius:5% 15%;
 border-top-right-radius:5% 15%;
+animation:${panelAppear(height)} 1s linear forwards;
+`
 
+const appearContentPanel = keyframes`
+from{opacity:0;}
+50%{opacity:0;}
+to{opacity:1;}
 `
 
 const validationButtonPosition = css`
     position:absolute;
     left:50%;
-    top:-18%;
+    top:10%;
     transform:translateX(-50%);
     width:fit-content;
-    height:15%;
+    height:80%;
     font-size:3em;
     font-family:'Reggae One', sans-serif;
     z-index:1;
+    animation:${appearContentPanel} 0.8s linear;
 `
 
 const shufflingKeyFrames = (index:number) => keyframes`
