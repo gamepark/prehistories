@@ -100,9 +100,4 @@ display:flex;
 flex-direction: row;
 justify-content: center;
 `
-const variableObjectivesStyle = css`
-border-radius:10%;
-box-shadow:0 0 0.5em black;
-`
-
 export default Objectives

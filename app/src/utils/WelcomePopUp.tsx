@@ -2,7 +2,6 @@
 
 import GameView from "@gamepark/prehistories/GameView"
 import PlayerColor from "@gamepark/prehistories/PlayerColor"
-import { PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView"
 import { usePlayer, usePlayerId } from "@gamepark/react-client"
 import { FC, useState } from "react"
 import { useTranslation } from "react-i18next/"
@@ -44,7 +43,7 @@ const WelcomePopUp : FC<{player:PlayerColor | undefined, game:GameView, close: (
                         <Goal key={index}
                               goal={goal}
                               players={game.players}
-                              css={[goalSize, goalSelected === goal && selectEffect]}
+                              css={[goalSize, goalSelected === goal && selectEffect(goal > 8)]}
                               onClick={() => setGoalSelected(goal)}
                         />
                     )}
@@ -62,8 +61,8 @@ const WelcomePopUp : FC<{player:PlayerColor | undefined, game:GameView, close: (
 
 }
 
-const selectEffect = css`
-box-shadow:0 0 0.5em 1em white;
+const selectEffect = (isExpert:boolean) => css`
+box-shadow:0 0 0.5em 1em ${isExpert ? `#1991d3` : `#f7ab01` };
 transition:box-shadow 0.5s linear;
 `
 
@@ -71,6 +70,7 @@ const goalSize = css`
 width:19.5%;
 height:100%;
 cursor:pointer;
+transition:box-shadow 0.5s linear;
 `
 
 const goalsPosition = css`

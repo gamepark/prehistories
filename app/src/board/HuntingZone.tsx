@@ -1,16 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import GameView, { getPlayers } from "@gamepark/prehistories/GameView";
+import GameView from "@gamepark/prehistories/GameView";
 import PlayPolyomino, { isPlayPolyomino } from "@gamepark/prehistories/moves/PlayPolyomino";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
-import PolyominoToHunt from "@gamepark/prehistories/types/appTypes/PolyominoToHunt";
 import Phase, { HuntPhase } from "@gamepark/prehistories/types/Phase";
 import { isPlayerHuntView, isPlayerViewSelf, PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
 import powerLevels from "@gamepark/prehistories/utils/powerLevels";
 import teamPower from "@gamepark/prehistories/utils/teamPower";
-import { useAnimation, usePlay, usePlayerId } from "@gamepark/react-client";
+import { useAnimation, usePlayerId } from "@gamepark/react-client";
 import { FC } from "react";
-import SetSelectedPolyomino, { setSelectedPolyominoMove } from "../localMoves/setSelectedPolyomino";
 import Images from "../utils/Images";
 import { tileSize } from "./Cave";
 import Polyomino from "./Polyomino";
@@ -29,7 +27,7 @@ const HuntingZone : FC<Props> = ({game, numberOfPlayers, indexOfDisplayedPlayer,
 
     return(
 
-        <div css={[huntingZonePosition, huntingZoneStyle, numberOfPlayers < 4 ? bG23Players : bG45Players]}>
+        <div css={[huntingZonePosition, numberOfPlayers < 4 ? bG23Players : bG45Players]}>
 
             {game.huntingBoard.map((polyomino, index) => 
             
@@ -83,11 +81,6 @@ const huntingZonePosition = css`
     width:24.5%;
     height:93%;
 `
-
-const huntingZoneStyle = css`
-
-`
-
 
 const bG23Players = css`
 background-image: url(${Images.huntingBoard23Players});

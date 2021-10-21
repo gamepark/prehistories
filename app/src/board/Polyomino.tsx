@@ -3,13 +3,13 @@ import { css, keyframes } from "@emotion/react";
 import Move from "@gamepark/prehistories/moves/Move";
 import PlayPolyomino, { isPlayPolyomino } from "@gamepark/prehistories/moves/PlayPolyomino";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
-import { useAnimation, usePlay, usePlayerId } from "@gamepark/react-client";
+import { useAnimation, usePlay } from "@gamepark/react-client";
 import { FC, HTMLAttributes } from "react";
 import Images from "../utils/Images";
 import PolyominoToHunt from "@gamepark/prehistories/types/appTypes/PolyominoToHunt"
 import { Draggable } from "@gamepark/react-components";
 import Phase from "@gamepark/prehistories/types/Phase";
-import { DragSourceMonitor, DropTargetMonitor, useDrop } from "react-dnd";
+import { DropTargetMonitor, useDrop } from "react-dnd";
 import SetSelectedPolyomino, { setSelectedPolyominoMove } from "../localMoves/setSelectedPolyomino";
 
 type Props = {
@@ -35,7 +35,6 @@ const Polyomino : FC<Props> = ({polyomino, side, color, draggable = false, type=
     const onDrop = (move:PlayPolyomino) => {
         play(move)
     }
-    const playerId = usePlayerId<PlayerColor>()
     const playSetSelectedPolyomino = usePlay<SetSelectedPolyomino>()
 
     const [{isDragging}, ref] = useDrop({           // Only to check the item currently dragged
@@ -130,8 +129,6 @@ ${(huntPhase === false || isAlreadyPlaced === true) && `filter:drop-shadow(0 0 0
 ${(huntPhase === true && isAlreadyPlaced === false && draggable === false) && `filter:drop-shadow(0 0 0.3em red);`}
 ${(huntPhase === true && isAlreadyPlaced === false && draggable === true) && `filter:drop-shadow(0 0 0.3em green);`}
 ${(huntPhase === true && isAlreadyPlaced === false && selected === true) && `filter:drop-shadow(0 0 0.3em white);`}
-
-
 `
 
 const polyominoSize = css`

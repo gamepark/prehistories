@@ -9,7 +9,6 @@ import GameDisplay from './GameDisplay'
 import HeaderText from './HeaderText'
 import Images from './utils/Images'
 import Box from './images/Box.png'
-import { css } from '@emotion/react'
 
 export default function App() {
   const game = useGame<GameView>()

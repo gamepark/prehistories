@@ -2,15 +2,14 @@
 import { css } from "@emotion/react";
 import { allPolyominos } from "@gamepark/prehistories/material/Polyominos";
 import MoveType from "@gamepark/prehistories/moves/MoveType";
-import PlayPolyomino from "@gamepark/prehistories/moves/PlayPolyomino";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import PolyominoToHunt from "@gamepark/prehistories/types/appTypes/PolyominoToHunt";
 import Coordinates from "@gamepark/prehistories/types/Coordinates";
 import { PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
 import getSquaresStartLeft, { getFreeSquaresFromPath, getOccupiedSquares, isCoordFree, isCoordOutOfBorders } from "@gamepark/prehistories/utils/getSquaresStartLeft";
-import { usePlay, usePlayerId } from "@gamepark/react-client";
-import { FC, useRef } from "react";
-import { DropTargetMonitor, useDrag, useDrop, XYCoord } from "react-dnd";
+import { usePlayerId } from "@gamepark/react-client";
+import { FC } from "react";
+import { DropTargetMonitor, useDrop, XYCoord } from "react-dnd";
 
 type Props = {
     x:number,

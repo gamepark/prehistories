@@ -1,16 +1,15 @@
 /** @jsxImportSource @emotion/react */
 
 import { css, keyframes } from "@emotion/react";
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import Cave from "./Cave";
-import { getTotem } from "./PlayerPanel";
 import Card from './Card'
 import { getColoredDeck } from "@gamepark/prehistories/material/Hunters";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import Images from "../utils/Images";
-import { isPlayerHuntView, isPlayerViewSelf, PlayerHuntView, PlayerView, isPlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
-import { DropTargetMonitor, useDrop, XYCoord } from "react-dnd";
+import { isPlayerViewSelf, PlayerHuntView, PlayerView, isPlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
+import { useDrop } from "react-dnd";
 import CardInHand, {isCardInHand} from "@gamepark/prehistories/types/appTypes/CardInHand";
 import CardPlayed from "@gamepark/prehistories/types/appTypes/CardPlayed";
 import MoveType from "@gamepark/prehistories/moves/MoveType";
@@ -18,12 +17,10 @@ import { useAnimation, useAnimations, usePlay, usePlayerId } from "@gamepark/rea
 import Phase, { HuntPhase } from "@gamepark/prehistories/types/Phase";
 import { Hand, Picture } from "@gamepark/react-components";
 import Move from "@gamepark/prehistories/moves/Move";
-import ResolvePermanentObjectives, { isResolvePermanentObjectives } from "@gamepark/prehistories/moves/CheckPermanentObjectives";
-import ResolveVariableObjectives from "@gamepark/prehistories/moves/CheckVariableObjectives";
-import PlayHuntCard, { isPlayHuntCard, PlayHuntCardView } from "@gamepark/prehistories/moves/PlayHuntCard";
+import { isPlayHuntCard, PlayHuntCardView } from "@gamepark/prehistories/moves/PlayHuntCard";
 import { RevealHuntCardsView, isRevealHuntCards } from "@gamepark/prehistories/moves/RevealHuntCards";
 import SpendHunter, { isSpendHunter } from "@gamepark/prehistories/moves/SpendHunter";
-import ShuffleDiscardPile, { isShuffleDiscardPile, ShuffleDiscardPileView } from "@gamepark/prehistories/moves/ShuffleDiscardPile";
+import { isShuffleDiscardPile, ShuffleDiscardPileView } from "@gamepark/prehistories/moves/ShuffleDiscardPile";
 import DrawXCards, { DrawXCardsView, isDrawXCards, isDrawXCardsView, isNotDrawXCardsView } from "@gamepark/prehistories/moves/DrawXCards";
 import { getPlayerColor } from "../utils/getterFunctions";
 import Button from "../utils/Button";
@@ -38,14 +35,12 @@ type Props = {
     selectedHunters:number[]|undefined
 }
 
-const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer, goals, selectedHunters}) => {
+const PlayerBoard : FC<Props> = ({player, phase, selectedHunters}) => {
 
     const {t} = useTranslation()
     const playerId = usePlayerId<PlayerColor>()
     const play = usePlay<Move>()
 
-    const totemAnimationPermanent = useAnimation<ResolvePermanentObjectives>(animation => isResolvePermanentObjectives(animation.move))
-    const totemAnimationVariable = useAnimation<ResolveVariableObjectives>(animation => isResolvePermanentObjectives(animation.move))
     const playHuntCardAnimation = useAnimation<PlayHuntCardView>(animation => isPlayHuntCard(animation.move))
     const revealCardsAnimation = useAnimation<RevealHuntCardsView>(animation => isRevealHuntCards(animation.move))
     const spendCardAnimations = useAnimations<SpendHunter>(animation => isSpendHunter(animation.move))
@@ -60,10 +55,6 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
         } else if(isDrawXCardsView(drawXCardsAnimation.move) && typeof playerHand === 'number'){
             playerHand +=drawXCardsAnimation.move.cards
         }
-    }
-
-    function howManyTotemToMove(move:ResolvePermanentObjectives):number{
-        return move.objectivesCompleted[0].length + move.objectivesCompleted[1].length + (move.objectivesCompleted[2] === true ? 1 : 0)
     }
 
     function displayValidationButton(phase:Phase|undefined, playerId:PlayerColor|undefined, color:PlayerColor, isReady:boolean|undefined):boolean{
@@ -145,7 +136,7 @@ const PlayerBoard : FC<Props> = ({player, players, phase, isActiveHuntingPlayer,
 
     return(
 
-        <div css={[playerBoardPosition, playerBoardStyle]}>
+        <div css={[playerBoardPosition]}>
 
             <Cave player={player}
                   phase={phase}
@@ -390,19 +381,6 @@ const spendAnimation = (discardLength:number, duration:number) => css`
 animation: ${spendHunterKeyFrames(discardLength)} ${duration}s ease-in forwards;
 `
 
-const dragKeyFrames = keyframes`
-0% {
-    box-shadow: 0 0 0.5em 0.1em gold;
-  }
-  90%, 100% {
-    box-shadow: 0 0 0.7em 0.5em gold;
-  }
-`
-
-const dragStyle = css`
-animation: ${dragKeyFrames} 2s ease-in-out alternate infinite;
-`
-
 const playHuntCardKeyframes = (lengthPlayed:number) => keyframes`
 from{
 }
@@ -515,10 +493,6 @@ top:7%;
 left:24%;
 width:56%;
 height:93%;
-`
-
-const playerBoardStyle = css`
-
 `
 
 function getCardBack(color:PlayerColor):string{

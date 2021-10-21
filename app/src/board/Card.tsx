@@ -1,8 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
-import { css, keyframes } from "@emotion/react"
-import { getColoredDeck } from "@gamepark/prehistories/material/Hunters"
-import PlayerColor, { playerColors } from "@gamepark/prehistories/PlayerColor"
+import { css } from "@emotion/react"
+import PlayerColor from "@gamepark/prehistories/PlayerColor"
 import { FC, HTMLAttributes } from "react"
 import Images, { BlueHunters, GreenHunters, RedHunters, WhiteHunters, YellowHunters } from "../utils/Images"
 import CardPlayed from "@gamepark/prehistories/types/appTypes/CardPlayed"

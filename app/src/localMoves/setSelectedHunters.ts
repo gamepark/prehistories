@@ -1,6 +1,5 @@
 import GameView from "@gamepark/prehistories/GameView";
 import { getColoredDeck } from "@gamepark/prehistories/material/Hunters";
-import PolyominoToHunt from "@gamepark/prehistories/types/appTypes/PolyominoToHunt";
 import { HuntPhase } from "@gamepark/prehistories/types/Phase";
 
 export default interface SetSelectedHunters{

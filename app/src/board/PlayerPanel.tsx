@@ -1,18 +1,14 @@
 /** @jsxImportSource @emotion/react */
 
 import { css, keyframes } from "@emotion/react";
-import Move from "@gamepark/prehistories/moves/Move";
-import MoveType from "@gamepark/prehistories/moves/MoveType";
-import { isRevealHuntCards, RevealHuntCardsView } from "@gamepark/prehistories/moves/RevealHuntCards";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import { getPlayerName } from "@gamepark/prehistories/PrehistoriesOptions";
-import Phase, { HuntPhase } from "@gamepark/prehistories/types/Phase";
+import Phase from "@gamepark/prehistories/types/Phase";
 import { PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
-import { PlayerTimer, useAnimation, usePlay, usePlayer, usePlayerId } from "@gamepark/react-client";
+import { PlayerTimer, usePlayer } from "@gamepark/react-client";
 import { Picture } from "@gamepark/react-components";
-import { FC, HTMLAttributes, useEffect, useState } from "react";
+import { FC, HTMLAttributes } from "react";
 import { useTranslation } from "react-i18next";
-import Button from "../utils/Button";
 import Images, { bluePowerBanners, greenPowerBanners, redPowerBanners, whitePowerBanners, yellowPowerBanners } from "../utils/Images";
 import AvatarPanel from "./AvatarPanel";
 
@@ -24,12 +20,10 @@ type Props = {
     nbPlayers:number
 } & HTMLAttributes<HTMLDivElement>
 
-const PlayerPanel : FC<Props> = ({player:{color, totemTokens, isReady, huntPhase, huntSpotTakenLevels, injuries}, position, phase, huntOrder, nbPlayers, ...props}) => {
+const PlayerPanel : FC<Props> = ({player:{color, totemTokens, injuries}, position, phase, huntOrder, nbPlayers, ...props}) => {
 
     const playerInfo = usePlayer(color)
     const {t} = useTranslation()
-    const playerId = usePlayerId<PlayerColor>()
-    const play = usePlay<Move>()
 
     return (
 
@@ -130,25 +124,6 @@ background-repeat: no-repeat;
 background-position: top;
 filter:drop-shadow(0 0 0.2em black);
 `
-
-
-
-
-
-function displayTakeWithInjuryButton(phase:Phase|undefined, playerId:PlayerColor|undefined, color:PlayerColor, huntPhase:HuntPhase | undefined, canPay:boolean):boolean{
-    return phase === Phase.Hunt && playerId === color && huntPhase === HuntPhase.Pay && canPay
-}
-
-const validationButtonPosition = css`
-    position:absolute;
-    left:50%;
-    transform:translateX(-50%);
-    width:fit-content;
-    height:20%;
-    font-size:3em;
-    font-family:'Reggae One', sans-serif;
-`
-
 const playerPanelPosition = (position:number) => css`
     position:absolute;
     top:${7+16+15*position}%;
@@ -191,8 +166,6 @@ height:3em;
 width:3em;
 margin : 0em ${-0.0625*spread+(8-spread)/10}em;
 border-radius:100%;
-
-
 `
 
 export function getTotem(color:PlayerColor):string{

@@ -1,4 +1,3 @@
-import box from '../images/Box.png'
 import huntingBoard23Players from '../images/HuntingBoard23players.jpg'
 import huntingBoard45Players from '../images/HuntingBoard45players.jpg'
 import caveBlue from '../images/CaveBlue.png'

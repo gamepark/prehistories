@@ -9,7 +9,7 @@ import HuntingZone from './board/HuntingZone'
 import Objectives from './board/Objectives'
 import PlayerBoard from './board/PlayerBoard'
 import PlayerPanel from './board/PlayerPanel'
-import SetCaveDisplayed, { setCaveDisplayed, setCaveDisplayedMove } from './localMoves/setCaveDisplayed'
+import SetCaveDisplayed, { setCaveDisplayedMove } from './localMoves/setCaveDisplayed'
 import WelcomePopUp from './utils/WelcomePopUp'
 
 type Props = {

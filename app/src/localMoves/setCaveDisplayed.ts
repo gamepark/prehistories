@@ -1,5 +1,4 @@
 import GameView from "@gamepark/prehistories/GameView";
-import MoveType from "@gamepark/prehistories/moves/MoveType";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 
 export default interface SetCaveDisplayed{
