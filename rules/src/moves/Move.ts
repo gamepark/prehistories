@@ -1,7 +1,6 @@
 import ChangeActivePlayer from './ChangeActivePlayer'
 import ResolvePermanentObjectives from './CheckPermanentObjectives'
 import ResolveVariableObjectives from './CheckVariableObjectives'
-import CheckVariableObjectives from './CheckVariableObjectives'
 import DrawXCards from './DrawXCards'
 import EndGame from './EndGame'
 import EndTurn from './EndTurn'

@@ -3,7 +3,6 @@ import GameView, { getPlayers, isGameView } from "../GameView";
 import PlayerColor from "../PlayerColor";
 import Coordinates from "../types/Coordinates";
 import { HuntPhase } from "../types/Phase";
-import {PlayerHuntView, PlayerViewSelf } from "../types/PlayerView";
 import powerLevels from "../utils/powerLevels";
 import Move from "./Move";
 import MoveType from "./MoveType";

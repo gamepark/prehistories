@@ -1,7 +1,7 @@
-import {Game, GameSpeed, SecretInformation, SimultaneousGame} from '@gamepark/rules-api'
+import {SecretInformation, SimultaneousGame} from '@gamepark/rules-api'
 import { shuffle } from 'lodash'
 import GameState from './GameState'
-import GameView, { getPlayers } from './GameView'
+import GameView from './GameView'
 import { getGoalsArray } from './material/Goals'
 import getHandPrintsCoords from './material/HandPrints'
 import { allPolyominos} from './material/Polyominos'
@@ -355,21 +355,8 @@ function getCardsToDraw(player:PlayerState):number[]{
   return result
 }
 
-function takeBackDiscardPile(color:PlayerColor, players:PlayerState[]):number[]{
-  const player = players.find(p => p.color === color)!
-  return shuffle(player.discard)
-}
-
 export function howManyCardToDraw(player:PlayerState|PlayerView|PlayerViewSelf|PlayerHuntView):number{
   return player.tilesHunted === undefined ? 3 : (player.injuries === undefined ? 2 + areHandPrintsRecovered(player) : Math.max(0, 2 - player.injuries) + areHandPrintsRecovered(player))
-}
-
-function howManyCardToDraw2(player:PlayerState|PlayerView|PlayerViewSelf|PlayerHuntView):number{
-  if (isPlayerState(player)){
-    return player.tilesHunted === undefined ? Math.min(3, player.deck.length+player.discard.length) : (player.injuries === undefined ? Math.min(2, player.deck.length+player.discard.length) : Math.min(Math.max(0, 2 - player.injuries), player.deck.length+player.discard.length))
-  } else {
-    return player.tilesHunted === undefined ? Math.min(3, player.deck+player.discard.length) : (player.injuries === undefined ? Math.min(2, player.deck+player.discard.length) : Math.min(Math.max(0, 2 - player.injuries), player.deck+player.discard.length))
-  }
 }
 
 export function areHandPrintsRecovered(player:PlayerState|PlayerView|PlayerViewSelf|PlayerHuntView):number{

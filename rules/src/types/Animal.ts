@@ -12,7 +12,6 @@ export function isHunter(animal:Animal):boolean{
 export function isLegendary(animal:Animal):boolean{
     return (animal >= 9)
 }
-
 export function isHandPrints(animal:Animal):boolean{
     return (animal === 8)
 }

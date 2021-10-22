@@ -1,4 +1,3 @@
-
 enum MoveType {
   PlayHuntCard,
   TellYouAreReady,

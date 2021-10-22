@@ -3,7 +3,7 @@ import GameView, { getPlayers } from "../GameView";
 import PlayerColor from "../PlayerColor";
 import { howManyCardToDraw } from "../Prehistories";
 import { HuntPhase } from "../types/Phase";
-import { isPlayerHuntView, isPlayerView, isPlayerViewSelf } from "../types/PlayerView";
+import { isPlayerView, isPlayerViewSelf } from "../types/PlayerView";
 import Move from "./Move";
 import MoveType from "./MoveType";
 import MoveView from "./MoveView";

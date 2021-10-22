@@ -1,7 +1,7 @@
 import GameState from "../GameState";
 import GameView, { getPlayers } from "../GameView";
 import PlayerColor from "../PlayerColor";
-import { isNotPlayerState, isPlayerHuntView, isPlayerView, isPlayerViewSelf } from "../types/PlayerView";
+import { isNotPlayerState } from "../types/PlayerView";
 import Move from "./Move";
 import MoveType from "./MoveType";
 import MoveView from "./MoveView";

@@ -1,6 +1,6 @@
 import GameState from "../GameState";
 import GameView, { getPlayers } from "../GameView";
-import Phase, { HuntPhase } from "../types/Phase";
+import { HuntPhase } from "../types/Phase";
 import MoveType from "./MoveType";
 
 type ChangeActivePlayer = {

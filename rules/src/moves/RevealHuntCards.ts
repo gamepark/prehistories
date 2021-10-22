@@ -3,7 +3,7 @@ import GameView, { getPlayers } from "../GameView";
 import PlayerColor from "../PlayerColor";
 import PlayerState from "../PlayerState";
 import Phase, { HuntPhase } from "../types/Phase";
-import { PlayerHuntView, PlayerView, PlayerViewSelf } from "../types/PlayerView";
+import { PlayerHuntView, PlayerViewSelf } from "../types/PlayerView";
 import teamPower from "../utils/teamPower";
 import teamSpeed from "../utils/teamSpeed";
 import Move from "./Move";

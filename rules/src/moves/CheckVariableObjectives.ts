@@ -3,7 +3,6 @@ import GameView, { getPlayers, isGameView } from "../GameView";
 import { getGoalsArray } from "../material/Goals";
 import PlayerColor from "../PlayerColor";
 import PlayerState from "../PlayerState";
-import { HuntPhase } from "../types/Phase";
 import { PlayerHuntView, PlayerView, PlayerViewSelf } from "../types/PlayerView";
 import Move from "./Move";
 import MoveType from "./MoveType";

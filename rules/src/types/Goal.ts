@@ -1,6 +1,5 @@
 import PlayerState from "../PlayerState"
 import Face from "./Face"
-import PaintedPolyominos from "./PaintedPolyominos"
 import { PlayerHuntView, PlayerView, PlayerViewSelf } from "./PlayerView"
 
 type Goal = {
