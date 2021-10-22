@@ -76,7 +76,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
                 play({type:MoveType.SpendHunter, card})
             })
             if (injury){
-                play({type:MoveType.ValidateSpendedHunters}, {delayed:true})
+                play({type:MoveType.ValidateSpentHunters}, {delayed:true})
             }
             playResetHunters(resetSelectedHuntersMove(), {local:true})
         }

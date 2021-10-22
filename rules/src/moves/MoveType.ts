@@ -4,7 +4,7 @@ enum MoveType {
   RevealHuntCards,
   PlayPolyomino,
   SpendHunter,
-  ValidateSpendedHunters,
+  ValidateSpentHunters,
   ResolvePermanentObjectives,
   ResolveVariableObjectives,
   SetHuntPhase,

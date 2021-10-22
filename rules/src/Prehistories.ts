@@ -23,7 +23,7 @@ import { shuffleDiscardPile } from './moves/ShuffleDiscardPile'
 import SpendHunter, { spendHunter } from './moves/SpendHunter'
 import { takeBackPlayedCards } from './moves/TakeBackPlayedCards'
 import TellYouAreReady, { tellYouAreReady } from './moves/TellYouAreReady'
-import ValidateSpendedHunters, { validateSpendedHunters } from './moves/ValidateSpendedHunters'
+import ValidateSpendedHunters, { validateSpentHunters } from './moves/ValidateSpentHunters'
 import PlayerColor from './PlayerColor'
 import PlayerState, { setupCave, setupDeck } from './PlayerState'
 import {isGameOptions, PrehistoriesOptions, PrehistoriesPlayerOptions} from './PrehistoriesOptions'
@@ -116,7 +116,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
             spendHuntersAndValidateMoves.push({type:MoveType.SpendHunter, card})
           })
           if (player.huntSpotTakenLevels![0] <= 0){
-            spendHuntersAndValidateMoves.push({type:MoveType.ValidateSpendedHunters})
+            spendHuntersAndValidateMoves.push({type:MoveType.ValidateSpentHunters})
           }
           return spendHuntersAndValidateMoves
         }
@@ -140,8 +140,8 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         return playPolyomino(this.state, move)
       case MoveType.SpendHunter:
         return spendHunter(this.state, move)
-      case MoveType.ValidateSpendedHunters:
-        return validateSpendedHunters(this.state)
+      case MoveType.ValidateSpentHunters:
+        return validateSpentHunters(this.state)
       case MoveType.ResolvePermanentObjectives:
         return resolvePermanentObjectives(this.state, move)
       case MoveType.ResolveVariableObjectives:
@@ -188,7 +188,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         switch(player.huntPhase){
           case HuntPhase.Pay:{
             if (player.huntSpotTakenLevels![1] <= 0){
-              return {type:MoveType.ValidateSpendedHunters}
+              return {type:MoveType.ValidateSpentHunters}
             } else return
           }
           case HuntPhase.CheckPermanentObjectives:{

@@ -8,7 +8,7 @@ import SetCaveDisplayed, { setCaveDisplayed } from './localMoves/setCaveDisplaye
 import { revealHuntCardsInView } from '@gamepark/prehistories/moves/RevealHuntCards'
 import { playPolyomino } from '@gamepark/prehistories/moves/PlayPolyomino'
 import { spendHunter } from '@gamepark/prehistories/moves/SpendHunter'
-import { validateSpendedHunters } from '@gamepark/prehistories/moves/ValidateSpendedHunters'
+import { validateSpentHunters } from '@gamepark/prehistories/moves/ValidateSpentHunters'
 import { resolvePermanentObjectives } from '@gamepark/prehistories/moves/CheckPermanentObjectives'
 import { resolveVariableObjectives } from '@gamepark/prehistories/moves/CheckVariableObjectives'
 import { refillHuntingBoardInView } from '@gamepark/prehistories/moves/RefillHuntingBoard'
@@ -46,8 +46,8 @@ export default class PrehistoriesView implements Game<GameView, MoveView> {
         return playPolyomino(this.state, move)
       case MoveType.SpendHunter:
         return spendHunter(this.state, move)
-      case MoveType.ValidateSpendedHunters:
-        return validateSpendedHunters(this.state)
+      case MoveType.ValidateSpentHunters:
+        return validateSpentHunters(this.state)
       case MoveType.ResolvePermanentObjectives:
         return resolvePermanentObjectives(this.state, move)
       case MoveType.ResolveVariableObjectives:

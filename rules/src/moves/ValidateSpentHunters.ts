@@ -3,13 +3,13 @@ import GameView, { getPlayers, isGameView } from "../GameView";
 import { HuntPhase } from "../types/Phase";
 import MoveType from "./MoveType";
 
-type ValidateSpendedHunters = {
-    type:MoveType.ValidateSpendedHunters
+type ValidateSpentHunters = {
+    type:MoveType.ValidateSpentHunters
 }
 
-export default ValidateSpendedHunters
+export default ValidateSpentHunters
 
-export function validateSpendedHunters(state:GameState|GameView){
+export function validateSpentHunters(state:GameState|GameView){
    
     const player = isGameView(state) ? getPlayers(state).find(p => p.color === state.sortedPlayers![0])! : state.players.find(p => p.color === state.sortedPlayers![0])!
     if (player.huntSpotTakenLevels![1] > 0){
