@@ -8,7 +8,7 @@ import HTML5ToTouch from 'react-dnd-multi-backend/dist/cjs/HTML5toTouch'
 import GameDisplay from './GameDisplay'
 import HeaderText from './HeaderText'
 import Images from './utils/Images'
-import Box from './images/Box.png'
+import Box from '@gamepark/prehistories-app/public/box.png'
 
 export default function App() {
   const game = useGame<GameView>()
