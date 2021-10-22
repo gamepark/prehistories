@@ -47,15 +47,15 @@ export default class PrehistoriesView implements Game<GameView, MoveView> {
       case MoveType.SpendHunter:
         return spendHunter(this.state, move)
       case MoveType.ValidateSpendedHunters:
-        return validateSpendedHunters(this.state, move)
+        return validateSpendedHunters(this.state)
       case MoveType.ResolvePermanentObjectives:
         return resolvePermanentObjectives(this.state, move)
       case MoveType.ResolveVariableObjectives:
         return resolveVariableObjectives(this.state, move)
       case MoveType.SetHuntPhase:
-        return setHuntPhase(this.state, move);
+        return setHuntPhase(this.state);
       case MoveType.EndTurn:
-        return endTurn(this.state, move)
+        return endTurn(this.state)
       case MoveType.TakeBackPlayedCards:
         return takeBackPlayedCardsInView(this.state, move)
       case MoveType.DrawXCards:
@@ -63,7 +63,7 @@ export default class PrehistoriesView implements Game<GameView, MoveView> {
       case MoveType.ShuffleDiscardPile:
         return shuffleDiscardPileInView(this.state, move)
       case MoveType.ChangeActivePlayer:
-        return changeActivePlayer(this.state, move)
+        return changeActivePlayer(this.state)
       case MoveType.RefillHuntingBoard:
         return refillHuntingBoardInView(this.state, move)
       case MoveType.EndGame:

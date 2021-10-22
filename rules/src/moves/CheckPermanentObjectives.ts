@@ -1,7 +1,6 @@
 import GameState from "../GameState";
 import GameView, { getPlayers, isGameView } from "../GameView";
 import { allPolyominos } from "../material/Polyominos";
-import PlayerColor from "../PlayerColor";
 import PlayerState from "../PlayerState";
 import Coordinates from "../types/Coordinates";
 import { HuntPhase } from "../types/Phase";
@@ -12,19 +11,18 @@ import MoveType from "./MoveType";
 
 type ResolvePermanentObjectives = {
     type:MoveType.ResolvePermanentObjectives
-    playerId:PlayerColor
     objectivesCompleted:[number[], number[], boolean];
 }
 
 export default ResolvePermanentObjectives
 
 export function resolvePermanentObjectives(state:GameState|GameView, move:ResolvePermanentObjectives){
-    const player = isGameView(state) ? getPlayers(state).find(p => p.color === move.playerId)! : state.players.find(p => p.color === move.playerId)!
+    const player = isGameView(state) ? getPlayers(state).find(p => p.color === state.sortedPlayers![0])! : state.players.find(p => p.color === state.sortedPlayers![0])!
     player.totemTokens = Math.max(0,player.totemTokens - (move.objectivesCompleted[0].length+move.objectivesCompleted[1].length+(move.objectivesCompleted[2] === true ? 1 : 0))) 
     player.huntPhase = HuntPhase.CheckVariableObjectives
 }
 
-export function checkPermanentObjectives(state:GameState|GameView, player:PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView): [number[],number[],boolean] {
+export function checkPermanentObjectives(player:PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView): [number[],number[],boolean] {
     const lastTilePlayed = player.cave[player.cave.length-1]
     const squaresPainted : Coordinates[] = []
     allPolyominos[lastTilePlayed.polyomino][0].coordinates.forEach(coord => {

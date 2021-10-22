@@ -100,23 +100,23 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
     
                     if(allPolyominos[tile][side].coordinates.some(coord => accessibleSquares.find(square => square.x === x+coord.x && square.y === y+coord.y))
                     && allPolyominos[tile][side].coordinates.every(coord => !isCoordOutOfBorders({x:coord.x+x,y:coord.y+y}) && isCoordFree({x:coord.x+x,y:coord.y+y}, getOccupiedSquares(player.cave)))){
-                      playPolyominoMoves.push({type:MoveType.PlayPolyomino, huntSpot:index, playerId:color, polyomino:tile, side, square:{x,y}})
+                      playPolyominoMoves.push({type:MoveType.PlayPolyomino, huntSpot:index, polyomino:tile, side, square:{x,y}})
                     }
                   }
                 }
               })
             }
           })
-          const endTurnMove:EndTurn[] = [{type:MoveType.EndTurn, playerId:color}]
+          const endTurnMove:EndTurn[] = [{type:MoveType.EndTurn}]
           return playPolyominoMoves.concat(endTurnMove)
         }
         case HuntPhase.Pay : {
           const spendHuntersAndValidateMoves:(SpendHunter|ValidateSpendedHunters)[] = [] 
           player.played.forEach(card => {
-            spendHuntersAndValidateMoves.push({type:MoveType.SpendHunter, playerId:this.state.sortedPlayers![0], card})
+            spendHuntersAndValidateMoves.push({type:MoveType.SpendHunter, card})
           })
           if (player.huntSpotTakenLevels![0] <= 0){
-            spendHuntersAndValidateMoves.push({type:MoveType.ValidateSpendedHunters, playerId:this.state.sortedPlayers![0]})
+            spendHuntersAndValidateMoves.push({type:MoveType.ValidateSpendedHunters})
           }
           return spendHuntersAndValidateMoves
         }
@@ -141,25 +141,25 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
       case MoveType.SpendHunter:
         return spendHunter(this.state, move)
       case MoveType.ValidateSpendedHunters:
-        return validateSpendedHunters(this.state, move)
+        return validateSpendedHunters(this.state)
       case MoveType.ResolvePermanentObjectives:
         return resolvePermanentObjectives(this.state, move)
       case MoveType.ResolveVariableObjectives:
         return resolveVariableObjectives(this.state, move)
       case MoveType.SetHuntPhase:
-        return setHuntPhase(this.state, move)
+        return setHuntPhase(this.state)
       case MoveType.RefillHuntingBoard:
         return refillHuntingBoard(this.state)
       case MoveType.EndTurn:
-        return endTurn(this.state, move)
+        return endTurn(this.state)
       case MoveType.TakeBackPlayedCards:
-        return takeBackPlayedCards(this.state, move)
+        return takeBackPlayedCards(this.state)
       case MoveType.DrawXCards:
-        return drawXCards(this.state, move)
+        return drawXCards(this.state)
       case MoveType.ShuffleDiscardPile:
         return shuffleDiscardPile(this.state, move)
       case MoveType.ChangeActivePlayer:
-        return changeActivePlayer(this.state, move)
+        return changeActivePlayer(this.state)
       case MoveType.EndGame:
         return endGame(this.state)
       default: return
@@ -188,39 +188,39 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         switch(player.huntPhase){
           case HuntPhase.Pay:{
             if (player.huntSpotTakenLevels![1] <= 0){
-              return {type:MoveType.ValidateSpendedHunters, playerId:player.color}
+              return {type:MoveType.ValidateSpendedHunters}
             } else return
           }
           case HuntPhase.CheckPermanentObjectives:{
 
-            const result = checkPermanentObjectives(this.state, player)
+            const result = checkPermanentObjectives(player)
             if (result[0].length !== 0 || result[1].length !== 0 || result[2] === true){
-              return {type:MoveType.ResolvePermanentObjectives, playerId:player.color, objectivesCompleted:result}
+              return {type:MoveType.ResolvePermanentObjectives, objectivesCompleted:result}
             } else {
-              return {type:MoveType.SetHuntPhase, playerId:player.color}
+              return {type:MoveType.SetHuntPhase}
             }
           }
 
           case HuntPhase.CheckVariableObjectives:{
             const result = checkVariableObjectives(this.state, player)
             if (result !== false){
-              return {type:MoveType.ResolveVariableObjectives, playerId:player.color, goal:result[0],tokens:result[1]}
+              return {type:MoveType.ResolveVariableObjectives, goal:result[0],tokens:result[1]}
             } else {
-              return {type:MoveType.SetHuntPhase, playerId:player.color}
+              return {type:MoveType.SetHuntPhase}
             }
           }
 
           case HuntPhase.DrawCards:{
             if (player.played.length !== 0){
-              return {type:MoveType.TakeBackPlayedCards, playerId:player.color, cards:player.played}
+              return {type:MoveType.TakeBackPlayedCards, cards:player.played}
             } else {
               const cardsToDraw:number = howManyCardToDraw(player)
               if (player.deck.length < cardsToDraw && player.deck.length + player.discard.length >= cardsToDraw){
 
                 const shuffledDiscardPile = shuffle(player.discard)
-                return {type:MoveType.ShuffleDiscardPile,playerId:player.color,newDeck:shuffledDiscardPile}
+                return {type:MoveType.ShuffleDiscardPile,newDeck:shuffledDiscardPile}
               } else {
-                return {type:MoveType.DrawXCards, playerId:player.color, cards:getCardsToDraw(player)}
+                return {type:MoveType.DrawXCards, cards:getCardsToDraw(player)}
               }
             }
           }
@@ -278,19 +278,19 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         return {...move, newBoard}
 
       case MoveType.TakeBackPlayedCards:
-        if (playerId === move.playerId){
+        if (playerId === this.state.sortedPlayers![0]){
           return move
         } else {
-          return {type:MoveType.TakeBackPlayedCards, playerId:move.playerId, playedLength:this.state.players.find(p => p.color === move.playerId)!.played.length}
+          return {type:MoveType.TakeBackPlayedCards, playedLength:this.state.players.find(p => p.color === this.state.sortedPlayers![0])!.played.length}
         }
       case MoveType.DrawXCards:
-        if (playerId === move.playerId){
+        if (playerId === this.state.sortedPlayers![0]){
           return move
         } else {
-          return {type:MoveType.DrawXCards, playerId:move.playerId, cards:howManyCardToDraw(this.state.players.find(p => p.color === move.playerId)!)}
+          return {type:MoveType.DrawXCards, playerId:this.state.sortedPlayers![0], cards:howManyCardToDraw(this.state.players.find(p => p.color === this.state.sortedPlayers![0])!)}
         }
       case MoveType.ShuffleDiscardPile:
-        return {type:MoveType.ShuffleDiscardPile, playerId:move.playerId,newDeckLength:move.newDeck.length}
+        return {type:MoveType.ShuffleDiscardPile,newDeckLength:move.newDeck.length}
       default : return move
     }
   }

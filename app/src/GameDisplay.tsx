@@ -57,6 +57,7 @@ export default function GameDisplay({game}: Props) {
                      phase={game.phase}
                      isActiveHuntingPlayer={game.sortedPlayers !== undefined && game.sortedPlayers[0] === playerDisplayed.color}
                      goals={game.goals}
+                     caveDisplayed = {game.caveDisplayed}
                      selectedHunters={game.huntersSelected}
         />
 

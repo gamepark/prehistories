@@ -1,6 +1,5 @@
 import GameState from "../GameState";
 import GameView, { getPlayers, isGameView } from "../GameView";
-import PlayerColor from "../PlayerColor";
 import Coordinates from "../types/Coordinates";
 import { HuntPhase } from "../types/Phase";
 import powerLevels from "../utils/powerLevels";
@@ -13,13 +12,12 @@ type PlayPolyomino = {
     side:0|1
     square:Coordinates
     huntSpot:number
-    playerId:PlayerColor
 }
 
 export default PlayPolyomino
 
 export function playPolyomino(state:GameState | GameView, move:PlayPolyomino){
-    const player = isGameView(state) ? getPlayers(state).find(p => p.color === move.playerId)! : state.players.find(p => p.color === move.playerId)!
+    const player = isGameView(state) ? getPlayers(state).find(p => p.color === state.sortedPlayers![0])! : state.players.find(p => p.color === state.sortedPlayers![0])!
     const polyomino :number| null = state.huntingBoard[move.huntSpot]
     if (polyomino === null){
         throw("error : trying to paint a null polyomino !")

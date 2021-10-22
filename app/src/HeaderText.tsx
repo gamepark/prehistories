@@ -57,7 +57,7 @@ function HeaderOnGoingGameText({game}:{game:GameView}){
       if(player.isReady === true){
         if(game.players.every(p => p.isReady === true)){
           return <> {t("initiative.reveal")} </>
-        } else if (game.players.filter(p => p.isReady).length === 1){
+        } else if (game.players.filter(p => p.isReady === false).length === 1){
           return <> {t("initiative.one.player.play.and.validate",{player:getPseudo(game.players.find(p => p.isReady === false)!.color,players,t)})} </>
         } else {
           return <> {t("initiative.other.players.play.and.validate")} </>

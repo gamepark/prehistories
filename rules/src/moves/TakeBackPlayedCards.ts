@@ -1,6 +1,5 @@
 import GameState from "../GameState";
 import GameView, { getPlayers } from "../GameView";
-import PlayerColor from "../PlayerColor";
 import PlayerState from "../PlayerState";
 import { isPlayerHuntView, isPlayerViewSelf, PlayerViewSelf } from "../types/PlayerView";
 import Move from "./Move";
@@ -8,7 +7,6 @@ import MoveType from "./MoveType";
 
 type TakeBackPlayedCards = {
     type:MoveType.TakeBackPlayedCards
-    playerId:PlayerColor
     cards:number[]
 }
 
@@ -16,12 +14,11 @@ export default TakeBackPlayedCards
 
 export type TakeBackPlayedCardsView = {
     type:MoveType.TakeBackPlayedCards
-    playerId:PlayerColor
     playedLength:number
 }
 
-export function takeBackPlayedCards(state:GameState, move:TakeBackPlayedCards){
-    const player = state.players.find(p => p.color === move.playerId)!
+export function takeBackPlayedCards(state:GameState){
+    const player = state.players.find(p => p.color === state.sortedPlayers![0])!
     playerTakeBackPlayedCards(player)
 }
 
@@ -29,9 +26,9 @@ export function takeBackPlayedCardsInView(state:GameView, move:TakeBackPlayedCar
     if (isNotTakeBackPlayedCardsView(move)){
         playerTakeBackPlayedCards(state.players.find(isPlayerViewSelf)!)
     } else {
-        const player = getPlayers(state).filter(isPlayerHuntView).find(p => p.color === move.playerId)!
+        const player = getPlayers(state).filter(isPlayerHuntView).find(p => p.color === state.sortedPlayers![0])!
         player.hand += move.playedLength
-        getPlayers(state).find(p => p.color === move.playerId)!.played = 0 
+        getPlayers(state).find(p => p.color === state.sortedPlayers![0])!.played = 0 
     }
 }
 

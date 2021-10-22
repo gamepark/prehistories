@@ -17,7 +17,6 @@ export function isRefillHuntingBoardView(move: RefillHuntingBoard | RefillHuntin
     return (move as RefillHuntingBoardView).newBoard !== undefined
 }
 
-
 export function fillHuntingBoard(state:GameState){
     const newBoard = state.huntingBoard
     const tilesDeck = state.tilesDeck

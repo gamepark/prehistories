@@ -22,11 +22,13 @@ type Props = {
     phase:Phase | undefined
     huntPosition?:number
     nbPlayers?:number
+    activePlayer?:PlayerColor
     indexOfDisplayedPlayer?:number
     indexListDisplayedPlayers?:PlayerColor[]
+
 } & Omit<HTMLAttributes<HTMLDivElement>, 'color'>
 
-const Polyomino : FC<Props> = ({polyomino, side, color, draggable = false, type='', draggableItem, isAlreadyPlaced, phase, huntPosition, nbPlayers, indexOfDisplayedPlayer, indexListDisplayedPlayers, ...props}) => {
+const Polyomino : FC<Props> = ({polyomino, side, color, draggable = false, type='', draggableItem, isAlreadyPlaced, phase, huntPosition, nbPlayers, activePlayer, indexOfDisplayedPlayer, indexListDisplayedPlayers, ...props}) => {
 
     const play = usePlay<Move>()
     const item = {...draggableItem}
@@ -53,7 +55,7 @@ const Polyomino : FC<Props> = ({polyomino, side, color, draggable = false, type=
                    item={item}
                    drop={onDrop}
                    {...props}
-                   css={[polyominoSize, playPolyominoAnimation !== undefined && huntPosition !== undefined && playPolyominoAnimation.move.huntSpot === huntPosition && nbPlayers !== undefined && indexListDisplayedPlayers !== undefined && playPolyominoAnimationStyle(playPolyominoAnimation.duration, indexOfDisplayedPlayer, indexListDisplayedPlayers, playPolyominoAnimation.move.playerId,playPolyominoAnimation.move.square.x,playPolyominoAnimation.move.square.y)]}
+                   css={[polyominoSize, playPolyominoAnimation !== undefined && huntPosition !== undefined && playPolyominoAnimation.move.huntSpot === huntPosition && nbPlayers !== undefined && indexListDisplayedPlayers !== undefined && activePlayer !== undefined && playPolyominoAnimationStyle(playPolyominoAnimation.duration, indexOfDisplayedPlayer, indexListDisplayedPlayers, activePlayer,playPolyominoAnimation.move.square.x,playPolyominoAnimation.move.square.y)]}
                    >
 
                 <div css={[css`position:absolute;width:100%;height:100%;`, flipTile(polyomino, side, playPolyominoAnimation?.move.side, playPolyominoAnimation?.move.polyomino) ]}> 

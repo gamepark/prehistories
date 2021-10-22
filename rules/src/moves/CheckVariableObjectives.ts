@@ -1,7 +1,6 @@
 import GameState from "../GameState";
 import GameView, { getPlayers, isGameView } from "../GameView";
 import { getGoalsArray } from "../material/Goals";
-import PlayerColor from "../PlayerColor";
 import PlayerState from "../PlayerState";
 import { PlayerHuntView, PlayerView, PlayerViewSelf } from "../types/PlayerView";
 import Move from "./Move";
@@ -9,7 +8,6 @@ import MoveType from "./MoveType";
 
 type ResolveVariableObjectives = {
     type : MoveType.ResolveVariableObjectives
-    playerId:PlayerColor
     goal:number
     tokens:number
 }
@@ -17,7 +15,7 @@ type ResolveVariableObjectives = {
 export default ResolveVariableObjectives
 
 export function resolveVariableObjectives(state:GameState | GameView, move:ResolveVariableObjectives){
-    const player = isGameView(state) ? getPlayers(state).find(p => p.color === move.playerId)! : state.players.find(p => p.color === move.playerId)!
+    const player = isGameView(state) ? getPlayers(state).find(p => p.color === state.sortedPlayers![0])! : state.players.find(p => p.color === state.sortedPlayers![0])!
     for(let i=0; i<move.tokens;i++){
         player.goalsMade.push(move.goal)
         player.totemTokens = Math.max(0, player.totemTokens -1)
@@ -29,11 +27,7 @@ export function checkVariableObjectives(state:GameState | GameView, player:Playe
 
     for(const goal of state.goals){
         if (!isPlayerAlreadyCompleteObjective(player, goal) && getGoalsArray(true)[goal].rule(player)){
-            if(anyPlayerCompleteObjective(goal, state.players)){
-                return [goal, getGoalsArray(true)[goal].value-1]
-            } else {
-                return [goal, getGoalsArray(true)[goal].value]
-            }
+            return (anyPlayerCompleteObjective(goal, state.players)) ? [goal, getGoalsArray(true)[goal].value-1] : [goal, getGoalsArray(true)[goal].value]            
         }
     }
 

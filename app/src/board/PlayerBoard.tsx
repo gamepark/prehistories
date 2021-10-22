@@ -33,9 +33,10 @@ type Props = {
     isActiveHuntingPlayer:boolean
     goals:number[]
     selectedHunters:number[]|undefined
+    caveDisplayed:PlayerColor
 }
 
-const PlayerBoard : FC<Props> = ({player, phase, selectedHunters}) => {
+const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}) => {
 
     const {t} = useTranslation()
     const playerId = usePlayerId<PlayerColor>()
@@ -72,10 +73,10 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters}) => {
     function validateHunters(hunters:number[]|undefined, injury:boolean){
         if (hunters !== undefined){
             hunters?.forEach(card => {
-                play({type:MoveType.SpendHunter, playerId:player.color, card})
+                play({type:MoveType.SpendHunter, card})
             })
             if (injury){
-                play({type:MoveType.ValidateSpendedHunters, playerId:player.color}, {delayed:true})
+                play({type:MoveType.ValidateSpendedHunters}, {delayed:true})
             }
             playResetHunters(resetSelectedHuntersMove(), {local:true})
         }
@@ -179,7 +180,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters}) => {
                 <div css={[huntingButtonsPosition(player.color, (displayValidationButton(phase, playerId, player.color, player.isReady) || displayEndTurnButton(phase, playerId, player.color, player.huntPhase)) ? 20 : 30), spendCardAnimations.length !== 0 && disapperingAnim]}>
                     
                     {displayValidationButton(phase, playerId, player.color, player.isReady) && <Button css={[validationButtonPosition]} onClick={() => {play({type:MoveType.TellYouAreReady, playerId:player.color})}} colorButton={player.color} >{t('Validate')}</Button> }
-                    {displayEndTurnButton(phase, playerId, player.color, player.huntPhase) && <Button css={[validationButtonPosition]} onClick={() => {play({type:MoveType.EndTurn, playerId:player.color})}} colorButton={player.color} >{t('End your Turn')}</Button>}
+                    {displayEndTurnButton(phase, playerId, player.color, player.huntPhase) && <Button css={[validationButtonPosition]} onClick={() => {play({type:MoveType.EndTurn})}} colorButton={player.color} >{t('End your Turn')}</Button>}
 
                     {displayHuntingButtons(phase, playerId, player.color, player.huntPhase) && <div css={[injuryStyle, (powerOfSelectedHunters < player.huntSpotTakenLevels![0] || powerOfSelectedHunters > player.huntSpotTakenLevels![1]) && desactivateStyle]} onClick={() => powerOfSelectedHunters >= player.huntSpotTakenLevels![0] && powerOfSelectedHunters < player.huntSpotTakenLevels![1] && validateHunters(selectedHunters, true)} > <span>{Math.max(player.huntSpotTakenLevels![0] - powerOfSelectedHunters,0)}</span></div>}
                     {displayHuntingButtons(phase, playerId, player.color, player.huntPhase) && <div css={[noInjuryStyle, powerOfSelectedHunters < player.huntSpotTakenLevels![1] && desactivateStyle]} onClick={() => powerOfSelectedHunters >= player.huntSpotTakenLevels![1] && validateHunters(selectedHunters, false)} > <span>{Math.max(player.huntSpotTakenLevels![1] - powerOfSelectedHunters,0)}</span> </div>}
@@ -221,14 +222,14 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters}) => {
                           color={player.color}
                           power={getColoredDeck(player.color)[card].power}
                           speed={getColoredDeck(player.color)[card].speed}
-                          css={[deckOffset(index), cardStyle, shuffleDiscardAnimation && shufflingAnimation(index, shuffleDiscardAnimation.duration, player.discard.length)]}
+                          css={[deckOffset(index), cardStyle, shuffleDiscardAnimation && player.color === caveDisplayed && shufflingAnimation(index, shuffleDiscardAnimation.duration, player.discard.length)]}
                     />)}
 
             </div>
 
             <div css={[deckZonePosition]}> 
             
-                {[...Array(player.deck - (drawXCardsAnimation ? (isNotDrawXCardsView(drawXCardsAnimation.move) ? drawXCardsAnimation.move.cards.length : 0) : 0))].map((_, i) => <Picture key={i} alt={t('token')} src={getCardBack(player.color)} css={[cardStyle, deckOffset(i), deckCardSize]} draggable={false} />)}
+                {[...Array(player.deck - (drawXCardsAnimation ? ((isNotDrawXCardsView(drawXCardsAnimation.move) && player.color === playerId) ? drawXCardsAnimation.move.cards.length : 0) : 0))].map((_, i) => <Picture key={i} alt={t('token')} src={getCardBack(player.color)} css={[cardStyle, deckOffset(i), deckCardSize]} draggable={false} />)}
             
             </div>
             

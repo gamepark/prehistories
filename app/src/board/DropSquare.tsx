@@ -2,12 +2,10 @@
 import { css } from "@emotion/react";
 import { allPolyominos } from "@gamepark/prehistories/material/Polyominos";
 import MoveType from "@gamepark/prehistories/moves/MoveType";
-import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import PolyominoToHunt from "@gamepark/prehistories/types/appTypes/PolyominoToHunt";
 import Coordinates from "@gamepark/prehistories/types/Coordinates";
 import { PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
 import getSquaresStartLeft, { getFreeSquaresFromPath, getOccupiedSquares, isCoordFree, isCoordOutOfBorders } from "@gamepark/prehistories/utils/getSquaresStartLeft";
-import { usePlayerId } from "@gamepark/react-client";
 import { FC } from "react";
 import { DropTargetMonitor, useDrop, XYCoord } from "react-dnd";
 
@@ -18,8 +16,6 @@ type Props = {
 } & React.HTMLAttributes<HTMLDivElement>
 
 const DropSquare : FC<Props> = ({x,y,player, ...props}) => {
-
-    const playerId = usePlayerId<PlayerColor>()
 
     const [{canDrop, isOver}, dropRef] = useDrop({
       accept: ["PolyominoToHunt"],
@@ -41,7 +37,7 @@ const DropSquare : FC<Props> = ({x,y,player, ...props}) => {
         const XYCoordDiff = { x: Math.floor((convertIntoPercent(monitor.getInitialClientOffset() ?? {x:0,y:0}).x - convertIntoPercent(monitor.getInitialSourceClientOffset() ?? {x:0,y:0}).x)/4.1),
         y: Math.floor((convertIntoPercent(monitor.getInitialClientOffset() ?? {x:0,y:0}).y - convertIntoPercent(monitor.getInitialSourceClientOffset() ?? {x:0,y:0}).y)/8.2)
 }
-          return {type:MoveType.PlayPolyomino,polyomino:item.polyomino,side:item.side, huntSpot:item.huntSpot, playerId, square:{x:x-XYCoordDiff.y,y:y-XYCoordDiff.x}}
+          return {type:MoveType.PlayPolyomino,polyomino:item.polyomino,side:item.side, huntSpot:item.huntSpot, square:{x:x-XYCoordDiff.y,y:y-XYCoordDiff.x}}
       }
     })
 

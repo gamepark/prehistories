@@ -9,7 +9,7 @@ type ChangeActivePlayer = {
 
 export default ChangeActivePlayer
 
-export function changeActivePlayer(state:GameState|GameView, move:ChangeActivePlayer){
+export function changeActivePlayer(state:GameState|GameView){
     const passingPlayer = getPlayers(state).find(p => p.color === state.sortedPlayers![0])! 
     delete passingPlayer.huntPhase
     delete passingPlayer.huntSpotTakenLevels

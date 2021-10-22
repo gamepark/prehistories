@@ -52,6 +52,7 @@ const HuntingZone : FC<Props> = ({game, numberOfPlayers, indexOfDisplayedPlayer,
                            phase = {game.phase}
                            huntPosition={index}
                            nbPlayers = {numberOfPlayers}
+                           activePlayer = {game.sortedPlayers !== undefined ? game.sortedPlayers[0] : undefined}
                            indexOfDisplayedPlayer={indexOfDisplayedPlayer}
                            indexListDisplayedPlayers={indexListDisplayedPlayers}
 
