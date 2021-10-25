@@ -2,7 +2,7 @@ import GameState from "../GameState";
 import GameView from "../GameView";
 import { getColoredDeck } from "../material/Hunters";
 import PlayerState from "../PlayerState";
-import { getFirstOfSortedPlayer, isPlayerView, PlayerHuntView, PlayerViewSelf } from "../types/PlayerView";
+import { getFirstOfSortedPlayer, isPlayerView, isPlayerViewSelf, PlayerHuntView, PlayerViewSelf } from "../types/PlayerView";
 import Move from "./Move";
 import MoveType from "./MoveType";
 import MoveView from "./MoveView";
@@ -23,7 +23,7 @@ export function spendHunter(state:GameState|GameView, move:SpendHunter){
 }
 
 function discardHunter(player:PlayerState | PlayerViewSelf | PlayerHuntView, card:number){
-    player.played.splice(player.played.findIndex(card => card === card),1)
+    player.played.splice(player.played.findIndex(c => c === card),1)
     player.discard.push(card)
 }
 

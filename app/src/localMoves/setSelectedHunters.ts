@@ -33,7 +33,6 @@ export function setSelectedHunters(state:GameView, move:SetSelectedHunters){
             }
         }
     }
-
 }
 
 export function resetSelectedHunters(state:GameView){
