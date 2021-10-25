@@ -1,8 +1,8 @@
 import GameState from "../GameState";
-import GameView, { getPlayers, isGameView } from "../GameView";
-import { getGoalsArray } from "../material/Goals";
+import GameView from "../GameView";
+import { getAllGoalsArray } from "../material/Goals";
 import PlayerState from "../PlayerState";
-import { PlayerHuntView, PlayerView, PlayerViewSelf } from "../types/PlayerView";
+import { getFirstOfSortedPlayer, PlayerHuntView, PlayerView, PlayerViewSelf } from "../types/PlayerView";
 import Move from "./Move";
 import MoveType from "./MoveType";
 
@@ -15,7 +15,7 @@ type ResolveVariableObjectives = {
 export default ResolveVariableObjectives
 
 export function resolveVariableObjectives(state:GameState | GameView, move:ResolveVariableObjectives){
-    const player = isGameView(state) ? getPlayers(state).find(p => p.color === state.sortedPlayers![0])! : state.players.find(p => p.color === state.sortedPlayers![0])!
+    const player = getFirstOfSortedPlayer(state)
     for(let i=0; i<move.tokens;i++){
         player.goalsMade.push(move.goal)
         player.totemTokens = Math.max(0, player.totemTokens -1)
@@ -24,13 +24,12 @@ export function resolveVariableObjectives(state:GameState | GameView, move:Resol
 }
 
 export function checkVariableObjectives(state:GameState | GameView, player:PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView):(false | [number, number]){
-
     for(const goal of state.goals){
-        if (!isPlayerAlreadyCompleteObjective(player, goal) && getGoalsArray(true)[goal].rule(player)){
-            return (anyPlayerCompleteObjective(goal, state.players)) ? [goal, getGoalsArray(true)[goal].value-1] : [goal, getGoalsArray(true)[goal].value]            
+        if (!isPlayerAlreadyCompleteObjective(player, goal) && getAllGoalsArray()[goal].rule(player)){
+            const rewardForFirstPlayer = anyPlayerCompleteObjective(goal, state.players) ? 0 : 1
+            return [goal, getAllGoalsArray[goal].value-1 + rewardForFirstPlayer]           
         }
     }
-
     return false
 }
 

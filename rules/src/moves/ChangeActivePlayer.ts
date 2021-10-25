@@ -1,6 +1,8 @@
 import GameState from "../GameState";
-import GameView, { getPlayers } from "../GameView";
+import GameView from "../GameView";
+import PlayerState from "../PlayerState";
 import { HuntPhase } from "../types/Phase";
+import { getFirstOfSortedPlayer, PlayerHuntView, PlayerView, PlayerViewSelf } from "../types/PlayerView";
 import MoveType from "./MoveType";
 
 type ChangeActivePlayer = {
@@ -10,14 +12,17 @@ type ChangeActivePlayer = {
 export default ChangeActivePlayer
 
 export function changeActivePlayer(state:GameState|GameView){
-    const passingPlayer = getPlayers(state).find(p => p.color === state.sortedPlayers![0])! 
-    delete passingPlayer.huntPhase
-    delete passingPlayer.huntSpotTakenLevels
-    delete passingPlayer.injuries
-    delete passingPlayer.isReady
-    delete passingPlayer.tilesHunted
+    cleanPlayerProperties(getFirstOfSortedPlayer(state))
     state.sortedPlayers!.shift()
     if (state.sortedPlayers!.length !== 0){
-        getPlayers(state).find(p => p.color === state.sortedPlayers![0])!.huntPhase = HuntPhase.Hunt
+        getFirstOfSortedPlayer(state).huntPhase = HuntPhase.Hunt
     } 
+}
+
+function cleanPlayerProperties(player:PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView){
+    delete player.huntPhase
+    delete player.huntSpotTakenLevels
+    delete player.injuries
+    delete player.isReady
+    delete player.tilesHunted
 }

@@ -1,6 +1,7 @@
 import GameState from "../GameState";
-import GameView, { getPlayers } from "../GameView";
-import { isNotPlayerState } from "../types/PlayerView";
+import GameView from "../GameView";
+import PlayerState from "../PlayerState";
+import { getFirstOfSortedPlayer, getPlayers, isNotPlayerState } from "../types/PlayerView";
 import Move from "./Move";
 import MoveType from "./MoveType";
 import MoveView from "./MoveView";
@@ -18,7 +19,7 @@ export type ShuffleDiscardPileView = {
 export default ShuffleDiscardPile
 
 export function shuffleDiscardPile(state:GameState, move:ShuffleDiscardPile){
-    const player = state.players.find(p => p.color === state.sortedPlayers![0])!
+    const player = getFirstOfSortedPlayer(state) as PlayerState         // A way to remove the cast with overloading ?
     player.deck = move.newDeck.concat(player.deck)
     player.discard = []
 }

@@ -349,9 +349,9 @@ const SunGoalsArray: Goal[] = [GoalA1,GoalA2,GoalA3,GoalA4,GoalA5,GoalA6,GoalA7,
 const MoonGoalsArray: Goal[] = [GoalB1,GoalB2,GoalB3,GoalB4,GoalB5,GoalB6,GoalB7,GoalB8,GoalB9]
 
 export function getGoalsArray(isExpert:boolean):Goal[]{
-    if (isExpert){
-        return SunGoalsArray.concat(MoonGoalsArray)
-    } else {
-        return SunGoalsArray
-    }
+    return isExpert ? SunGoalsArray.concat(MoonGoalsArray) : SunGoalsArray 
+}
+
+export function getAllGoalsArray():Goal[]{
+    return SunGoalsArray.concat(MoonGoalsArray)
 }

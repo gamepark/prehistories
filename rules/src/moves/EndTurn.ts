@@ -1,6 +1,7 @@
 import GameState from "../GameState"
-import GameView, { getPlayers, isGameView } from "../GameView"
+import GameView from "../GameView"
 import { HuntPhase } from "../types/Phase"
+import { getFirstOfSortedPlayer } from "../types/PlayerView"
 import Move from "./Move"
 import MoveType from "./MoveType"
 
@@ -11,8 +12,7 @@ type EndTurn = {
 export default EndTurn
 
 export function endTurn(state:GameState|GameView){
-    const player = isGameView(state) ? getPlayers(state).find(p => p.color === state.sortedPlayers![0])! : state.players.find(p => p.color === state.sortedPlayers![0])!
-    player.huntPhase = HuntPhase.DrawCards
+    getFirstOfSortedPlayer(state).huntPhase = HuntPhase.DrawCards
 }
 
 export function isEndTurn(move:Move):move is EndTurn{

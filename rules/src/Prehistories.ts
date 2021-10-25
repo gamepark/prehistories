@@ -2,7 +2,7 @@ import {SecretInformation, SimultaneousGame} from '@gamepark/rules-api'
 import { shuffle } from 'lodash'
 import GameState from './GameState'
 import GameView from './GameView'
-import { getGoalsArray } from './material/Goals'
+import { getAllGoalsArray, getGoalsArray } from './material/Goals'
 import getHandPrintsCoords from './material/HandPrints'
 import { allPolyominos} from './material/Polyominos'
 import { changeActivePlayer } from './moves/ChangeActivePlayer'
@@ -31,7 +31,7 @@ import Coordinates from './types/Coordinates'
 import Phase, { HuntPhase } from './types/Phase'
 import { isPlayerState, PlayerHuntView, PlayerView, PlayerViewSelf } from './types/PlayerView'
 import getSquaresStartLeft, { getFreeSquaresFromPath, getOccupiedSquares, isCoordFree, isCoordOutOfBorders } from './utils/getSquaresStartLeft'
-import powerLevels from './utils/powerLevels'
+import getPowerLevels from './utils/powerLevels'
 import teamPower from './utils/teamPower'
 
 export default class Prehistories extends SimultaneousGame<GameState, Move, PlayerColor>
@@ -93,7 +93,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
           const playPolyominoMoves:(PlayPolyomino|EndTurn)[] = []
           const accessibleSquares:Coordinates[] = getFreeSquaresFromPath(getSquaresStartLeft(player.cave),player.cave)
           this.state.huntingBoard.forEach((tile, index) => {
-            if (tile !== null && teamPower(player.played) >= powerLevels(this.state.players.length, index)[0]){
+            if (tile !== null && teamPower(player.played) >= getPowerLevels(this.state.players.length, index)[0]){
               ([0,1] as (0|1)[]).forEach(side => {
                 for (let x = 0;x<7;x++){
                   for (let y = 0;y<7;y++){
@@ -324,7 +324,7 @@ function setupGoals(game:GameState, isExpertGame:boolean):number[]{
   } else {
     const result : number[] = [goalsIds[0]]
     goalsIds.forEach(elem => {
-      result.every( res => getGoalsArray(isExpertGame)[elem].idConflict !== getGoalsArray(isExpertGame)[res].idConflict ) && result.push(elem)
+      result.every( res => getAllGoalsArray()[elem].idConflict !== getAllGoalsArray()[res].idConflict ) && result.push(elem)
     })
     return numberOfGoals === 4 ? [result[0],result[1],result[2],result[3]] : [result[0],result[1],result[2],result[3],result[4]]
   }

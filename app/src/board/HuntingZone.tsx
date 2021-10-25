@@ -5,7 +5,7 @@ import PlayPolyomino, { isPlayPolyomino } from "@gamepark/prehistories/moves/Pla
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import Phase, { HuntPhase } from "@gamepark/prehistories/types/Phase";
 import { isPlayerHuntView, isPlayerViewSelf, PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
-import powerLevels from "@gamepark/prehistories/utils/powerLevels";
+import getPowerLevels from "@gamepark/prehistories/utils/powerLevels";
 import teamPower from "@gamepark/prehistories/utils/teamPower";
 import { useAnimation, usePlayerId } from "@gamepark/react-client";
 import { FC, useState } from "react";
@@ -76,7 +76,7 @@ function isPolyominoHuntable(player:(PlayerView|PlayerViewSelf|PlayerHuntView|un
     && firstPlayer !== undefined && player.color === firstPlayer
     && player.huntPhase === HuntPhase.Hunt
     && (isPlayerHuntView(player) || isPlayerViewSelf(player)) 
-    && teamPower(player.played) >= powerLevels(nbPlayers, huntSpot)[0]
+    && teamPower(player.played) >= getPowerLevels(nbPlayers, huntSpot)[0]
 }
 
 const polyominoToHuntPosition = (position:number, numberOfPlayers:number, polyomino:number, side:0|1) => css`

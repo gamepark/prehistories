@@ -15,7 +15,21 @@ import TakeBackPlayedCards from './TakeBackPlayedCards'
 import TellYouAreReady from './TellYouAreReady'
 import ValidateSpendedHunters from './ValidateSpentHunters'
 
-type Move = PlayHuntCard | TellYouAreReady | RevealHuntCards | PlayPolyomino | SpendHunter | ValidateSpendedHunters |
-ResolvePermanentObjectives | ResolveVariableObjectives | SetHuntPhase | EndTurn | TakeBackPlayedCards | RefillHuntingBoard | DrawXCards | ShuffleDiscardPile | ChangeActivePlayer | EndGame
+type Move = PlayHuntCard |
+            TellYouAreReady |
+            RevealHuntCards |
+            PlayPolyomino |
+            SpendHunter |
+            ValidateSpendedHunters |
+            ResolvePermanentObjectives |
+            ResolveVariableObjectives |
+            SetHuntPhase |
+            EndTurn |
+            TakeBackPlayedCards |
+            RefillHuntingBoard |
+            DrawXCards |
+            ShuffleDiscardPile |
+            ChangeActivePlayer |
+         EndGame
 
 export default Move

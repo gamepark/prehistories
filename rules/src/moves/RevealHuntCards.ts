@@ -1,9 +1,9 @@
 import GameState from "../GameState";
-import GameView, { getPlayers } from "../GameView";
+import GameView from "../GameView";
 import PlayerColor from "../PlayerColor";
 import PlayerState from "../PlayerState";
 import Phase, { HuntPhase } from "../types/Phase";
-import { PlayerHuntView, PlayerViewSelf } from "../types/PlayerView";
+import { getFirstOfSortedPlayer, PlayerHuntView, PlayerViewSelf } from "../types/PlayerView";
 import teamPower from "../utils/teamPower";
 import teamSpeed from "../utils/teamSpeed";
 import Move from "./Move";
@@ -26,7 +26,7 @@ export function revealHuntCards(state:GameState){
     state.phase = Phase.Hunt
     state.players.forEach(p => delete p.isReady)
     state.sortedPlayers = sortPlayers(state.players)
-    state.players.find(p => p.color === state.sortedPlayers![0])!.huntPhase = HuntPhase.Hunt
+    getFirstOfSortedPlayer(state).huntPhase = HuntPhase.Hunt
 }
 
 export function revealHuntCardsInView(state:GameView, move:RevealHuntCardsView){
@@ -35,11 +35,11 @@ export function revealHuntCardsInView(state:GameView, move:RevealHuntCardsView){
         delete p.isReady
     })
     state.phase = Phase.Hunt
-    state.sortedPlayers = sortPlayers(state.players as PlayerState[] | (PlayerViewSelf | PlayerHuntView)[]) ;
-    getPlayers(state).find(p => p.color === state.sortedPlayers![0])!.huntPhase = HuntPhase.Hunt
+    state.sortedPlayers = sortPlayers(state.players as (PlayerViewSelf | PlayerHuntView)[]) ;
+    getFirstOfSortedPlayer(state).huntPhase = HuntPhase.Hunt
 }
 
-export function isRevealHuntCards(move: Move |MoveView):move is RevealHuntCards{
+export function isRevealHuntCards(move: Move | MoveView):move is RevealHuntCards{
     return move.type === MoveType.RevealHuntCards
 }
 

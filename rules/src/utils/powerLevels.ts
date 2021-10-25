@@ -1,7 +1,7 @@
 /**
  * @return an array of two numbers : first is the smallest limit to hunt, second is the power to hunt without a injury
  */
-function powerLevels(nbPlayers:number, spot:number):number[]{
+function getPowerLevels(nbPlayers:number, spot:number):number[]{
     switch (spot){
         case 0:
             return nbPlayers < 4 ? [1,4] : [2,3]
@@ -21,4 +21,4 @@ function powerLevels(nbPlayers:number, spot:number):number[]{
     }
 }
 
-export default powerLevels
+export default getPowerLevels

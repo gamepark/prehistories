@@ -1,7 +1,7 @@
 import GameState from "../GameState";
-import GameView, { getPlayers } from "../GameView";
+import GameView from "../GameView";
 import PlayerState from "../PlayerState";
-import { isPlayerHuntView, isPlayerViewSelf, PlayerViewSelf } from "../types/PlayerView";
+import { getFirstOfSortedPlayer, getPlayers, isPlayerHuntView, isPlayerViewSelf, PlayerViewSelf } from "../types/PlayerView";
 import Move from "./Move";
 import MoveType from "./MoveType";
 
@@ -18,17 +18,17 @@ export type TakeBackPlayedCardsView = {
 }
 
 export function takeBackPlayedCards(state:GameState){
-    const player = state.players.find(p => p.color === state.sortedPlayers![0])!
+    const player = getFirstOfSortedPlayer(state) as PlayerState         // A way to remove the cast with overloading ?
     playerTakeBackPlayedCards(player)
 }
 
 export function takeBackPlayedCardsInView(state:GameView, move:TakeBackPlayedCards | TakeBackPlayedCardsView){
-    if (isNotTakeBackPlayedCardsView(move)){
+    if (!isTakeBackPlayedCardsView(move)){
         playerTakeBackPlayedCards(state.players.find(isPlayerViewSelf)!)
     } else {
         const player = getPlayers(state).filter(isPlayerHuntView).find(p => p.color === state.sortedPlayers![0])!
         player.hand += move.playedLength
-        getPlayers(state).find(p => p.color === state.sortedPlayers![0])!.played = 0 
+        getFirstOfSortedPlayer(state).played = 0 
     }
 }
 

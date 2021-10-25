@@ -1,8 +1,8 @@
 import GameState from "../GameState";
-import GameView, { getPlayers } from "../GameView";
+import GameView from "../GameView";
 import PlayerColor from "../PlayerColor";
 import PlayerState from "../PlayerState";
-import { isPlayerView, isPlayerViewSelf, PlayerViewSelf } from "../types/PlayerView";
+import { getPlayers, getPlayerWithColor, isPlayerView, isPlayerViewSelf, PlayerViewSelf } from "../types/PlayerView";
 import Move from "./Move";
 import MoveType from "./MoveType";
 import MoveView from "./MoveView";
@@ -21,7 +21,7 @@ export type PlayHuntCardView = {
 }
 
 export function playHuntCard(state:GameState, move:PlayHuntCard){
-    const player = state.players.find(p => p.color === move.playerId)!
+    const player = getPlayerWithColor(state, move.playerId) as PlayerState
     playerPlayHuntCard(player, move)
 }
 

@@ -1,10 +1,10 @@
 import GameState from "../GameState";
-import GameView, { getPlayers, isGameView } from "../GameView";
+import GameView, { isGameView } from "../GameView";
 import { allPolyominos } from "../material/Polyominos";
 import PlayerState from "../PlayerState";
 import Coordinates from "../types/Coordinates";
 import { HuntPhase } from "../types/Phase";
-import { PlayerHuntView, PlayerView, PlayerViewSelf } from "../types/PlayerView";
+import { getFirstOfSortedPlayer, PlayerHuntView, PlayerView, PlayerViewSelf } from "../types/PlayerView";
 import { getOccupiedSquares } from "../utils/getSquaresStartLeft";
 import Move from "./Move";
 import MoveType from "./MoveType";
@@ -17,7 +17,7 @@ type ResolvePermanentObjectives = {
 export default ResolvePermanentObjectives
 
 export function resolvePermanentObjectives(state:GameState|GameView, move:ResolvePermanentObjectives){
-    const player = isGameView(state) ? getPlayers(state).find(p => p.color === state.sortedPlayers![0])! : state.players.find(p => p.color === state.sortedPlayers![0])!
+    const player = getFirstOfSortedPlayer(state)
     player.totemTokens = Math.max(0,player.totemTokens - (move.objectivesCompleted[0].length+move.objectivesCompleted[1].length+(move.objectivesCompleted[2] === true ? 1 : 0))) 
     player.huntPhase = HuntPhase.CheckVariableObjectives
 }

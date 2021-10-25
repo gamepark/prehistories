@@ -12,7 +12,7 @@ import Button from "./Button"
 import { css } from "@emotion/react"
 import { getBG } from "../board/PlayerPanel"
 import Goal from "../board/Goal"
-import {getGoalsArray} from "@gamepark/prehistories/material/Goals"
+import {getAllGoalsArray} from "@gamepark/prehistories/material/Goals"
 
 const WelcomePopUp : FC<{player:PlayerColor | undefined, game:GameView, close: () => void}> = ({player, game, close}) => {
 
@@ -49,7 +49,7 @@ const WelcomePopUp : FC<{player:PlayerColor | undefined, game:GameView, close: (
                     )}
                 </div>
 
-                <p> {goalSelected === -1 ? t("goal.default.text") : t(getGoalsArray(true)[goalSelected].text) } </p>
+                <p> {goalSelected === -1 ? t("goal.default.text") : t(getAllGoalsArray()[goalSelected].text) } </p>
 
                 <Button css={buttonPosition} colorButton={player ?? PlayerColor.White} onClick={close}>{t("Let's Hunt !")}</Button>
 

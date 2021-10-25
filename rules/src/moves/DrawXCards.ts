@@ -1,8 +1,9 @@
 import GameState from "../GameState";
-import GameView, { getPlayers } from "../GameView";
+import GameView from "../GameView";
+import PlayerState from "../PlayerState";
 import { howManyCardToDraw } from "../Prehistories";
 import { HuntPhase } from "../types/Phase";
-import { isPlayerView, isPlayerViewSelf } from "../types/PlayerView";
+import { getFirstOfSortedPlayer, getPlayers, isPlayerView, isPlayerViewSelf } from "../types/PlayerView";
 import Move from "./Move";
 import MoveType from "./MoveType";
 import MoveView from "./MoveView";
@@ -20,17 +21,15 @@ export type DrawXCardsView = {
 }
 
 export function drawXCards(state:GameState){
-    const player = state.players.find(p => p.color === state.sortedPlayers![0])!
+    const player = getFirstOfSortedPlayer(state) as PlayerState
     for (let i=0;i<howManyCardToDraw(player);i++){
-        if (player.deck.length !== 0){
-            player.hand.push(player.deck.pop()!)
-        }
+        player.hand.push(player.deck.pop()!)
     }
     player.huntPhase = HuntPhase.ChangeActivePlayer
 }
 
 export function drawXCardsInView(state:GameView, move:DrawXCards|DrawXCardsView){
-    if (isNotDrawXCardsView(move)){
+    if (!isDrawXCardsView(move)){
         const player = getPlayers(state).filter(isPlayerViewSelf).find(p => p.color === state.sortedPlayers![0])!
         player.hand = player.hand.concat(move.cards.filter(elem => elem !== undefined && elem !== null))
         player.deck = Math.max(player.deck-howManyCardToDraw(player),0)
@@ -53,8 +52,4 @@ export function isDrawXCards(move:Move| MoveView):move is DrawXCards{
 
 export function isDrawXCardsView(move:DrawXCards | DrawXCardsView): move is DrawXCardsView{
     return typeof move.cards === 'number'
-}
-
-export function isNotDrawXCardsView(move:DrawXCards | DrawXCardsView): move is DrawXCards{
-    return Array.isArray(move.cards) 
 }

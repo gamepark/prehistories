@@ -1,6 +1,8 @@
 import GameState from "../GameState";
-import GameView, { getPlayers, isGameView } from "../GameView";
+import GameView from "../GameView";
+import PlayerState from "../PlayerState";
 import { HuntPhase } from "../types/Phase";
+import { getFirstOfSortedPlayer, PlayerHuntView, PlayerView, PlayerViewSelf } from "../types/PlayerView";
 import MoveType from "./MoveType";
 
 type ValidateSpentHunters = {
@@ -11,15 +13,15 @@ export default ValidateSpentHunters
 
 export function validateSpentHunters(state:GameState|GameView){
    
-    const player = isGameView(state) ? getPlayers(state).find(p => p.color === state.sortedPlayers![0])! : state.players.find(p => p.color === state.sortedPlayers![0])!
-    if (player.huntSpotTakenLevels![1] > 0){
-        if (player.injuries === undefined || player.injuries === 0){
-            player.injuries = 1
-        } else {
-            player.injuries++
-        }
-    }
+    const player = getFirstOfSortedPlayer(state)
+    setPlayerInjuries(player)
     delete player.huntSpotTakenLevels
     player.huntPhase = HuntPhase.CheckPermanentObjectives
 
+}
+
+function setPlayerInjuries(player:PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView){
+    if (player.huntSpotTakenLevels![1] > 0){
+        player.injuries = (player.injuries ?? 0)+1 
+    }
 }
