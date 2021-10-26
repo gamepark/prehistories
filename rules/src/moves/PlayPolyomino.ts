@@ -9,7 +9,7 @@ import MoveType from "./MoveType";
 
 type PlayPolyomino = {
     type:MoveType.PlayPolyomino
-    polyomino:number
+    polyomino:number        // TODO
     side:0|1
     square:Coordinates
     huntSpot:number
@@ -24,9 +24,11 @@ export function playPolyomino(state:GameState | GameView, move:PlayPolyomino){
         throw("error : trying to paint a null polyomino !")
     } else {
         player.cave.push({polyomino, side:move.side, x:move.square.x, y:move.square.y})
-        player.huntSpotTakenLevels = getPowerLevels(state.players.length,move.huntSpot)
-        player.huntPhase = HuntPhase.Pay
-        player.tilesHunted = (player.tilesHunted ?? 0)+1
+        player.huntingProps = {huntPhase:HuntPhase.Pay,
+                               huntSpotTakenLevels:getPowerLevels(state.players.length,move.huntSpot),
+                               injuries:player.huntingProps!.injuries,
+                               tilesHunted:(player.huntingProps!.tilesHunted ?? 0)+1,
+                              }
     }
     state.huntingBoard[move.huntSpot] = null
 }

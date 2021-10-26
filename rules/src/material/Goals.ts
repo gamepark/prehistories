@@ -324,7 +324,7 @@ const GoalB8: Goal = {
     hint:'hintB8',
     value:2,
     rule:(player : PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
-        return player.tilesHunted !== undefined && player.tilesHunted >= 3    
+        return (player.huntingProps?.tilesHunted ?? 0) >= 3    
     }
 }
 

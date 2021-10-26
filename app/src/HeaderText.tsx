@@ -68,7 +68,7 @@ function HeaderOnGoingGameText({game}:{game:GameView}){
     }
     case Phase.Hunt:{
       const activePlayer = game.players.find(p => p.color === game.sortedPlayers![0])!
-      switch(activePlayer.huntPhase){
+      switch(activePlayer.huntingProps?.huntPhase){
         case HuntPhase.Hunt:{
           return activePlayer.color === playerId ? <> {t("hunt.you.hunt.tile")} </> : <> {t("hunt.player.hunt.tile",{player:getPseudo(activePlayer.color,players,t)})} </>
         }

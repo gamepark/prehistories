@@ -15,14 +15,11 @@ export function changeActivePlayer(state:GameState|GameView){
     cleanPlayerProperties(getFirstOfSortedPlayer(state))
     state.sortedPlayers!.shift()
     if (state.sortedPlayers!.length !== 0){
-        getFirstOfSortedPlayer(state).huntPhase = HuntPhase.Hunt
+        getFirstOfSortedPlayer(state).huntingProps = {huntPhase : HuntPhase.Hunt}
     } 
 }
 
 function cleanPlayerProperties(player:PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView){
-    delete player.huntPhase
-    delete player.huntSpotTakenLevels
-    delete player.injuries
-    delete player.isReady
-    delete player.tilesHunted
+    delete player.huntingProps
+
 }

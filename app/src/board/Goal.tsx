@@ -15,7 +15,7 @@ type Props = {
 const Goal : FC<Props> = ({goal, players, ...props}) => {
     
     const playerNewArray = players.filter(p => p)
-    const sortedPlayers = playerNewArray.sort((a,b) => -a.goalsMade.filter(g => g === goal).length+b.goalsMade.filter(g => g === goal).length)
+    const sortedPlayers = playerNewArray.sort((a,b) => -a.variableGoalsMade.filter(g => g === goal).length+b.variableGoalsMade.filter(g => g === goal).length)
 
     const {t} = useTranslation()
 
@@ -24,7 +24,7 @@ const Goal : FC<Props> = ({goal, players, ...props}) => {
         <div css={[goalStyle(goal), goalPosition]} {...props}>
 
             {sortedPlayers.map((player, indexPlayer) => 
-                [...Array(player.goalsMade.filter(g => g === goal).length)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[totemStyle(indexPlayer,i), incomingAnimation]} draggable={false} />)
+                [...Array(player.variableGoalsMade.filter(g => g === goal).length)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[totemStyle(indexPlayer,i), incomingAnimation]} draggable={false} />)
             )}
 
         </div>

@@ -32,7 +32,7 @@ const Objectives : FC<Props> = ({goals,players, ...props}) => {
 
         <div css={[permanentObjectivePosition, permanentObjectiveStyle]}>
             {players.map((player, indexPlayer) => 
-                [...Array(8-player.goalsMade.length-player.totemTokens)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[totemStyle(indexPlayer,i), incomingAnimation]} draggable={false} />)
+                [...Array(8-player.variableGoalsMade.length-player.totemTokens)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[totemStyle(indexPlayer,i), incomingAnimation]} draggable={false} />)
             )}
 
         </div>

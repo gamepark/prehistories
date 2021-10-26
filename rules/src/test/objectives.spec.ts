@@ -362,7 +362,7 @@ const anyState: GameState = {
 }
 
 function withCave(cave:PaintedPolyominos[], color:PlayerColor ):PlayerState{
-    return {cave,color,deck:[],discard:[], goalsMade:[], hand:[], played:[], totemTokens:8}
+    return {cave,color,deck:[],discard:[], variableGoalsMade:[], hand:[], played:[], totemTokens:8}
 }
 
 function createGameWithCave(...caves:PaintedPolyominos[][]):GameState{

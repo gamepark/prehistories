@@ -25,7 +25,7 @@ export function drawXCards(state:GameState){
     for (let i=0;i<howManyCardToDraw(player);i++){
         player.hand.push(player.deck.pop()!)
     }
-    player.huntPhase = HuntPhase.ChangeActivePlayer
+    player.huntingProps!.huntPhase = HuntPhase.ChangeActivePlayer
 }
 
 export function drawXCardsInView(state:GameView, move:DrawXCards|DrawXCardsView){
@@ -33,7 +33,7 @@ export function drawXCardsInView(state:GameView, move:DrawXCards|DrawXCardsView)
         const player = getPlayers(state).filter(isPlayerViewSelf).find(p => p.color === state.sortedPlayers![0])!
         player.hand = player.hand.concat(move.cards.filter(elem => elem !== undefined && elem !== null))
         player.deck = Math.max(player.deck-howManyCardToDraw(player),0)
-        player.huntPhase = HuntPhase.ChangeActivePlayer
+        player.huntingProps!.huntPhase = HuntPhase.ChangeActivePlayer
     } else {
 
         if (getPlayers(state).filter(isPlayerView).find(p => p.color === state.sortedPlayers![0]) === undefined){
@@ -42,7 +42,7 @@ export function drawXCardsInView(state:GameView, move:DrawXCards|DrawXCardsView)
         const player = getPlayers(state).filter(isPlayerView).find(p => p.color === state.sortedPlayers![0])!
         player.hand = Math.min(player.hand + howManyCardToDraw(player),player.hand+player.deck)
         player.deck = Math.max(player.deck -howManyCardToDraw(player),0)
-        player.huntPhase = HuntPhase.ChangeActivePlayer
+        player.huntingProps!.huntPhase = HuntPhase.ChangeActivePlayer
     }
 }
 

@@ -20,7 +20,7 @@ type Props = {
     nbPlayers:number
 } & HTMLAttributes<HTMLDivElement>
 
-const PlayerPanel : FC<Props> = ({player:{color, totemTokens, injuries}, position, phase, huntOrder, nbPlayers, ...props}) => {
+const PlayerPanel : FC<Props> = ({player:{color, totemTokens, huntingProps}, position, phase, huntOrder, nbPlayers, ...props}) => {
 
     const playerInfo = usePlayer(color)
     const {t} = useTranslation()
@@ -36,14 +36,14 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, injuries}, positio
             <h1 css={[nameStyle]}>{playerInfo?.name === undefined ? getPlayerName(color, t) : playerInfo?.name}</h1>
             <div css={totemRemainingPosition}>
 
-                {[...Array(totemTokens)].map((e, i) => <Picture key={i} alt={t('token')} src={getTotem(color)} css={totemStyle(totemTokens)} draggable={false} />)}
+                {[...Array(totemTokens)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(color)} css={totemStyle(totemTokens)} draggable={false} />)}
 
             </div>
             <PlayerTimer playerId={color} css={[TimerStyle]}/>
 
-            {(injuries !== undefined) &&  
+            {(huntingProps?.injuries !== undefined) &&  
                 <div css={injuriesIndicatorPosition}>
-                    {[...Array(injuries)].map((_,i) => <Picture key={i} alt={t('injuries')} src={Images.arrowBrokenIcon} draggable={false} css={brokenArrowIconStyle(i)} /> )}
+                    {[...Array(huntingProps.injuries)].map((_,i) => <Picture key={i} alt={t('injuries')} src={Images.arrowBrokenIcon} draggable={false} css={brokenArrowIconStyle(i)} /> )}
                 </div>}
 
         </div>

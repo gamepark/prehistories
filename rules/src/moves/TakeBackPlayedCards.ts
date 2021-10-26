@@ -41,10 +41,6 @@ export function isTakeBackPlayedCards(move:Move):move is TakeBackPlayedCards{
     return move.type === MoveType.TakeBackPlayedCards
 }
 
-export function isNotTakeBackPlayedCardsView(move:TakeBackPlayedCards | TakeBackPlayedCardsView):move is TakeBackPlayedCards{
-    return (move as TakeBackPlayedCards).cards !== undefined
-}
-
 export function isTakeBackPlayedCardsView(move:TakeBackPlayedCards | TakeBackPlayedCardsView):move is TakeBackPlayedCardsView{
     return (move as TakeBackPlayedCards).cards === undefined
 }

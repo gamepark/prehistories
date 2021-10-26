@@ -26,7 +26,7 @@ export function revealHuntCards(state:GameState){
     state.phase = Phase.Hunt
     state.players.forEach(p => delete p.isReady)
     state.sortedPlayers = sortPlayers(state.players)
-    getFirstOfSortedPlayer(state).huntPhase = HuntPhase.Hunt
+    getFirstOfSortedPlayer(state).huntingProps = {huntPhase : HuntPhase.Hunt}
 }
 
 export function revealHuntCardsInView(state:GameView, move:RevealHuntCardsView){
@@ -36,7 +36,7 @@ export function revealHuntCardsInView(state:GameView, move:RevealHuntCardsView){
     })
     state.phase = Phase.Hunt
     state.sortedPlayers = sortPlayers(state.players as (PlayerViewSelf | PlayerHuntView)[]) ;
-    getFirstOfSortedPlayer(state).huntPhase = HuntPhase.Hunt
+    getFirstOfSortedPlayer(state).huntingProps = {huntPhase : HuntPhase.Hunt}
 }
 
 export function isRevealHuntCards(move: Move | MoveView):move is RevealHuntCards{

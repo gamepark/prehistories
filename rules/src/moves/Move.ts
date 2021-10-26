@@ -30,6 +30,6 @@ type Move = PlayHuntCard |
             DrawXCards |
             ShuffleDiscardPile |
             ChangeActivePlayer |
-         EndGame
+            EndGame
 
 export default Move

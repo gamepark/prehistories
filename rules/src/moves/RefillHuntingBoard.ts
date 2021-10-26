@@ -36,26 +36,28 @@ export function refillHuntingBoard(state:GameState){
 }
 
 export function refillHuntingBoardInView(state: GameView, move:RefillHuntingBoardView){
-    state.huntingBoard.forEach((spot, index) => {
-      if (spot === null && state.tilesDeck[index] !== 0){
-        if (state.players.length < 4){
-          state.tilesDeck[index]--
-        } else {
-          if (index<2){
-            state.tilesDeck[0]--
-          } else if (index<4){
-            state.tilesDeck[1]--
-          } else {
-            state.tilesDeck[index-2]--
-          }
-        }
-        
-        
-      }
-    })
+    removeFirstTileOfEmptySlots(state);
     state.huntingBoard = move.newBoard
     delete state.sortedPlayers
     state.phase = Phase.Initiative
+}
+
+function removeFirstTileOfEmptySlots(state: GameView) {
+  state.huntingBoard.forEach((spot, index) => {
+    if (spot === null && state.tilesDeck[index] !== 0) {
+      if (state.players.length < 4) {
+        state.tilesDeck[index]--;
+      } else {
+        if (index < 2) {
+          state.tilesDeck[0]--;
+        } else if (index < 4) {
+          state.tilesDeck[1]--;
+        } else {
+          state.tilesDeck[index - 2]--;
+        }
+      }
+    }
+  });
 }
 
 export function getNewTile(nbPlayers:number, spot:number, tilesDeck:number[][], isView:boolean, previousState:undefined|(number|null)[]):number|null{

@@ -17,7 +17,7 @@ export default ResolveVariableObjectives
 export function resolveVariableObjectives(state:GameState | GameView, move:ResolveVariableObjectives){
     const player = getFirstOfSortedPlayer(state)
     for(let i=0; i<move.tokens;i++){
-        player.goalsMade.push(move.goal)
+        player.variableGoalsMade.push(move.goal)
         player.totemTokens = Math.max(0, player.totemTokens -1)
     }
     
@@ -34,11 +34,11 @@ export function checkVariableObjectives(state:GameState | GameView, player:Playe
 }
 
 function anyPlayerCompleteObjective(goal:number, players:(PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView)[]):boolean{
-    return players.filter(p => p.goalsMade.find(g => g === goal) !== undefined).length > 0
+    return players.filter(p => p.variableGoalsMade.find(g => g === goal) !== undefined).length > 0
 }
 
 function isPlayerAlreadyCompleteObjective(player:PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView, goal:number):boolean{
-    return player.goalsMade.find(g => g === goal) !== undefined
+    return player.variableGoalsMade.find(g => g === goal) !== undefined
 }
 
 export function isResolveVariableObjectives(move: Move):move is ResolveVariableObjectives{
