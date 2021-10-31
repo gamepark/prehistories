@@ -28,7 +28,7 @@ export default function GameDisplay({game}: Props) {
   const showWelcomePopup = !welcomePopUpClosed
 
   return (
-    <Letterbox css={letterBoxStyle} top={0}>
+    <Letterbox id="letterbox" css={letterBoxStyle} top={0}>
       <div css={[css`position: absolute;
                     top:0;left:0;width:100%;height:100%;`, perspective]}>
                       

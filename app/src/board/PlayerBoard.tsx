@@ -133,6 +133,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
 
             <Cave player={player}
                   phase={phase}
+                  nbPlayers={playResetHunters.length}
             />
 
 

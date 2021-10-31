@@ -1391,19 +1391,19 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@datadog/browser-core@2.18.0":
-  version "2.18.0"
-  resolved "https://registry.yarnpkg.com/@datadog/browser-core/-/browser-core-2.18.0.tgz#581e546795b6d7df5897d431448cb6e486b8d1bc"
-  integrity sha512-1RvxLK8TiuAaDrwkrlOg7wM+7FilJtNbC30h5BxoGChWEBB7QsgeYGnliQ60byZUCzhbvARVzHHNZTxUiP+fPQ==
+"@datadog/browser-core@3.6.12":
+  version "3.6.12"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-core/-/browser-core-3.6.12.tgz#6fcdbd6809656544289f7684f03b88a598cc3345"
+  integrity sha512-On/09LrlSxodRvbSPJqEvYlX8MoK9Ae4k7UezqvX2+Uk3JYfV6XBSPHFd4ZNz0rLTjvfynAr8XTOOIRMEitrSg==
   dependencies:
     tslib "^1.10.0"
 
-"@datadog/browser-logs@^2.8.1":
-  version "2.18.0"
-  resolved "https://registry.yarnpkg.com/@datadog/browser-logs/-/browser-logs-2.18.0.tgz#98f9afbae103541f935b7acfa6d9858dd85385d2"
-  integrity sha512-bDT5YkPNHGZmjADXtsVtwSyL+/J7MA4k2mBcHzutXK7/tKrIRiKH6ygHiBRryNHfD7/Q79tZqJzi32kSZy3AAA==
+"@datadog/browser-logs@^3.6.11":
+  version "3.6.12"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-logs/-/browser-logs-3.6.12.tgz#9d029f0424d3696f81b03ce7bd0bae1044c5f1b5"
+  integrity sha512-at3JJ4KGvxSWTaKJTZMWxpLpzUx/h7v5QHliGmLDVWKCZOV4xygfCMQleFPcJELJ9cefWcNiQqcFPxvHB0u09Q==
   dependencies:
-    "@datadog/browser-core" "2.18.0"
+    "@datadog/browser-core" "3.6.12"
     tslib "^1.10.0"
 
 "@emotion/cache@^11.1.3":
@@ -1532,18 +1532,18 @@
   resolved "https://registry.yarnpkg.com/@gamepark/avataaars/-/avataaars-2.1.3.tgz#bf5540ce7ade3da03c81cbbf1651b5042ad4b08c"
   integrity sha512-ZPa78YaO95lwozQB/67QM9axbQtBeS3pMl9fd6R5hBDLsmDdQiuemGzL2Ie8X3FYBHvXlesaPFcII5sltdWkJw==
 
-"@gamepark/react-client@~5.5.0":
-  version "5.5.0"
-  resolved "https://registry.yarnpkg.com/@gamepark/react-client/-/react-client-5.5.0.tgz#762a179c2468ddebc6d20d87528df3cea3994c3c"
-  integrity sha512-7ED+vaelueq7V2QywWwCS4XzG6A6ER5i/pOR84Xa2+Y9MH9qtCI1Pd8IRzJPjFD5Qt5mRHk9+7ad6SL6jIfzPg==
+"@gamepark/react-client@~5.8.1":
+  version "5.8.3"
+  resolved "https://registry.yarnpkg.com/@gamepark/react-client/-/react-client-5.8.3.tgz#585e752a21d6e193d6f11e536f29650587adf41d"
+  integrity sha512-DqtPTyMmXjOPFeeiS/+FWucarf/EG7QzN51cCipzuxzPGhpngwEjXWEl3Iu9LZPrOyqbICgshXHlSen3nhF6tA==
   dependencies:
     "@apollo/client" "^3.1.3"
-    "@datadog/browser-logs" "^2.8.1"
+    "@datadog/browser-logs" "^3.6.11"
     "@fortawesome/free-regular-svg-icons" "^5.15.3"
     "@fortawesome/free-solid-svg-icons" "^5.15.3"
     "@fortawesome/react-fontawesome" "^0.1.14"
     "@gamepark/avataaars" "^2.1.3"
-    "@gamepark/rules-api" "^5.3.0"
+    "@gamepark/rules-api" "^5.8.2"
     "@harelpls/use-pusher" "^7.2.1"
     "@types/lodash.shuffle" "^4.2.6"
     "@types/react" "^17.0.3"
@@ -1562,10 +1562,10 @@
     react-infinite-scroller "^1.2.4"
     redux ">=4.0.5"
 
-"@gamepark/react-components@~5.5.0":
-  version "5.5.4"
-  resolved "https://registry.yarnpkg.com/@gamepark/react-components/-/react-components-5.5.4.tgz#9011dd9af602f6fa483a07a45273ff9b5f77b24b"
-  integrity sha512-dmJ4UYxA4zEqTKA1lTBExN0JQMBxYgicu3U6RmpeNs+AvoncK1hmtzoUCYWTiC7B8rVyQFlKIArQ85cmwaf07g==
+"@gamepark/react-components@~5.6.3":
+  version "5.6.3"
+  resolved "https://registry.yarnpkg.com/@gamepark/react-components/-/react-components-5.6.3.tgz#e599d5690108779b662e3c1ad2f7d1808b6973bc"
+  integrity sha512-Xon9edUjdNhQdkZ81WKpd7QLmEc1A25XWBe1GzInOfFC1LglWEVKbTAb1P7wq8khHhBXYVHY84SHvAOCvHkTUA==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^1.2.34"
     "@fortawesome/free-solid-svg-icons" "^5.15.2"
@@ -1573,7 +1573,14 @@
     "@react-dnd/shallowequal" "^2.0.0"
     supports-webp "^2.0.1"
 
-"@gamepark/rules-api@^5.3.0", "@gamepark/rules-api@~5.3.0":
+"@gamepark/rules-api@^5.8.2":
+  version "5.8.2"
+  resolved "https://registry.yarnpkg.com/@gamepark/rules-api/-/rules-api-5.8.2.tgz#243a55957faabf850ce72473b8fe8a9ea163b777"
+  integrity sha512-EEsUlZxj3Zb6lcumW68VdWRc+AS0bsXomYLQs1C6g2/3svw5F1apZ1ndkB+HvVscaIPBMMkDI/Okbam88gMbig==
+  dependencies:
+    fast-deep-equal "^3.1.3"
+
+"@gamepark/rules-api@~5.3.0":
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/@gamepark/rules-api/-/rules-api-5.3.0.tgz#b5f39817c7f3be2f6d2cd3196ae46430d09a3769"
   integrity sha512-8Xvi8zK9HhxThSUk/FsU48rLzFYgPbifQdDfaBWKjaG+z9eILFGUrZld3aLQDXe4uIBK4bgmRLVQRsWfR9cbzA==

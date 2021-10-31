@@ -5,34 +5,27 @@ import Phase from "@gamepark/prehistories/types/Phase";
 import { PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
 import { FC } from "react";
 import Images from "../utils/Images";
-import DropSquare from "./DropSquare";
 import Polyomino from "./Polyomino";
+import PolyominoDropArea from "./PolyominoDropArea";
 
 type Props = {
     player:PlayerView|PlayerViewSelf|PlayerHuntView
     phase:Phase | undefined
+    nbPlayers:number
 }
 
-const Cave : FC<Props> = ({player, phase}) => {
+const Cave : FC<Props> = ({player, nbPlayers, phase}) => {
 
     const sizeTileW = 14.2857 // % unit
     const sizeTileH = 14.2857 // % unit
 
     return(
 
-        <div css={[cavePosition, caveStyle(player.color)]}>
+        <div css={[cavePosition, caveStyle(player.color)]}> 
 
             <div css={canvasExcludingBorders}>
 
-                {[0,1,2,3,4,5,6].map((x, index1) => 
-                    [0,1,2,3,4,5,6].map((y, index2) =>
-                        <DropSquare x={x}
-                                  y={y}
-                                  key={index1+' '+index2}
-                                  player={player}
-                        />
-                    )
-                )}
+                <PolyominoDropArea player={player} css={css`top:0;left:0`} />
 
                 {player.cave.map((paint, index) => 
 
@@ -64,6 +57,9 @@ const Cave : FC<Props> = ({player, phase}) => {
 
 }
 
+const caveLeft = 5.1 //em
+const caveTop = 29 //em
+
 export const tileSize = (polyomino:number, side:number, sizeBaseW:number, sizeBaseH:number) =>`
 
 ${polyomino <= 26 && `width:${sizeBaseW}%;height:${sizeBaseH}%;`};
@@ -83,10 +79,10 @@ left:${y*14.2857}%;
 
 const canvasExcludingBorders = css`
 position:absolute;
-left:5.5%;
-top:5.5%;
-width:89%;
-height:89%;
+left:2.6em;
+top:3em;
+width:88%;
+height:87%;
 `
 
 const cavePosition = css`
