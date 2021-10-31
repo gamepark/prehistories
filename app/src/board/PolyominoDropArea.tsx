@@ -28,7 +28,7 @@ type Props = {
   
     const [{draggedPolyo, over}, dropRef] = useDrop({
       accept: "PolyominoToHunt",
-      canDrop: (item: PolyominoToHunt, monitor) => {
+      canDrop: (item: PolyominoToHunt, monitor) => { 
         const sourceClientOffset = monitor.getSourceClientOffset()
         if (!sourceClientOffset) return false
         const position = getAreaPosition(sourceClientOffset)

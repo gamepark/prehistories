@@ -7,7 +7,6 @@ import MoveType from "./MoveType";
 
 type TakeBackPlayedCards = {
     type:MoveType.TakeBackPlayedCards
-    cards:number[]
 }
 
 export default TakeBackPlayedCards
@@ -42,5 +41,5 @@ export function isTakeBackPlayedCards(move:Move):move is TakeBackPlayedCards{
 }
 
 export function isTakeBackPlayedCardsView(move:TakeBackPlayedCards | TakeBackPlayedCardsView):move is TakeBackPlayedCardsView{
-    return (move as TakeBackPlayedCards).cards === undefined
+    return (move as TakeBackPlayedCardsView).playedLength !== undefined
 }

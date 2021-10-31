@@ -212,7 +212,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
 
           case HuntPhase.DrawCards:{
             if (player.played.length !== 0){
-              return {type:MoveType.TakeBackPlayedCards, cards:player.played}
+              return {type:MoveType.TakeBackPlayedCards}
             } else {
               const cardsToDraw:number = howManyCardToDraw(player)
               const canAndMustShuffleDiscard = player.deck.length < cardsToDraw && player.deck.length + player.discard.length >= cardsToDraw
