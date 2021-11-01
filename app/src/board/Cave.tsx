@@ -79,8 +79,8 @@ left:${y*14.2857}%;
 
 const canvasExcludingBorders = css`
 position:absolute;
-left:2.6em;
-top:3em;
+left:2.5em;
+top:2.7em;
 width:88%;
 height:87%;
 `

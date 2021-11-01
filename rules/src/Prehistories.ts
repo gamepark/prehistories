@@ -1,5 +1,6 @@
-import {SecretInformation, SimultaneousGame} from '@gamepark/rules-api'
+import {Action, SecretInformation, SimultaneousGame, Undo} from '@gamepark/rules-api'
 import { shuffle } from 'lodash'
+import canUndo from './canUndo'
 import GameState from './GameState'
 import GameView from './GameView'
 import { getAllGoalsArray, getGoalsArray } from './material/Goals'
@@ -35,7 +36,7 @@ import getPowerLevels from './utils/powerLevels'
 import teamPower from './utils/teamPower'
 
 export default class Prehistories extends SimultaneousGame<GameState, Move, PlayerColor>
-  implements SecretInformation<GameState, GameView, Move, MoveView, PlayerColor> {
+  implements SecretInformation<GameState, GameView, Move, MoveView, PlayerColor>, Undo<GameState, Move, PlayerColor> {
 
   constructor(state: GameState)
   constructor(options: PrehistoriesOptions)
@@ -293,6 +294,10 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         return {type:MoveType.ShuffleDiscardPile,newDeckLength:move.newDeck.length}
       default : return move
     }
+  }
+
+  canUndo(action: Action<Move, PlayerColor>, consecutiveActions: Action<Move, PlayerColor>[]): boolean {
+    return canUndo(action, consecutiveActions)
   }
 
   getPlayerMoveView(move: Move, playerId: PlayerColor): MoveView {

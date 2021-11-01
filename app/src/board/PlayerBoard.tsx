@@ -175,7 +175,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
                     {isDisplayValidationButton && <Button css={[validationButtonPosition]} onClick={() => {play({type:MoveType.TellYouAreReady, playerId:player.color})}} colorButton={player.color} >{t('Validate')}</Button> }
                     {isDisplayEndTurnButton && <Button css={[validationButtonPosition]} onClick={() => {play({type:MoveType.EndTurn})}} colorButton={player.color} >{t('End your Turn')}</Button>}
 
-                    {isDisplayHuntingButtons && <div css={[injuryStyle, (powerOfSelectedHunters < player.huntingProps!.huntSpotTakenLevels![0] || powerOfSelectedHunters > player.huntingProps!.huntSpotTakenLevels![1]) && desactivateStyle]} onClick={() => powerOfSelectedHunters >= player.huntingProps!.huntSpotTakenLevels![0] && powerOfSelectedHunters < player.huntingProps!.huntSpotTakenLevels![1] && validateHunters(selectedHunters, true)} > <span>{Math.max(player.huntingProps!.huntSpotTakenLevels![0] - powerOfSelectedHunters,0)}</span></div>}
+                    {isDisplayHuntingButtons && <div css={[injuryStyle, (powerOfSelectedHunters < player.huntingProps!.huntSpotTakenLevels![0] || powerOfSelectedHunters >= player.huntingProps!.huntSpotTakenLevels![1]) && desactivateStyle]} onClick={() => powerOfSelectedHunters >= player.huntingProps!.huntSpotTakenLevels![0] && powerOfSelectedHunters < player.huntingProps!.huntSpotTakenLevels![1] && validateHunters(selectedHunters, true)} > <span>{Math.max(player.huntingProps!.huntSpotTakenLevels![0] - powerOfSelectedHunters,0)}</span></div>}
                     {isDisplayHuntingButtons && <div css={[noInjuryStyle, powerOfSelectedHunters < player.huntingProps!.huntSpotTakenLevels![1] && desactivateStyle]} onClick={() => powerOfSelectedHunters >= player.huntingProps!.huntSpotTakenLevels![1] && validateHunters(selectedHunters, false)} > <span>{Math.max(player.huntingProps!.huntSpotTakenLevels![1] - powerOfSelectedHunters,0)}</span> </div>}
                     
                 </div>
@@ -255,6 +255,7 @@ transform:rotateZ(-20deg);
 
 const desactivateStyle = css`
 filter: grayscale(80%);
+transition:filter 0.2s linear;
 cursor:not-allowed;
 &:active{
     box-shadow:0 0.2em 0.5em black;
@@ -280,6 +281,7 @@ flex-direction:row;
 align-items:center;
 justify-content:center;
 box-shadow:0 0.2em 0.5em black;
+transition:filter 0.2s linear;
 &:active{
     box-shadow:0 0.2em 0.2em black;
     top:4%;
@@ -309,6 +311,7 @@ flex-direction:row;
 align-items:center;
 justify-content:center;
 box-shadow:0 0.2em 0.5em black;
+transition:filter 0.2s linear;
 &:active{
     box-shadow:0 0.2em 0.2em black;
     top:4%;
@@ -455,6 +458,8 @@ top:28%;
 left:46%;
 width:53%;
 height:45%;
+z-index:1;
+
 background-color:rgba(131, 180, 65,0.1);
 border : solid 0.6em ${getPlayerColor(color)};
 border-radius:5%;
@@ -486,7 +491,6 @@ position:absolute;
 top:${(key%3)*24}%;
 left:${2+Math.floor(key/3)*22}%;
 transform-origin:bottom left;
-z-index:0;
 cursor:pointer;
 `
 

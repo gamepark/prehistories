@@ -1,7 +1,7 @@
 import GameView from '@gamepark/prehistories/GameView'
 import MoveType from '@gamepark/prehistories/moves/MoveType'
 import MoveView from '@gamepark/prehistories/moves/MoveView'
-import {Game} from '@gamepark/rules-api'
+import {Action, Game, Undo} from '@gamepark/rules-api'
 import {playHuntCardInView} from '@gamepark/prehistories/moves/PlayHuntCard'
 import { tellYouAreReady } from '@gamepark/prehistories/moves/TellYouAreReady'
 import SetCaveDisplayed, { setCaveDisplayed } from './localMoves/setCaveDisplayed'
@@ -20,10 +20,12 @@ import { changeActivePlayer } from '@gamepark/prehistories/moves/ChangeActivePla
 import { endGame } from '@gamepark/prehistories/moves/EndGame'
 import { setHuntPhase } from '@gamepark/prehistories/moves/SetHuntPhase'
 import SetSelectedHunters, { resetSelectedHunters, ResetSelectedHunters, setSelectedHunters } from './localMoves/setSelectedHunters'
+import PlayerColor from '@gamepark/prehistories/PlayerColor'
+import canUndo from '@gamepark/prehistories/canUndo'
 
 type LocalMove = MoveView | SetCaveDisplayed | SetSelectedHunters | ResetSelectedHunters
 
-export default class PrehistoriesView implements Game<GameView, MoveView> {
+export default class PrehistoriesView implements Game<GameView, MoveView>, Undo<GameView, MoveView, PlayerColor> {
   state: GameView
 
   constructor(state: GameView) {
@@ -76,6 +78,10 @@ export default class PrehistoriesView implements Game<GameView, MoveView> {
         return resetSelectedHunters(this.state)
       
     }
+  }
+
+  canUndo(action: Action<MoveView, PlayerColor>, consecutiveActions: Action<MoveView, PlayerColor>[]): boolean {
+    return canUndo(action, consecutiveActions)
   }
 
 }

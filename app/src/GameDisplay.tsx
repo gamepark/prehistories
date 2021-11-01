@@ -24,7 +24,7 @@ export default function GameDisplay({game}: Props) {
 
   const playSetCaveDisplayed = usePlay<SetCaveDisplayed>()
 
-  const [welcomePopUpClosed, setWelcomePopUpClosed] = useState(false)
+  const [welcomePopUpClosed, setWelcomePopUpClosed] = useState(playerDisplayed.cave.length !== 3)
   const showWelcomePopup = !welcomePopUpClosed
 
   return (
