@@ -22,7 +22,7 @@ describe('Test Pathfinding', () => {
         {polyomino:polyominosArray[2],side:0, x:1, y:0},
         {polyomino:polyominosArray[27],side:1, x:1, y:2},
         {polyomino:polyominosArray[28],side:0, x:1, y:5},
-        {polyomino:polyominosArray[53],side:0, x:3, y:3},
+        {polyomino:polyominosArray[53],side:1, x:3, y:3},
 
     ]
 
