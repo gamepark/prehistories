@@ -495,7 +495,6 @@ cursor:pointer;
 
 const cardStyle = css`
 border-radius:8%;
-box-shadow:0 0 0.5em black;
 `
 
 const cardHandPanelPosition = css`

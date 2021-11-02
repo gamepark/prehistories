@@ -27,7 +27,7 @@ export function checkVariableObjectives(state:GameState | GameView, player:Playe
     for(const goal of state.goals){
         if (!isPlayerAlreadyCompleteObjective(player, goal) && getAllGoalsArray()[goal].rule(player)){
             const rewardForFirstPlayer = anyPlayerCompleteObjective(goal, state.players) ? 0 : 1
-            return [goal, getAllGoalsArray[goal].value-1 + rewardForFirstPlayer]           
+            return [goal, getAllGoalsArray()[goal].value-1 + rewardForFirstPlayer]           
         }
     }
     return false

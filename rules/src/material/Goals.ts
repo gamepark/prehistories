@@ -71,7 +71,7 @@ const GoalA4: Goal = {
         const animalsToCheck : Animal[] = [Animal.Fish, Animal.Ibex, Animal.Mammoth, Animal.Yak, Animal.Boar].filter(animal => occupiedSquares.filter(square => square.animal === animal).length >= 8)
         if (animalsToCheck.length === 0) return false
         for(const animal of animalsToCheck){
-            const listOfCheckedSquares:Coordinates[] = []
+            let listOfCheckedSquares:Coordinates[] = []
             const occupiedSquareByAnimal = occupiedSquares.filter(square => square.animal === animal)
             for(const square of occupiedSquareByAnimal){
                 if (listOfCheckedSquares.find(check => check.x === square.x && check.y === square.y) === undefined){
@@ -79,7 +79,7 @@ const GoalA4: Goal = {
                     if (result.length >= 8){
                         return true
                     } else {
-                        listOfCheckedSquares.concat(result)
+                        listOfCheckedSquares = listOfCheckedSquares.concat(result)
                     }
                 }
             }
@@ -237,7 +237,7 @@ const GoalB4: Goal = {
         const animalsToCheck : Animal[] = [Animal.Fish, Animal.Ibex, Animal.Mammoth, Animal.Yak, Animal.Boar].filter(animal => occupiedSquares.filter(square => square.animal === animal).length >= 10)
         if (animalsToCheck.length === 0) return false
         for(const animal of animalsToCheck){
-            const listOfCheckedSquares:Coordinates[] = []
+            let listOfCheckedSquares:Coordinates[] = []
             const occupiedSquareByAnimal = occupiedSquares.filter(square => square.animal === animal)
             for (const square of occupiedSquareByAnimal){
                 if (listOfCheckedSquares.find(check => check.x === square.x && check.y === square.y) === undefined){
@@ -245,7 +245,7 @@ const GoalB4: Goal = {
                     if (result.length >= 10){
                         return true
                     } else {
-                        listOfCheckedSquares.concat(result)
+                        listOfCheckedSquares = listOfCheckedSquares.concat(result)
                     }
                 }
             }
@@ -336,7 +336,6 @@ const GoalB9: Goal = {
     value:2,
     rule:(player : PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
         const cave:PaintedPolyominos[] = player.cave
-        const occupiedSquares:PaintedSquare[] = getOccupiedSquares(cave)
         const legendaryTiles = cave.filter(tile => tile.polyomino > 71)
         for (const polyo of legendaryTiles){
             if (legendaryTiles.find(tile => ((tile.x === polyo.x+2 && tile.y === polyo.y) || (tile.y === polyo.y+2 && tile.x === polyo.x)))) return true

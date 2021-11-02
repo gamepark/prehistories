@@ -10,13 +10,16 @@ import Objectives from './board/Objectives'
 import PlayerBoard from './board/PlayerBoard'
 import PlayerPanel from './board/PlayerPanel'
 import SetCaveDisplayed, { setCaveDisplayedMove } from './localMoves/setCaveDisplayed'
+import { AudioLoader } from './sounds/AudioLoader'
+import PrehistoriesSounds from './sounds/PrehistoriesSounds'
 import WelcomePopUp from './utils/WelcomePopUp'
 
 type Props = {
   game: GameView
+  audioLoader: AudioLoader
 }
 
-export default function GameDisplay({game}: Props) {
+export default function GameDisplay({game, audioLoader}: Props) {
 
   const playerId = usePlayerId<PlayerColor>()
   const players = useMemo(() => getPlayersStartingWith(game, playerId), [game, playerId]) 
@@ -63,9 +66,10 @@ export default function GameDisplay({game}: Props) {
 
         {showWelcomePopup && <WelcomePopUp player={playerId} game={game} close={() => setWelcomePopUpClosed(true)} />}
 
-
-
       </div>
+
+      <PrehistoriesSounds audioLoader={audioLoader} />
+
     </Letterbox>
   )
 }

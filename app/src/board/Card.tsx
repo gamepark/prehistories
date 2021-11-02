@@ -79,6 +79,7 @@ height:100%;
 border-radius:8%;
 `
 const cardStyle = (image:string) => css`
+box-shadow:0 0 0.5em black;
 background-image: url(${image});
 background-size: cover;
 background-repeat: no-repeat;
