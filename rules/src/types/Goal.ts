@@ -4,7 +4,6 @@ import { PlayerHuntView, PlayerView, PlayerViewSelf } from "./PlayerView"
 
 type Goal = {
     face:Face,
-    idConflict:number,
     text:string,
     hint:string
     value:number,

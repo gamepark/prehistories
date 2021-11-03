@@ -1,8 +1,8 @@
 import GameState from "../GameState";
 import GameView from "../GameView";
-import { getAllGoalsArray } from "../material/Goals";
+import {goals} from "../material/Goals";
 import PlayerState from "../PlayerState";
-import { getFirstOfSortedPlayer, PlayerHuntView, PlayerView, PlayerViewSelf } from "../types/PlayerView";
+import {getFirstOfSortedPlayer, PlayerHuntView, PlayerView, PlayerViewSelf} from "../types/PlayerView";
 import Move from "./Move";
 import MoveType from "./MoveType";
 
@@ -25,9 +25,9 @@ export function resolveVariableObjectives(state:GameState | GameView, move:Resol
 
 export function checkVariableObjectives(state:GameState | GameView, player:PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView):(false | [number, number]){
     for(const goal of state.goals){
-        if (!isPlayerAlreadyCompleteObjective(player, goal) && getAllGoalsArray()[goal].rule(player)){
+        if (!isPlayerAlreadyCompleteObjective(player, goal) && goals[goal].rule(player)){
             const rewardForFirstPlayer = anyPlayerCompleteObjective(goal, state.players) ? 0 : 1
-            return [goal, getAllGoalsArray()[goal].value-1 + rewardForFirstPlayer]           
+            return [goal, goals[goal].value-1 + rewardForFirstPlayer]
         }
     }
     return false

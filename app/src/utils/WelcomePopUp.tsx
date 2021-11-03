@@ -2,17 +2,17 @@
 
 import GameView from "@gamepark/prehistories/GameView"
 import PlayerColor from "@gamepark/prehistories/PlayerColor"
-import { usePlayer, usePlayerId } from "@gamepark/react-client"
-import { FC, useState } from "react"
-import { useTranslation } from "react-i18next/"
+import {usePlayer, usePlayerId} from "@gamepark/react-client"
+import {FC, useState} from "react"
+import {useTranslation} from "react-i18next/"
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
-import { getPlayerName } from "@gamepark/prehistories/PrehistoriesOptions"
+import {getPlayerName} from "@gamepark/prehistories/PrehistoriesOptions"
 import Button from "./Button"
-import { css } from "@emotion/react"
-import { getBG } from "../board/PlayerPanel"
+import {css} from "@emotion/react"
+import {getBG} from "../board/PlayerPanel"
 import Goal from "../board/Goal"
-import {getAllGoalsArray} from "@gamepark/prehistories/material/Goals"
+import {goals} from "@gamepark/prehistories/material/Goals"
 
 const WelcomePopUp : FC<{player:PlayerColor | undefined, game:GameView, close: () => void}> = ({player, game, close}) => {
 
@@ -49,7 +49,7 @@ const WelcomePopUp : FC<{player:PlayerColor | undefined, game:GameView, close: (
                     )}
                 </div>
 
-                <p> {goalSelected === -1 ? t("goal.default.text") : t(getAllGoalsArray()[goalSelected].text) } </p>
+                <p> {goalSelected === -1 ? t("goal.default.text") : t(goals[goalSelected].text) } </p>
 
                 <Button css={buttonPosition} colorButton={player ?? PlayerColor.White} onClick={close}>{t("Let's Hunt !")}</Button>
 

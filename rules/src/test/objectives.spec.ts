@@ -1,10 +1,8 @@
-import GameState from "../GameState"
-import { getAllGoalsArray } from "../material/Goals"
-import { allPolyominos } from "../material/Polyominos"
-import PlayerColor, { playerColors } from "../PlayerColor"
+import {goals} from "../material/Goals"
+import {allPolyominos} from "../material/Polyominos"
+import PlayerColor from "../PlayerColor"
 import PlayerState from "../PlayerState"
 import PlacedTile from "../types/PlacedTile"
-import Phase from "../types/Phase"
 
 describe('Test Objectives', () => {
 
@@ -26,9 +24,9 @@ describe('Test Objectives', () => {
             {tile:polyominosArray[72],side:0, x:2, y:3}
         ])
 
-        expect(getAllGoalsArray()[0].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
-        expect(getAllGoalsArray()[0].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
-        expect(getAllGoalsArray()[0].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[0].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[0].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
+        expect(goals[0].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
     })
 
     test("Objective2", () => {          // 3x3 central square filled
@@ -45,9 +43,9 @@ describe('Test Objectives', () => {
             {tile:polyominosArray[60],side:0, x:4, y:2}
         ])
 
-        expect(getAllGoalsArray()[1].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
-        expect(getAllGoalsArray()[1].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
-        expect(getAllGoalsArray()[1].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[1].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[1].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
+        expect(goals[1].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
     })
 
     test("Objective3", () => {          // column of 5 animals
@@ -64,9 +62,9 @@ describe('Test Objectives', () => {
             {tile:polyominosArray[60],side:0, x:3, y:0}
         ])
 
-        expect(getAllGoalsArray()[2].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
-        expect(getAllGoalsArray()[2].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
-        expect(getAllGoalsArray()[2].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[2].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[2].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
+        expect(goals[2].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
     })
 
     test("Objective4", () => {          // group of 8 same animals (no legend)
@@ -85,9 +83,9 @@ describe('Test Objectives', () => {
             {tile:polyominosArray[60],side:0, x:3, y:0}
         ])
 
-        expect(getAllGoalsArray()[3].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
-        expect(getAllGoalsArray()[3].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
-        expect(getAllGoalsArray()[3].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[3].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false)
+        expect(goals[3].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true)
+        expect(goals[3].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
     })
 
     test("Objective5", () => {          // surround hunter tile
@@ -104,9 +102,9 @@ describe('Test Objectives', () => {
             {tile:polyominosArray[60],side:0, x:5, y:3}
         ])
 
-        expect(getAllGoalsArray()[4].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
-        expect(getAllGoalsArray()[4].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
-        expect(getAllGoalsArray()[4].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[4].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[4].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
+        expect(goals[4].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
     })
 
     test("Objective6", () => {          // Column of 5 same animal no legend
@@ -123,9 +121,9 @@ describe('Test Objectives', () => {
             {tile:polyominosArray[59],side:0, x:3, y:2},
         ])
 
-        expect(getAllGoalsArray()[5].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
-        expect(getAllGoalsArray()[5].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
-        expect(getAllGoalsArray()[5].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)  
+        expect(goals[5].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[5].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
+        expect(goals[5].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)  
     })
 
     test("Objective7", () => {          // Pathfinding betwenn top left corner and bottom right corner
@@ -141,9 +139,9 @@ describe('Test Objectives', () => {
             {tile:polyominosArray[58],side:0, x:5, y:5},
         ])
 
-        expect(getAllGoalsArray()[6].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
-        expect(getAllGoalsArray()[6].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
-        expect(getAllGoalsArray()[6].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[6].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[6].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
+        expect(goals[6].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
     })
 
     test("Objective8", () => {          // 5 tiles 1x1 built  
@@ -161,9 +159,9 @@ describe('Test Objectives', () => {
             {tile:polyominosArray[6],side:1, x:0, y:3}
         ])
 
-        expect(getAllGoalsArray()[7].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
-        expect(getAllGoalsArray()[7].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
-        expect(getAllGoalsArray()[7].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[7].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[7].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
+        expect(goals[7].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
     })
 
     test("Objective9", () => {          // Surround a legendary tile
@@ -182,9 +180,9 @@ describe('Test Objectives', () => {
             {tile:polyominosArray[73],side:0, x:5, y:5}
         ])
 
-        expect(getAllGoalsArray()[8].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
-        expect(getAllGoalsArray()[8].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
-        expect(getAllGoalsArray()[8].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[8].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[8].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
+        expect(goals[8].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
     })
 
     test("Objective10", () => {          // Surround two totems
@@ -209,9 +207,9 @@ describe('Test Objectives', () => {
             {tile:polyominosArray[4],side:0, x:4, y:5},
         ])
 
-        expect(getAllGoalsArray()[9].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
-        expect(getAllGoalsArray()[9].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
-        expect(getAllGoalsArray()[9].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)  
+        expect(goals[9].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[9].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
+        expect(goals[9].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)  
     })
 
     test("Objective11", () => {          // Fill the right column
@@ -232,9 +230,9 @@ describe('Test Objectives', () => {
             {tile:polyominosArray[3],side:0, x:0, y:0},
         ])
 
-        expect(getAllGoalsArray()[10].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
-        expect(getAllGoalsArray()[10].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
-        expect(getAllGoalsArray()[10].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[10].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[10].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
+        expect(goals[10].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
     })
 
     test("Objective12", () => {          // Line of 5 different animals
@@ -252,9 +250,9 @@ describe('Test Objectives', () => {
             {tile:polyominosArray[67],side:0, x:0, y:1},
         ])
 
-        expect(getAllGoalsArray()[11].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
-        expect(getAllGoalsArray()[11].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
-        expect(getAllGoalsArray()[11].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[11].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[11].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
+        expect(goals[11].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
     })
 
     test("Objective13", () => {          // Group of 10 same animal
@@ -269,9 +267,9 @@ describe('Test Objectives', () => {
             {tile:polyominosArray[59],side:0, x:4, y:1}
         ])
 
-        expect(getAllGoalsArray()[12].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
-        expect(getAllGoalsArray()[12].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
-        expect(getAllGoalsArray()[12].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[12].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[12].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
+        expect(goals[12].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
     })
 
     test("Objective14", () => {          // surround hunter with 4 different animals
@@ -287,9 +285,9 @@ describe('Test Objectives', () => {
             {tile:polyominosArray[59],side:0, x:4, y:1}
         ])
 
-        expect(getAllGoalsArray()[13].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
-        expect(getAllGoalsArray()[13].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
-        expect(getAllGoalsArray()[13].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[13].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[13].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
+        expect(goals[13].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
     })
 
     test("Objective15", () => {          // line of 5 same animals (no Legendary)
@@ -302,9 +300,9 @@ describe('Test Objectives', () => {
             {tile:polyominosArray[69],side:1, x:3, y:3},
         ])
 
-        expect(getAllGoalsArray()[14].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
-        expect(getAllGoalsArray()[14].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
-        expect(getAllGoalsArray()[14].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[14].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[14].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
+        expect(goals[14].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
     })
 
     test("Objective16", () => {          // fill 4 corners
@@ -326,9 +324,9 @@ describe('Test Objectives', () => {
             {tile:polyominosArray[4],side:0, x:3, y:6},
         ])
 
-        expect(getAllGoalsArray()[15].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
-        expect(getAllGoalsArray()[15].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
-        expect(getAllGoalsArray()[15].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[15].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[15].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
+        expect(goals[15].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
     })
 
     test("Objective18", () => {          // 2 legendary side by side
@@ -345,29 +343,13 @@ describe('Test Objectives', () => {
             {tile:polyominosArray[74],side:0, x:0, y:4}
         ])
 
-        expect(getAllGoalsArray()[17].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
-        expect(getAllGoalsArray()[17].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
-        expect(getAllGoalsArray()[17].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[17].rule(withCave(startCave, PlayerColor.Yellow))).toBe(false) 
+        expect(goals[17].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true) 
+        expect(goals[17].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false) 
     })
 
 })
 
-
-const anyState: GameState = {
-    goals:[],
-    huntingBoard:[],
-    phase:Phase.Initiative,
-    tilesDeck:[],
-    players:[]
-}
-
 function withCave(cave:PlacedTile[], color:PlayerColor ):PlayerState{
     return {cave,color,deck:[],discard:[], variableGoalsMade:[], hand:[], played:[], totemTokens:8}
-}
-
-function createGameWithCave(...caves:PlacedTile[][]):GameState{
-    return {
-        ...anyState,
-        players:caves.map((cave, index) => withCave(cave, playerColors[index]))
-    }
 }

@@ -3,7 +3,7 @@ import {shuffle} from 'lodash'
 import canUndo from './canUndo'
 import GameState from './GameState'
 import GameView from './GameView'
-import {getAllGoalsArray, getGoalsArray} from './material/Goals'
+import {goals} from './material/Goals'
 import getHandPrintsCoords from './material/HandPrints'
 import {allPolyominos} from './material/Polyominos'
 import {changeActivePlayer} from './moves/ChangeActivePlayer'
@@ -341,18 +341,18 @@ function setupTilesDeck(): number[][] {
 }
 
 function setupGoals(game: GameState, isExpertGame: boolean): number[] {
-  const goalsIds = shuffle(Array.from(getGoalsArray(isExpertGame).keys()))
+  const numberOfGoalCards = goals.length / 2
+  const goalCardsShuffled = shuffle(Array.from(goals.slice(0, numberOfGoalCards).keys()))
   const numberOfGoals: number = game.players.length < 4 ? 4 : 5
-  if (!isExpertGame) {
-    return numberOfGoals === 4 ? [goalsIds[0], goalsIds[1], goalsIds[2], goalsIds[3]] : [goalsIds[0], goalsIds[1], goalsIds[2], goalsIds[3], goalsIds[4]]
-  } else {
-    const result: number[] = [goalsIds[0]]
-    goalsIds.forEach(elem => {
-      result.every(res => getAllGoalsArray()[elem].idConflict !== getAllGoalsArray()[res].idConflict) && result.push(elem)
-    })
-    return numberOfGoals === 4 ? [result[0], result[1], result[2], result[3]] : [result[0], result[1], result[2], result[3], result[4]]
+  const goalCards = goalCardsShuffled.slice(0, numberOfGoals)
+  if (isExpertGame) {
+    for (let i = 0; i < goalCards.length; i++){
+      if (Math.random() < 0.5) {
+        goalCards[i] = goalCards[i] + numberOfGoalCards // Moon side is the second part of the goals array
+      }
+    }
   }
-
+  return goalCards
 }
 
 function setupHuntingBoard(game: GameState): number[] {
