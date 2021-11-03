@@ -1,8 +1,4 @@
-import GameState from "../GameState";
-import GameView from "../GameView";
-import { allPolyominos } from "../material/Polyominos";
-import PlayerColor from "../PlayerColor";
-import Animal from "../types/Animal";
+import {allPolyominos} from "../material/Polyominos";
 import Coordinates from "../types/Coordinates";
 import PlacedTile from "../types/PlacedTile";
 import {PaintedSquare} from "../types/Polyomino"
@@ -17,32 +13,6 @@ function getSquaresStartLeft(cave:PlacedTile[]):Coordinates[]{
 }
 
 export default getSquaresStartLeft
-
-export function getFreeSquaresFromPath(path:Coordinates[], cave:PlacedTile[]):Coordinates[]{
-    const result:Coordinates[] = []
-    const occupiedSquares:PaintedSquare[] = getOccupiedSquares(cave)
-    if (path.length === 0){
-        return [{x:0,y:0},{x:1,y:0},{x:2,y:0},{x:3,y:0},{x:4,y:0},{x:5,y:0},{x:6,y:0}]
-    }
-    path.forEach(tile => {
-        [{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}].forEach(coord => {
-            const newCoord = {x:tile.x+coord.x,y:tile.y+coord.y}
-            if (!isCoordOutOfBorders(newCoord) && isCoordFree(newCoord, occupiedSquares) && result.find(coord => coord.x === newCoord.x && coord.y === newCoord.y) === undefined){
-                result.push(newCoord)
-            }
-        })
-    })
-
-    return result
-}
-
-export function isCoordOutOfBorders(coord:Coordinates):boolean{
-    return coord.x < 0 || coord.x > 6 || coord.y < 0 || coord.y > 6
-}
-
-export function isCoordFree(coord:Coordinates, occupiedSquares:PaintedSquare[]):boolean{
-    return occupiedSquares.every(square => square.x !== coord.x || square.y !== coord.y)
-}
 
 export function getTilesFromTarget(target:Coordinates,list:Coordinates[], occupiedSquares:PaintedSquare[]):Coordinates[]{
     const coordIterator:Coordinates[] = [{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}]
