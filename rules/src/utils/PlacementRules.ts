@@ -13,8 +13,9 @@ export function getCavePlacementSpaces(player: PlayerState | PlayerView | Player
   const placementSpaces: PlacementSpace[][] = cave.map(row => row.map(space =>
     space === Space.Hunter || space === Space.TotemAnimal ? PlacementSpace.BLOCKED : PlacementSpace.FREE
   ))
-  if (player.cave.length > 3) { // TODO: do not place Hunter and Totem animal at startup as if they were tiles
-    for (const placedTile of player.cave) {
+  const placedTiles = player.cave.slice(3) // TODO: do not place Hunter and Totem animal at startup as if they were tiles
+  if (placedTiles.length > 0) {
+    for (const placedTile of placedTiles) {
       for (const {x, y} of getPlacedTileCoordinates(placedTile)) {
         placementSpaces[y][x] = PlacementSpace.BLOCKED
       }
