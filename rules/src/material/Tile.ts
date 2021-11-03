@@ -1,4 +1,4 @@
-enum Painting {
+enum Tile {
   Hunter, TotemicAnimal,
   Fish1, Fish2, Fish3A, Fish3B, Fish4A, Fish4B,
   Mammoth1, Mammoth2, Mammoth3A, Mammoth3B, Mammoth4A, Mammoth4B,
@@ -10,30 +10,30 @@ enum Painting {
 
 const X = true, _ = false
 
-export function getPolyomino(tile: Painting, flipped?: boolean): boolean[][] {
+export function getPolyomino(tile: Tile, flipped?: boolean): boolean[][] {
   switch (tile) {
-    case Painting.Hunter:
-    case Painting.TotemicAnimal:
-    case Painting.Fish1:
-    case Painting.Mammoth1:
-    case Painting.Buffalo1:
-    case Painting.Ibex1:
-    case Painting.Boar1:
+    case Tile.Hunter:
+    case Tile.TotemicAnimal:
+    case Tile.Fish1:
+    case Tile.Mammoth1:
+    case Tile.Buffalo1:
+    case Tile.Ibex1:
+    case Tile.Boar1:
       return [[X]]
-    case Painting.Fish2:
-    case Painting.Mammoth2:
-    case Painting.Buffalo2:
-    case Painting.Ibex2:
-    case Painting.Boar2:
+    case Tile.Fish2:
+    case Tile.Mammoth2:
+    case Tile.Buffalo2:
+    case Tile.Ibex2:
+    case Tile.Boar2:
       return !flipped ? [
         [X, X]
       ] : [
         [X],
         [X]
       ]
-    case Painting.Fish3A:
-    case Painting.Mammoth3A:
-    case Painting.Buffalo3A:
+    case Tile.Fish3A:
+    case Tile.Mammoth3A:
+    case Tile.Buffalo3A:
       return !flipped ? [
         [X, _],
         [X, X]
@@ -41,9 +41,9 @@ export function getPolyomino(tile: Painting, flipped?: boolean): boolean[][] {
         [X, X],
         [X, _]
       ]
-    case Painting.Fish3B:
-    case Painting.Mammoth3B:
-    case Painting.Buffalo3B:
+    case Tile.Fish3B:
+    case Tile.Mammoth3B:
+    case Tile.Buffalo3B:
       return !flipped ? [
         [_, X],
         [X, X]
@@ -51,8 +51,8 @@ export function getPolyomino(tile: Painting, flipped?: boolean): boolean[][] {
         [X, X],
         [_, X]
       ]
-    case Painting.Ibex3A:
-    case Painting.Boar3A:
+    case Tile.Ibex3A:
+    case Tile.Boar3A:
       return !flipped ? [
         [X, _],
         [X, X]
@@ -60,8 +60,8 @@ export function getPolyomino(tile: Painting, flipped?: boolean): boolean[][] {
         [X, X],
         [_, X]
       ]
-    case Painting.Ibex3B:
-    case Painting.Boar3B:
+    case Tile.Ibex3B:
+    case Tile.Boar3B:
       return !flipped ? [
         [_, X],
         [X, X]
@@ -69,8 +69,8 @@ export function getPolyomino(tile: Painting, flipped?: boolean): boolean[][] {
         [X, X],
         [X, _]
       ]
-    case Painting.Fish4A:
-    case Painting.Ibex4A:
+    case Tile.Fish4A:
+    case Tile.Ibex4A:
       return !flipped ? [
         [X, X, _],
         [_, X, X]
@@ -78,8 +78,8 @@ export function getPolyomino(tile: Painting, flipped?: boolean): boolean[][] {
         [_, X, X],
         [X, X, _]
       ]
-    case Painting.Fish4B:
-    case Painting.Mammoth4B:
+    case Tile.Fish4B:
+    case Tile.Mammoth4B:
       return !flipped ? [
         [_, X],
         [X, X],
@@ -89,9 +89,9 @@ export function getPolyomino(tile: Painting, flipped?: boolean): boolean[][] {
         [X, X],
         [X, _]
       ]
-    case Painting.Mammoth4A:
-    case Painting.Buffalo4A:
-    case Painting.Boar4A:
+    case Tile.Mammoth4A:
+    case Tile.Buffalo4A:
+    case Tile.Boar4A:
       return !flipped ? [
         [_, X],
         [X, X],
@@ -101,7 +101,7 @@ export function getPolyomino(tile: Painting, flipped?: boolean): boolean[][] {
         [X, X],
         [_, X]
       ]
-    case Painting.Buffalo4B:
+    case Tile.Buffalo4B:
       return !flipped ? [
         [_, X],
         [X, X],
@@ -110,8 +110,8 @@ export function getPolyomino(tile: Painting, flipped?: boolean): boolean[][] {
         [X, X, X],
         [_, X, _]
       ]
-    case Painting.Ibex4B:
-    case Painting.Boar4B:
+    case Tile.Ibex4B:
+    case Tile.Boar4B:
       return !flipped ? [
         [_, X, _],
         [X, X, X]
@@ -119,11 +119,11 @@ export function getPolyomino(tile: Painting, flipped?: boolean): boolean[][] {
         [X, X, X],
         [_, X, _]
       ]
-    case Painting.Legendary1:
-    case Painting.Legendary2:
-    case Painting.Legendary3:
-    case Painting.Legendary4:
-    case Painting.Legendary5:
+    case Tile.Legendary1:
+    case Tile.Legendary2:
+    case Tile.Legendary3:
+    case Tile.Legendary4:
+    case Tile.Legendary5:
       return [
         [X, X],
         [X, X]
@@ -131,4 +131,4 @@ export function getPolyomino(tile: Painting, flipped?: boolean): boolean[][] {
   }
 }
 
-export default Painting
+export default Tile

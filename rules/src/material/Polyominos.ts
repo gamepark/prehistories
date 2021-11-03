@@ -1,65 +1,65 @@
 import Animal from '../types/Animal'
 import Coordinates from '../types/Coordinates'
 import Polyomino from '../types/Polyomino'
-import Painting, {getPolyomino} from './Painting'
+import Tile, {getPolyomino} from './Tile'
 
-function paintingToAnimal(painting: Painting): Animal {
+function paintingToAnimal(painting: Tile): Animal {
   switch (painting) {
-    case Painting.Hunter:
+    case Tile.Hunter:
       return Animal.Hunter
-    case Painting.TotemicAnimal:
+    case Tile.TotemicAnimal:
       return Animal.Totem
-    case Painting.Fish1:
-    case Painting. Fish2:
-    case Painting. Fish3A:
-    case Painting. Fish3B:
-    case Painting. Fish4A:
-    case Painting. Fish4B:
+    case Tile.Fish1:
+    case Tile.Fish2:
+    case Tile.Fish3A:
+    case Tile.Fish3B:
+    case Tile.Fish4A:
+    case Tile.Fish4B:
       return Animal.Fish
-    case Painting.Mammoth1:
-    case Painting. Mammoth2:
-    case Painting. Mammoth3A:
-    case Painting. Mammoth3B:
-    case Painting. Mammoth4A:
-    case Painting. Mammoth4B:
+    case Tile.Mammoth1:
+    case Tile.Mammoth2:
+    case Tile.Mammoth3A:
+    case Tile.Mammoth3B:
+    case Tile.Mammoth4A:
+    case Tile.Mammoth4B:
       return Animal.Mammoth
-    case Painting.Buffalo1:
-    case Painting. Buffalo2:
-    case Painting. Buffalo3A:
-    case Painting. Buffalo3B:
-    case Painting. Buffalo4A:
-    case Painting. Buffalo4B:
+    case Tile.Buffalo1:
+    case Tile.Buffalo2:
+    case Tile.Buffalo3A:
+    case Tile.Buffalo3B:
+    case Tile.Buffalo4A:
+    case Tile.Buffalo4B:
       return Animal.Yak
-    case Painting.Ibex1:
-    case Painting. Ibex2:
-    case Painting. Ibex3A:
-    case Painting. Ibex3B:
-    case Painting. Ibex4A:
-    case Painting. Ibex4B:
+    case Tile.Ibex1:
+    case Tile.Ibex2:
+    case Tile.Ibex3A:
+    case Tile.Ibex3B:
+    case Tile.Ibex4A:
+    case Tile.Ibex4B:
       return Animal.Ibex
-    case Painting.Boar1:
-    case Painting. Boar2:
-    case Painting. Boar3A:
-    case Painting. Boar3B:
-    case Painting. Boar4A:
-    case Painting. Boar4B:
+    case Tile.Boar1:
+    case Tile.Boar2:
+    case Tile.Boar3A:
+    case Tile.Boar3B:
+    case Tile.Boar4A:
+    case Tile.Boar4B:
       return Animal.Boar
-    case Painting.Legendary1:
+    case Tile.Legendary1:
       return Animal.Legendary1
-    case Painting. Legendary2:
+    case Tile.Legendary2:
       return Animal.Legendary2
-    case Painting. Legendary3:
+    case Tile.Legendary3:
       return Animal.Legendary3
-    case Painting. Legendary4:
+    case Tile.Legendary4:
       return Animal.Legendary4
-    case Painting. Legendary5:
+    case Tile.Legendary5:
       return Animal.Legendary5
   }
 }
 
-function getReversedCoordinates(painting: Painting, flipped?: boolean): Coordinates[] {
+function getReversedCoordinates(painting: Tile, flipped?: boolean): Coordinates[] {
   const coordinates: Coordinates[] = []
-  for (let x = 0; x < getPolyomino(painting, flipped).length; x++){
+  for (let x = 0; x < getPolyomino(painting, flipped).length; x++) {
     const row = getPolyomino(painting, flipped)[x]
     for (let y = 0; y < row.length; y++) {
       if (row[y]) {
@@ -70,7 +70,7 @@ function getReversedCoordinates(painting: Painting, flipped?: boolean): Coordina
   return coordinates
 }
 
-function paintingToPolyomino(painting: Painting): Polyomino {
+function paintingToPolyomino(painting: Tile): Polyomino {
   const animal = paintingToAnimal(painting)
   return [{
     animal: animal,
@@ -81,27 +81,27 @@ function paintingToPolyomino(painting: Painting): Polyomino {
   }]
 }
 
-export const allPolyominos:Polyomino[] = [
-  Painting.Hunter, Painting.TotemicAnimal,
-  Painting.Fish1, Painting.Fish1, Painting.Fish1, Painting.Fish1, Painting.Fish1,
-  Painting.Mammoth1, Painting.Mammoth1, Painting.Mammoth1, Painting.Mammoth1, Painting.Mammoth1,
-  Painting.Ibex1, Painting.Ibex1, Painting.Ibex1, Painting.Ibex1, Painting.Ibex1,
-  Painting.Buffalo1, Painting.Buffalo1, Painting.Buffalo1, Painting.Buffalo1, Painting.Buffalo1,
-  Painting.Boar1, Painting.Boar1, Painting.Boar1, Painting.Boar1, Painting.Boar1,
-  Painting.Fish2, Painting.Fish2, Painting.Fish2, Painting.Fish2, Painting.Fish2,
-  Painting.Mammoth2, Painting.Mammoth2, Painting.Mammoth2, Painting.Mammoth2, Painting.Mammoth2,
-  Painting.Ibex2, Painting.Ibex2, Painting.Ibex2, Painting.Ibex2, Painting.Ibex2,
-  Painting.Buffalo2, Painting.Buffalo2, Painting.Buffalo2, Painting.Buffalo2, Painting.Buffalo2,
-  Painting.Boar2, Painting.Boar2, Painting.Boar2, Painting.Boar2, Painting.Boar2,
-  Painting.Fish3A, Painting.Fish3B,
-  Painting.Mammoth3A, Painting.Mammoth3B,
-  Painting.Ibex3A, Painting.Ibex3B,
-  Painting.Buffalo3A, Painting.Buffalo3B,
-  Painting.Boar3A, Painting.Boar3B,
-  Painting.Fish4A, Painting.Fish4B,
-  Painting.Mammoth4A, Painting.Mammoth4B,
-  Painting.Ibex4A, Painting.Ibex4B,
-  Painting.Buffalo4A, Painting.Buffalo4B,
-  Painting.Boar4A, Painting.Boar4B,
-  Painting.Legendary1, Painting.Legendary2, Painting.Legendary3, Painting.Legendary4, Painting.Legendary5
+export const allPolyominos: Polyomino[] = [
+  Tile.Hunter, Tile.TotemicAnimal,
+  Tile.Fish1, Tile.Fish1, Tile.Fish1, Tile.Fish1, Tile.Fish1,
+  Tile.Mammoth1, Tile.Mammoth1, Tile.Mammoth1, Tile.Mammoth1, Tile.Mammoth1,
+  Tile.Ibex1, Tile.Ibex1, Tile.Ibex1, Tile.Ibex1, Tile.Ibex1,
+  Tile.Buffalo1, Tile.Buffalo1, Tile.Buffalo1, Tile.Buffalo1, Tile.Buffalo1,
+  Tile.Boar1, Tile.Boar1, Tile.Boar1, Tile.Boar1, Tile.Boar1,
+  Tile.Fish2, Tile.Fish2, Tile.Fish2, Tile.Fish2, Tile.Fish2,
+  Tile.Mammoth2, Tile.Mammoth2, Tile.Mammoth2, Tile.Mammoth2, Tile.Mammoth2,
+  Tile.Ibex2, Tile.Ibex2, Tile.Ibex2, Tile.Ibex2, Tile.Ibex2,
+  Tile.Buffalo2, Tile.Buffalo2, Tile.Buffalo2, Tile.Buffalo2, Tile.Buffalo2,
+  Tile.Boar2, Tile.Boar2, Tile.Boar2, Tile.Boar2, Tile.Boar2,
+  Tile.Fish3A, Tile.Fish3B,
+  Tile.Mammoth3A, Tile.Mammoth3B,
+  Tile.Ibex3A, Tile.Ibex3B,
+  Tile.Buffalo3A, Tile.Buffalo3B,
+  Tile.Boar3A, Tile.Boar3B,
+  Tile.Fish4A, Tile.Fish4B,
+  Tile.Mammoth4A, Tile.Mammoth4B,
+  Tile.Ibex4A, Tile.Ibex4B,
+  Tile.Buffalo4A, Tile.Buffalo4B,
+  Tile.Boar4A, Tile.Boar4B,
+  Tile.Legendary1, Tile.Legendary2, Tile.Legendary3, Tile.Legendary4, Tile.Legendary5
 ].map(paintingToPolyomino)
