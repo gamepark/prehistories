@@ -9,13 +9,16 @@ import MoveType from './MoveType'
 
 type PlaceTile = {
   type: MoveType.PlaceTile
-  polyomino: number        // TODO
-  side: 0 | 1
-  square: Coordinates
   huntSpot: number
+  side: 0 | 1
+  coordinates: Coordinates
 }
 
 export default PlaceTile
+
+export function placeTileMove(huntSpot: number, side: 0 | 1, coordinates: Coordinates): PlaceTile {
+  return {type: MoveType.PlaceTile, huntSpot, side, coordinates}
+}
 
 export function placeTile(state: GameState | GameView, move: PlaceTile) {
   const player = getFirstOfSortedPlayer(state)
@@ -23,7 +26,7 @@ export function placeTile(state: GameState | GameView, move: PlaceTile) {
   if (polyomino === null) {
     throw('error : trying to paint a null polyomino !')
   } else {
-    player.cave.push({tile: polyomino, side: move.side, x: move.square.x, y: move.square.y})
+    player.cave.push({tile: polyomino, side: move.side, ...move.coordinates})
     player.hunting = {
       huntPhase: HuntPhase.Pay,
       huntSpotTakenLevels: getPowerLevels(state.players.length, move.huntSpot),

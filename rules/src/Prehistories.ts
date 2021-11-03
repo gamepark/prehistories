@@ -16,7 +16,7 @@ import Move from './moves/Move'
 import MoveType from './moves/MoveType'
 import MoveView from './moves/MoveView'
 import PlayHuntCard, {playHuntCard} from './moves/PlayHuntCard'
-import PlaceTile, {placeTile} from './moves/PlaceTile'
+import PlaceTile, {placeTile, placeTileMove} from './moves/PlaceTile'
 import {getNewTile, refillHuntingBoard} from './moves/RefillHuntingBoard'
 import {revealHuntCards} from './moves/RevealHuntCards'
 import {setHuntPhase} from './moves/SetHuntPhase'
@@ -104,7 +104,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
                       && allPolyominos[tile][side].coordinates.every(coord => !isCoordOutOfBorders({
                         x: coord.x + x, y: coord.y + y
                       }) && isCoordFree({x: coord.x + x, y: coord.y + y}, getOccupiedSquares(player.cave)))) {
-                      playPolyominoMoves.push({type: MoveType.PlaceTile, huntSpot: index, polyomino: tile, side, square: {x, y}})
+                      playPolyominoMoves.push(placeTileMove(index, side, {x, y}))
                     }
                   }
                 }

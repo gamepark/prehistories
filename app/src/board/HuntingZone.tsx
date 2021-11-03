@@ -48,7 +48,7 @@ const HuntingZone : FC<Props> = ({game, numberOfPlayers, indexOfDisplayedPlayer,
                     key={index}
                     css={[
                         polyominoToHuntSize(index, numberOfPlayers, polyomino, (playPolyominoAnimation !== undefined && playPolyominoAnimation.move.huntSpot === index ? 1 : sideArray[index]), 8, 16), polyominoToHuntPosition(index, numberOfPlayers, polyomino, sideArray[index]),
-                        playPolyominoAnimation?.move.huntSpot === index && indexListDisplayedPlayers !== undefined && activePlayer !== undefined && playPolyominoAnimationStyle(playPolyominoAnimation.duration, indexOfDisplayedPlayer, indexListDisplayedPlayers, activePlayer, playPolyominoAnimation.move.square.x, playPolyominoAnimation.move.square.y)
+                        playPolyominoAnimation?.move.huntSpot === index && indexListDisplayedPlayers !== undefined && activePlayer !== undefined && playPolyominoAnimationStyle(playPolyominoAnimation.duration, indexOfDisplayedPlayer, indexListDisplayedPlayers, activePlayer, playPolyominoAnimation.move.coordinates.x, playPolyominoAnimation.move.coordinates.y)
                     ]}
                     isAnimation={playPolyominoAnimation?.move.huntSpot === index}
                     side={playPolyominoAnimation?.move.huntSpot === index ? playPolyominoAnimation.move.side : sideArray[index]}

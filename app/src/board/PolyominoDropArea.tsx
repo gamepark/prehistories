@@ -1,17 +1,21 @@
 /** @jsxImportSource @emotion/react */
 import PolyominoToHunt from "@gamepark/prehistories/types/appTypes/PolyominoToHunt"
 import Coordinates from "@gamepark/prehistories/types/Coordinates"
-import getSquaresStartLeft, { getFreeSquaresFromPath, getOccupiedSquares, isCoordFree, isCoordOutOfBorders } from "@gamepark/prehistories/utils/getSquaresStartLeft"
-import { HTMLAttributes, useCallback, useMemo, useRef } from "react"
-import { DropTargetMonitor, useDrop, XYCoord } from "react-dnd"
-import { PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
-import { allPolyominos } from "@gamepark/prehistories/material/Polyominos"
-import { css } from "@emotion/react"
+import getSquaresStartLeft, {
+  getFreeSquaresFromPath,
+  getOccupiedSquares,
+  isCoordFree,
+  isCoordOutOfBorders
+} from "@gamepark/prehistories/utils/getSquaresStartLeft"
+import {HTMLAttributes, useCallback, useRef} from "react"
+import {DropTargetMonitor, useDrop, XYCoord} from "react-dnd"
+import {PlayerHuntView, PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
+import {allPolyominos} from "@gamepark/prehistories/material/Polyominos"
+import {css} from "@emotion/react"
 import useEfficientDragLayer from '@gamepark/react-components/dist/Draggable/useEfficientDragLayer'
-import { HandItem } from "@gamepark/react-components"
-import MoveType from "@gamepark/prehistories/moves/MoveType"
-import { useSound } from "@gamepark/react-client"
+import {useSound} from "@gamepark/react-client"
 import MoveTileSound from "../sounds/moveTile.mp3"
+import {placeTileMove} from "@gamepark/prehistories/moves/PlaceTile";
 
 
 type Props = {
@@ -43,7 +47,7 @@ type Props = {
       drop: (item: PolyominoToHunt, monitor) => {
         moveTileSound.play()
         const position = getAreaPosition(monitor.getSourceClientOffset()!)
-        return {type:MoveType.PlaceTile,polyomino:item.polyomino,side:item.side, huntSpot:item.huntSpot, square:{x:position.x,y:position.y}}
+        return placeTileMove(item.huntSpot, item.side, position)
       },
       collect: (monitor: DropTargetMonitor<PolyominoToHunt>) => {
         return ({
