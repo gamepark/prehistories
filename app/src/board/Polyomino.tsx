@@ -111,12 +111,12 @@ backface-visibility:hidden;
 const flipTile = (side:0|1) => css`
 transform-style:preserve-3d;
 transform:rotateY(${side * 180}deg);
-transition:transform 0.2s linear, top 0.2s linear, left 0.2s linear;
+transition:transform 0.2s linear, top 0.2s cubic-bezier(1,0,0,1), left 0.2s cubic-bezier(1,0,0,1);
 `
 
 const displayHuntPolyomino = (isDragging:boolean, pos:number|undefined, polyomino:number, nbPlayers:number|undefined, side:0|1, face:"front"|"back", isAnimation:boolean) => css`
 transform:scale(${pos === undefined ? 1 : 0.8}) rotateZ(${pos === undefined || nbPlayers === undefined || isDragging || isAnimation ? 0 : getRotate(pos, nbPlayers, side, polyomino)}deg) rotateY(${face === "front" ? 0 : 180}deg);
-transition:transform 0.1s linear;
+transition:transform 0.2s linear;
 `
 
 const polyominoSize = css`

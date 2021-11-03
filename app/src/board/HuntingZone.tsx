@@ -91,7 +91,7 @@ const polyominoToHuntPosition = (position:number, numberOfPlayers:number, polyom
 position:absolute;
 top:${getTop(position, numberOfPlayers, side, polyomino)}%;
 left:${getLeft(position, numberOfPlayers, side, polyomino)}%;
-transition:top 0.1s linear, left 0.1s linear;
+transition:top 0.2s cubic-bezier(1,0,0,1), left 0.2s cubic-bezier(1,0,0,1), width 0.2s cubic-bezier(1,0,0,1), height 0.2s cubic-bezier(1,0,0,1);
 `
 
 const huntingZonePosition = css`
