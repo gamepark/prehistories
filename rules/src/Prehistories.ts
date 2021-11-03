@@ -70,7 +70,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
       case Phase.Initiative:
         return !this.state.players.find(p => p.color === playerId)?.isReady
       case Phase.Hunt:
-        return this.state.sortedPlayers !== undefined ? this.state.sortedPlayers![0] === playerId : false
+        return this.state.sortedPlayers !== undefined && this.state.sortedPlayers[0] === playerId
       default:
         return false
     }
@@ -79,7 +79,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
   getLegalMoves(color: PlayerColor): Move[] {
     const player = this.state.players.find(p => p.color === color)!
     if (this.state.phase === Phase.Initiative) {
-      if (player.isReady === true) {
+      if (player.isReady) {
         return []
       } else {
         const playHuntCardMoves: (PlayHuntCard | TellYouAreReady)[] = []
@@ -89,7 +89,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         playHuntCardMoves.push({type: MoveType.TellYouAreReady, playerId: color})
         return playHuntCardMoves
       }
-    } else if (player.huntingProps !== undefined) {
+    } else if (player.huntingProps) {
       switch (player.huntingProps.huntPhase) {
         case HuntPhase.Hunt : {
           const playPolyominoMoves: (PlayPolyomino | EndTurn)[] = []
@@ -175,12 +175,13 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
 
     switch (this.state.phase) {
       case Phase.Initiative: {
-        if (this.state.players.every(p => p.isReady === true)) {
+        if (this.state.players.every(p => p.isReady)) {
           return {type: MoveType.RevealHuntCards}
         } else return
       }
       case Phase.Hunt: {
-        if (this.state.sortedPlayers!.length === 0) {
+        if (!this.state.sortedPlayers) return
+        if (this.state.sortedPlayers.length === 0) {
           return {type: MoveType.RefillHuntingBoard}
         }
 
@@ -188,16 +189,16 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
           return {type: MoveType.EndGame}
         }
 
-        const player = this.state.players.find(p => p.color === this.state.sortedPlayers![0])!
-
-        switch (player.huntingProps!.huntPhase) {
+        const currentPlayer = this.state.sortedPlayers[0]
+        const player = this.state.players.find(p => p.color === currentPlayer)!
+        if (!player.huntingProps) return
+        switch (player.huntingProps.huntPhase) {
           case HuntPhase.Pay: {
-            if (player.huntingProps!.huntSpotTakenLevels![1] <= 0) {
+            if (player.huntingProps.huntSpotTakenLevels && player.huntingProps.huntSpotTakenLevels[1] <= 0) {
               return {type: MoveType.ValidateSpentHunters}
             } else return
           }
           case HuntPhase.CheckPermanentObjectives: {
-
             const result = checkPermanentObjectives(player)
             if (result[0].length !== 0 || result[1].length !== 0 || result[2]) {
               return {type: MoveType.ResolvePermanentObjectives, objectivesCompleted: result}
@@ -208,7 +209,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
 
           case HuntPhase.CheckVariableObjectives: {
             const result = checkVariableObjectives(this.state, player)
-            if (result !== false) {
+            if (result) {
               return {type: MoveType.ResolveVariableObjectives, goal: result[0], tokens: result[1]}
             } else {
               return {type: MoveType.SetHuntPhase}
@@ -234,9 +235,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
           }
         }
       }
-
     }
-
     return
   }
 
