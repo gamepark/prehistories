@@ -28,12 +28,14 @@ import ValidateSpendedHunters, {validateSpentHunters} from './moves/ValidateSpen
 import PlayerColor from './PlayerColor'
 import PlayerState, {setupCave, setupDeck} from './PlayerState'
 import {isGameOptions, PrehistoriesOptions, PrehistoriesPlayerOptions} from './PrehistoriesOptions'
-import Coordinates from './types/Coordinates'
 import Phase, {HuntPhase} from './types/Phase'
 import {PlayerHuntView, PlayerView, PlayerViewSelf} from './types/PlayerView'
-import getSquaresStartLeft, {getFreeSquaresFromPath, getOccupiedSquares, isCoordFree, isCoordOutOfBorders} from './utils/getSquaresStartLeft'
 import getPowerLevels from './utils/powerLevels'
 import teamPower from './utils/teamPower'
+import {getCavePlacementSpaces, PlacementSpace} from "./utils/PlacementRules";
+import PlacedTile, {getPlacedTileCoordinates} from "./types/PlacedTile";
+import {cavesSize} from "./material/Caves";
+import {sides} from "./material/Tile";
 
 export default class Prehistories extends SimultaneousGame<GameState, Move, PlayerColor>
   implements SecretInformation<GameState, GameView, Move, MoveView, PlayerColor>, Undo<GameState, Move, PlayerColor> {
@@ -93,24 +95,24 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
       switch (player.hunting.huntPhase) {
         case HuntPhase.Hunt : {
           const playPolyominoMoves: (PlaceTile | EndTurn)[] = []
-          const accessibleSquares: Coordinates[] = getFreeSquaresFromPath(getSquaresStartLeft(player.cave), player.cave)
-          this.state.huntingBoard.forEach((tile, index) => {
-            if (tile !== null && teamPower(player.played) >= getPowerLevels(this.state.players.length, index)[0]) {
-              ([0, 1] as (0 | 1)[]).forEach(side => {
-                for (let x = 0; x < 7; x++) {
-                  for (let y = 0; y < 7; y++) {
-
-                    if (allPolyominos[tile][side].coordinates.some(coord => accessibleSquares.find(square => square.x === x + coord.x && square.y === y + coord.y))
-                      && allPolyominos[tile][side].coordinates.every(coord => !isCoordOutOfBorders({
-                        x: coord.x + x, y: coord.y + y
-                      }) && isCoordFree({x: coord.x + x, y: coord.y + y}, getOccupiedSquares(player.cave)))) {
-                      playPolyominoMoves.push(placeTileMove(index, side, {x, y}))
-                    }
-                  }
-                }
-              })
+          const cave = getCavePlacementSpaces(player)
+          for (let huntSpot = 0; huntSpot < this.state.huntingBoard.length; huntSpot++) {
+            const tile = this.state.huntingBoard[huntSpot]
+            if (tile === null || teamPower(player.played) < getPowerLevels(this.state.players.length, huntSpot)[0]) {
+              continue
             }
-          })
+            for (let x = 0; x < cavesSize; x++) {
+              for (let y = 0; y < cavesSize; y++) {
+                sides.forEach(side => {
+                  const placedTile: PlacedTile = {tile, side, x, y}
+                  const coordinates = getPlacedTileCoordinates(placedTile)
+                  if (coordinates.every(({x, y}) => cave[y] && cave[y][x]) && coordinates.some(({x, y}) => cave[y][x] === PlacementSpace.CONNECTED)) {
+                    playPolyominoMoves.push(placeTileMove(huntSpot, side, {x, y}))
+                  }
+                })
+              }
+            }
+          }
           const endTurnMove: EndTurn[] = [{type: MoveType.EndTurn}]
           return playPolyominoMoves.concat(endTurnMove)
         }
@@ -288,7 +290,10 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         if (playerId === this.state.sortedPlayers![0]) {
           return move
         } else {
-          return {type: MoveType.TakeBackPlayedCards, playedLength: this.state.players.find(p => p.color === this.state.sortedPlayers![0])!.played.length}
+          return {
+            type: MoveType.TakeBackPlayedCards,
+            playedLength: this.state.players.find(p => p.color === this.state.sortedPlayers![0])!.played.length
+          }
         }
       case MoveType.DrawXCards:
         if (playerId === this.state.sortedPlayers![0]) {

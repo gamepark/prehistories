@@ -1,3 +1,5 @@
+import Coordinates from "../types/Coordinates";
+
 enum Tile {
   Hunter, TotemicAnimal,
   Fish1, Fish2, Fish3A, Fish3B, Fish4A, Fish4B,
@@ -33,9 +35,13 @@ export const tiles = [
   Tile.Legendary1, Tile.Legendary2, Tile.Legendary3, Tile.Legendary4, Tile.Legendary5
 ]
 
+export type Side = 0 | 1
+
+export const sides: Side[] = [0, 1]
+
 const X = true, _ = false
 
-export function getPolyomino(tile: Tile, flipped?: boolean): boolean[][] {
+export function getPolyomino(tile: Tile, side: Side): boolean[][] {
   switch (tile) {
     case Tile.Hunter:
     case Tile.TotemicAnimal:
@@ -50,7 +56,7 @@ export function getPolyomino(tile: Tile, flipped?: boolean): boolean[][] {
     case Tile.Buffalo2:
     case Tile.Ibex2:
     case Tile.Boar2:
-      return !flipped ? [
+      return side === 0 ? [
         [X, X]
       ] : [
         [X],
@@ -59,7 +65,7 @@ export function getPolyomino(tile: Tile, flipped?: boolean): boolean[][] {
     case Tile.Fish3A:
     case Tile.Mammoth3A:
     case Tile.Buffalo3A:
-      return !flipped ? [
+      return side === 0 ? [
         [X, _],
         [X, X]
       ] : [
@@ -69,7 +75,7 @@ export function getPolyomino(tile: Tile, flipped?: boolean): boolean[][] {
     case Tile.Fish3B:
     case Tile.Mammoth3B:
     case Tile.Buffalo3B:
-      return !flipped ? [
+      return side === 0 ? [
         [_, X],
         [X, X]
       ] : [
@@ -78,7 +84,7 @@ export function getPolyomino(tile: Tile, flipped?: boolean): boolean[][] {
       ]
     case Tile.Ibex3A:
     case Tile.Boar3A:
-      return !flipped ? [
+      return side === 0 ? [
         [X, _],
         [X, X]
       ] : [
@@ -87,7 +93,7 @@ export function getPolyomino(tile: Tile, flipped?: boolean): boolean[][] {
       ]
     case Tile.Ibex3B:
     case Tile.Boar3B:
-      return !flipped ? [
+      return side === 0 ? [
         [_, X],
         [X, X]
       ] : [
@@ -96,7 +102,7 @@ export function getPolyomino(tile: Tile, flipped?: boolean): boolean[][] {
       ]
     case Tile.Fish4A:
     case Tile.Ibex4A:
-      return !flipped ? [
+      return side === 0 ? [
         [X, X, _],
         [_, X, X]
       ] : [
@@ -105,7 +111,7 @@ export function getPolyomino(tile: Tile, flipped?: boolean): boolean[][] {
       ]
     case Tile.Fish4B:
     case Tile.Mammoth4B:
-      return !flipped ? [
+      return side === 0 ? [
         [_, X],
         [X, X],
         [_, X]
@@ -117,7 +123,7 @@ export function getPolyomino(tile: Tile, flipped?: boolean): boolean[][] {
     case Tile.Mammoth4A:
     case Tile.Buffalo4A:
     case Tile.Boar4A:
-      return !flipped ? [
+      return side === 0 ? [
         [_, X],
         [X, X],
         [X, _]
@@ -127,7 +133,7 @@ export function getPolyomino(tile: Tile, flipped?: boolean): boolean[][] {
         [_, X]
       ]
     case Tile.Buffalo4B:
-      return !flipped ? [
+      return side === 0 ? [
         [_, X],
         [X, X],
         [_, X]
@@ -137,7 +143,7 @@ export function getPolyomino(tile: Tile, flipped?: boolean): boolean[][] {
       ]
     case Tile.Ibex4B:
     case Tile.Boar4B:
-      return !flipped ? [
+      return side === 0 ? [
         [_, X, _],
         [X, X, X]
       ] : [
@@ -154,6 +160,45 @@ export function getPolyomino(tile: Tile, flipped?: boolean): boolean[][] {
         [X, X]
       ]
   }
+}
+
+export function getPolyominoCoordinates(polyomino: boolean[][]): Coordinates[] {
+  const coordinates: Coordinates[] = []
+  for (let y = 0; y < polyomino.length; y++) {
+    for (let x = 0; x < polyomino[y].length; x++) {
+      if (polyomino[y][x]) coordinates.push({x: x, y: y})
+    }
+  }
+  return coordinates
+}
+
+export function getPolyominoAdjacentCoordinates(polyomino: boolean[][]): Coordinates[] {
+  const coordinates: Coordinates[] = []
+  for (let y = 0; y < polyomino.length; y++) {
+    for (let x = 0; x < polyomino[y].length; x++) {
+      if (!polyomino[y][x]
+        && (polyomino[y][x - 1] || polyomino[y][x + 1] || (polyomino[y - 1] && polyomino[y - 1][x]) || (polyomino[y + 1] && polyomino[y + 1][x]))) {
+        coordinates.push({x, y: polyomino.length - 1 - y})
+      }
+    }
+  }
+  for (let y = 0; y < polyomino.length; y++) {
+    if (polyomino[y][0]) {
+      coordinates.push({x: -1, y: polyomino.length - 1 - y})
+    }
+    if (polyomino[y][polyomino[0].length - 1]) {
+      coordinates.push({x: polyomino[0].length - 1, y: polyomino.length - 1 - y})
+    }
+  }
+  for (let x = 0; x < polyomino[0].length; x++) {
+    if (polyomino[0][x]) {
+      coordinates.push({x, y: -1})
+    }
+    if (polyomino[polyomino.length - 1][x]) {
+      coordinates.push({x, y: polyomino.length - 1})
+    }
+  }
+  return coordinates
 }
 
 export default Tile

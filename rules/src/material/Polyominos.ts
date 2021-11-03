@@ -1,7 +1,7 @@
 import Animal from '../types/Animal'
 import Coordinates from '../types/Coordinates'
 import Polyomino from '../types/Polyomino'
-import Tile, {getPolyomino, tiles} from './Tile'
+import Tile, {getPolyomino, Side, tiles} from './Tile'
 
 function paintingToAnimal(painting: Tile): Animal {
   switch (painting) {
@@ -57,10 +57,10 @@ function paintingToAnimal(painting: Tile): Animal {
   }
 }
 
-function getReversedCoordinates(painting: Tile, flipped?: boolean): Coordinates[] {
+function getReversedCoordinates(painting: Tile, side: Side): Coordinates[] {
   const coordinates: Coordinates[] = []
-  for (let x = 0; x < getPolyomino(painting, flipped).length; x++) {
-    const row = getPolyomino(painting, flipped)[x]
+  for (let x = 0; x < getPolyomino(painting, side).length; x++) {
+    const row = getPolyomino(painting, side)[x]
     for (let y = 0; y < row.length; y++) {
       if (row[y]) {
         coordinates.push({x, y})
@@ -74,10 +74,10 @@ function paintingToPolyomino(painting: Tile): Polyomino {
   const animal = paintingToAnimal(painting)
   return [{
     animal: animal,
-    coordinates: getReversedCoordinates(painting)
+    coordinates: getReversedCoordinates(painting, 0)
   }, {
     animal: animal,
-    coordinates: getReversedCoordinates(painting, true)
+    coordinates: getReversedCoordinates(painting, 1)
   }]
 }
 
