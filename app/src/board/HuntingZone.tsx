@@ -7,11 +7,12 @@ import Phase, { HuntPhase } from "@gamepark/prehistories/types/Phase";
 import { isPlayerHuntView, isPlayerViewSelf, PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
 import getPowerLevels from "@gamepark/prehistories/utils/powerLevels";
 import teamPower from "@gamepark/prehistories/utils/teamPower";
-import { useAnimation, usePlayerId } from "@gamepark/react-client";
+import { useAnimation, usePlayerId, useSound } from "@gamepark/react-client";
 import { FC, useState } from "react";
 import Images from "../utils/Images";
 import { tileSize } from "./Cave";
 import Polyomino from "./Polyomino";
+import MoveTileSound from "../sounds/moveTile.mp3"
 
 type Props = {
     game:GameView
@@ -25,8 +26,11 @@ const HuntingZone : FC<Props> = ({game, numberOfPlayers, indexOfDisplayedPlayer,
     const playerId = usePlayerId<PlayerColor>()
     const playPolyominoAnimation = useAnimation<PlayPolyomino>(animation => isPlayPolyomino(animation.move))
     const startHook:(0|1)[] = numberOfPlayers < 4 ? [0,0,0,0,0] : [0,0,0,0,0,0,0] 
+    const moveTileSound = useSound(MoveTileSound)
+    moveTileSound.volume = 0.5
 
     function createSideArray(index:number, side:number):(0|1)[]{
+        moveTileSound.play()
         const array:(0|1)[] = numberOfPlayers < 4 ? [0,0,0,0,0] : [0,0,0,0,0,0,0] 
         array[index] = side === 0 ? 1 : 0
         return array

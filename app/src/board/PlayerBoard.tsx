@@ -12,7 +12,7 @@ import { useDrop } from "react-dnd";
 import CardInHand, {isCardInHand} from "@gamepark/prehistories/types/appTypes/CardInHand";
 import CardPlayed from "@gamepark/prehistories/types/appTypes/CardPlayed";
 import MoveType from "@gamepark/prehistories/moves/MoveType";
-import { useAnimation, useAnimations, usePlay, usePlayerId } from "@gamepark/react-client";
+import { useAnimation, useAnimations, usePlay, usePlayerId, useSound } from "@gamepark/react-client";
 import Phase, { HuntPhase } from "@gamepark/prehistories/types/Phase";
 import { Hand, Picture } from "@gamepark/react-components";
 import Move from "@gamepark/prehistories/moves/Move";
@@ -24,6 +24,8 @@ import DrawXCards, { DrawXCardsView, isDrawXCards, isDrawXCardsView } from "@gam
 import { getPlayerColor } from "../utils/getterFunctions";
 import Button from "../utils/Button";
 import SetSelectedHunters, { ResetSelectedHunters, resetSelectedHuntersMove, setSelectedHunterMove } from "../localMoves/setSelectedHunters";
+import MoveCardSound from "../sounds/cardMove.mp3"
+import ButtonClickSound from "../sounds/buttonClick.mp3"
 
 type Props = {
     player:PlayerView | PlayerViewSelf | PlayerHuntView,
@@ -40,6 +42,10 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
     const {t} = useTranslation()
     const playerId = usePlayerId<PlayerColor>()
     const play = usePlay<Move>()
+    const moveCardSound = useSound(MoveCardSound)
+    moveCardSound.volume = 0.5
+    const clickSound = useSound(ButtonClickSound)
+    clickSound.volume = 0.5
 
     const playHuntCardAnimation = useAnimation<PlayHuntCardView>(animation => isPlayHuntCard(animation.move))
     const revealCardsAnimation = useAnimation<RevealHuntCardsView>(animation => isRevealHuntCards(animation.move))
@@ -62,6 +68,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
     const isDisplayHuntingButtons:boolean = phase === Phase.Hunt && playerId === player.color && player.huntingProps?.huntPhase === HuntPhase.Pay
 
     function validateHunters(hunters:number[]|undefined, injury:boolean){
+        clickSound.play()
         if (hunters !== undefined){
             hunters.forEach(card => {
                 play({type:MoveType.SpendHunter, card})
@@ -69,14 +76,13 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
             if (injury){
                 play({type:MoveType.ValidateSpentHunters}, {delayed:true})
             }
+            moveCardSound.play()
             playResetHunters(resetSelectedHuntersMove(), {local:true})
         }
     }
 
     const playSelectHunter = usePlay<SetSelectedHunters>()
     const playResetHunters = usePlay<ResetSelectedHunters>()
-
-
 
     const [{canDropPlayed, isOverPlayed}, dropRefPlayed] = useDrop({
         accept: ["CardInHand", 'CardPlayed'],
@@ -94,6 +100,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
         }),
         drop: (item: CardInHand | CardPlayed) => {
             if(isCardInHand(item)){
+                moveCardSound.play()
                 return {type:MoveType.PlayHuntCard, card:item.card, playerId:player.color }          
             } else {
                 return 
@@ -171,8 +178,10 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
             {(isDisplayHuntingButtons || isDisplayValidationButton || isDisplayEndTurnButton) && 
                 <div css={[huntingButtonsPosition(player.color, (isDisplayValidationButton || isDisplayEndTurnButton) ? 20 : 30), spendCardAnimations.length !== 0 && disapperingAnim]}>
                     
-                    {isDisplayValidationButton && <Button css={[validationButtonPosition]} onClick={() => {play({type:MoveType.TellYouAreReady, playerId:player.color})}} colorButton={player.color} >{t('Validate')}</Button> }
-                    {isDisplayEndTurnButton && <Button css={[validationButtonPosition]} onClick={() => {play({type:MoveType.EndTurn})}} colorButton={player.color} >{t('End your Turn')}</Button>}
+                    {isDisplayValidationButton && <Button css={[validationButtonPosition]} 
+                                                          onClick={() => {clickSound.play() ; play({type:MoveType.TellYouAreReady, playerId:player.color})}} 
+                                                          colorButton={player.color} >{t('Validate')}</Button> }
+                    {isDisplayEndTurnButton && <Button css={[validationButtonPosition]} onClick={() => {clickSound.play() ; play({type:MoveType.EndTurn})}} colorButton={player.color} >{t('End your Turn')}</Button>}
 
                     {isDisplayHuntingButtons && <div css={[injuryStyle, (powerOfSelectedHunters < player.huntingProps!.huntSpotTakenLevels![0] || powerOfSelectedHunters >= player.huntingProps!.huntSpotTakenLevels![1]) && desactivateStyle]} onClick={() => powerOfSelectedHunters >= player.huntingProps!.huntSpotTakenLevels![0] && powerOfSelectedHunters < player.huntingProps!.huntSpotTakenLevels![1] && validateHunters(selectedHunters, true)} > <span>{Math.max(player.huntingProps!.huntSpotTakenLevels![0] - powerOfSelectedHunters,0)}</span></div>}
                     {isDisplayHuntingButtons && <div css={[noInjuryStyle, powerOfSelectedHunters < player.huntingProps!.huntSpotTakenLevels![1] && desactivateStyle]} onClick={() => powerOfSelectedHunters >= player.huntingProps!.huntSpotTakenLevels![1] && validateHunters(selectedHunters, false)} > <span>{Math.max(player.huntingProps!.huntSpotTakenLevels![1] - powerOfSelectedHunters,0)}</span> </div>}
@@ -415,6 +424,7 @@ const playHuntCardAnimationStyle = (duration:number, lengthPlayed:number) => css
 const deckCardSize = css`
 width:100%;
 height:100%;
+box-shadow:0 0 0.5em black;
 `
 
 const deckOffset = (index:number) => css`

@@ -10,6 +10,8 @@ import { css } from "@emotion/react"
 import useEfficientDragLayer from '@gamepark/react-components/dist/Draggable/useEfficientDragLayer'
 import { HandItem } from "@gamepark/react-components"
 import MoveType from "@gamepark/prehistories/moves/MoveType"
+import { useSound } from "@gamepark/react-client"
+import MoveTileSound from "../sounds/moveTile.mp3"
 
 
 type Props = {
@@ -18,6 +20,8 @@ type Props = {
   
   export default function PolyominoDropArea({player, ...props}: Props) {
     const ref = useRef<HTMLDivElement>(null)
+    const moveTileSound = useSound(MoveTileSound)
+    moveTileSound.volume = 0.5
   
     const getAreaPosition = useCallback((sourceClientOffset: XYCoord) => {
       const dropArea = ref.current!.getBoundingClientRect()
@@ -37,6 +41,7 @@ type Props = {
         && getCoveredCoordinates(item, position).every(coord => !isCoordOutOfBorders({x:coord.x,y:coord.y}) && isCoordFree({x:coord.x,y:coord.y}, getOccupiedSquares(player.cave)))
       },
       drop: (item: PolyominoToHunt, monitor) => {
+        moveTileSound.play()
         const position = getAreaPosition(monitor.getSourceClientOffset()!)
         return {type:MoveType.PlayPolyomino,polyomino:item.polyomino,side:item.side, huntSpot:item.huntSpot, square:{x:position.x,y:position.y}}
       },

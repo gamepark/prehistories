@@ -6,12 +6,12 @@ import { FC, HTMLAttributes } from "react"
 import Images, { BlueHunters, GreenHunters, RedHunters, WhiteHunters, YellowHunters } from "../utils/Images"
 import CardPlayed from "@gamepark/prehistories/types/appTypes/CardPlayed"
 import CardInHand from "@gamepark/prehistories/types/appTypes/CardInHand"
-import { useAnimation, usePlay } from "@gamepark/react-client"
+import { useAnimation, usePlay, useSound } from "@gamepark/react-client"
 import Move from "@gamepark/prehistories/moves/Move"
 import PlayHuntCard from "@gamepark/prehistories/moves/PlayHuntCard"
 import { Draggable } from "@gamepark/react-components"
 import { isRevealHuntCards, RevealHuntCardsView } from "@gamepark/prehistories/moves/RevealHuntCards"
-
+import MoveCardSound from "../sounds/cardMove.mp3"
 
 type Props = {
     color:PlayerColor
@@ -25,8 +25,11 @@ type Props = {
 const Card : FC<Props> = ({color, power, speed, draggable=false, type='', draggableItem, ...props}) => {
 
     const play = usePlay<Move>()
+    const moveCardSound = useSound(MoveCardSound)
     const item = {...draggableItem}
     const onDrop = (move:PlayHuntCard) => {
+        moveCardSound.volume = 0.5
+        moveCardSound.play()
         play(move)
     }
 
@@ -55,6 +58,7 @@ const Card : FC<Props> = ({color, power, speed, draggable=false, type='', dragga
 }
 
 const faceToShow = (power:undefined|number, isAnimation:boolean, duration:number) => css`
+box-shadow:0 0 0.5em black;
 transform:rotateY(${power === undefined ? 180 : 0}deg);
 ${isAnimation ? `transition:transform ${duration}s linear;` : `transition:none;`}
 
@@ -79,7 +83,6 @@ height:100%;
 border-radius:8%;
 `
 const cardStyle = (image:string) => css`
-box-shadow:0 0 0.5em black;
 background-image: url(${image});
 background-size: cover;
 background-repeat: no-repeat;
