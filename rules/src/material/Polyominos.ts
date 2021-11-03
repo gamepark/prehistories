@@ -1,7 +1,7 @@
 import Animal from '../types/Animal'
 import Coordinates from '../types/Coordinates'
 import Polyomino from '../types/Polyomino'
-import Tile, {getPolyomino} from './Tile'
+import Tile, {getPolyomino, tiles} from './Tile'
 
 function paintingToAnimal(painting: Tile): Animal {
   switch (painting) {
@@ -81,27 +81,4 @@ function paintingToPolyomino(painting: Tile): Polyomino {
   }]
 }
 
-export const allPolyominos: Polyomino[] = [
-  Tile.Hunter, Tile.TotemicAnimal,
-  Tile.Fish1, Tile.Fish1, Tile.Fish1, Tile.Fish1, Tile.Fish1,
-  Tile.Mammoth1, Tile.Mammoth1, Tile.Mammoth1, Tile.Mammoth1, Tile.Mammoth1,
-  Tile.Ibex1, Tile.Ibex1, Tile.Ibex1, Tile.Ibex1, Tile.Ibex1,
-  Tile.Buffalo1, Tile.Buffalo1, Tile.Buffalo1, Tile.Buffalo1, Tile.Buffalo1,
-  Tile.Boar1, Tile.Boar1, Tile.Boar1, Tile.Boar1, Tile.Boar1,
-  Tile.Fish2, Tile.Fish2, Tile.Fish2, Tile.Fish2, Tile.Fish2,
-  Tile.Mammoth2, Tile.Mammoth2, Tile.Mammoth2, Tile.Mammoth2, Tile.Mammoth2,
-  Tile.Ibex2, Tile.Ibex2, Tile.Ibex2, Tile.Ibex2, Tile.Ibex2,
-  Tile.Buffalo2, Tile.Buffalo2, Tile.Buffalo2, Tile.Buffalo2, Tile.Buffalo2,
-  Tile.Boar2, Tile.Boar2, Tile.Boar2, Tile.Boar2, Tile.Boar2,
-  Tile.Fish3A, Tile.Fish3B,
-  Tile.Mammoth3A, Tile.Mammoth3B,
-  Tile.Ibex3A, Tile.Ibex3B,
-  Tile.Buffalo3A, Tile.Buffalo3B,
-  Tile.Boar3A, Tile.Boar3B,
-  Tile.Fish4A, Tile.Fish4B,
-  Tile.Mammoth4A, Tile.Mammoth4B,
-  Tile.Ibex4A, Tile.Ibex4B,
-  Tile.Buffalo4A, Tile.Buffalo4B,
-  Tile.Boar4A, Tile.Boar4B,
-  Tile.Legendary1, Tile.Legendary2, Tile.Legendary3, Tile.Legendary4, Tile.Legendary5
-].map(paintingToPolyomino)
+export const allPolyominos: Polyomino[] = tiles.map(paintingToPolyomino)
