@@ -1,18 +1,18 @@
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
-import GameView from "@gamepark/prehistories/GameView";
-import PlaceTile, { isPlaceTile } from "@gamepark/prehistories/moves/PlaceTile";
-import PlayerColor from "@gamepark/prehistories/PlayerColor";
-import Phase, { HuntPhase } from "@gamepark/prehistories/types/Phase";
-import { isPlayerHuntView, isPlayerViewSelf, PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
-import getPowerLevels from "@gamepark/prehistories/utils/powerLevels";
-import teamPower from "@gamepark/prehistories/utils/teamPower";
-import { useAnimation, usePlayerId, useSound } from "@gamepark/react-client";
-import { FC, useState } from "react";
-import Images from "../utils/Images";
-import { tileSize } from "./Cave";
-import Polyomino from "./Polyomino";
-import MoveTileSound from "../sounds/moveTile.mp3"
+import {css, keyframes} from '@emotion/react'
+import GameView from '@gamepark/prehistories/GameView'
+import PlaceTile, {isPlaceTile} from '@gamepark/prehistories/moves/PlaceTile'
+import PlayerColor from '@gamepark/prehistories/PlayerColor'
+import Phase, {HuntPhase} from '@gamepark/prehistories/types/Phase'
+import {isPlayerHuntView, isPlayerViewSelf, PlayerHuntView, PlayerView, PlayerViewSelf} from '@gamepark/prehistories/types/PlayerView'
+import getPowerLevels from '@gamepark/prehistories/utils/powerLevels'
+import teamPower from '@gamepark/prehistories/utils/teamPower'
+import {useAnimation, usePlayerId, useSound} from '@gamepark/react-client'
+import {FC, useState} from 'react'
+import MoveTileSound from '../sounds/moveTile.mp3'
+import Images from '../utils/Images'
+import {tileSize} from './Cave'
+import Polyomino from './Polyomino'
 
 type Props = {
     game:GameView
@@ -42,27 +42,31 @@ const HuntingZone : FC<Props> = ({game, numberOfPlayers, indexOfDisplayedPlayer,
 
         <div css={[huntingZonePosition, numberOfPlayers < 4 ? bG23Players : bG45Players]}>
 
-            {game.huntingBoard.map((polyomino, index) => 
-            
-                polyomino !== null && <Polyomino 
-                           key = {index}
-                           css = {[polyominoToHuntSize(index, numberOfPlayers, polyomino, (playPolyominoAnimation !== undefined && playPolyominoAnimation.move.huntSpot === index ? 1 : sideArray[index]), 8,16), polyominoToHuntPosition(index, numberOfPlayers, polyomino, sideArray[index])]}
-                           side = {sideArray[index]}
-                           polyomino={polyomino} 
-                           draggable={isPolyominoHuntable(game.players.find(p => p.color === playerId), game.phase, index, game.players.length,game.sortedPlayers !== undefined ? game.sortedPlayers[0] : undefined)}
-                           type={'PolyominoToHunt'}
-                           draggableItem={{type:"PolyominoToHunt", huntSpot:index, polyomino, side:(sideArray[index])}}
-                           isAlreadyPlaced = {false}
-                           phase = {game.phase}
-                           huntPosition={index}
-                           nbPlayers = {numberOfPlayers}
-                           activePlayer = {game.sortedPlayers !== undefined ? game.sortedPlayers[0] : undefined}
-                           indexOfDisplayedPlayer={indexOfDisplayedPlayer}
-                           indexListDisplayedPlayers={indexListDisplayedPlayers}
+            {game.huntingBoard.map((polyomino, index) => {
+                let activePlayer = game.sortedPlayers !== undefined ? game.sortedPlayers[0] : undefined
+                return polyomino !== null && <Polyomino
+                    key={index}
+                    css={[
+                        polyominoToHuntSize(index, numberOfPlayers, polyomino, (playPolyominoAnimation !== undefined && playPolyominoAnimation.move.huntSpot === index ? 1 : sideArray[index]), 8, 16), polyominoToHuntPosition(index, numberOfPlayers, polyomino, sideArray[index]),
+                        playPolyominoAnimation?.move.huntSpot === index && indexListDisplayedPlayers !== undefined && activePlayer !== undefined && playPolyominoAnimationStyle(playPolyominoAnimation.duration, indexOfDisplayedPlayer, indexListDisplayedPlayers, activePlayer, playPolyominoAnimation.move.square.x, playPolyominoAnimation.move.square.y)
+                    ]}
+                    isAnimation={playPolyominoAnimation?.move.huntSpot === index}
+                    side={playPolyominoAnimation?.move.huntSpot === index ? playPolyominoAnimation.move.side : sideArray[index]}
+                    polyomino={polyomino}
+                    draggable={isPolyominoHuntable(game.players.find(p => p.color === playerId), game.phase, index, game.players.length, game.sortedPlayers !== undefined ? game.sortedPlayers[0] : undefined)}
+                    type={'PolyominoToHunt'}
+                    draggableItem={{type: 'PolyominoToHunt', huntSpot: index, polyomino, side: (sideArray[index])}}
+                    isAlreadyPlaced={false}
+                    phase={game.phase}
+                    huntPosition={index}
+                    nbPlayers={numberOfPlayers}
+                    activePlayer={activePlayer}
+                    indexOfDisplayedPlayer={indexOfDisplayedPlayer}
+                    indexListDisplayedPlayers={indexListDisplayedPlayers}
 
-                           onClick={() => setSideArray(createSideArray(index, sideArray[index]))}
-                />
-
+                    onClick={() => setSideArray(createSideArray(index, sideArray[index]))}
+                  />
+              }
             )}
 
         </div>
@@ -194,6 +198,24 @@ const polyominoToHuntSize = (pos:number, players:number, polyomino:number, side:
         return tileSize(polyomino, side, sizeBaseW, sizeBaseH)    
 }
 
+const playPolyominoKeyframes = (isGoodDisplayedCave: number | undefined, indexListDisplayedPlayers: PlayerColor[], player: PlayerColor, x: number, y: number) => keyframes`
+  from {
+    transform: scale(0.6);
+  }
+  20% {
+    transform: scale(1.3);
+  }
+  80%, to {
+    transform: scale(${isGoodDisplayedCave === indexListDisplayedPlayers.findIndex(p => p === player) ? 1 : 0});
+    top: ${isGoodDisplayedCave === indexListDisplayedPlayers.findIndex(p => p === player) ? 26.5 + x * 5.3 : 32 + ((indexListDisplayedPlayers.findIndex(p => p === player) - 1)) * 15}em;
+    left: ${isGoodDisplayedCave === indexListDisplayedPlayers.findIndex(p => p === player) ? 47.5 + y * 5.2 : 150}em;
+  }
+`
+
+const playPolyominoAnimationStyle = (duration: number, isGoodDisplayedCave: number | undefined, indexListDisplayedPlayers: PlayerColor[], player: PlayerColor, x: number, y: number) => css`
+  z-index: 10 !important;
+  animation: ${playPolyominoKeyframes(isGoodDisplayedCave, indexListDisplayedPlayers, player, x, y)} ${duration}s ease-in;
+`
 
 
 export default HuntingZone
