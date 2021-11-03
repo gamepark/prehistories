@@ -1,13 +1,13 @@
 import PlayerState from "../PlayerState";
-import {PlayerView} from "../types/PlayerView";
+import {PlayerHuntView, PlayerView, PlayerViewSelf} from "../types/PlayerView";
 import caves, {Space} from "../material/Caves";
-import {getPlacedTileAdjacentCoordinates, getPlacedTileCoordinates} from "../types/PlacedTile";
+import PlacedTile, {getPlacedTileAdjacentCoordinates, getPlacedTileCoordinates} from "../types/PlacedTile";
 
 export enum PlacementSpace {
   BLOCKED, FREE, CONNECTED
 }
 
-export function getCavePlacementSpaces(player: PlayerState | PlayerView): PlacementSpace[][] {
+export function getCavePlacementSpaces(player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView): PlacementSpace[][] {
   const cave = caves[player.color]
   const placementSpaces: PlacementSpace[][] = cave.map(row => row.map(space =>
     space === Space.HUNTER || space === Space.TOTEM_ANIMAL ? PlacementSpace.BLOCKED : PlacementSpace.FREE
@@ -36,4 +36,16 @@ export function getCavePlacementSpaces(player: PlayerState | PlayerView): Placem
     }
   }
   return placementSpaces
+}
+
+export function canPlaceTile(cave: PlacementSpace[][], placedTile: PlacedTile) {
+  let connected = false
+  const coordinates = getPlacedTileCoordinates(placedTile)
+  for (const {x, y} of coordinates) {
+    if (!cave[y] || !cave[y][x]) return false
+    if (cave[y][x] === PlacementSpace.CONNECTED) {
+      connected = true
+    }
+  }
+  return connected
 }

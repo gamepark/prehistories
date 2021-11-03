@@ -32,8 +32,7 @@ import Phase, {HuntPhase} from './types/Phase'
 import {PlayerHuntView, PlayerView, PlayerViewSelf} from './types/PlayerView'
 import getPowerLevels from './utils/powerLevels'
 import teamPower from './utils/teamPower'
-import {getCavePlacementSpaces, PlacementSpace} from "./utils/PlacementRules";
-import PlacedTile, {getPlacedTileCoordinates} from "./types/PlacedTile";
+import {canPlaceTile, getCavePlacementSpaces} from "./utils/PlacementRules";
 import {cavesSize} from "./material/Caves";
 import {sides} from "./material/Tile";
 
@@ -103,13 +102,11 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
             }
             for (let x = 0; x < cavesSize; x++) {
               for (let y = 0; y < cavesSize; y++) {
-                sides.forEach(side => {
-                  const placedTile: PlacedTile = {tile, side, x, y}
-                  const coordinates = getPlacedTileCoordinates(placedTile)
-                  if (coordinates.every(({x, y}) => cave[y] && cave[y][x]) && coordinates.some(({x, y}) => cave[y][x] === PlacementSpace.CONNECTED)) {
+                for (const side of sides) {
+                  if (canPlaceTile(cave, {tile, side, x, y})) {
                     playPolyominoMoves.push(placeTileMove(huntSpot, side, {x, y}))
                   }
-                })
+                }
               }
             }
           }
