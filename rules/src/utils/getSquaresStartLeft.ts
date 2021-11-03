@@ -3,17 +3,6 @@ import Coordinates from "../types/Coordinates";
 import PlacedTile from "../types/PlacedTile";
 import {PaintedSquare} from "../types/Polyomino"
 
-function getSquaresStartLeft(cave:PlacedTile[]):Coordinates[]{
-    if (isFirstColumnEmpty(cave)){
-        return []
-    } else {
-        const coordOfFirstTile = {x:getOccupiedSquares(cave).find(polyo => polyo.y ===0)!.x, y:getOccupiedSquares(cave).find(polyo => polyo.y ===0)!.y}
-        return [coordOfFirstTile].concat(getTilesFromTarget(coordOfFirstTile, [coordOfFirstTile], getOccupiedSquares(cave)))
-    }
-}
-
-export default getSquaresStartLeft
-
 export function getTilesFromTarget(target:Coordinates,list:Coordinates[], occupiedSquares:PaintedSquare[]):Coordinates[]{
     const coordIterator:Coordinates[] = [{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}]
     const newList:Coordinates[] = []

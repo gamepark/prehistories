@@ -2,6 +2,7 @@ import PlayerState from "../PlayerState";
 import {PlayerHuntView, PlayerView, PlayerViewSelf} from "../types/PlayerView";
 import caves, {Space} from "../material/Caves";
 import PlacedTile, {getPlacedTileAdjacentCoordinates, getPlacedTileCoordinates} from "../types/PlacedTile";
+import {getAdjacentCoordinates} from "../types/Coordinates";
 
 export enum PlacementSpace {
   BLOCKED, FREE, CONNECTED
@@ -10,7 +11,7 @@ export enum PlacementSpace {
 export function getCavePlacementSpaces(player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView): PlacementSpace[][] {
   const cave = caves[player.color]
   const placementSpaces: PlacementSpace[][] = cave.map(row => row.map(space =>
-    space === Space.HUNTER || space === Space.TOTEM_ANIMAL ? PlacementSpace.BLOCKED : PlacementSpace.FREE
+    space === Space.Hunter || space === Space.TotemAnimal ? PlacementSpace.BLOCKED : PlacementSpace.FREE
   ))
   if (player.cave.length > 3) { // TODO: do not place Hunter and Totem animal at startup as if they were tiles
     for (const placedTile of player.cave) {
@@ -20,8 +21,8 @@ export function getCavePlacementSpaces(player: PlayerState | PlayerView | Player
       for (const {x, y} of getPlacedTileAdjacentCoordinates(placedTile)) {
         if (placementSpaces[y][x] === PlacementSpace.FREE) {
           placementSpaces[y][x] = PlacementSpace.CONNECTED
-        } else if (cave[y][x] === Space.HUNTER || cave[y][x] === Space.TOTEM_ANIMAL) { // Those are never on edges
-          const adjacentCoordinates = [{x: x + 1, y}, {x: x - 1, y}, {x, y: y + 1}, {x, y: y - 1}]
+        } else if (cave[y][x] === Space.Hunter || cave[y][x] === Space.TotemAnimal) { // Those are never on edges
+          const adjacentCoordinates = getAdjacentCoordinates({x, y})
           for (const {x, y} of adjacentCoordinates) {
             if (placementSpaces[y][x] === PlacementSpace.FREE) {
               placementSpaces[y][x] = PlacementSpace.CONNECTED

@@ -1,12 +1,14 @@
 import PlayerState from "../PlayerState";
 import Animal from "../types/Animal";
-import Coordinates from "../types/Coordinates";
+import Coordinates, {getAdjacentCoordinates} from "../types/Coordinates";
 import Face from "../types/Face";
 import Goal from "../types/Goal";
 import PlacedTile from "../types/PlacedTile";
 import {PlayerHuntView, PlayerView, PlayerViewSelf} from "../types/PlayerView";
 import {PaintedSquare} from "../types/Polyomino";
-import getSquaresStartLeft, {getOccupiedSquares, getTilesFromTarget} from "../utils/getSquaresStartLeft";
+import {getOccupiedSquares, getTilesFromTarget} from "../utils/getSquaresStartLeft";
+import {getPaintedCave, Painting} from "./PaintedCave";
+import {cavesSize} from "./Caves";
 
 const GoalA1: Goal = {
   face: Face.A,
@@ -14,9 +16,17 @@ const GoalA1: Goal = {
   hint: 'hintA1',
   value: 2,
   rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
-    const cave: PlacedTile[] = player.cave
-    const path: Coordinates[] = getSquaresStartLeft(cave)
-    return path.find(square => square.x === cave[0].x && square.y === cave[0].y) !== undefined && path.find(square => square.x === cave[1].x && square.y === cave[1].y) !== undefined
+    const cave = getPaintedCave(player)
+    for (let y = 0; y < cave.length; y++) {
+      for (let x = 0; x < cave[y].length; x++) {
+        if (cave[y][x] === Painting.TotemAnimal) {
+          if (getAdjacentCoordinates({x, y}).every(({x, y}) => cave[y][x] === Painting.Empty)) {
+            return false
+          }
+        }
+      }
+    }
+    return true
   }
 }
 
@@ -130,9 +140,8 @@ const GoalA7: Goal = {
   hint: 'hintA7',
   value: 2,
   rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
-    const cave: PlacedTile[] = player.cave
-    const path: Coordinates[] = getSquaresStartLeft(cave)
-    return path.find(square => square.x === 0 && square.y === 0) !== undefined && path.find(square => square.x === 6 && square.y === 6) !== undefined
+    const cave = getPaintedCave(player)
+    return cave[0][0] !== Painting.Empty && cave[cavesSize - 1][cavesSize - 1] !== Painting.Empty
   }
 }
 

@@ -3,14 +3,14 @@ import PlayerColor from '../PlayerColor'
 export const cavesSize = 7
 
 export enum Space {
-  EMPTY, HUNTER, TOTEM_ANIMAL, HAND, HAND2
+  Empty, Hunter, TotemAnimal, Hand, Hand2
 }
 
-const _ = Space.EMPTY
-const H = Space.HUNTER
-const T = Space.TOTEM_ANIMAL
-const a = Space.HAND
-const b = Space.HAND2
+const _ = Space.Empty
+const H = Space.Hunter
+const T = Space.TotemAnimal
+const a = Space.Hand
+const b = Space.Hand2
 
 const caves: { [key in PlayerColor]: Space[][] } = {
   [PlayerColor.Yellow]: [

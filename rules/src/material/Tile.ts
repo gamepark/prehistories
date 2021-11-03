@@ -1,7 +1,7 @@
 import Coordinates from "../types/Coordinates";
 
 enum Tile {
-  Hunter, TotemicAnimal,
+  Hunter, TotemAnimal,
   Fish1, Fish2, Fish3A, Fish3B, Fish4A, Fish4B,
   Mammoth1, Mammoth2, Mammoth3A, Mammoth3B, Mammoth4A, Mammoth4B,
   Buffalo1, Buffalo2, Buffalo3A, Buffalo3B, Buffalo4A, Buffalo4B,
@@ -11,7 +11,7 @@ enum Tile {
 }
 
 export const tiles = [
-  Tile.Hunter, Tile.TotemicAnimal,
+  Tile.Hunter, Tile.TotemAnimal,
   Tile.Fish1, Tile.Fish1, Tile.Fish1, Tile.Fish1, Tile.Fish1,
   Tile.Mammoth1, Tile.Mammoth1, Tile.Mammoth1, Tile.Mammoth1, Tile.Mammoth1,
   Tile.Ibex1, Tile.Ibex1, Tile.Ibex1, Tile.Ibex1, Tile.Ibex1,
@@ -44,7 +44,7 @@ const X = true, _ = false
 export function getPolyomino(tile: Tile, side: Side): boolean[][] {
   switch (tile) {
     case Tile.Hunter:
-    case Tile.TotemicAnimal:
+    case Tile.TotemAnimal:
     case Tile.Fish1:
     case Tile.Mammoth1:
     case Tile.Buffalo1:

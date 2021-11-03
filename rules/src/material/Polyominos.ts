@@ -7,7 +7,7 @@ function paintingToAnimal(painting: Tile): Animal {
   switch (painting) {
     case Tile.Hunter:
       return Animal.Hunter
-    case Tile.TotemicAnimal:
+    case Tile.TotemAnimal:
       return Animal.Totem
     case Tile.Fish1:
     case Tile.Fish2:
