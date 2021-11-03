@@ -1,10 +1,10 @@
 import { HuntPhase } from "./Phase"
 
-type HuntingProps = {
+type Hunting = {
     huntSpotTakenLevels?:number[]
     huntPhase?:HuntPhase
     injuries?:number
     tilesHunted?:number
 }
 
-export default HuntingProps
+export default Hunting

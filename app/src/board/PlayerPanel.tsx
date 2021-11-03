@@ -20,7 +20,7 @@ type Props = {
     nbPlayers:number
 } & HTMLAttributes<HTMLDivElement>
 
-const PlayerPanel : FC<Props> = ({player:{color, totemTokens, huntingProps}, position, phase, huntOrder, nbPlayers, ...props}) => {
+const PlayerPanel : FC<Props> = ({player:{color, totemTokens, hunting}, position, phase, huntOrder, nbPlayers, ...props}) => {
 
     const playerInfo = usePlayer(color)
     const {t} = useTranslation()
@@ -41,9 +41,9 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, huntingProps}, pos
             </div>
             <PlayerTimer playerId={color} css={[TimerStyle]}/>
 
-            {(huntingProps?.injuries !== undefined) &&  
+            {(hunting?.injuries !== undefined) &&
                 <div css={injuriesIndicatorPosition}>
-                    {[...Array(huntingProps.injuries)].map((_,i) => <Picture key={i} alt={t('injuries')} src={Images.arrowBrokenIcon} draggable={false} css={brokenArrowIconStyle(i)} /> )}
+                    {[...Array(hunting.injuries)].map((_, i) => <Picture key={i} alt={t('injuries')} src={Images.arrowBrokenIcon} draggable={false} css={brokenArrowIconStyle(i)} /> )}
                 </div>}
 
         </div>

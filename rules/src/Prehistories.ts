@@ -89,8 +89,8 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         playHuntCardMoves.push({type: MoveType.TellYouAreReady, playerId: color})
         return playHuntCardMoves
       }
-    } else if (player.huntingProps) {
-      switch (player.huntingProps.huntPhase) {
+    } else if (player.hunting) {
+      switch (player.hunting.huntPhase) {
         case HuntPhase.Hunt : {
           const playPolyominoMoves: (PlayPolyomino | EndTurn)[] = []
           const accessibleSquares: Coordinates[] = getFreeSquaresFromPath(getSquaresStartLeft(player.cave), player.cave)
@@ -119,7 +119,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
           player.played.forEach(card => {
             spendHuntersAndValidateMoves.push({type: MoveType.SpendHunter, card})
           })
-          if (player.huntingProps.huntSpotTakenLevels![0] <= 0) {
+          if (player.hunting.huntSpotTakenLevels![0] <= 0) {
             spendHuntersAndValidateMoves.push({type: MoveType.ValidateSpentHunters})
           }
           return spendHuntersAndValidateMoves
@@ -191,10 +191,10 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
 
         const currentPlayer = this.state.sortedPlayers[0]
         const player = this.state.players.find(p => p.color === currentPlayer)!
-        if (!player.huntingProps) return
-        switch (player.huntingProps.huntPhase) {
+        if (!player.hunting) return
+        switch (player.hunting.huntPhase) {
           case HuntPhase.Pay: {
-            if (player.huntingProps.huntSpotTakenLevels && player.huntingProps.huntSpotTakenLevels[1] <= 0) {
+            if (player.hunting.huntSpotTakenLevels && player.hunting.huntSpotTakenLevels[1] <= 0) {
               return {type: MoveType.ValidateSpentHunters}
             } else return
           }
@@ -378,15 +378,15 @@ function getCardsToDraw(player: PlayerState): number[] {
 }
 
 export function howManyCardToDraw(player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView): number {
-  return player.huntingProps!.tilesHunted === undefined ? 3 : (player.huntingProps!.injuries === undefined ? 2 + areHandPrintsRecovered(player) : Math.max(0, 2 - player.huntingProps!.injuries) + areHandPrintsRecovered(player))
+  return player.hunting!.tilesHunted === undefined ? 3 : (player.hunting!.injuries === undefined ? 2 + areHandPrintsRecovered(player) : Math.max(0, 2 - player.hunting!.injuries) + areHandPrintsRecovered(player))
 }
 
 export function areHandPrintsRecovered(player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView): number {
   let result: number = 0
-  if (player.huntingProps!.tilesHunted === undefined) {
+  if (player.hunting!.tilesHunted === undefined) {
     return result
   } else {
-    for (let i = 0; i < player.huntingProps!.tilesHunted; i++) {
+    for (let i = 0; i < player.hunting!.tilesHunted; i++) {
       const tile = player.cave[player.cave.length - 1 - i]
       allPolyominos[tile.polyomino][tile.side].coordinates.forEach(coord => {
         if (tile.x + coord.x === getHandPrintsCoords(player.color)[0].x && tile.y + coord.y === getHandPrintsCoords(player.color)[0].y) {

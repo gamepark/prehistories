@@ -64,8 +64,8 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
     }
 
     const isDisplayValidationButton:boolean = phase === Phase.Initiative && playerId === player.color && player.isReady !== true
-    const isDisplayEndTurnButton:boolean = phase === Phase.Hunt && playerId === player.color && player.huntingProps?.huntPhase === HuntPhase.Hunt
-    const isDisplayHuntingButtons:boolean = phase === Phase.Hunt && playerId === player.color && player.huntingProps?.huntPhase === HuntPhase.Pay
+    const isDisplayEndTurnButton:boolean = phase === Phase.Hunt && playerId === player.color && player.hunting?.huntPhase === HuntPhase.Hunt
+    const isDisplayHuntingButtons:boolean = phase === Phase.Hunt && playerId === player.color && player.hunting?.huntPhase === HuntPhase.Pay
 
     function validateHunters(hunters:number[]|undefined, injury:boolean){
         clickSound.play()
@@ -183,8 +183,8 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
                                                           colorButton={player.color} >{t('Validate')}</Button> }
                     {isDisplayEndTurnButton && <Button css={[validationButtonPosition]} onClick={() => {clickSound.play() ; play({type:MoveType.EndTurn})}} colorButton={player.color} >{t('End your Turn')}</Button>}
 
-                    {isDisplayHuntingButtons && <div css={[injuryStyle, (powerOfSelectedHunters < player.huntingProps!.huntSpotTakenLevels![0] || powerOfSelectedHunters >= player.huntingProps!.huntSpotTakenLevels![1]) && desactivateStyle]} onClick={() => powerOfSelectedHunters >= player.huntingProps!.huntSpotTakenLevels![0] && powerOfSelectedHunters < player.huntingProps!.huntSpotTakenLevels![1] && validateHunters(selectedHunters, true)} > <span>{Math.max(player.huntingProps!.huntSpotTakenLevels![0] - powerOfSelectedHunters,0)}</span></div>}
-                    {isDisplayHuntingButtons && <div css={[noInjuryStyle, powerOfSelectedHunters < player.huntingProps!.huntSpotTakenLevels![1] && desactivateStyle]} onClick={() => powerOfSelectedHunters >= player.huntingProps!.huntSpotTakenLevels![1] && validateHunters(selectedHunters, false)} > <span>{Math.max(player.huntingProps!.huntSpotTakenLevels![1] - powerOfSelectedHunters,0)}</span> </div>}
+                    {isDisplayHuntingButtons && <div css={[injuryStyle, (powerOfSelectedHunters < player.hunting!.huntSpotTakenLevels![0] || powerOfSelectedHunters >= player.hunting!.huntSpotTakenLevels![1]) && desactivateStyle]} onClick={() => powerOfSelectedHunters >= player.hunting!.huntSpotTakenLevels![0] && powerOfSelectedHunters < player.hunting!.huntSpotTakenLevels![1] && validateHunters(selectedHunters, true)} > <span>{Math.max(player.hunting!.huntSpotTakenLevels![0] - powerOfSelectedHunters,0)}</span></div>}
+                    {isDisplayHuntingButtons && <div css={[noInjuryStyle, powerOfSelectedHunters < player.hunting!.huntSpotTakenLevels![1] && desactivateStyle]} onClick={() => powerOfSelectedHunters >= player.hunting!.huntSpotTakenLevels![1] && validateHunters(selectedHunters, false)} > <span>{Math.max(player.hunting!.huntSpotTakenLevels![1] - powerOfSelectedHunters,0)}</span> </div>}
                     
                 </div>
             }
@@ -201,7 +201,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
                 color={player.color}
                 power={getColoredDeck(player.color)[card].power}
                 speed={getColoredDeck(player.color)[card].speed}
-                onClick={() => player.color === playerId && player.huntingProps?.huntPhase === HuntPhase.Pay && playSelectHunter(setSelectedHunterMove(card), {local:true})}
+                onClick={() => player.color === playerId && player.hunting?.huntPhase === HuntPhase.Pay && playSelectHunter(setSelectedHunterMove(card), {local:true})}
                 
                 />
             

@@ -78,7 +78,7 @@ function isPolyominoHuntable(player:(PlayerView|PlayerViewSelf|PlayerHuntView|un
     return phase === Phase.Hunt 
     && player !== undefined 
     && firstPlayer !== undefined && player.color === firstPlayer
-    && player.huntingProps?.huntPhase === HuntPhase.Hunt
+    && player.hunting?.huntPhase === HuntPhase.Hunt
     && (isPlayerHuntView(player) || isPlayerViewSelf(player)) 
     && teamPower(player.played) >= getPowerLevels(nbPlayers, huntSpot)[0]
 }

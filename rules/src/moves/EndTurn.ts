@@ -12,7 +12,7 @@ type EndTurn = {
 export default EndTurn
 
 export function endTurn(state:GameState|GameView){
-    getFirstOfSortedPlayer(state).huntingProps!.huntPhase = HuntPhase.DrawCards
+    getFirstOfSortedPlayer(state).hunting!.huntPhase = HuntPhase.DrawCards
 }
 
 export function isEndTurn(move:Move):move is EndTurn{

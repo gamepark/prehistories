@@ -3,7 +3,7 @@ import { getColoredDeck } from './material/Hunters';
 import { allPolyominos } from './material/Polyominos';
 import PlayerColor from './PlayerColor'
 import PaintedPolyominos from './types/PaintedPolyominos';
-import HuntingProps from './types/HuntingProps';
+import Hunting from './types/Hunting';
 
 export default interface PlayerState {
   color: PlayerColor
@@ -15,7 +15,7 @@ export default interface PlayerState {
   played:number[]
   variableGoalsMade:number[]
   isReady?:boolean
-  huntingProps?:HuntingProps
+  hunting?:Hunting
 }
 
 export function setupDeck(color:PlayerColor):number[]{

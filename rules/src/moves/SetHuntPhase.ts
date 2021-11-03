@@ -11,7 +11,7 @@ type SetHuntPhase = {
 export default SetHuntPhase
 
 export function setHuntPhase(state:GameState | GameView){
-    const playerHuntingProperties = getFirstOfSortedPlayer(state).huntingProps!
+    const playerHuntingProperties = getFirstOfSortedPlayer(state).hunting!
     if (playerHuntingProperties.huntPhase === HuntPhase.CheckPermanentObjectives){
         playerHuntingProperties.huntPhase = HuntPhase.CheckVariableObjectives
     } else if (playerHuntingProperties.huntPhase === HuntPhase.CheckVariableObjectives){

@@ -28,8 +28,8 @@ function discardHunter(player:PlayerState | PlayerViewSelf | PlayerHuntView, car
 }
 
 function adjustHuntingLevels(player:PlayerState | PlayerViewSelf | PlayerHuntView, card:number){
-    player.huntingProps!.huntSpotTakenLevels![0] -= getColoredDeck(player.color)[card].power
-    player.huntingProps!.huntSpotTakenLevels![1] -= getColoredDeck(player.color)[card].power
+    player.hunting!.huntSpotTakenLevels![0] -= getColoredDeck(player.color)[card].power
+    player.hunting!.huntSpotTakenLevels![1] -= getColoredDeck(player.color)[card].power
 }
 
 export function isSpendHunter(move: Move |MoveView):move is SpendHunter{

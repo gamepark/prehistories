@@ -19,7 +19,7 @@ export default ResolvePermanentObjectives
 export function resolvePermanentObjectives(state:GameState|GameView, move:ResolvePermanentObjectives){
     const player = getFirstOfSortedPlayer(state)
     player.totemTokens = Math.max(0,player.totemTokens - (move.objectivesCompleted[0].length+move.objectivesCompleted[1].length+(move.objectivesCompleted[2] === true ? 1 : 0))) 
-    player.huntingProps!.huntPhase = HuntPhase.CheckVariableObjectives
+    player.hunting!.huntPhase = HuntPhase.CheckVariableObjectives
 }
 
 export function checkPermanentObjectives(player:PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView): [number[],number[],boolean] {
