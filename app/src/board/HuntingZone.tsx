@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import GameView from "@gamepark/prehistories/GameView";
-import PlayPolyomino, { isPlayPolyomino } from "@gamepark/prehistories/moves/PlayPolyomino";
+import PlaceTile, { isPlaceTile } from "@gamepark/prehistories/moves/PlaceTile";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import Phase, { HuntPhase } from "@gamepark/prehistories/types/Phase";
 import { isPlayerHuntView, isPlayerViewSelf, PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
@@ -24,7 +24,7 @@ type Props = {
 const HuntingZone : FC<Props> = ({game, numberOfPlayers, indexOfDisplayedPlayer, indexListDisplayedPlayers}) => {
 
     const playerId = usePlayerId<PlayerColor>()
-    const playPolyominoAnimation = useAnimation<PlayPolyomino>(animation => isPlayPolyomino(animation.move))
+    const playPolyominoAnimation = useAnimation<PlaceTile>(animation => isPlaceTile(animation.move))
     const startHook:(0|1)[] = numberOfPlayers < 4 ? [0,0,0,0,0] : [0,0,0,0,0,0,0] 
     const moveTileSound = useSound(MoveTileSound)
     moveTileSound.volume = 0.5

@@ -5,7 +5,7 @@ import DrawXCards from './DrawXCards'
 import EndGame from './EndGame'
 import EndTurn from './EndTurn'
 import PlayHuntCard from './PlayHuntCard'
-import PlayPolyomino from './PlayPolyomino'
+import PlaceTile from './PlaceTile'
 import RefillHuntingBoard from './RefillHuntingBoard'
 import RevealHuntCards from './RevealHuntCards'
 import SetHuntPhase from './SetHuntPhase'
@@ -18,7 +18,7 @@ import ValidateSpendedHunters from './ValidateSpentHunters'
 type Move = PlayHuntCard |
             TellYouAreReady |
             RevealHuntCards |
-            PlayPolyomino |
+            PlaceTile |
             SpendHunter |
             ValidateSpendedHunters |
             ResolvePermanentObjectives |

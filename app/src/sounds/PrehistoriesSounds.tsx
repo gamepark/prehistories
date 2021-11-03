@@ -1,7 +1,7 @@
 import ResolvePermanentObjectives, { isResolvePermanentObjectives } from "@gamepark/prehistories/moves/CheckPermanentObjectives"
 import ResolveVariableObjectives, { isResolveVariableObjectives } from "@gamepark/prehistories/moves/CheckVariableObjectives"
 import DrawXCards, { isDrawXCards } from "@gamepark/prehistories/moves/DrawXCards"
-import PlayPolyomino, { isPlayPolyomino } from "@gamepark/prehistories/moves/PlayPolyomino"
+import PlaceTile, { isPlaceTile } from "@gamepark/prehistories/moves/PlaceTile"
 import { isRevealHuntCards, RevealHuntCardsView } from "@gamepark/prehistories/moves/RevealHuntCards"
 import { useAnimation } from "@gamepark/react-client"
 import { FC, useEffect } from "react"
@@ -25,7 +25,7 @@ const PrehistoriesSounds : FC<Props> = ({audioLoader}) => {
 
     const revealCardsAnimation = useAnimation<RevealHuntCardsView>(animation => isRevealHuntCards(animation.move))
     const drawCards = useAnimation<DrawXCards>(animation => isDrawXCards(animation.move))
-    const playTile = useAnimation<PlayPolyomino>(animation => isPlayPolyomino(animation.move))
+    const playTile = useAnimation<PlaceTile>(animation => isPlaceTile(animation.move))
     const permObjective = useAnimation<ResolvePermanentObjectives>(animation => isResolvePermanentObjectives(animation.move))
     const varObjective = useAnimation<ResolveVariableObjectives>(animation => isResolveVariableObjectives(animation.move))
     const playCard = useAnimation<PlayHuntCard>(animation => isPlayHuntCard(animation.move))

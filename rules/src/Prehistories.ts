@@ -16,7 +16,7 @@ import Move from './moves/Move'
 import MoveType from './moves/MoveType'
 import MoveView from './moves/MoveView'
 import PlayHuntCard, {playHuntCard} from './moves/PlayHuntCard'
-import PlayPolyomino, {playPolyomino} from './moves/PlayPolyomino'
+import PlaceTile, {placeTile} from './moves/PlaceTile'
 import {getNewTile, refillHuntingBoard} from './moves/RefillHuntingBoard'
 import {revealHuntCards} from './moves/RevealHuntCards'
 import {setHuntPhase} from './moves/SetHuntPhase'
@@ -92,7 +92,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
     } else if (player.hunting) {
       switch (player.hunting.huntPhase) {
         case HuntPhase.Hunt : {
-          const playPolyominoMoves: (PlayPolyomino | EndTurn)[] = []
+          const playPolyominoMoves: (PlaceTile | EndTurn)[] = []
           const accessibleSquares: Coordinates[] = getFreeSquaresFromPath(getSquaresStartLeft(player.cave), player.cave)
           this.state.huntingBoard.forEach((tile, index) => {
             if (tile !== null && teamPower(player.played) >= getPowerLevels(this.state.players.length, index)[0]) {
@@ -104,7 +104,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
                       && allPolyominos[tile][side].coordinates.every(coord => !isCoordOutOfBorders({
                         x: coord.x + x, y: coord.y + y
                       }) && isCoordFree({x: coord.x + x, y: coord.y + y}, getOccupiedSquares(player.cave)))) {
-                      playPolyominoMoves.push({type: MoveType.PlayPolyomino, huntSpot: index, polyomino: tile, side, square: {x, y}})
+                      playPolyominoMoves.push({type: MoveType.PlaceTile, huntSpot: index, polyomino: tile, side, square: {x, y}})
                     }
                   }
                 }
@@ -140,8 +140,8 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         return tellYouAreReady(this.state, move)
       case MoveType.RevealHuntCards:
         return revealHuntCards(this.state)
-      case MoveType.PlayPolyomino:
-        return playPolyomino(this.state, move)
+      case MoveType.PlaceTile:
+        return placeTile(this.state, move)
       case MoveType.SpendHunter:
         return spendHunter(this.state, move)
       case MoveType.ValidateSpentHunters:

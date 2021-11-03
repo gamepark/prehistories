@@ -6,7 +6,7 @@ import {playHuntCardInView} from '@gamepark/prehistories/moves/PlayHuntCard'
 import { tellYouAreReady } from '@gamepark/prehistories/moves/TellYouAreReady'
 import SetCaveDisplayed, { setCaveDisplayed } from './localMoves/setCaveDisplayed'
 import { revealHuntCardsInView } from '@gamepark/prehistories/moves/RevealHuntCards'
-import { playPolyomino } from '@gamepark/prehistories/moves/PlayPolyomino'
+import { placeTile } from '@gamepark/prehistories/moves/PlaceTile'
 import { spendHunter } from '@gamepark/prehistories/moves/SpendHunter'
 import { validateSpentHunters } from '@gamepark/prehistories/moves/ValidateSpentHunters'
 import { resolvePermanentObjectives } from '@gamepark/prehistories/moves/CheckPermanentObjectives'
@@ -44,8 +44,8 @@ export default class PrehistoriesView implements Game<GameView, MoveView>, Undo<
         return tellYouAreReady(this.state, move)
       case MoveType.RevealHuntCards:
         return revealHuntCardsInView(this.state, move)
-      case MoveType.PlayPolyomino:
-        return playPolyomino(this.state, move)
+      case MoveType.PlaceTile:
+        return placeTile(this.state, move)
       case MoveType.SpendHunter:
         return spendHunter(this.state, move)
       case MoveType.ValidateSpentHunters:

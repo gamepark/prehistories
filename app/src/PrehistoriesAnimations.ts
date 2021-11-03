@@ -10,7 +10,7 @@ const prehistoriesAnimations : Animations<GameView, MoveView, PlayerColor> = {
 
         if (move.type === MoveType.DrawXCards){
             return action.playerId === playerId ? 1.5 : (state.caveDisplayed === action.playerId ? 1.5 : 0)
-        } else if (move.type === MoveType.PlayPolyomino){
+        } else if (move.type === MoveType.PlaceTile){
             return action.playerId === playerId ? 0 : 5
         } else if (move.type === MoveType.SpendHunter){
             return action.playerId === playerId ? 1 : (state.caveDisplayed === action.playerId ? 1 : 0)

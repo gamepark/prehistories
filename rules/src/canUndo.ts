@@ -11,7 +11,7 @@ export default function canUndo(action: Action<Move|MoveView, PlayerColor>, cons
         case MoveType.TellYouAreReady:
             return !action.consequences.some(consequence => consequence.type === MoveType.RevealHuntCards) 
             && !consecutiveActions.some(consecutiveAction => consecutiveAction.consequences.some(consequence => consequence.type === MoveType.RevealHuntCards)) 
-        case MoveType.PlayPolyomino:
+        case MoveType.PlaceTile:
         case MoveType.SpendHunter:
         case MoveType.ValidateSpentHunters:{
             return !action.consequences.some(consequence => consequence.type === MoveType.EndTurn)

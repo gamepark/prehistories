@@ -43,7 +43,7 @@ type Props = {
       drop: (item: PolyominoToHunt, monitor) => {
         moveTileSound.play()
         const position = getAreaPosition(monitor.getSourceClientOffset()!)
-        return {type:MoveType.PlayPolyomino,polyomino:item.polyomino,side:item.side, huntSpot:item.huntSpot, square:{x:position.x,y:position.y}}
+        return {type:MoveType.PlaceTile,polyomino:item.polyomino,side:item.side, huntSpot:item.huntSpot, square:{x:position.x,y:position.y}}
       },
       collect: (monitor: DropTargetMonitor<PolyominoToHunt>) => {
         return ({

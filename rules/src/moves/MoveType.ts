@@ -2,7 +2,7 @@ enum MoveType {
   PlayHuntCard,
   TellYouAreReady,
   RevealHuntCards,
-  PlayPolyomino,
+  PlaceTile,
   SpendHunter,
   ValidateSpentHunters,
   ResolvePermanentObjectives,

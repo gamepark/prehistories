@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css, keyframes } from "@emotion/react";
 import Move from "@gamepark/prehistories/moves/Move";
-import PlayPolyomino, { isPlayPolyomino } from "@gamepark/prehistories/moves/PlayPolyomino";
+import PlaceTile, { isPlaceTile } from "@gamepark/prehistories/moves/PlaceTile";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import { useAnimation, usePlay } from "@gamepark/react-client";
 import { FC, HTMLAttributes } from "react";
@@ -32,7 +32,7 @@ const Polyomino : FC<Props> = ({polyomino, side, color, draggable = false, type=
 
     const play = usePlay<Move>()
     const item = {...draggableItem}
-    const onDrop = (move:PlayPolyomino) => {
+    const onDrop = (move:PlaceTile) => {
         play(move)
     }
 
@@ -46,7 +46,7 @@ const Polyomino : FC<Props> = ({polyomino, side, color, draggable = false, type=
         }),
       })
 
-      const playPolyominoAnimation = useAnimation<PlayPolyomino>(animation => isPlayPolyomino(animation.move))
+      const playPolyominoAnimation = useAnimation<PlaceTile>(animation => isPlaceTile(animation.move))
       
 
     return(
