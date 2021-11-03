@@ -388,7 +388,7 @@ export function areHandPrintsRecovered(player: PlayerState | PlayerView | Player
   } else {
     for (let i = 0; i < player.hunting!.tilesHunted; i++) {
       const tile = player.cave[player.cave.length - 1 - i]
-      allPolyominos[tile.polyomino][tile.side].coordinates.forEach(coord => {
+      allPolyominos[tile.tile][tile.side].coordinates.forEach(coord => {
         if (tile.x + coord.x === getHandPrintsCoords(player.color)[0].x && tile.y + coord.y === getHandPrintsCoords(player.color)[0].y) {
           result++
         }

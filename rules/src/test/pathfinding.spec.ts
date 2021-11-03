@@ -2,7 +2,7 @@ import GameState from "../GameState";
 import { allPolyominos } from "../material/Polyominos";
 import PlayerColor, { playerColors } from "../PlayerColor";
 import PlayerState from "../PlayerState";
-import PaintedPolyominos from "../types/PaintedPolyominos";
+import PlacedTile from "../types/PlacedTile";
 import Phase from "../types/Phase";
 import getSquaresStartLeft, { getFreeSquaresFromPath, getOccupiedSquares } from "../utils/getSquaresStartLeft";
 import Coordinates from "../types/Coordinates";
@@ -10,61 +10,61 @@ import Coordinates from "../types/Coordinates";
 describe('Test Pathfinding', () => {
 
     const polyominosArray :number[] = Array.from(allPolyominos.keys())
-    const cave1:PaintedPolyominos[] = [
-        {polyomino:polyominosArray[1],side:0, x:1, y:1},
-        {polyomino:polyominosArray[1],side:0, x:5, y:4},
-        {polyomino:polyominosArray[0],side:0, x:3, y:2}
+    const cave1:PlacedTile[] = [
+        {tile:polyominosArray[1],side:0, x:1, y:1},
+        {tile:polyominosArray[1],side:0, x:5, y:4},
+        {tile:polyominosArray[0],side:0, x:3, y:2}
     ]
-    const cave2:PaintedPolyominos[] = [
-        {polyomino:polyominosArray[1],side:0, x:1, y:1},
-        {polyomino:polyominosArray[1],side:0, x:5, y:4},
-        {polyomino:polyominosArray[0],side:0, x:3, y:2},
-        {polyomino:polyominosArray[2],side:0, x:1, y:0},
-        {polyomino:polyominosArray[27],side:1, x:1, y:2},
-        {polyomino:polyominosArray[28],side:0, x:1, y:5},
-        {polyomino:polyominosArray[53],side:1, x:3, y:3},
+    const cave2:PlacedTile[] = [
+        {tile:polyominosArray[1],side:0, x:1, y:1},
+        {tile:polyominosArray[1],side:0, x:5, y:4},
+        {tile:polyominosArray[0],side:0, x:3, y:2},
+        {tile:polyominosArray[2],side:0, x:1, y:0},
+        {tile:polyominosArray[27],side:1, x:1, y:2},
+        {tile:polyominosArray[28],side:0, x:1, y:5},
+        {tile:polyominosArray[53],side:1, x:3, y:3},
 
     ]
 
-    const cave3:PaintedPolyominos[] = [
-        {polyomino:polyominosArray[1],side:0, x:1, y:1},
-        {polyomino:polyominosArray[1],side:0, x:5, y:4},
-        {polyomino:polyominosArray[0],side:0, x:3, y:2},
-        {polyomino:polyominosArray[2],side:0, x:1, y:0},
-        {polyomino:polyominosArray[3],side:0, x:6, y:2},
-        {polyomino:polyominosArray[6],side:0, x:5, y:3},
-        {polyomino:polyominosArray[32],side:1, x:1, y:2},
-        {polyomino:polyominosArray[33],side:0, x:1, y:3},
-        {polyomino:polyominosArray[55],side:0, x:4, y:1},
-        {polyomino:polyominosArray[28],side:0, x:3, y:5},
+    const cave3:PlacedTile[] = [
+        {tile:polyominosArray[1],side:0, x:1, y:1},
+        {tile:polyominosArray[1],side:0, x:5, y:4},
+        {tile:polyominosArray[0],side:0, x:3, y:2},
+        {tile:polyominosArray[2],side:0, x:1, y:0},
+        {tile:polyominosArray[3],side:0, x:6, y:2},
+        {tile:polyominosArray[6],side:0, x:5, y:3},
+        {tile:polyominosArray[32],side:1, x:1, y:2},
+        {tile:polyominosArray[33],side:0, x:1, y:3},
+        {tile:polyominosArray[55],side:0, x:4, y:1},
+        {tile:polyominosArray[28],side:0, x:3, y:5},
     ]
 
-    const cave4:PaintedPolyominos[] = [
-        {polyomino:polyominosArray[1],side:0, x:1, y:1},
-        {polyomino:polyominosArray[1],side:0, x:5, y:4},
-        {polyomino:polyominosArray[0],side:0, x:3, y:2},
-        {polyomino:polyominosArray[2],side:0, x:1, y:0},
-        {polyomino:polyominosArray[3],side:0, x:3, y:6},
-        {polyomino:polyominosArray[4],side:0, x:5, y:6},
-        {polyomino:polyominosArray[27],side:1, x:1, y:4},
-        {polyomino:polyominosArray[28],side:1, x:3, y:4},
-        {polyomino:polyominosArray[52],side:0, x:4, y:2},
-        {polyomino:polyominosArray[54],side:0, x:5, y:1},
-        {polyomino:polyominosArray[57],side:1, x:1, y:2},
+    const cave4:PlacedTile[] = [
+        {tile:polyominosArray[1],side:0, x:1, y:1},
+        {tile:polyominosArray[1],side:0, x:5, y:4},
+        {tile:polyominosArray[0],side:0, x:3, y:2},
+        {tile:polyominosArray[2],side:0, x:1, y:0},
+        {tile:polyominosArray[3],side:0, x:3, y:6},
+        {tile:polyominosArray[4],side:0, x:5, y:6},
+        {tile:polyominosArray[27],side:1, x:1, y:4},
+        {tile:polyominosArray[28],side:1, x:3, y:4},
+        {tile:polyominosArray[52],side:0, x:4, y:2},
+        {tile:polyominosArray[54],side:0, x:5, y:1},
+        {tile:polyominosArray[57],side:1, x:1, y:2},
     ]
 
-    const cave5:PaintedPolyominos[] = [
-        {polyomino:polyominosArray[1],side:0, x:1, y:1},
-        {polyomino:polyominosArray[1],side:0, x:5, y:4},
-        {polyomino:polyominosArray[0],side:0, x:3, y:2},
-        {polyomino:polyominosArray[62],side:1, x:5, y:0},
+    const cave5:PlacedTile[] = [
+        {tile:polyominosArray[1],side:0, x:1, y:1},
+        {tile:polyominosArray[1],side:0, x:5, y:4},
+        {tile:polyominosArray[0],side:0, x:3, y:2},
+        {tile:polyominosArray[62],side:1, x:5, y:0},
     ]
 
-    const cave6:PaintedPolyominos[] = [
-        {polyomino:polyominosArray[1],side:0, x:5, y:1},
-        {polyomino:polyominosArray[1],side:0, x:2, y:5},
-        {polyomino:polyominosArray[0],side:0, x:3, y:3},
-        {polyomino:polyominosArray[66],side:0, x:3, y:0},
+    const cave6:PlacedTile[] = [
+        {tile:polyominosArray[1],side:0, x:5, y:1},
+        {tile:polyominosArray[1],side:0, x:2, y:5},
+        {tile:polyominosArray[0],side:0, x:3, y:3},
+        {tile:polyominosArray[66],side:0, x:3, y:0},
     ]
 
     test('getOccupiedSquares', () => {   

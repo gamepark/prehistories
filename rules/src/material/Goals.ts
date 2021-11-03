@@ -3,7 +3,7 @@ import Animal from "../types/Animal";
 import Coordinates from "../types/Coordinates";
 import Face from "../types/Face";
 import Goal from "../types/Goal";
-import PaintedPolyominos from "../types/PaintedPolyominos";
+import PlacedTile from "../types/PlacedTile";
 import { PlayerHuntView, PlayerView, PlayerViewSelf } from "../types/PlayerView";
 import { PaintedSquare } from "../types/Polyomino";
 import getSquaresStartLeft, { getOccupiedSquares, getTilesFromTarget } from "../utils/getSquaresStartLeft";
@@ -15,7 +15,7 @@ const GoalA1: Goal = {
     hint:'hintA1',
     value:2,
     rule:(player : PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
-        const cave:PaintedPolyominos[] = player.cave
+        const cave:PlacedTile[] = player.cave
         const path:Coordinates[] = getSquaresStartLeft(cave)
         return path.find(square => square.x === cave[0].x && square.y === cave[0].y) !== undefined && path.find(square => square.x === cave[1].x && square.y === cave[1].y) !== undefined
     }
@@ -28,7 +28,7 @@ const GoalA2: Goal = {
     hint:'hintA2',
     value:2,
     rule:(player : PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
-        const cave:PaintedPolyominos[] = player.cave
+        const cave:PlacedTile[] = player.cave
         const occupiedSquares:PaintedSquare[] = getOccupiedSquares(cave)  
         return occupiedSquares.filter(square => square.x >= 2 && square.x <=4 && square.y >=2 && square.y <=4).length === 9  
     }
@@ -41,7 +41,7 @@ const GoalA3: Goal = {
     hint:'hintA3',
     value:2,
     rule:(player : PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
-        const cave:PaintedPolyominos[] = player.cave
+        const cave:PlacedTile[] = player.cave
         const occupiedSquares:PaintedSquare[] = getOccupiedSquares(cave)
         for(const y of [0,1,2,3,4,5,6]){
             const animalsInColumn : Animal[] = [] ;
@@ -66,7 +66,7 @@ const GoalA4: Goal = {
     hint:'hintA4',
     value:2,
     rule:(player : PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
-        const cave:PaintedPolyominos[] = player.cave
+        const cave:PlacedTile[] = player.cave
         const occupiedSquares:PaintedSquare[] = getOccupiedSquares(cave) 
         const animalsToCheck : Animal[] = [Animal.Fish, Animal.Ibex, Animal.Mammoth, Animal.Yak, Animal.Boar].filter(animal => occupiedSquares.filter(square => square.animal === animal).length >= 8)
         if (animalsToCheck.length === 0) return false
@@ -95,7 +95,7 @@ const GoalA5: Goal = {
     hint:'hintA5',
     value:2,
     rule:(player : PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
-        const cave:PaintedPolyominos[] = player.cave
+        const cave:PlacedTile[] = player.cave
         const occupiedSquares:PaintedSquare[] = getOccupiedSquares(cave) 
         const hunterCoord:Coordinates = {x:cave[2].x, y:cave[2].y}    
         return occupiedSquares.filter(square => square.x >= hunterCoord.x-1 && square.x <= hunterCoord.x+1 && square.y >= hunterCoord.y-1 && square.y <= hunterCoord.y+1).length === 9   
@@ -109,7 +109,7 @@ const GoalA6: Goal = {
     hint:'hintA6',
     value:2,
     rule:(player : PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
-        const cave:PaintedPolyominos[] = player.cave
+        const cave:PlacedTile[] = player.cave
         const occupiedSquares:PaintedSquare[] = getOccupiedSquares(cave)
         const animalsToCheck : Animal[] = [Animal.Fish, Animal.Ibex, Animal.Mammoth, Animal.Yak, Animal.Boar].filter(animal => occupiedSquares.filter(square => square.animal === animal).length >= 5)
         for (const animal of animalsToCheck){
@@ -137,7 +137,7 @@ const GoalA7: Goal = {
     hint:'hintA7',
     value:2,
     rule:(player : PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
-        const cave:PaintedPolyominos[] = player.cave
+        const cave:PlacedTile[] = player.cave
         const path:Coordinates[] = getSquaresStartLeft(cave)
         return path.find(square => square.x === 0 && square.y === 0) !== undefined && path.find(square => square.x === 6 && square.y === 6) !== undefined    
     }
@@ -150,8 +150,8 @@ const GoalA8: Goal = {
     hint:'hintA8',
     value:2,
     rule:(player : PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
-        const cave:PaintedPolyominos[] = player.cave
-        return cave.filter(polyo =>  polyo.polyomino < 27 && polyo.polyomino > 1).length >=5    
+        const cave:PlacedTile[] = player.cave
+        return cave.filter(polyo =>  polyo.tile < 27 && polyo.tile > 1).length >=5
     }
 }
 
@@ -162,11 +162,11 @@ const GoalA9: Goal = {
     hint:'hintA9',
     value:2,
     rule:(player : PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
-        const cave:PaintedPolyominos[] = player.cave
+        const cave:PlacedTile[] = player.cave
         const occupiedSquares:PaintedSquare[] = getOccupiedSquares(cave)
         const coordToCheck:Coordinates[] = [{x:-1,y:-1},{x:-1,y:0},{x:-1,y:1},{x:-1,y:2},{x:0,y:2},{x:1,y:2},{x:2,y:2},{x:2,y:1},{x:2,y:0},{x:2,y:-1},{x:1,y:-1},{x:0,y:-1}]
         for(const polyo of cave){
-            if (polyo.polyomino > 71){
+            if (polyo.tile > 71){
                 if (coordToCheck.every(coord => polyo.x + coord.x < 0 || polyo.x + coord.x > 6 || polyo.y + coord.y < 0 || polyo.y + coord.y > 6 || occupiedSquares.find(square => square.x === polyo.x + coord.x && square.y === polyo.y + coord.y) !== undefined)) return true
             }
         }
@@ -181,9 +181,9 @@ const GoalB1: Goal = {
     hint:'hintB1',
     value:3,
     rule:(player : PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
-        const cave:PaintedPolyominos[] = player.cave
+        const cave:PlacedTile[] = player.cave
         const occupiedSquares:PaintedSquare[] = getOccupiedSquares(cave)
-        const totems = cave.filter(polyo => polyo.polyomino === 1)
+        const totems = cave.filter(polyo => polyo.tile === 1)
         const coordToCheck:Coordinates[] = [{x:-1,y:-1},{x:-1,y:0},{x:-1,y:1},{x:0,y:1},{x:1,y:1},{x:1,y:0},{x:1,y:-1},{x:0,y:-1}]
         return totems.every(tile => coordToCheck.every(coord => occupiedSquares.find(square => square.x === tile.x + coord.x && square.y === tile.y + coord.y)))    
     }
@@ -196,7 +196,7 @@ const GoalB2: Goal = {
     hint:'hintB2',
     value:2,
     rule:(player : PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
-        const cave:PaintedPolyominos[] = player.cave
+        const cave:PlacedTile[] = player.cave
         const occupiedSquares:PaintedSquare[] = getOccupiedSquares(cave)
         return [0,1,2,3,4,5,6].every(x => occupiedSquares.find(square => square.x === x && square.y === 6))    
     }
@@ -209,7 +209,7 @@ const GoalB3: Goal = {
     hint:'hintB3',
     value:2,
     rule:(player : PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
-        const cave:PaintedPolyominos[] = player.cave
+        const cave:PlacedTile[] = player.cave
         const occupiedSquares:PaintedSquare[] = getOccupiedSquares(cave)
         for (const x of [0,1,2,3,4,5,6]){
             const animalsInLine : Animal[] = [] ;
@@ -232,7 +232,7 @@ const GoalB4: Goal = {
     hint:'hintB4',
     value:3,
     rule:(player : PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
-        const cave:PaintedPolyominos[] = player.cave
+        const cave:PlacedTile[] = player.cave
         const occupiedSquares:PaintedSquare[] = getOccupiedSquares(cave)
         const animalsToCheck : Animal[] = [Animal.Fish, Animal.Ibex, Animal.Mammoth, Animal.Yak, Animal.Boar].filter(animal => occupiedSquares.filter(square => square.animal === animal).length >= 10)
         if (animalsToCheck.length === 0) return false
@@ -261,7 +261,7 @@ const GoalB5: Goal = {
     hint:'hintB5',
     value:2,
     rule:(player : PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
-        const cave:PaintedPolyominos[] = player.cave
+        const cave:PlacedTile[] = player.cave
         const occupiedSquares:PaintedSquare[] = getOccupiedSquares(cave)
         const hunterCoord:Coordinates = {x:cave[2].x, y:cave[2].y}
         const adjacentAnimal:Animal[] = []
@@ -283,7 +283,7 @@ const GoalB6: Goal = {
     hint:'hintB6',
     value:2,
     rule:(player : PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
-        const cave:PaintedPolyominos[] = player.cave
+        const cave:PlacedTile[] = player.cave
         const occupiedSquares:PaintedSquare[] = getOccupiedSquares(cave)
         const animalsToCheck : Animal[] = [Animal.Fish, Animal.Ibex, Animal.Mammoth, Animal.Yak, Animal.Boar].filter(animal => occupiedSquares.filter(square => square.animal === animal).length >= 5)
         for (const animal of animalsToCheck){
@@ -311,7 +311,7 @@ const GoalB7: Goal = {
     hint:'hintB7',
     value:3,
     rule:(player : PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
-        const cave:PaintedPolyominos[] = player.cave
+        const cave:PlacedTile[] = player.cave
         const occupiedSquares:PaintedSquare[] = getOccupiedSquares(cave)
         return [{x:0,y:0},{x:6,y:0},{x:6,y:6},{x:0,y:6}].every(coord => occupiedSquares.find(square => square.x === coord.x && square.y === coord.y))    
     }
@@ -335,8 +335,8 @@ const GoalB9: Goal = {
     hint:'hintB9',
     value:2,
     rule:(player : PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
-        const cave:PaintedPolyominos[] = player.cave
-        const legendaryTiles = cave.filter(tile => tile.polyomino > 71)
+        const cave:PlacedTile[] = player.cave
+        const legendaryTiles = cave.filter(tile => tile.tile > 71)
         for (const polyo of legendaryTiles){
             if (legendaryTiles.find(tile => ((tile.x === polyo.x+2 && tile.y === polyo.y) || (tile.y === polyo.y+2 && tile.x === polyo.x)))) return true
         }

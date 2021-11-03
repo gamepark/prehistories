@@ -27,7 +27,7 @@ export function checkPermanentObjectives(player:PlayerState | PlayerView | Playe
     const squaresPainted : Coordinates[] = []
     const occupiedSquares :Coordinates[] = getOccupiedSquares(player.cave)
     
-    allPolyominos[lastTilePlayed.polyomino][0].coordinates.forEach(coord => {
+    allPolyominos[lastTilePlayed.tile][0].coordinates.forEach(coord => {
         squaresPainted.push({x:coord.x+lastTilePlayed.x,y:coord.y+lastTilePlayed.y})
     }) 
     
@@ -49,7 +49,7 @@ export function checkPermanentObjectives(player:PlayerState | PlayerView | Playe
         }
     })
 
-    return [completed.lines, completed.columns, lastTilePlayed.polyomino >= 72] 
+    return [completed.lines, completed.columns, lastTilePlayed.tile >= 72]
 
 }
 

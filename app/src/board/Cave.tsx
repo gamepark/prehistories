@@ -29,9 +29,9 @@ const Cave : FC<Props> = ({player, nbPlayers, phase}) => {
 
                 {player.cave.map((paint, index) => 
 
-                    paint.polyomino < 2 
-                        ? <div css = {[tilePosition(paint.x, paint.y), tileSize(paint.polyomino, paint.side,sizeTileW, sizeTileH)]} key = {index}> 
-                            <Polyomino  polyomino={paint.polyomino} 
+                    paint.tile < 2
+                        ? <div css = {[tilePosition(paint.x, paint.y), tileSize(paint.tile, paint.side,sizeTileW, sizeTileH)]} key = {index}>
+                            <Polyomino  polyomino={paint.tile}
                                         side={paint.side}
                                         color={player.color} 
                                         isAlreadyPlaced={true}
@@ -40,8 +40,8 @@ const Cave : FC<Props> = ({player, nbPlayers, phase}) => {
 
 
                         </div>
-                        : <div css = {[tilePosition(paint.x, paint.y), tileSize(paint.polyomino, paint.side,sizeTileW, sizeTileH)]} key = {index}>
-                            <Polyomino polyomino={paint.polyomino} 
+                        : <div css = {[tilePosition(paint.x, paint.y), tileSize(paint.tile, paint.side,sizeTileW, sizeTileH)]} key = {index}>
+                            <Polyomino polyomino={paint.tile}
                                        side={paint.side}
                                        isAlreadyPlaced={true}
                                        phase={phase}

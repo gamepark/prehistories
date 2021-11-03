@@ -4,10 +4,10 @@ import { allPolyominos } from "../material/Polyominos";
 import PlayerColor from "../PlayerColor";
 import Animal from "../types/Animal";
 import Coordinates from "../types/Coordinates";
-import PaintedPolyominos from "../types/PaintedPolyominos";
+import PlacedTile from "../types/PlacedTile";
 import {PaintedSquare} from "../types/Polyomino"
 
-function getSquaresStartLeft(cave:PaintedPolyominos[]):Coordinates[]{
+function getSquaresStartLeft(cave:PlacedTile[]):Coordinates[]{
     if (isFirstColumnEmpty(cave)){
         return []
     } else {
@@ -18,7 +18,7 @@ function getSquaresStartLeft(cave:PaintedPolyominos[]):Coordinates[]{
 
 export default getSquaresStartLeft
 
-export function getFreeSquaresFromPath(path:Coordinates[], cave:PaintedPolyominos[]):Coordinates[]{
+export function getFreeSquaresFromPath(path:Coordinates[], cave:PlacedTile[]):Coordinates[]{
     const result:Coordinates[] = []
     const occupiedSquares:PaintedSquare[] = getOccupiedSquares(cave)
     if (path.length === 0){
@@ -62,14 +62,14 @@ export function getTilesFromTarget(target:Coordinates,list:Coordinates[], occupi
 
 }
 
-export function isFirstColumnEmpty(cave:PaintedPolyominos[]):boolean{
+export function isFirstColumnEmpty(cave:PlacedTile[]):boolean{
     return getOccupiedSquares(cave).every(polyo => polyo.y !== 0)
 }
 
-export function getOccupiedSquares(cave:PaintedPolyominos[]):PaintedSquare[]{
+export function getOccupiedSquares(cave:PlacedTile[]):PaintedSquare[]{
     const result:PaintedSquare[] = []
     cave.forEach(paint => {
-        const polyo = allPolyominos[paint.polyomino][paint.side]
+        const polyo = allPolyominos[paint.tile][paint.side]
         polyo.coordinates.forEach(coord => {
             result.push({animal:polyo.animal, x:paint.x+coord.x,y:paint.y+coord.y})
         })

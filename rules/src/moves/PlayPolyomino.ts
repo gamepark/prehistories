@@ -23,7 +23,7 @@ export function playPolyomino(state:GameState | GameView, move:PlayPolyomino){
     if (polyomino === null){
         throw("error : trying to paint a null polyomino !")
     } else {
-        player.cave.push({polyomino, side:move.side, x:move.square.x, y:move.square.y})
+        player.cave.push({tile: polyomino, side:move.side, x:move.square.x, y:move.square.y})
         player.hunting = {huntPhase:HuntPhase.Pay,
                                huntSpotTakenLevels:getPowerLevels(state.players.length,move.huntSpot),
                                injuries:player.hunting!.injuries,
