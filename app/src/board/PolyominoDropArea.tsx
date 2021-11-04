@@ -12,6 +12,7 @@ import {placeTileMove} from "@gamepark/prehistories/moves/PlaceTile";
 import {canPlaceTile, getCavePlacementSpaces, PlacementSpace} from "@gamepark/prehistories/utils/PlacementRules";
 import {Side} from "@gamepark/prehistories/material/Tile";
 import {getPlacedTileCoordinates} from "@gamepark/prehistories/types/PlacedTile";
+import { setPercentDimension, toAbsolute, toFullSize } from "../utils/styles";
 
 
 type Props = {
@@ -60,7 +61,7 @@ export default function PolyominoDropArea({player, ...props}: Props) {
   dropRef(ref)
 
   return (
-    <div ref={ref} css={style} {...props}>
+    <div ref={ref} css={[toAbsolute, toFullSize]} {...props}>
       {draggedPolyo && <ValidDropAreaHighlight cave={cave} tile={draggedPolyo.polyomino} side={draggedPolyo.side}/>}
       {draggedPolyo && over && <DropShadow cave={cave} tile={draggedPolyo.polyomino} side={draggedPolyo.side} getAreaPosition={getAreaPosition}/>}
     </div>
@@ -77,7 +78,7 @@ function ValidDropAreaHighlight({cave, tile, side}: ValidDropAreaHighlightProps)
   const area = useMemo(() => getValidDropArea(cave, tile, side), [cave, tile, side])
   return <>{
     area.map((row, y) =>
-      row.map((space, x) => space && <div key={`${x}_${y}`} css={[squareCss, position({x, y}), highlight]}/>)
+      row.map((space, x) => space && <div key={`${x}_${y}`} css={[toAbsolute, setPercentDimension(squareSize, squareSize), position({x, y}), highlight]}/>)
     )
   }</>
 }
@@ -112,24 +113,14 @@ function DropShadow({cave, tile, side, getAreaPosition}: DropShadowProps) {
   const coordinates = getAreaPosition(sourceClientOffset)
   const placedTile = {tile, side, ...coordinates}
   if (!canPlaceTile(cave, placedTile)) return null
+
   return <>{
     getPlacedTileCoordinates(placedTile).map(({x, y}) =>
-      <div key={`${x}_${y}`} css={[squareCss, position({x, y}), strongHighlight]}/>
+      <div key={`${x}_${y}`} css={[toAbsolute, setPercentDimension(squareSize, squareSize), position({x, y}), strongHighlight]}/>
     )
   }</>
+  
 }
-
-const style = css`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-`
-
-const squareCss = css`
-  position: absolute;
-  width: ${squareSize}%;
-  height: ${squareSize}%;
-`
 
 const highlight = css`
   background-color: rgba(0, 128, 0, 0.3);

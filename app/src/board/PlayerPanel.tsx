@@ -9,6 +9,7 @@ import { PlayerTimer, usePlayer } from "@gamepark/react-client";
 import { Picture } from "@gamepark/react-components";
 import { FC, HTMLAttributes } from "react";
 import { useTranslation } from "react-i18next";
+import { placingBackground, setPercentDimension, toAbsolute } from "../utils/styles";
 import Images, { bluePowerBanners, greenPowerBanners, redPowerBanners, whitePowerBanners, yellowPowerBanners } from "../utils/Images";
 import AvatarPanel from "./AvatarPanel";
 
@@ -25,11 +26,13 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, hunting}, position
     const playerInfo = usePlayer(color)
     const {t} = useTranslation()
 
+    const noOfPassage:number|undefined = huntOrder !== undefined && huntOrder.findIndex(c => c === color) !== -1 ? huntOrder.findIndex(c => c === color) + (nbPlayers - huntOrder.length) : -1
+
     return (
 
-        <div {...props} css={[playerPanelStyle(getBG(color)), playerPanelPosition(position)]}>
+        <div {...props} css={[placingBackground(getBG(color),"cover"), playerPanelBorder, toAbsolute, setPercentDimension(15,20), playerPanelPosition(position)]}>
 
-            {huntOrder !== undefined && <div css={[powerPosition, powerStyle(getPowerBanner(color)[huntOrder.findIndex(c => c === color) !== -1 ? huntOrder.findIndex(c => c === color) + (nbPlayers - huntOrder.length) : -1]), entryBannerAnim]}> </div>}
+            {huntOrder !== undefined && <div css={[toAbsolute, setPercentDimension(40,18), powerPosition, placingBackground(getPowerBanner(color)[noOfPassage],"contain"), powerShadow, entryBannerAnim]}> </div>}
 
             <AvatarPanel playerInfo={playerInfo} color={color} css={css`z-index:5;`}/>
 
@@ -42,8 +45,8 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, hunting}, position
             <PlayerTimer playerId={color} css={[TimerStyle]}/>
 
             {(hunting?.injuries !== undefined) &&
-                <div css={injuriesIndicatorPosition}>
-                    {[...Array(hunting.injuries)].map((_, i) => <Picture key={i} alt={t('injuries')} src={Images.arrowBrokenIcon} draggable={false} css={brokenArrowIconStyle(i)} /> )}
+                <div css={[toAbsolute, setPercentDimension(32,50), injuriesIndicatorPosition]}>
+                    {[...Array(hunting.injuries)].map((_, i) => <Picture key={i} alt={t('injuries')} src={Images.arrowBrokenIcon} draggable={false} css={[toAbsolute, setPercentDimension(100,38), brokenArrowIconStyle(i)]} /> )}
                 </div>}
 
         </div>
@@ -53,24 +56,18 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, hunting}, position
 }
 
 const injuriesIndicatorPosition = css`
-position:absolute;
-bottom:7%;
-left:25%;
-width:50%;
-height:32%;
-text-align:center;
+    bottom:7%;
+    left:25%;
+    text-align:center;
 `
 
 const brokenArrowIconStyle = (index:number) => css`
-position:absolute;
-top:0;
-left:${index*25}%;
-width:38%;
-height:100%;
-border:0.1em solid orange;
-border-radius:15%;
-box-shadow:0 0 0.5em black;
-transform:rotateZ(-10deg);
+    top:0;
+    left:${index*25}%;
+    border:0.1em solid orange;
+    border-radius:15%;
+    box-shadow:0 0 0.5em black;
+    transform:rotateZ(-10deg);
 `
 
 const entryBannerKeyframes = keyframes`
@@ -89,7 +86,7 @@ to{
 `
 
 const entryBannerAnim = css`
-animation: ${entryBannerKeyframes} 1s ease-out;
+    animation: ${entryBannerKeyframes} 1s ease-out;
 `
 
 function getPowerBanner(color:PlayerColor):string[]{
@@ -108,36 +105,22 @@ function getPowerBanner(color:PlayerColor):string[]{
 }
 
 const powerPosition = css`
-position:absolute;
-top:55%;
-left:3%;
-z-index:-1;
-width:18%;
-height:40%;
-transform:rotateZ(5deg);
+    top:55%;
+    left:3%;
+    z-index:-1;
+    transform:rotateZ(5deg);
 `
 
-const powerStyle = (image:string) => css`
-background-image: url(${image});
-background-size: contain;
-background-repeat: no-repeat;
-background-position: top;
-filter:drop-shadow(0 0 0.2em black);
+const powerShadow = css`
+    filter:drop-shadow(0 0 0.2em black);
 `
 const playerPanelPosition = (position:number) => css`
-    position:absolute;
     top:${7+16+15*position}%;
-    z-index:0;
     right:0;
-    height:15%;
-    width:20%;
+    z-index:0;
 `
 
-const playerPanelStyle = (image:string) => css`
-    background-image: url(${image});
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: top;
+const playerPanelBorder = css`
     border:0.1em solid black;
     cursor:pointer;
 `
@@ -162,10 +145,10 @@ const totemRemainingPosition = css`
 `
 
 const totemStyle = (spread:number) => css`
-height:3em;
-width:3em;
-margin : 0em ${-0.0625*spread+(8-spread)/10}em;
-border-radius:100%;
+    height:3em;
+    width:3em;
+    margin : 0em ${-0.0625*spread+(8-spread)/10}em;
+    border-radius:100%;
 `
 
 export function getTotem(color:PlayerColor):string{

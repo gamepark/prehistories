@@ -7,6 +7,7 @@ import PolyominoToHunt from '@gamepark/prehistories/types/appTypes/PolyominoToHu
 import {usePlay} from '@gamepark/react-client'
 import {Draggable} from '@gamepark/react-components'
 import {FC, HTMLAttributes} from 'react'
+import { placingBackground, toAbsolute, toFullSize } from '../utils/styles'
 import Images from '../utils/Images'
 
 type Props = {
@@ -27,28 +28,25 @@ const Polyomino : FC<Props> = ({polyomino, side, color, draggable = false, type=
         play(move)
     }
 
-
-
     return(
         <Draggable canDrag={draggable}
                    type={type}
                    item={item}
                    drop={onDrop}
                    {...props}
-                   css={[polyominoSize]}>
+                   css={toFullSize}>
 
-                <div css={[css`position:absolute;width:100%;height:100%;`, flipTile(side)]}>
+                <div css={[toAbsolute, toFullSize, flipTile(side)]}>
 
-                    <div css={[css`position:absolute;width:100%;height:100%;`,
-                               frontSide,
-                                polyominoStyle(color ? getColoredPolyominoImage(polyomino, color!): getPolyominoImage(polyomino, 0)),
-                                draggable && glowingAnimation
+                    <div css={[toAbsolute, toFullSize, sideDisplay,
+                               polyominoShadow,
+                               placingBackground(color ? getColoredPolyominoImage(polyomino, color!): getPolyominoImage(polyomino, 0),"contain"),
+                               draggable && glowingAnimation
                               ]}>
                     </div>
 
-                    {<div css={[css`position:absolute;width:100%;height:100%;`,
-                                backSide,
-                                polyominoStyle(color ? getColoredPolyominoImage(polyomino, color!): getPolyominoImage(polyomino, 1)),
+                    {<div css={[toAbsolute, toFullSize, sideDisplay, polyominoShadow,
+                                placingBackground(color ? getColoredPolyominoImage(polyomino, color!): getPolyominoImage(polyomino, 1),"contain"),
                                 draggable && glowingAnimation
                                ]}>
                     </div>}
@@ -61,45 +59,27 @@ const Polyomino : FC<Props> = ({polyomino, side, color, draggable = false, type=
 }
 
 const glowingKeyframes = keyframes`
-from{
-  filter:drop-shadow(0 0 0.2em lime);  
-}
-to{
-    filter:drop-shadow(0 0 0.8em lime) drop-shadow(0 0 0.8em lime);
-}
+    from{filter:drop-shadow(0 0 0.2em lime);}
+    to{filter:drop-shadow(0 0 0.8em lime) drop-shadow(0 0 0.8em lime);}
 `
 
 const glowingAnimation = css`
-animation:${glowingKeyframes} 1s alternate infinite linear;
+    animation:${glowingKeyframes} 1s alternate infinite linear;
 `
 
-const frontSide = css`
-transform-style: preserve-3d;
-backface-visibility:hidden;
-`
-
-const backSide = css`
-transform-style: preserve-3d;
-backface-visibility:hidden;
+const sideDisplay = css`
+    transform-style: preserve-3d;
+    backface-visibility:hidden;
 `
 
 const flipTile = (side:0|1) => css`
-transform-style:preserve-3d;
-transform:rotateY(${side * 180}deg);
-transition:transform 0.2s linear, top 0.2s cubic-bezier(1,0,0,1), left 0.2s cubic-bezier(1,0,0,1);
+    transform-style:preserve-3d;
+    transform:rotateY(${side * 180}deg);
+    transition:transform 0.2s linear, top 0.2s cubic-bezier(1,0,0,1), left 0.2s cubic-bezier(1,0,0,1);
 `
 
-const polyominoSize = css`
-width:100%;
-height:100%;
-`
-
-const polyominoStyle = (image:string) => css`
-background-image: url(${image});
-background-size: contain;
-background-repeat: no-repeat;
-background-position: top;
-filter:drop-shadow(0 0 0.2em black);
+const polyominoShadow = css`
+    filter:drop-shadow(0 0 0.2em black);
 `
 
 function getColoredPolyominoImage(polyomino:number, color:PlayerColor):string{
@@ -114,8 +94,7 @@ switch (color){
         return polyomino === 0 ? Images.polyominoType0HunterWhite : Images.polyominoType0TotemWhite
     case (PlayerColor.Yellow) :
         return polyomino === 0 ? Images.polyominoType0HunterYellow : Images.polyominoType0TotemYellow
-}
-        
+    }      
 }
 
 function getPolyominoImage(polyomino:number, side:number):string{

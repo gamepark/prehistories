@@ -1,9 +1,8 @@
 /** @jsxImportSource @emotion/react */
-
 import { css } from "@emotion/react"
 import PlayerColor from "@gamepark/prehistories/PlayerColor"
 import { FC, HTMLAttributes } from "react"
-import Images, { BlueHunters, GreenHunters, RedHunters, WhiteHunters, YellowHunters } from "../utils/Images"
+import { BlueHunters, GreenHunters, RedHunters, WhiteHunters, YellowHunters } from "../utils/Images"
 import CardPlayed from "@gamepark/prehistories/types/appTypes/CardPlayed"
 import CardInHand from "@gamepark/prehistories/types/appTypes/CardInHand"
 import { useAnimation, usePlay, useSound } from "@gamepark/react-client"
@@ -12,6 +11,8 @@ import PlayHuntCard from "@gamepark/prehistories/moves/PlayHuntCard"
 import { Draggable } from "@gamepark/react-components"
 import { isRevealHuntCards, RevealHuntCardsView } from "@gamepark/prehistories/moves/RevealHuntCards"
 import MoveCardSound from "../sounds/cardMove.mp3"
+import { placingBackground, toAbsolute, toFullSize } from "../utils/styles"
+import { getCardBack } from "../utils/getterFunctions"
 
 type Props = {
     color:PlayerColor
@@ -42,12 +43,12 @@ const Card : FC<Props> = ({color, power, speed, draggable=false, type='', dragga
                    item={item}
                    drop={onDrop}
                    {...props}
-                   css={[cardPosition]}>
+                   css={[toAbsolute, toFullSize, cardPosition]}>
 
-            <div css={[cardPosition, faceToShow(power, revealCardsAnimation !== undefined, revealCardsAnimation?.duration ?? 0)]}>
+            <div css={[toAbsolute, toFullSize, cardPosition, faceToShow(power, revealCardsAnimation !== undefined, revealCardsAnimation?.duration ?? 0)]}>
 
-                <div css={[cardPosition, front, cardStyle(getCardImage(color, power, speed))]}></div>
-                <div css={[cardPosition, back, cardStyle(getCardImage(color, undefined, undefined))]}></div>
+                <div css={[toAbsolute, toFullSize, cardPosition, front, placingBackground(getCardImage(color, power, speed), "cover")]}></div>
+                <div css={[toAbsolute, toFullSize, cardPosition, back, placingBackground(getCardImage(color, undefined, undefined), "cover")]}></div>
 
             </div>
 
@@ -58,50 +59,43 @@ const Card : FC<Props> = ({color, power, speed, draggable=false, type='', dragga
 }
 
 const faceToShow = (power:undefined|number, isAnimation:boolean, duration:number) => css`
-box-shadow:0 0 0.5em black;
-transform:rotateY(${power === undefined ? 180 : 0}deg);
-${isAnimation ? `transition:transform ${duration}s linear;` : `transition:none;`}
-
+    box-shadow:0 0 0.5em black;
+    transform:rotateY(${power === undefined ? 180 : 0}deg);
+    ${isAnimation ? `transition:transform ${duration}s linear;` : `transition:none;`}
 `
 
 const front = css`
-transform-style: preserve-3d;
-backface-visibility:hidden;
+    transform-style: preserve-3d;
+    backface-visibility:hidden;
 `
 
 const back = css`
-transform-style: preserve-3d;
-backface-visibility:hidden;
-transform:rotateY(180deg);
+    transform-style: preserve-3d;
+    backface-visibility:hidden;
+    transform:rotateY(180deg);
 `
 
 const cardPosition = css`
-transform-style:preserve-3d;
-position:absolute;
-width:100%;
-height:100%;
-border-radius:8%;
-`
-const cardStyle = (image:string) => css`
-background-image: url(${image});
-background-size: cover;
-background-repeat: no-repeat;
-background-position: top;
+    transform-style:preserve-3d;
+    border-radius:8%;
 `
 
 function getCardImage(color:PlayerColor, power:number|undefined, speed:number|undefined):string{
-    switch(color){
-        case PlayerColor.Blue :
-            return power === undefined || speed === undefined ? Images.cardBackBlue : (speed <= ((6-power)*10)+5 ? BlueHunters[(power-1)*2] : BlueHunters[(power*2)-1])
-        case PlayerColor.Green :
-            return power === undefined || speed === undefined ? Images.cardBackGreen : (speed <= ((6-power)*10)+5 ? GreenHunters[(power-1)*2] : GreenHunters[(power*2)-1])
-        case PlayerColor.Red :
-            return power === undefined || speed === undefined ? Images.cardBackRed : (speed <= ((6-power)*10)+5 ? RedHunters[(power-1)*2] : RedHunters[(power*2)-1])
-        case PlayerColor.White :
-            return power === undefined || speed === undefined ? Images.cardBackWhite : (speed <= ((6-power)*10)+5 ? WhiteHunters[(power-1)*2] : WhiteHunters[(power*2)-1])
-        case PlayerColor.Yellow :
-            return power === undefined || speed === undefined ? Images.cardBackYellow : (speed <= ((6-power)*10)+5 ? YellowHunters[(power-1)*2] : YellowHunters[(power*2)-1])
-
+    if(power === undefined || speed === undefined){
+        return getCardBack(color)
+    } else {
+        switch(color){
+            case PlayerColor.Blue :
+                return (speed <= ((6-power)*10)+5 ? BlueHunters[(power-1)*2] : BlueHunters[(power*2)-1])
+            case PlayerColor.Green :
+                return (speed <= ((6-power)*10)+5 ? GreenHunters[(power-1)*2] : GreenHunters[(power*2)-1])
+            case PlayerColor.Red :
+                return (speed <= ((6-power)*10)+5 ? RedHunters[(power-1)*2] : RedHunters[(power*2)-1])
+            case PlayerColor.White :
+                return (speed <= ((6-power)*10)+5 ? WhiteHunters[(power-1)*2] : WhiteHunters[(power*2)-1])
+            case PlayerColor.Yellow :
+                return (speed <= ((6-power)*10)+5 ? YellowHunters[(power-1)*2] : YellowHunters[(power*2)-1])
+        }
     }
 }
 

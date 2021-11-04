@@ -6,13 +6,11 @@ import { isRevealHuntCards, RevealHuntCardsView } from "@gamepark/prehistories/m
 import { useAnimation } from "@gamepark/react-client"
 import { FC, useEffect } from "react"
 import { AudioLoader } from "./AudioLoader"
-import buttonClick from './buttonClick.mp3'
 import cardFlipSound from "./cardFlip.mp3";
 import cardMoveSound from "./cardMove.mp3";
 import moveTileSound from "./moveTile.mp3";
 import permObjectiveSound from "./permObjective.mp3";
 import varObjectiveSound from "./varObjective.mp3";
-import playerTurnSound from "./playerTurn.mp3";
 import PlayHuntCard, { isPlayHuntCard } from "@gamepark/prehistories/moves/PlayHuntCard"
 
 

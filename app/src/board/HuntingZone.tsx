@@ -11,6 +11,7 @@ import teamPower from '@gamepark/prehistories/utils/teamPower'
 import {useAnimation, usePlayerId, useSound} from '@gamepark/react-client'
 import {FC, useState} from 'react'
 import { DropTargetMonitor, useDrop } from 'react-dnd'
+import { placingBackground, setPercentDimension, toAbsolute } from '../utils/styles'
 import MoveTileSound from '../sounds/moveTile.mp3'
 import Images from '../utils/Images'
 import {tileSize} from './Cave'
@@ -52,13 +53,14 @@ const HuntingZone : FC<Props> = ({game, numberOfPlayers, indexOfDisplayedPlayer,
 
     return(
 
-        <div css={[huntingZonePosition, numberOfPlayers < 4 ? bG23Players : bG45Players]}>
+        <div css={[toAbsolute, setPercentDimension(93,24.5), huntingZonePosition, placingBackground(numberOfPlayers < 4 ? Images.huntingBoard23Players : Images.huntingBoard45Players, "contain")]}>
 
             {game.huntingBoard.map((polyomino, index) => {
                 let activePlayer = game.sortedPlayers !== undefined ? game.sortedPlayers[0] : undefined
                 return polyomino !== null && <Polyomino
                     key={index}
-                    css={[ polyominoToHuntSize(index, numberOfPlayers, polyomino, (playPolyominoAnimation !== undefined && playPolyominoAnimation?.move.huntSpot === index ? playPolyominoAnimation.move.side : sideArray[index]), 8, 16), polyominoToHuntPosition(index, numberOfPlayers, polyomino, sideArray[index]),
+                    css={[ toAbsolute,
+                           polyominoToHuntSize(polyomino, (playPolyominoAnimation !== undefined && playPolyominoAnimation?.move.huntSpot === index ? playPolyominoAnimation.move.side : sideArray[index]), 8, 16), polyominoToHuntPosition(index, numberOfPlayers, polyomino, sideArray[index]),
                            playPolyominoAnimation?.move.huntSpot === index && indexListDisplayedPlayers !== undefined && activePlayer !== undefined && playPolyominoAnimationStyle(playPolyominoAnimation.duration, indexOfDisplayedPlayer, indexListDisplayedPlayers, activePlayer, playPolyominoAnimation.move.coordinates.x, playPolyominoAnimation.move.coordinates.y),
                            displayHuntPolyomino(isDragging?.huntSpot === index, index, polyomino, numberOfPlayers, (sideArray[index]), playPolyominoAnimation?.move.huntSpot === index),
                     ]}
@@ -81,19 +83,19 @@ const HuntingZone : FC<Props> = ({game, numberOfPlayers, indexOfDisplayedPlayer,
 }
 
 const displayHuntPolyomino = (isDragging:boolean, pos:number|undefined, polyomino:number, nbPlayers:number|undefined, side:0|1, isAnimation:boolean) => css`
-> div > div {
-    &:nth-of-type(1){
-        transform: scale(${pos === undefined ? 1 : 0.8}) rotateZ(${pos === undefined || nbPlayers === undefined || isDragging || isAnimation ? 0 : getRotate(pos, nbPlayers, side, polyomino)}deg) rotateY(0deg);
-        transition:transform 0.2s linear;
+    > div > div {
+        &:nth-of-type(1){
+            transform: scale(${pos === undefined ? 1 : 0.8}) rotateZ(${pos === undefined || nbPlayers === undefined || isDragging || isAnimation ? 0 : getRotate(pos, nbPlayers, side, polyomino)}deg) rotateY(0deg);
+            transition:transform 0.2s linear;
+        }
+        &:nth-of-type(2){
+            transform: scale(${pos === undefined ? 1 : 0.8}) rotateZ(${pos === undefined || nbPlayers === undefined || isDragging || isAnimation ? 0 : getRotate(pos, nbPlayers, side, polyomino)}deg) rotateY(180deg);
+            transition:transform 0.2s linear;
+        }
     }
-    &:nth-of-type(2){
-        transform: scale(${pos === undefined ? 1 : 0.8}) rotateZ(${pos === undefined || nbPlayers === undefined || isDragging || isAnimation ? 0 : getRotate(pos, nbPlayers, side, polyomino)}deg) rotateY(180deg);
-        transition:transform 0.2s linear;
-    }
-}`
+`
 
 function isPolyominoHuntable(player:(PlayerView|PlayerViewSelf|PlayerHuntView|undefined), phase:Phase|undefined, huntSpot:number, nbPlayers:number, firstPlayer:PlayerColor|undefined):boolean{
-
     return phase === Phase.Hunt 
     && player !== undefined 
     && firstPlayer !== undefined && player.color === firstPlayer
@@ -103,32 +105,32 @@ function isPolyominoHuntable(player:(PlayerView|PlayerViewSelf|PlayerHuntView|un
 }
 
 const polyominoToHuntPosition = (position:number, numberOfPlayers:number, polyomino:number, side:0|1) => css`
-position:absolute;
-top:${getTop(position, numberOfPlayers, side, polyomino)}%;
-left:${getLeft(position, numberOfPlayers, side, polyomino)}%;
-transition:top 0.2s cubic-bezier(1,0,0,1), left 0.2s cubic-bezier(1,0,0,1), width 0.2s cubic-bezier(1,0,0,1), height 0.2s cubic-bezier(1,0,0,1);
+    top:${getTop(position, numberOfPlayers, side, polyomino)}%;
+    left:${getLeft(position, numberOfPlayers, side, polyomino)}%;
+    transition:top 0.2s cubic-bezier(1,0,0,1), left 0.2s cubic-bezier(1,0,0,1), width 0.2s cubic-bezier(1,0,0,1), height 0.2s cubic-bezier(1,0,0,1);
 `
 
 const huntingZonePosition = css`
-    position:absolute;
     top:7%;
     left:0;
-    width:24.5%;
-    height:93%;
+`
+const polyominoToHuntSize = (polyomino:number, side:(0|1), sizeBaseH:number, sizeBaseW:number) => {
+    return tileSize(polyomino, side, sizeBaseW, sizeBaseH)    
+}
+
+const playPolyominoKeyframes = (isGoodDisplayedCave: number | undefined, indexListDisplayedPlayers: PlayerColor[], player: PlayerColor, x: number, y: number) => keyframes`
+    from {transform: scale(0.6);}
+    20% {transform: scale(1.3);}
+    80%,to {
+        transform: scale(${isGoodDisplayedCave === indexListDisplayedPlayers.findIndex(p => p === player) ? 0.92 : 0});
+        top: ${isGoodDisplayedCave === indexListDisplayedPlayers.findIndex(p => p === player) ? 28 + x * 5.2 : 32 + ((indexListDisplayedPlayers.findIndex(p => p === player) - 1)) * 15}em;
+        left: ${isGoodDisplayedCave === indexListDisplayedPlayers.findIndex(p => p === player) ? 46.5 + y * 5.2 : 150}em;
+    }
 `
 
-const bG23Players = css`
-background-image: url(${Images.huntingBoard23Players});
-background-size: contain;
-background-repeat: no-repeat;
-background-position: top;
-`
-
-const bG45Players = css`
-background-image: url(${Images.huntingBoard45Players});
-background-size: contain;
-background-repeat: no-repeat;
-background-position: top;
+const playPolyominoAnimationStyle = (duration: number, isGoodDisplayedCave: number | undefined, indexListDisplayedPlayers: PlayerColor[], player: PlayerColor, x: number, y: number) => css`
+    z-index: 10 !important;
+    animation: ${playPolyominoKeyframes(isGoodDisplayedCave, indexListDisplayedPlayers, player, x, y)} ${duration}s ease-in infinite;
 `
 
 function getTop(pos:number, players:number, side:0|1, polyo:number):number{
@@ -208,29 +210,6 @@ function getPosForSShape(polyo:number, side:0|1):number[]{
         return side === 0 ? [16.5,60] : [16,60]
     } else return [0,0] 
 }
-
-const polyominoToHuntSize = (pos:number, players:number, polyomino:number, side:(0|1), sizeBaseH:number, sizeBaseW:number) => {
-        return tileSize(polyomino, side, sizeBaseW, sizeBaseH)    
-}
-
-const playPolyominoKeyframes = (isGoodDisplayedCave: number | undefined, indexListDisplayedPlayers: PlayerColor[], player: PlayerColor, x: number, y: number) => keyframes`
-  from {
-    transform: scale(0.6);
-  }
-  20% {
-    transform: scale(1.3);
-  }
-  80%,to {
-    transform: scale(${isGoodDisplayedCave === indexListDisplayedPlayers.findIndex(p => p === player) ? 0.92 : 0});
-    top: ${isGoodDisplayedCave === indexListDisplayedPlayers.findIndex(p => p === player) ? 28 + x * 5.2 : 32 + ((indexListDisplayedPlayers.findIndex(p => p === player) - 1)) * 15}em;
-    left: ${isGoodDisplayedCave === indexListDisplayedPlayers.findIndex(p => p === player) ? 46.5 + y * 5.2 : 150}em;
-  }
-`
-
-const playPolyominoAnimationStyle = (duration: number, isGoodDisplayedCave: number | undefined, indexListDisplayedPlayers: PlayerColor[], player: PlayerColor, x: number, y: number) => css`
-  z-index: 10 !important;
-  animation: ${playPolyominoKeyframes(isGoodDisplayedCave, indexListDisplayedPlayers, player, x, y)} ${duration}s ease-in infinite;
-`
 
 function getRotate(pos:number, players:number, side:0|1, polyomino:number):number{
     switch (pos){
