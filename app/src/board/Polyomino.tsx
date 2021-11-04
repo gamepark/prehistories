@@ -4,11 +4,9 @@ import Move from '@gamepark/prehistories/moves/Move'
 import PlaceTile from '@gamepark/prehistories/moves/PlaceTile'
 import PlayerColor from '@gamepark/prehistories/PlayerColor'
 import PolyominoToHunt from '@gamepark/prehistories/types/appTypes/PolyominoToHunt'
-import Phase from '@gamepark/prehistories/types/Phase'
 import {usePlay} from '@gamepark/react-client'
 import {Draggable} from '@gamepark/react-components'
 import {FC, HTMLAttributes} from 'react'
-import {DropTargetMonitor, useDrop} from 'react-dnd'
 import Images from '../utils/Images'
 
 type Props = {
@@ -18,18 +16,10 @@ type Props = {
     draggable?:boolean
     type?:'PolyominoToHunt'
     draggableItem?:PolyominoToHunt
-    isAlreadyPlaced:boolean
-    phase:Phase | undefined
-    huntPosition?:number
-    nbPlayers?:number
-    activePlayer?:PlayerColor
-    indexOfDisplayedPlayer?:number
-    indexListDisplayedPlayers?:PlayerColor[]
-    isAnimation?: boolean
 
 } & Omit<HTMLAttributes<HTMLDivElement>, 'color'>
 
-const Polyomino : FC<Props> = ({polyomino, side, color, draggable = false, type='', draggableItem, isAlreadyPlaced, phase, huntPosition, nbPlayers, activePlayer, indexOfDisplayedPlayer, indexListDisplayedPlayers, isAnimation = false, ...props}) => {
+const Polyomino : FC<Props> = ({polyomino, side, color, draggable = false, type='', draggableItem, ...props}) => {
 
     const play = usePlay<Move>()
     const item = {...draggableItem}
@@ -37,15 +27,7 @@ const Polyomino : FC<Props> = ({polyomino, side, color, draggable = false, type=
         play(move)
     }
 
-    const [{isDragging}, ref] = useDrop({           // Only to check the item currently dragged
-        accept: ["PolyominoToHunt"],
-        canDrop: (item: PolyominoToHunt) => {
-            return item.polyomino === polyomino && item.huntSpot === huntPosition
-        },
-        collect: (monitor:DropTargetMonitor) => ({
-          isDragging: monitor.canDrop(),
-        }),
-      })
+
 
     return(
         <Draggable canDrag={draggable}
@@ -53,29 +35,22 @@ const Polyomino : FC<Props> = ({polyomino, side, color, draggable = false, type=
                    item={item}
                    drop={onDrop}
                    {...props}
-                   css={[polyominoSize]}
-                   >
+                   css={[polyominoSize]}>
 
-                <div css={[css`position:absolute;width:100%;height:100%;`, flipTile(side) ]}>
+                <div css={[css`position:absolute;width:100%;height:100%;`, flipTile(side)]}>
 
-                    <div ref={ref} 
-                         css={[
-                             css`position:absolute;width:100%;height:100%;`,
-                             frontSide,
-                             displayHuntPolyomino(isDragging, huntPosition, polyomino, nbPlayers, side, "front", isAnimation),
-                             polyominoStyle(color ? getColoredPolyominoImage(polyomino, color!): getPolyominoImage(polyomino, 0)),
-                             draggable && glowingAnimation
-                             ]}>
-
+                    <div css={[css`position:absolute;width:100%;height:100%;`,
+                               frontSide,
+                                polyominoStyle(color ? getColoredPolyominoImage(polyomino, color!): getPolyominoImage(polyomino, 0)),
+                                draggable && glowingAnimation
+                              ]}>
                     </div>
 
-                    {<div ref={ref} css={[css`position:absolute;width:100%;height:100%;`,
-                                          backSide,
-                                          displayHuntPolyomino(isDragging, huntPosition, polyomino, nbPlayers, 1, "back", isAnimation),
-                                          polyominoStyle(color ? getColoredPolyominoImage(polyomino, color!): getPolyominoImage(polyomino, 1)),
-                                          draggable && glowingAnimation
-                                        ]}>
-
+                    {<div css={[css`position:absolute;width:100%;height:100%;`,
+                                backSide,
+                                polyominoStyle(color ? getColoredPolyominoImage(polyomino, color!): getPolyominoImage(polyomino, 1)),
+                                draggable && glowingAnimation
+                               ]}>
                     </div>}
 
                 </div>
@@ -114,11 +89,6 @@ transform:rotateY(${side * 180}deg);
 transition:transform 0.2s linear, top 0.2s cubic-bezier(1,0,0,1), left 0.2s cubic-bezier(1,0,0,1);
 `
 
-const displayHuntPolyomino = (isDragging:boolean, pos:number|undefined, polyomino:number, nbPlayers:number|undefined, side:0|1, face:"front"|"back", isAnimation:boolean) => css`
-transform:scale(${pos === undefined ? 1 : 0.8}) rotateZ(${pos === undefined || nbPlayers === undefined || isDragging || isAnimation ? 0 : getRotate(pos, nbPlayers, side, polyomino)}deg) rotateY(${face === "front" ? 0 : 180}deg);
-transition:transform 0.2s linear;
-`
-
 const polyominoSize = css`
 width:100%;
 height:100%;
@@ -131,71 +101,6 @@ background-repeat: no-repeat;
 background-position: top;
 filter:drop-shadow(0 0 0.2em black);
 `
-
-function getRotate(pos:number, players:number, side:0|1, polyomino:number):number{
-    switch (pos){
-    case 0 :
-        return players < 4 ? -40 - side*15 : -20 + side*40
-    case 1 :
-        return players < 4 ? (side === 0 ? 30 : 60) : 8 - side*20
-    case 2 :
-        return players < 4 ? getLRotation(polyomino, side) + (side === 0 ? -7 : 7) : (side === 0 ? 100 : -15)
-    case 3 :
-        return players < 4 ? (polyomino%2 === 0 ? getSRotation(polyomino, side) + (side === 0 ? 17 : -17) : getTRotation(polyomino, side) + (side === 0 ? 17 : -17) ) : (side === 0 ? -15 : -75)
-    case 4 :
-        return players < 4 ? (side === 0 ? -22 : 22) : getLRotation(polyomino, side) + (side === 0 ? -8 : 8)
-    case 5 :
-        return players < 4 ? 0 : (polyomino%2 === 0 ? getSRotation(polyomino, side) + (side === 0 ? 17 : -17) : getTRotation(polyomino, side) + (side === 0 ? 17 : -17) )
-    case 6 :
-        return players < 4 ? 0 : (side === 0 ? -22 : 22)
-    default :
-        return 0
-    } 
-}
-
-function getSRotation(polyomino:number, side:0|1):number{
-    if (polyomino === 62){
-        return side === 0 ? 0 : 0
-    }
-    else if (polyomino === 64){
-        return side === 0 ? -90 : 90
-    }
-    else if (polyomino === 66){
-        return side === 0 ? -5 : 175
-    }
-    else if (polyomino === 68){
-        return side === 0 ? -90 : 90
-    }
-    else if (polyomino === 70){
-        return side === 0 ? -90 : 85
-    } else return 0 
-}
-
-function getTRotation(polyomino:number, side:0|1):number{
-    if (polyomino === 63){
-        return side === 0 ? 90 : 88
-    }
-    else if (polyomino === 65){
-        return side === 0 ? 90 : 90
-    }
-    else if (polyomino === 67){
-        return side === 0 ? 0 : 180
-    }
-    else if (polyomino === 69){
-        return side === 0 ? 90 : 180
-    }
-    else if (polyomino === 71){
-        return side === 0 ? 0 : 180
-    } else return 0 
-}
-
-function getLRotation(polyomino:number, side:0|1):number{
-    if(polyomino%2 === 0){
-        return side === 0 ? 0 : (polyomino === 56 || polyomino === 60 ? -180 : 90)
-    } else {
-        return side === 0 ? 90 : ((polyomino === 53 || polyomino === 55 || polyomino === 59) ? 180 : 90)
-    }
-}
 
 function getColoredPolyominoImage(polyomino:number, color:PlayerColor):string{
 switch (color){
