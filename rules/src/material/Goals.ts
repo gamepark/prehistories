@@ -10,6 +10,8 @@ import {getOccupiedSquares, getTilesFromTarget} from "../utils/getSquaresStartLe
 import {getPaintedCave, Painting} from "./PaintedCave";
 import {cavesSize} from "./Caves";
 
+const {Mammoth, Buffalo, Fish, Boar, Ibex} = Painting;
+
 const GoalA1: Goal = {
   face: Face.A,
   text: 'goalA1',
@@ -75,20 +77,30 @@ const GoalA4: Goal = {
   hint: 'hintA4',
   value: 2,
   rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
-    const cave: PlacedTile[] = player.cave
-    const occupiedSquares: PaintedSquare[] = getOccupiedSquares(cave)
-    const animalsToCheck: Animal[] = [Animal.Fish, Animal.Ibex, Animal.Mammoth, Animal.Yak, Animal.Boar].filter(animal => occupiedSquares.filter(square => square.animal === animal).length >= 8)
-    if (animalsToCheck.length === 0) return false
-    for (const animal of animalsToCheck) {
-      let listOfCheckedSquares: Coordinates[] = []
-      const occupiedSquareByAnimal = occupiedSquares.filter(square => square.animal === animal)
-      for (const square of occupiedSquareByAnimal) {
-        if (listOfCheckedSquares.find(check => check.x === square.x && check.y === square.y) === undefined) {
-          const result = [{x: square.x, y: square.y}].concat(getTilesFromTarget(square, [{x: square.x, y: square.y}], occupiedSquareByAnimal))
-          if (result.length >= 8) {
-            return true
-          } else {
-            listOfCheckedSquares = listOfCheckedSquares.concat(result)
+    const cave = getPaintedCave(player)
+    const areaMap: { painting: Painting, squares: Coordinates[] }[][] = cave.map((row, y) => row.map((painting, x) => ({painting, squares: [{x, y}]})))
+    for (let y = 0; y < cave.length; y++) {
+      for (let x = 0; x < cave.length; x++) {
+        const painting = cave[y][x]
+        if (painting === Buffalo || painting === Boar || painting === Ibex || painting === Fish || painting === Mammoth) {
+          const samePaintingY = y > 0 && areaMap[y - 1][x].painting === painting
+          const samePaintingX = x > 0 && areaMap[y][x - 1].painting === painting
+          if (samePaintingY && samePaintingX && areaMap[y - 1][x] !== areaMap[y][x - 1]) { // reunite 2 areas
+            areaMap[y][x] = areaMap[y][x - 1]
+            areaMap[y][x].squares.push(...areaMap[y - 1][x].squares)
+            for (const square of areaMap[y - 1][x].squares) {
+              areaMap[square.y][square.x] = areaMap[y][x]
+            }
+          } else if (samePaintingY) {
+            areaMap[y][x] = areaMap[y - 1][x]
+          } else if (samePaintingX) {
+            areaMap[y][x] = areaMap[y][x - 1]
+          }
+          if (samePaintingY || samePaintingX) {
+            areaMap[y][x].squares.push({x, y})
+            if (areaMap[y][x].squares.length >= 8) {
+              return true
+            }
           }
         }
       }
