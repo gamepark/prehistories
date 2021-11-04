@@ -1,8 +1,9 @@
 import PlayerState from "../PlayerState";
 import {PlayerHuntView, PlayerView, PlayerViewSelf} from "../types/PlayerView";
 import caves, {Space} from "./Caves";
-import {getPlacedTileCoordinates} from "../types/PlacedTile";
-import Tile, {tiles} from "./Tile";
+import PlacedTile, {getPlacedTileCoordinates} from "../types/PlacedTile";
+import Tile, {isLegendaryAnimalTile, tiles} from "./Tile";
+import Coordinates from "../types/Coordinates";
 
 export enum Painting {
   Empty, Hunter, TotemAnimal, Fish, Mammoth, Buffalo, Ibex, Boar,
@@ -84,4 +85,70 @@ function getAnimal(tile: Tile): Painting {
     case Tile.Legendary5:
       return Painting.Legendary5
   }
+}
+
+export function isLegendaryTileSurroundedByPaintings(cave: Painting[][], placedTile: PlacedTile) {
+  const tile = tiles[placedTile.tile]
+  if (!isLegendaryAnimalTile(tile)) {
+    return false
+  }
+  for (let x = placedTile.x; x < placedTile.x + 3; x++) {
+    if ((cave[placedTile.y - 1] && cave[placedTile.y - 1][x - 1] === Painting.Empty) || (cave[placedTile.y + 2] && cave[placedTile.y + 2][x] === Painting.Empty)) {
+      return false
+    }
+  }
+  for (let y = placedTile.y; y < placedTile.y + 3; y++) {
+    if ((cave[y] && cave[y][placedTile.x - 1] === Painting.Empty) || (cave[y + 1] && cave[y + 1][placedTile.x + 2] === Painting.Empty)) {
+      return false
+    }
+  }
+  return true
+}
+
+export function isSpaceSurrounded(cave: Painting[][], coordinates: Coordinates) {
+  for (let y = coordinates.y - 1; y <= coordinates.y + 1; y++) {
+    for (let x = coordinates.x - 1; x <= coordinates.x + 1; x++) {
+      if (cave[y][x] === Painting.Empty) return false
+    }
+  }
+  return true
+}
+
+export function isAnimalPainting(painting: Painting) {
+  return painting !== Painting.Empty && painting !== Painting.Hunter
+}
+
+function isCommonAnimal(painting: Painting) {
+  return painting === Painting.Buffalo || painting === Painting.Boar || painting === Painting.Ibex || painting === Painting.Fish || painting === Painting.Mammoth
+}
+
+export function hasGroupOfIdenticalAnimals(cave: Painting[][], size: number) {
+  const areaMap: { painting: Painting, squares: Coordinates[] }[][] = cave.map((row, y) => row.map((painting, x) => ({painting, squares: [{x, y}]})))
+  for (let y = 0; y < cave.length; y++) {
+    for (let x = 0; x < cave.length; x++) {
+      const painting = cave[y][x]
+      if (isCommonAnimal(painting)) {
+        const samePaintingY = y > 0 && areaMap[y - 1][x].painting === painting
+        const samePaintingX = x > 0 && areaMap[y][x - 1].painting === painting
+        if (samePaintingY && samePaintingX && areaMap[y - 1][x] !== areaMap[y][x - 1]) { // reunite 2 areas
+          areaMap[y][x] = areaMap[y][x - 1]
+          areaMap[y][x].squares.push(...areaMap[y - 1][x].squares)
+          for (const square of areaMap[y - 1][x].squares) {
+            areaMap[square.y][square.x] = areaMap[y][x]
+          }
+        } else if (samePaintingY) {
+          areaMap[y][x] = areaMap[y - 1][x]
+        } else if (samePaintingX) {
+          areaMap[y][x] = areaMap[y][x - 1]
+        }
+        if (samePaintingY || samePaintingX) {
+          areaMap[y][x].squares.push({x, y})
+          if (areaMap[y][x].squares.length >= size) {
+            return true
+          }
+        }
+      }
+    }
+  }
+  return false
 }

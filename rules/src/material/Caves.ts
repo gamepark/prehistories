@@ -1,4 +1,5 @@
 import PlayerColor from '../PlayerColor'
+import Coordinates from "../types/Coordinates";
 
 export const cavesSize = 7
 
@@ -61,3 +62,27 @@ const caves: { [key in PlayerColor]: Space[][] } = {
 }
 
 export default caves
+
+export function getHunterCoordinates(player: PlayerColor): Coordinates {
+  for (let y = 1; y < cavesSize - 1; y++) {
+    for (let x = 1; x < cavesSize - 1; x++) {
+      if (caves[player][y][x] === Space.Hunter) {
+        return {x, y}
+      }
+    }
+  }
+  throw new Error(`Hunter is missing for ${player}`)
+}
+
+export function getTotemCoordinates(player: PlayerColor): Coordinates[] {
+  const coordinates: Coordinates[] = []
+  for (let y = 1; y < cavesSize - 1; y++) {
+    for (let x = 1; x < cavesSize - 1; x++) {
+      if (caves[player][y][x] === Space.TotemAnimal) {
+        coordinates.push({x, y})
+        if (coordinates.length === 2) return coordinates
+      }
+    }
+  }
+  throw new Error(`At least one totem animal is missing for ${player}`)
+}

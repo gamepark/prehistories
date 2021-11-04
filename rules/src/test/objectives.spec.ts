@@ -239,7 +239,7 @@ describe('Test Objectives', () => {
         const goodCave:PlacedTile[] = startCave.concat([
             {tile:polyominosArray[68],side:1, x:1, y:0},
             {tile:polyominosArray[60],side:1, x:0, y:4},
-            {tile:polyominosArray[67],side:0, x:0, y:1},
+            {tile:polyominosArray[67],side:0, x:0, y:2},
             {tile:polyominosArray[3],side:0, x:1, y:6},
             
         ])

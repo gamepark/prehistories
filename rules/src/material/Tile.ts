@@ -201,4 +201,8 @@ export function getPolyominoAdjacentCoordinates(polyomino: boolean[][]): Coordin
   return coordinates
 }
 
+export function isLegendaryAnimalTile(tile: Tile) {
+  return tile === Tile.Legendary1 || tile === Tile.Legendary2 || tile === Tile.Legendary3 || tile === Tile.Legendary4 || tile === Tile.Legendary5
+}
+
 export default Tile
