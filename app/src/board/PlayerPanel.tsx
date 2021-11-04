@@ -44,7 +44,7 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, hunting}, position
             </div>
             <PlayerTimer playerId={color} css={[TimerStyle]}/>
 
-            {(hunting?.injuries !== undefined) &&
+            {(hunting && hunting.injuries !== 0) &&
                 <div css={[toAbsolute, setPercentDimension(32,50), injuriesIndicatorPosition]}>
                     {[...Array(hunting.injuries)].map((_, i) => <Picture key={i} alt={t('injuries')} src={Images.arrowBrokenIcon} draggable={false} css={[toAbsolute, setPercentDimension(100,38), brokenArrowIconStyle(i)]} /> )}
                 </div>}

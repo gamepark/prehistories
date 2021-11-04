@@ -15,7 +15,7 @@ export function changeActivePlayer(state:GameState|GameView){
     cleanPlayerProperties(getFirstOfSortedPlayer(state))
     state.sortedPlayers!.shift()
     if (state.sortedPlayers!.length !== 0){
-        getFirstOfSortedPlayer(state).hunting = {huntPhase : HuntPhase.Hunt}
+        getFirstOfSortedPlayer(state).hunting = {huntPhase : HuntPhase.Hunt,injuries:0,tilesHunted:0,huntSpotTakenLevels:undefined}
     } 
 }
 

@@ -22,6 +22,6 @@ export function validateSpentHunters(state: GameState | GameView) {
 
 function setPlayerInjuries(hunting: Hunting) {
   if (hunting.huntSpotTakenLevels![1] > 0) {
-    hunting.injuries = (hunting.injuries ?? 0) + 1
+    hunting.injuries +=1
   }
 }

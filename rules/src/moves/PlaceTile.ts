@@ -31,7 +31,7 @@ export function placeTile(state: GameState | GameView, move: PlaceTile) {
       huntPhase: HuntPhase.Pay,
       huntSpotTakenLevels: getPowerLevels(state.players.length, move.huntSpot),
       injuries: player.hunting!.injuries,
-      tilesHunted: (player.hunting!.tilesHunted ?? 0) + 1
+      tilesHunted: player.hunting!.tilesHunted + 1
     }
   }
   state.huntingBoard[move.huntSpot] = null
