@@ -5,7 +5,7 @@ import {getPlacedTileCoordinates} from "../types/PlacedTile";
 import Tile, {tiles} from "./Tile";
 
 export enum Painting {
-  Empty, Hunter, TotemAnimal, Fish, Mammoth = 1, Buffalo, Ibex, Boar,
+  Empty, Hunter, TotemAnimal, Fish, Mammoth, Buffalo, Ibex, Boar,
   Legendary1, Legendary2, Legendary3, Legendary4, Legendary5
 }
 
