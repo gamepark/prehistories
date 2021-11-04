@@ -152,3 +152,14 @@ export function hasGroupOfIdenticalAnimals(cave: Painting[][], size: number) {
   }
   return false
 }
+
+export function isColumnPainted(cave: Painting[][], column: number) {
+  for (let y = 0; y < cave.length; y++) {
+    if (cave[y][column] === Painting.Empty) return false
+  }
+  return true
+}
+
+export function isLinePainted(cave: Painting[][], line: number) {
+  return cave[line].every(painting => painting !== Painting.Empty)
+}

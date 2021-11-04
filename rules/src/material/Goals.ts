@@ -3,7 +3,15 @@ import {getAdjacentCoordinates} from "../types/Coordinates";
 import Face from "../types/Face";
 import Goal from "../types/Goal";
 import {PlayerHuntView, PlayerView, PlayerViewSelf} from "../types/PlayerView";
-import {getPaintedCave, hasGroupOfIdenticalAnimals, isAnimalPainting, isLegendaryTileSurroundedByPaintings, isSpaceSurrounded, Painting} from "./PaintedCave";
+import {
+  getPaintedCave,
+  hasGroupOfIdenticalAnimals,
+  isAnimalPainting,
+  isColumnPainted,
+  isLegendaryTileSurroundedByPaintings,
+  isSpaceSurrounded,
+  Painting
+} from "./PaintedCave";
 import {cavesSize, getHunterCoordinates, getTotemCoordinates} from "./Caves";
 import Tile, {isLegendaryAnimalTile, tiles} from "./Tile";
 
@@ -166,10 +174,7 @@ const GoalB2: Goal = {
   value: 2,
   rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
     const cave = getPaintedCave(player)
-    for (let y = 0; y < cave.length; y++) {
-      if (cave[y][cavesSize - 1] === Painting.Empty) return false
-    }
-    return true
+    return isColumnPainted(cave, cavesSize - 1)
   }
 }
 
