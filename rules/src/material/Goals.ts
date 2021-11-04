@@ -36,9 +36,15 @@ const GoalA2: Goal = {
   hint: 'hintA2',
   value: 2,
   rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
-    const cave: PlacedTile[] = player.cave
-    const occupiedSquares: PaintedSquare[] = getOccupiedSquares(cave)
-    return occupiedSquares.filter(square => square.x >= 2 && square.x <= 4 && square.y >= 2 && square.y <= 4).length === 9
+    const cave = getPaintedCave(player)
+    for (let y = 2; y <= 4; y++) {
+      for (let x = 2; x <= 4; x++) {
+        if (cave[y][x] === Painting.Empty) {
+          return false
+        }
+      }
+    }
+    return true
   }
 }
 
@@ -48,19 +54,16 @@ const GoalA3: Goal = {
   hint: 'hintA3',
   value: 2,
   rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
-    const cave: PlacedTile[] = player.cave
-    const occupiedSquares: PaintedSquare[] = getOccupiedSquares(cave)
-    for (const y of [0, 1, 2, 3, 4, 5, 6]) {
-      const animalsInColumn: Animal[] = [];
-      for (const x of [0, 1, 2, 3, 4, 5, 6]) {
-        const square = occupiedSquares.find(square => square.x === x && square.y === y)
-        if (square !== undefined && animalsInColumn.includes(square.animal) === false && square.animal !== Animal.Hunter) {
-          animalsInColumn.push(square.animal)
+    const cave = getPaintedCave(player)
+    for (let x = 0; x < cavesSize; x++) {
+      const column = new Set<Painting>()
+      for (let y = 0; y < cavesSize; y++) {
+        const painting = cave[y][x];
+        if (painting !== Painting.Empty && painting !== Painting.Hunter) {
+          column.add(painting)
         }
       }
-      if (animalsInColumn.length >= 5) {
-        return true
-      }
+      if (column.size >= 5) return true
     }
     return false
   }

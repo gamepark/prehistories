@@ -5,7 +5,8 @@ import {getPlacedTileCoordinates} from "../types/PlacedTile";
 import Tile, {tiles} from "./Tile";
 
 export enum Painting {
-  Empty, Hunter, TotemAnimal, LegendaryAnimal, Fish, Mammoth = 1, Buffalo, Ibex, Boar
+  Empty, Hunter, TotemAnimal, Fish, Mammoth = 1, Buffalo, Ibex, Boar,
+  Legendary1, Legendary2, Legendary3, Legendary4, Legendary5
 }
 
 export function getPaintedCave(player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView): Painting[][] {
@@ -73,10 +74,14 @@ function getAnimal(tile: Tile): Painting {
     case Tile.Boar4B:
       return Painting.Boar
     case Tile.Legendary1:
+      return Painting.Legendary1
     case Tile.Legendary2:
+      return Painting.Legendary2
     case Tile.Legendary3:
+      return Painting.Legendary3
     case Tile.Legendary4:
+      return Painting.Legendary4
     case Tile.Legendary5:
-      return Painting.LegendaryAnimal
+      return Painting.Legendary5
   }
 }
