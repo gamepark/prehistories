@@ -53,7 +53,7 @@ const HuntingZone : FC<Props> = ({game, numberOfPlayers, indexOfDisplayedPlayer,
 
     return(
 
-        <div css={[toAbsolute, setPercentDimension(93,23.8), huntingZonePosition, placingBackground(numberOfPlayers < 4 ? Images.huntingBoard23Players : Images.huntingBoard45Players, "contain")]}>
+        <div css={[toAbsolute, setPercentDimension(93,23.8), huntingZonePosition, placingBackground(numberOfPlayers < 4 ? Images.huntingBoard23Players : Images.huntingBoard45Players, "cover")]}>
 
             {game.huntingBoard.map((polyomino, index) => {
                 let activePlayer = game.sortedPlayers !== undefined ? game.sortedPlayers[0] : undefined
@@ -136,13 +136,13 @@ const playPolyominoAnimationStyle = (duration: number, isGoodDisplayedCave: numb
 function getTop(pos:number, players:number, side:0|1, polyo:number):number{
     switch (pos){
         case 0 :
-            return players < 4 ? 6.5 : 3
+            return players < 4 ? 9 : 3
         case 1 :
-            return players < 4 ? (side===0 ? 14 : 10) : 13
+            return players < 4 ? (side===0 ? 17 : 12) : 13
         case 2 :
-            return players < 4 ? 37 : (side === 0 ? 8 : 4)
+            return players < 4 ? 38 : (side === 0 ? 8 : 4)
         case 3 :
-            return players < 4 ? (polyo%2 === 0 ? getPosForSShape(polyo, side)[1] : getPosForTShape(polyo, side)[1]) : (side === 0 ? 21 : 17)
+            return players < 4 ? (polyo%2 === 0 ? getPosForSShape(polyo, side)[1]+1.5 : getPosForTShape(polyo, side)[1]+1.5) : (side === 0 ? 21 : 17)
         case 4 :
             return players < 4 ? 80 : 38
         case 5 :
@@ -163,7 +163,7 @@ function getLeft(pos:number, players:number, side:0|1, polyo:number):number{
         case 2 :
             return players < 4 ? (side === 0 ? 37 : 38) : (side === 0 ? 44 : 52)
         case 3 :
-            return players < 4 ? (polyo%2 === 0 ? getPosForSShape(polyo, side)[0] : getPosForTShape(polyo, side)[0]) : (side === 0 ? 65 : 73)
+            return players < 4 ? (polyo%2 === 0 ? getPosForSShape(polyo, side)[0]-2 : getPosForTShape(polyo, side)[0]-2) : (side === 0 ? 65 : 73)
         case 4 :
             return players < 4 ? 60 : 38
         case 5 :
