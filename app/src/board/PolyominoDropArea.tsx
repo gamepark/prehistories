@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import PolyominoToHunt from "@gamepark/prehistories/types/appTypes/PolyominoToHunt"
 import Coordinates from "@gamepark/prehistories/types/Coordinates"
 import {HTMLAttributes, useCallback, useMemo, useRef} from "react"
 import {DropTargetMonitor, useDrop, XYCoord} from "react-dnd"
@@ -12,7 +11,8 @@ import {placeTileMove} from "@gamepark/prehistories/moves/PlaceTile";
 import {canPlaceTile, getCavePlacementSpaces, PlacementSpace} from "@gamepark/prehistories/utils/PlacementRules";
 import {Side} from "@gamepark/prehistories/material/Tile";
 import {getPlacedTileCoordinates} from "@gamepark/prehistories/types/PlacedTile";
-import { setPercentDimension, toAbsolute, toFullSize } from "../utils/styles";
+import {setPercentDimension, toAbsolute, toFullSize} from "../utils/styles";
+import {DraggedTile, HuntTile} from "./Polyomino";
 
 
 type Props = {
@@ -34,25 +34,20 @@ export default function PolyominoDropArea({player, ...props}: Props) {
   const cave = useMemo(() => getCavePlacementSpaces(player), [player])
 
   const [{draggedPolyo, over}, dropRef] = useDrop({
-    accept: "PolyominoToHunt",
-    canDrop: (item: PolyominoToHunt, monitor) => {
+    accept: HuntTile,
+    canDrop: (item: DraggedTile, monitor) => {
       const sourceClientOffset = monitor.getSourceClientOffset()
       if (!sourceClientOffset) return false
       return canPlaceTile(cave, {tile: item.polyomino, side: item.side, ...getAreaPosition(sourceClientOffset)})
     },
-    drop: (item: PolyominoToHunt, monitor) => {
+    drop: (item: DraggedTile, monitor) => {
       moveTileSound.play()
       const position = getAreaPosition(monitor.getSourceClientOffset()!)
       return placeTileMove(item.huntSpot, item.side, position)
     },
-    collect: (monitor: DropTargetMonitor<PolyominoToHunt>) => {
+    collect: (monitor: DropTargetMonitor<DraggedTile>) => {
       return ({
-        draggedPolyo: monitor.getItemType() === "PolyominoToHunt" ? {
-          type: monitor.getItem().type,
-          polyomino: monitor.getItem().polyomino,
-          side: monitor.getItem().side,
-          huntSpot: monitor.getItem().huntSpot
-        } : undefined,
+        draggedPolyo: monitor.getItemType() === HuntTile ? monitor.getItem() : undefined,
         over: monitor.isOver()
       })
     }

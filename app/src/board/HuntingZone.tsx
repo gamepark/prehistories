@@ -3,19 +3,18 @@ import {css, keyframes} from '@emotion/react'
 import GameView from '@gamepark/prehistories/GameView'
 import PlaceTile, {isPlaceTile} from '@gamepark/prehistories/moves/PlaceTile'
 import PlayerColor from '@gamepark/prehistories/PlayerColor'
-import PolyominoToHunt from '@gamepark/prehistories/types/appTypes/PolyominoToHunt'
 import Phase, {HuntPhase} from '@gamepark/prehistories/types/Phase'
 import {isPlayerHuntView, isPlayerViewSelf, PlayerHuntView, PlayerView, PlayerViewSelf} from '@gamepark/prehistories/types/PlayerView'
 import getPowerLevels from '@gamepark/prehistories/utils/powerLevels'
 import teamPower from '@gamepark/prehistories/utils/teamPower'
 import {useAnimation, usePlayerId, useSound} from '@gamepark/react-client'
 import {FC, useState} from 'react'
-import { DropTargetMonitor, useDrop } from 'react-dnd'
-import { placingBackground, setPercentDimension, toAbsolute } from '../utils/styles'
+import {DropTargetMonitor, useDrop} from 'react-dnd'
+import {placingBackground, setPercentDimension, toAbsolute} from '../utils/styles'
 import MoveTileSound from '../sounds/moveTile.mp3'
 import Images from '../utils/Images'
 import {tileSize} from './Cave'
-import Polyomino from './Polyomino'
+import Polyomino, {DraggedTile, HuntTile} from './Polyomino'
 import {tiles} from "@gamepark/prehistories/material/Tile";
 
 type Props = {
@@ -43,12 +42,12 @@ const HuntingZone : FC<Props> = ({game, numberOfPlayers, indexOfDisplayedPlayer,
     const [sideArray,setSideArray] = useState(startHook)
 
     const [{isDragging}] = useDrop({           // Only to check the item currently dragged
-        accept: ["PolyominoToHunt"],
-        canDrop: (item: PolyominoToHunt) => {
+        accept: HuntTile,
+        canDrop: (item: DraggedTile) => {
             return item !== null
         },
         collect: (monitor:DropTargetMonitor) => ({
-          isDragging: monitor.getItem<PolyominoToHunt>()
+          isDragging: monitor.getItem<DraggedTile>()
         }),
       })
 
@@ -67,9 +66,8 @@ const HuntingZone : FC<Props> = ({game, numberOfPlayers, indexOfDisplayedPlayer,
                     ]}
                     side={playPolyominoAnimation?.move.huntSpot === index ? playPolyominoAnimation.move.side : sideArray[index]}
                     tile={tiles[polyomino]}
-                    draggable={isPolyominoHuntable(game.players.find(p => p.color === playerId), game.phase, index, game.players.length, game.sortedPlayers !== undefined ? game.sortedPlayers[0] : undefined)}
-                    type={'PolyominoToHunt'}
-                    draggableItem={{type: 'PolyominoToHunt', huntSpot: index, polyomino, side: (sideArray[index])}}
+                    canDrag={isPolyominoHuntable(game.players.find(p => p.color === playerId), game.phase, index, game.players.length, game.sortedPlayers !== undefined ? game.sortedPlayers[0] : undefined)}
+                    item={{huntSpot: index, polyomino, side: (sideArray[index])}}
                     onClick={() => setSideArray(createSideArray(index, sideArray[index]))}
                   />
               }

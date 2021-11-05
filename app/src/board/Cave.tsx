@@ -27,6 +27,7 @@ const Cave : FC<Props> = ({player}) => {
                         <div css = {[toAbsolute, tilePosition(paint.x, paint.y), tileSize(paint.tile, paint.side,sizeTileW, sizeTileH)]} key = {index}>
                             <Polyomino tile={tiles[paint.tile]}
                                        side={paint.side}
+                                       canDrag={false}
                                        css={displayCavePolyomino}
                                        />
                         </div>
