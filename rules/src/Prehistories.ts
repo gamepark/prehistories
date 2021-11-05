@@ -4,8 +4,6 @@ import canUndo from './canUndo'
 import GameState from './GameState'
 import GameView from './GameView'
 import {goals} from './material/Goals'
-import getHandPrintsCoords from './material/HandPrints'
-import {allPolyominos} from './material/Polyominos'
 import {changeActivePlayer} from './moves/ChangeActivePlayer'
 import {checkPermanentObjectives, resolvePermanentObjectives} from './moves/CheckPermanentObjectives'
 import {checkVariableObjectives, resolveVariableObjectives} from './moves/CheckVariableObjectives'
@@ -33,8 +31,9 @@ import {PlayerHuntView, PlayerView, PlayerViewSelf} from './types/PlayerView'
 import getPowerLevels from './utils/powerLevels'
 import teamPower from './utils/teamPower'
 import {canPlaceTile, getCavePlacementSpaces} from "./utils/PlacementRules";
-import {cavesSize} from "./material/Caves";
-import {sides} from "./material/Tile";
+import caves, {cavesSize, Space} from "./material/Caves";
+import {sides, tiles} from "./material/Tile";
+import {getPlacedTileCoordinates} from "./types/PlacedTile";
 
 export default class Prehistories extends SimultaneousGame<GameState, Move, PlayerColor>
   implements SecretInformation<GameState, GameView, Move, MoveView, PlayerColor>, Undo<GameState, Move, PlayerColor> {
@@ -331,7 +330,7 @@ function setupPlayers(players: PrehistoriesPlayerOptions[]): PlayerState[] {
 }
 
 function setupTilesDeck(): number[][] {
-  const polyominosArray: number[] = Array.from(allPolyominos.keys())
+  const polyominosArray: number[] = Array.from(tiles.keys())
 
   return [shuffle(polyominosArray.filter(p => p > 1 && p < 27)),
     shuffle(polyominosArray.filter(p => p > 26 && p < 52)),
@@ -389,15 +388,14 @@ export function areHandPrintsRecovered(player: PlayerState | PlayerView | Player
     return result
   } else {
     for (let i = 0; i < player.hunting!.tilesHunted; i++) {
-      const tile = player.cave[player.cave.length - 1 - i]
-      allPolyominos[tile.tile][tile.side].coordinates.forEach(coord => {
-        if (tile.x + coord.x === getHandPrintsCoords(player.color)[0].x && tile.y + coord.y === getHandPrintsCoords(player.color)[0].y) {
+      const placedTile = player.cave[player.cave.length - 1 - i]
+      for (const {x, y} of getPlacedTileCoordinates(placedTile)) {
+        if (caves[player.color][y][x] === Space.Hand) {
           result++
-        }
-        if (tile.x + coord.x === getHandPrintsCoords(player.color)[1].x && tile.y + coord.y === getHandPrintsCoords(player.color)[1].y) {
+        } else if (caves[player.color][y][x] === Space.Hand2) {
           result += 2
         }
-      })
+      }
     }
     return result
   }

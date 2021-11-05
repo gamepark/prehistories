@@ -204,7 +204,7 @@ const GoalB5: Goal = {
   rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
     const cave = getPaintedCave(player)
     const {x, y} = getHunterCoordinates(player.color)
-    const paintings = [cave[x - 1][y], cave[x][y - 1], cave[x + 1][y], cave[x][y + 1]]
+    const paintings = [cave[y][x - 1], cave[y - 1][x], cave[y][x + 1], cave[y + 1][x]]
     return !paintings.includes(Painting.Empty) && new Set(paintings).size === 4
   }
 }
