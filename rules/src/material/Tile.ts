@@ -9,7 +9,7 @@ enum Tile {
   Legendary1, Legendary2, Legendary3, Legendary4, Legendary5
 }
 
-export const tiles = [
+export const tiles = [Tile.Fish1, Tile.Fish1, // TODO: delete those 2 useless elements
   Tile.Fish1, Tile.Fish1, Tile.Fish1, Tile.Fish1, Tile.Fish1,
   Tile.Mammoth1, Tile.Mammoth1, Tile.Mammoth1, Tile.Mammoth1, Tile.Mammoth1,
   Tile.Ibex1, Tile.Ibex1, Tile.Ibex1, Tile.Ibex1, Tile.Ibex1,
