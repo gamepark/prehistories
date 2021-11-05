@@ -24,7 +24,7 @@ import {takeBackPlayedCards} from './moves/TakeBackPlayedCards'
 import TellYouAreReady, {tellYouAreReady} from './moves/TellYouAreReady'
 import ValidateSpendedHunters, {validateSpentHunters} from './moves/ValidateSpentHunters'
 import PlayerColor from './PlayerColor'
-import PlayerState, {setupCave, setupDeck} from './PlayerState'
+import PlayerState, {setupDeck} from './PlayerState'
 import {isGameOptions, PrehistoriesOptions, PrehistoriesPlayerOptions} from './PrehistoriesOptions'
 import Phase, {HuntPhase} from './types/Phase'
 import {PlayerHuntView, PlayerView, PlayerViewSelf} from './types/PlayerView'
@@ -319,7 +319,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
 function setupPlayers(players: PrehistoriesPlayerOptions[]): PlayerState[] {
   return players.map((options) => ({
     color: options.id,
-    cave: setupCave(options.id),
+    cave: [],
     totemTokens: 8,
     deck: setupDeck(options.id),
     discard: [],

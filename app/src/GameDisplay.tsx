@@ -27,7 +27,7 @@ export default function GameDisplay({game, audioLoader}: Props) {
 
   const playSetCaveDisplayed = usePlay<SetCaveDisplayed>()
 
-  const [welcomePopUpClosed, setWelcomePopUpClosed] = useState(playerDisplayed.cave.length !== 3)
+  const [welcomePopUpClosed, setWelcomePopUpClosed] = useState(playerDisplayed.cave.length > 0)
   const showWelcomePopup = !welcomePopUpClosed
 
   return (

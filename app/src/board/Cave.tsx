@@ -23,10 +23,7 @@ const Cave : FC<Props> = ({player}) => {
                 <PolyominoDropArea player={player} css={css`top:0;left:0`} />
 
                 {player.cave.map((paint, index) => 
-
-                    paint.tile < 2
-                        ? null
-                        : <div css = {[toAbsolute, tilePosition(paint.x, paint.y), tileSize(paint.tile, paint.side,sizeTileW, sizeTileH)]} key = {index}>
+                        <div css = {[toAbsolute, tilePosition(paint.x, paint.y), tileSize(paint.tile, paint.side,sizeTileW, sizeTileH)]} key = {index}>
                             <Polyomino polyomino={paint.tile}
                                        side={paint.side}
                                        css={displayCavePolyomino}
