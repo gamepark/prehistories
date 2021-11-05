@@ -94,16 +94,6 @@ import totemWhite from '../images/TotemWhite.jpg'
 import totemGreen from '../images/TotemGreen.jpg'
 import totemRed from '../images/TotemRed.jpg'
 import totemYellow from '../images/TotemYellow.jpg'
-import polyominoType0HunterBlue from '../images/PolyominoType0-HunterBlue.png'
-import polyominoType0HunterWhite from '../images/PolyominoType0-HunterWhite.png'
-import polyominoType0HunterGreen from '../images/PolyominoType0-HunterGreen.png'
-import polyominoType0HunterRed from '../images/PolyominoType0-HunterRed.png'
-import polyominoType0HunterYellow from '../images/PolyominoType0-HunterYellow.png'
-import polyominoType0TotemBlue from '../images/PolyominoType0-TotemBlue.png'
-import polyominoType0TotemWhite from '../images/PolyominoType0-TotemWhite.png'
-import polyominoType0TotemGreen from '../images/PolyominoType0-TotemGreen.png'
-import polyominoType0TotemRed from '../images/PolyominoType0-TotemRed.png'
-import polyominoType0TotemYellow from '../images/PolyominoType0-TotemYellow.png'
 import polyominoType1_1 from '../images/PolyominoType1-1.png'
 import polyominoType1_2 from '../images/PolyominoType1-2.png'
 import polyominoType1_3 from '../images/PolyominoType1-3.png'
@@ -211,9 +201,7 @@ const Images = {
     hunterYellow1_1, hunterYellow1_2, hunterYellow2_1, hunterYellow2_2, hunterYellow3_1, hunterYellow3_2, hunterYellow4_1, hunterYellow4_2, hunterYellow5_1, hunterYellow5_2, hunterYellow6_1, hunterYellow6_2, 
     objective0, objective1A, objective1B, objective2A, objective2B, objective3A, objective3B, objective4A, objective4B, objective5A, objective5B, objective6A, objective6B, objective7A, objective7B, objective8A, objective8B, objective9A, objective9B,
     totemBlue, totemGreen, totemRed, totemWhite, totemYellow, 
-    polyominoType0HunterBlue, polyominoType0HunterWhite, polyominoType0HunterGreen, polyominoType0HunterRed, polyominoType0HunterYellow, 
-    polyominoType0TotemBlue, polyominoType0TotemWhite, polyominoType0TotemGreen, polyominoType0TotemRed, polyominoType0TotemYellow, 
-    polyominoType1_1, polyominoType1_2, polyominoType1_3, polyominoType1_4, polyominoType1_5, 
+    polyominoType1_1, polyominoType1_2, polyominoType1_3, polyominoType1_4, polyominoType1_5,
     polyominoType2_1A, polyominoType2_2A, polyominoType2_3A, polyominoType2_4A, polyominoType2_5A, polyominoType2_1B, polyominoType2_2B, polyominoType2_3B, polyominoType2_4B, polyominoType2_5B, 
     polyominoType3_1A, polyominoType3_2A, polyominoType3_3A, polyominoType3_4A, polyominoType3_5A, polyominoType3_6A, polyominoType3_7A, polyominoType3_8A, polyominoType3_9A, polyominoType3_10A, polyominoType3_1B, polyominoType3_2B, polyominoType3_3B, polyominoType3_4B, polyominoType3_5B, polyominoType3_6B, polyominoType3_7B, polyominoType3_8B, polyominoType3_9B, polyominoType3_10B, 
     polyominoType4_1A, polyominoType4_2A, polyominoType4_3A, polyominoType4_4A, polyominoType4_5A, polyominoType4_6A, polyominoType4_7A, polyominoType4_8A, polyominoType4_9A, polyominoType4_10A, polyominoType4_1B, polyominoType4_2B, polyominoType4_3B, polyominoType4_4B, polyominoType4_5B, polyominoType4_6B, polyominoType4_7B, polyominoType4_8B, polyominoType4_9B, polyominoType4_10B, 

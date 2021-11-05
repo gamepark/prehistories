@@ -2,25 +2,23 @@
 import {css, keyframes} from '@emotion/react'
 import Move from '@gamepark/prehistories/moves/Move'
 import PlaceTile from '@gamepark/prehistories/moves/PlaceTile'
-import PlayerColor from '@gamepark/prehistories/PlayerColor'
 import PolyominoToHunt from '@gamepark/prehistories/types/appTypes/PolyominoToHunt'
 import {usePlay} from '@gamepark/react-client'
 import {Draggable} from '@gamepark/react-components'
 import {FC, HTMLAttributes} from 'react'
-import { placingBackground, toAbsolute, toFullSize } from '../utils/styles'
+import {placingBackground, toAbsolute, toFullSize} from '../utils/styles'
 import Images from '../utils/Images'
 
 type Props = {
     polyomino:number
     side:0|1
-    color?:PlayerColor
     draggable?:boolean
     type?:'PolyominoToHunt'
     draggableItem?:PolyominoToHunt
 
 } & Omit<HTMLAttributes<HTMLDivElement>, 'color'>
 
-const Polyomino : FC<Props> = ({polyomino, side, color, draggable = false, type='', draggableItem, ...props}) => {
+const Polyomino : FC<Props> = ({polyomino, side, draggable = false, type='', draggableItem, ...props}) => {
 
     const play = usePlay<Move>()
     const item = {...draggableItem}
@@ -40,13 +38,13 @@ const Polyomino : FC<Props> = ({polyomino, side, color, draggable = false, type=
 
                     <div css={[toAbsolute, toFullSize, sideDisplay,
                                polyominoShadow,
-                               placingBackground(color ? getColoredPolyominoImage(polyomino, color!): getPolyominoImage(polyomino, 0),"contain"),
+                               placingBackground(getPolyominoImage(polyomino, 0),"contain"),
                                draggable && glowingAnimation
                               ]}>
                     </div>
 
                     {<div css={[toAbsolute, toFullSize, sideDisplay, polyominoShadow,
-                                placingBackground(color ? getColoredPolyominoImage(polyomino, color!): getPolyominoImage(polyomino, 1),"contain"),
+                                placingBackground(getPolyominoImage(polyomino, 1),"contain"),
                                 draggable && glowingAnimation
                                ]}>
                     </div>}
@@ -81,21 +79,6 @@ const flipTile = (side:0|1) => css`
 const polyominoShadow = css`
     filter:drop-shadow(0 0 0.2em black);
 `
-
-function getColoredPolyominoImage(polyomino:number, color:PlayerColor):string{
-switch (color){
-    case (PlayerColor.Blue) :
-        return polyomino === 0 ? Images.polyominoType0HunterBlue : Images.polyominoType0TotemBlue
-    case (PlayerColor.Green) :
-            return polyomino === 0 ? Images.polyominoType0HunterGreen : Images.polyominoType0TotemGreen
-    case (PlayerColor.Red) :
-        return polyomino === 0 ? Images.polyominoType0HunterRed : Images.polyominoType0TotemRed
-    case (PlayerColor.White) :
-        return polyomino === 0 ? Images.polyominoType0HunterWhite : Images.polyominoType0TotemWhite
-    case (PlayerColor.Yellow) :
-        return polyomino === 0 ? Images.polyominoType0HunterYellow : Images.polyominoType0TotemYellow
-    }      
-}
 
 function getPolyominoImage(polyomino:number, side:number):string{
     if (polyomino>=2 && polyomino <=6){

@@ -25,13 +25,7 @@ const Cave : FC<Props> = ({player}) => {
                 {player.cave.map((paint, index) => 
 
                     paint.tile < 2
-                        ? <div css = {[toAbsolute, tilePosition(paint.x, paint.y), tileSize(paint.tile, paint.side,sizeTileW, sizeTileH)]} key = {index}>
-                            <Polyomino  polyomino={paint.tile}
-                                        side={paint.side}
-                                        color={player.color} 
-                                        />
-
-                        </div>
+                        ? null
                         : <div css = {[toAbsolute, tilePosition(paint.x, paint.y), tileSize(paint.tile, paint.side,sizeTileW, sizeTileH)]} key = {index}>
                             <Polyomino polyomino={paint.tile}
                                        side={paint.side}
