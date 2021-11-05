@@ -174,16 +174,16 @@ export function getPolyominoAdjacentCoordinates(polyomino: boolean[][]): Coordin
     for (let x = 0; x < polyomino[y].length; x++) {
       if (!polyomino[y][x]
         && (polyomino[y][x - 1] || polyomino[y][x + 1] || (polyomino[y - 1] && polyomino[y - 1][x]) || (polyomino[y + 1] && polyomino[y + 1][x]))) {
-        coordinates.push({x, y: polyomino.length - 1 - y})
+        coordinates.push({x, y})
       }
     }
   }
   for (let y = 0; y < polyomino.length; y++) {
     if (polyomino[y][0]) {
-      coordinates.push({x: -1, y: polyomino.length - 1 - y})
+      coordinates.push({x: -1, y})
     }
     if (polyomino[y][polyomino[0].length - 1]) {
-      coordinates.push({x: polyomino[0].length - 1, y: polyomino.length - 1 - y})
+      coordinates.push({x: polyomino[0].length, y})
     }
   }
   for (let x = 0; x < polyomino[0].length; x++) {
@@ -191,7 +191,7 @@ export function getPolyominoAdjacentCoordinates(polyomino: boolean[][]): Coordin
       coordinates.push({x, y: -1})
     }
     if (polyomino[polyomino.length - 1][x]) {
-      coordinates.push({x, y: polyomino.length - 1})
+      coordinates.push({x, y: polyomino.length})
     }
   }
   return coordinates
