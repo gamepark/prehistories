@@ -7,6 +7,7 @@ import { placingBackground, setPercentDimension, sizeTileH, sizeTileW, toAbsolut
 import Images from "../utils/Images";
 import Polyomino from "./Polyomino";
 import PolyominoDropArea from "./PolyominoDropArea";
+import {tiles} from "@gamepark/prehistories/material/Tile";
 
 type Props = {
     player:PlayerView|PlayerViewSelf|PlayerHuntView
@@ -24,7 +25,7 @@ const Cave : FC<Props> = ({player}) => {
 
                 {player.cave.map((paint, index) => 
                         <div css = {[toAbsolute, tilePosition(paint.x, paint.y), tileSize(paint.tile, paint.side,sizeTileW, sizeTileH)]} key = {index}>
-                            <Polyomino polyomino={paint.tile}
+                            <Polyomino tile={tiles[paint.tile]}
                                        side={paint.side}
                                        css={displayCavePolyomino}
                                        />

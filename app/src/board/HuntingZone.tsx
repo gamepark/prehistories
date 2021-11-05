@@ -16,6 +16,7 @@ import MoveTileSound from '../sounds/moveTile.mp3'
 import Images from '../utils/Images'
 import {tileSize} from './Cave'
 import Polyomino from './Polyomino'
+import {tiles} from "@gamepark/prehistories/material/Tile";
 
 type Props = {
     game:GameView
@@ -65,7 +66,7 @@ const HuntingZone : FC<Props> = ({game, numberOfPlayers, indexOfDisplayedPlayer,
                            displayHuntPolyomino(isDragging?.huntSpot === index, index, polyomino, numberOfPlayers, (sideArray[index]), playPolyominoAnimation?.move.huntSpot === index),
                     ]}
                     side={playPolyominoAnimation?.move.huntSpot === index ? playPolyominoAnimation.move.side : sideArray[index]}
-                    polyomino={polyomino}
+                    tile={tiles[polyomino]}
                     draggable={isPolyominoHuntable(game.players.find(p => p.color === playerId), game.phase, index, game.players.length, game.sortedPlayers !== undefined ? game.sortedPlayers[0] : undefined)}
                     type={'PolyominoToHunt'}
                     draggableItem={{type: 'PolyominoToHunt', huntSpot: index, polyomino, side: (sideArray[index])}}

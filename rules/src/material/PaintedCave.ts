@@ -35,10 +35,6 @@ export function getPaintedCave(player: PlayerState | PlayerView | PlayerViewSelf
 
 function getAnimal(tile: Tile): Painting {
   switch (tile) {
-    case Tile.Hunter:
-      return Painting.Hunter
-    case Tile.TotemAnimal:
-      return Painting.TotemAnimal
     case Tile.Fish1:
     case Tile.Fish2:
     case Tile.Fish3A:

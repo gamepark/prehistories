@@ -8,9 +8,10 @@ import {Draggable} from '@gamepark/react-components'
 import {FC, HTMLAttributes} from 'react'
 import {placingBackground, toAbsolute, toFullSize} from '../utils/styles'
 import Images from '../utils/Images'
+import Tile, {Side} from "@gamepark/prehistories/material/Tile";
 
 type Props = {
-    polyomino:number
+    tile: Tile
     side:0|1
     draggable?:boolean
     type?:'PolyominoToHunt'
@@ -18,7 +19,7 @@ type Props = {
 
 } & Omit<HTMLAttributes<HTMLDivElement>, 'color'>
 
-const Polyomino : FC<Props> = ({polyomino, side, draggable = false, type='', draggableItem, ...props}) => {
+const Polyomino : FC<Props> = ({tile, side, draggable = false, type='', draggableItem, ...props}) => {
 
     const play = usePlay<Move>()
     const item = {...draggableItem}
@@ -38,13 +39,13 @@ const Polyomino : FC<Props> = ({polyomino, side, draggable = false, type='', dra
 
                     <div css={[toAbsolute, toFullSize, sideDisplay,
                                polyominoShadow,
-                               placingBackground(getPolyominoImage(polyomino, 0),"contain"),
+                               placingBackground(getTileImage(tile, 0),"contain"),
                                draggable && glowingAnimation
                               ]}>
                     </div>
 
                     {<div css={[toAbsolute, toFullSize, sideDisplay, polyominoShadow,
-                                placingBackground(getPolyominoImage(polyomino, 1),"contain"),
+                                placingBackground(getTileImage(tile, 1),"contain"),
                                 draggable && glowingAnimation
                                ]}>
                     </div>}
@@ -80,86 +81,79 @@ const polyominoShadow = css`
     filter:drop-shadow(0 0 0.2em black);
 `
 
-function getPolyominoImage(polyomino:number, side:number):string{
-    if (polyomino>=2 && polyomino <=6){
-        return Images.polyominoType1_1
-    } else if (polyomino >=7 && polyomino <=11){
-        return Images.polyominoType1_2
-    } else if (polyomino >= 12 && polyomino <=16){
-        return Images.polyominoType1_3
-    } else if (polyomino>=17 && polyomino <=21){
-        return Images.polyominoType1_4
-    } else if (polyomino>=22 && polyomino <=26){
-        return Images.polyominoType1_5
-
-    } else if (polyomino>=27 && polyomino<=31){
-        return side === 0 ? Images.polyominoType2_1A : Images.polyominoType2_1B
-    } else if (polyomino >=32 && polyomino <=36){
-        return side === 0 ? Images.polyominoType2_2A : Images.polyominoType2_2B
-    } else if (polyomino >= 37 && polyomino <=41){
-        return side === 0 ? Images.polyominoType2_3A : Images.polyominoType2_3B
-    } else if (polyomino>=42 && polyomino <=46){
-        return side === 0 ? Images.polyominoType2_4A : Images.polyominoType2_4B
-    } else if (polyomino>=47 && polyomino <=51){
-        return side === 0 ? Images.polyominoType2_5A : Images.polyominoType2_5B
-
-    } else if (polyomino === 52){
-        return side === 0 ? Images.polyominoType3_1A : Images.polyominoType3_1B
-    } else if (polyomino === 53){
-        return side === 0 ? Images.polyominoType3_2A : Images.polyominoType3_2B
-    } else if (polyomino === 54){
-        return side === 0 ? Images.polyominoType3_3A : Images.polyominoType3_3B
-    } else if (polyomino === 55){
-        return side === 0 ? Images.polyominoType3_4A : Images.polyominoType3_4B
-    } else if (polyomino === 56){
-        return side === 0 ? Images.polyominoType3_5A : Images.polyominoType3_5B
-    } else if (polyomino === 57){
-        return side === 0 ? Images.polyominoType3_6A : Images.polyominoType3_6B
-    } else if (polyomino === 58){
-        return side === 0 ? Images.polyominoType3_7A : Images.polyominoType3_7B
-    } else if (polyomino === 59){
-        return side === 0 ? Images.polyominoType3_8A : Images.polyominoType3_8B
-    } else if (polyomino === 60){
-        return side === 0 ? Images.polyominoType3_9A : Images.polyominoType3_9B
-    } else if (polyomino === 61){
-        return side === 0 ? Images.polyominoType3_10A : Images.polyominoType3_10B
-
-    } else if (polyomino === 62){
-        return side === 0 ? Images.polyominoType4_1A : Images.polyominoType4_1B
-    } else if (polyomino === 63){
-        return side === 0 ? Images.polyominoType4_2A : Images.polyominoType4_2B
-    } else if (polyomino === 64){
-        return side === 0 ? Images.polyominoType4_3A : Images.polyominoType4_3B
-    } else if (polyomino === 65){
-        return side === 0 ? Images.polyominoType4_4A : Images.polyominoType4_4B
-    } else if (polyomino === 66){
-        return side === 0 ? Images.polyominoType4_5A : Images.polyominoType4_5B
-    } else if (polyomino === 67){
-        return side === 0 ? Images.polyominoType4_6A : Images.polyominoType4_6B
-    } else if (polyomino === 68){
-        return side === 0 ? Images.polyominoType4_7A : Images.polyominoType4_7B
-    } else if (polyomino === 69){
-        return side === 0 ? Images.polyominoType4_8A : Images.polyominoType4_8B
-    } else if (polyomino === 70){
-        return side === 0 ? Images.polyominoType4_9A : Images.polyominoType4_9B
-    } else if (polyomino === 71){
-        return side === 0 ? Images.polyominoType4_10A : Images.polyominoType4_10B
-    
-    } else if (polyomino === 72){
-        return Images.polyominoType5_1
-    } else if (polyomino === 73){
-        return Images.polyominoType5_2
-    } else if (polyomino === 74){
-        return Images.polyominoType5_3
-    } else if (polyomino === 75){
-        return Images.polyominoType5_4
-    } else if (polyomino === 76){
-        return Images.polyominoType5_5
-
-    } else {
-        return ''
+function getTileImage(tile: Tile, side: Side): string {
+    switch (tile) {
+        case Tile.Fish1:
+            return Images.polyominoType1_1
+        case Tile.Fish2:
+            return side === 0 ? Images.polyominoType2_1A : Images.polyominoType2_1B
+        case Tile.Fish3A:
+            return side === 0 ? Images.polyominoType3_1A : Images.polyominoType3_1B
+        case Tile.Fish3B:
+            return side === 0 ? Images.polyominoType3_2A : Images.polyominoType3_2B
+        case Tile.Fish4A:
+            return side === 0 ? Images.polyominoType4_1A : Images.polyominoType4_1B
+        case Tile.Fish4B:
+            return side === 0 ? Images.polyominoType4_2A : Images.polyominoType4_2B
+        case Tile.Mammoth1:
+            return Images.polyominoType1_2
+        case Tile.Mammoth2:
+            return side === 0 ? Images.polyominoType2_2A : Images.polyominoType2_2B
+        case Tile.Mammoth3A:
+            return side === 0 ? Images.polyominoType3_3A : Images.polyominoType3_3B
+        case Tile.Mammoth3B:
+            return side === 0 ? Images.polyominoType3_4A : Images.polyominoType3_4B
+        case Tile.Mammoth4A:
+            return side === 0 ? Images.polyominoType4_3A : Images.polyominoType4_3B
+        case Tile.Mammoth4B:
+            return side === 0 ? Images.polyominoType4_4A : Images.polyominoType4_4B
+        case Tile.Buffalo1:
+            return Images.polyominoType1_4
+        case Tile.Buffalo2:
+            return side === 0 ? Images.polyominoType2_4A : Images.polyominoType2_4B
+        case Tile.Buffalo3A:
+            return side === 0 ? Images.polyominoType3_7A : Images.polyominoType3_7B
+        case Tile.Buffalo3B:
+            return side === 0 ? Images.polyominoType3_8A : Images.polyominoType3_8B
+        case Tile.Buffalo4A:
+            return side === 0 ? Images.polyominoType4_7A : Images.polyominoType4_7B
+        case Tile.Buffalo4B:
+            return side === 0 ? Images.polyominoType4_8A : Images.polyominoType4_8B
+        case Tile.Ibex1:
+            return Images.polyominoType1_3
+        case Tile.Ibex2:
+            return side === 0 ? Images.polyominoType2_3A : Images.polyominoType2_3B
+        case Tile.Ibex3A:
+            return side === 0 ? Images.polyominoType3_5A : Images.polyominoType3_5B
+        case Tile.Ibex3B:
+            return side === 0 ? Images.polyominoType3_6A : Images.polyominoType3_6B
+        case Tile.Ibex4A:
+            return side === 0 ? Images.polyominoType4_5A : Images.polyominoType4_5B
+        case Tile.Ibex4B:
+            return side === 0 ? Images.polyominoType4_6A : Images.polyominoType4_6B
+        case Tile.Boar1:
+            return Images.polyominoType1_5
+        case Tile.Boar2:
+            return side === 0 ? Images.polyominoType2_5A : Images.polyominoType2_5B
+        case Tile.Boar3A:
+            return side === 0 ? Images.polyominoType3_9A : Images.polyominoType3_9B
+        case Tile.Boar3B:
+            return side === 0 ? Images.polyominoType3_10A : Images.polyominoType3_10B
+        case Tile.Boar4A:
+            return side === 0 ? Images.polyominoType4_9A : Images.polyominoType4_9B
+        case Tile.Boar4B:
+            return side === 0 ? Images.polyominoType4_10A : Images.polyominoType4_10B
+        case Tile.Legendary1:
+            return Images.polyominoType5_1
+        case Tile.Legendary2:
+            return Images.polyominoType5_2
+        case Tile.Legendary3:
+            return Images.polyominoType5_3
+        case Tile.Legendary4:
+            return Images.polyominoType5_4
+        case Tile.Legendary5:
+            return Images.polyominoType5_5
     }
-
 }
 
 export default Polyomino
