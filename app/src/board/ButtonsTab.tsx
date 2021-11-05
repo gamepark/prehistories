@@ -152,8 +152,8 @@ const huntingButtonsPosition = (color:PlayerColor) => css`
     border-left:0.6em solid ${getPlayerColor(color)};
     border-right:0.6em solid ${getPlayerColor(color)};
     background-color:rgba(0,0,0,0.5);
-    border-top-left-radius:5% 15%;
-    border-top-right-radius:5% 15%;
+    border-top-left-radius:2em;
+    border-top-right-radius:2em;
 `
 
 const appearContentPanel = keyframes`

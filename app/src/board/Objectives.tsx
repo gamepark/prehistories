@@ -31,7 +31,7 @@ const Objectives : FC<Props> = ({goals,players, ...props}) => {
             )}
         </div>
 
-        <div css={[toAbsolute, permanentObjectivePosition, setPercentDimension(15.9,20), placingBackground(Images.objective0, "contain")]}>
+        <div css={[toAbsolute, permanentObjectivePosition, setPercentDimension(15.9,20), placingBackground(Images.objective0, "cover")]}>
             {players.map((player, indexPlayer) => 
                 [...Array(8-player.variableGoalsMade.length-player.totemTokens)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[toAbsolute, totemStyle(indexPlayer,i), incomingAnimation]} draggable={false} />)
             )}
@@ -65,6 +65,8 @@ const totemStyle = (iPlayer:number, iToken:number) => css`
 const permanentObjectivePosition = css`
     top:7%;
     right:0%;
+    border-radius:0.8em;
+    border:0.1em solid black;
 `
 
 const goalMargin = css`

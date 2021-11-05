@@ -304,7 +304,7 @@ const cardPlayedPanelPosition = (color:PlayerColor) => css`
     z-index:1;
     background-color:rgba(131, 180, 65,0.1);
     border:solid 0.6em ${getPlayerColor(color)};
-    border-radius:5%;
+    border-radius:2em;
 `
 
 const deckZonePosition = css`

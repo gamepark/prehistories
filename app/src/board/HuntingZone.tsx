@@ -53,7 +53,7 @@ const HuntingZone : FC<Props> = ({game, numberOfPlayers, indexOfDisplayedPlayer,
 
     return(
 
-        <div css={[toAbsolute, setPercentDimension(93,24.5), huntingZonePosition, placingBackground(numberOfPlayers < 4 ? Images.huntingBoard23Players : Images.huntingBoard45Players, "contain")]}>
+        <div css={[toAbsolute, setPercentDimension(93,23.8), huntingZonePosition, placingBackground(numberOfPlayers < 4 ? Images.huntingBoard23Players : Images.huntingBoard45Players, "contain")]}>
 
             {game.huntingBoard.map((polyomino, index) => {
                 let activePlayer = game.sortedPlayers !== undefined ? game.sortedPlayers[0] : undefined
@@ -111,7 +111,8 @@ const polyominoToHuntPosition = (position:number, numberOfPlayers:number, polyom
 
 const huntingZonePosition = css`
     top:7%;
-    left:0;
+    left:0.5%;
+    border-radius:1em;
 `
 const polyominoToHuntSize = (polyomino:number, side:(0|1), sizeBaseH:number, sizeBaseW:number) => {
     return tileSize(polyomino, side, sizeBaseW, sizeBaseH)    

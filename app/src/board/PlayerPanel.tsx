@@ -115,13 +115,14 @@ const powerShadow = css`
     filter:drop-shadow(0 0 0.2em black);
 `
 const playerPanelPosition = (position:number) => css`
-    top:${7+16+15*position}%;
+    top:${7+15.9+15.42*position+0.42}%;
     right:0;
     z-index:0;
 `
 
 const playerPanelBorder = css`
     border:0.1em solid black;
+    border-radius:0.8em;
     cursor:pointer;
 `
 
