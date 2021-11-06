@@ -84,4 +84,7 @@ export default class PrehistoriesView implements Game<GameView, MoveView>, Undo<
     return canUndo(action, consecutiveActions)
   }
 
+  restoreLocalMoves(localState: GameView) {
+    this.state.caveDisplayed = localState.caveDisplayed
+  }
 }

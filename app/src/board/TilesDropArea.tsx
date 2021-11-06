@@ -11,23 +11,25 @@ import {placeTileMove} from "@gamepark/prehistories/moves/PlaceTile";
 import {canPlaceTile, getCavePlacementSpaces, PlacementSpace} from "@gamepark/prehistories/utils/PlacementRules";
 import {Side} from "@gamepark/prehistories/material/Tile";
 import {getPlacedTileCoordinates} from "@gamepark/prehistories/types/PlacedTile";
-import {setPercentDimension, toAbsolute, toFullSize} from "../utils/styles";
-import {DraggedTile, HuntTile} from "./Polyomino";
+import {caveBorder, squareSize} from "../utils/styles";
+import {DraggedTile, HuntTile} from "./DraggableTile";
+import {cavesSize} from "@gamepark/prehistories/material/Caves";
 
 
 type Props = {
   player: PlayerView | PlayerViewSelf | PlayerHuntView
 } & HTMLAttributes<HTMLDivElement>
 
-export default function PolyominoDropArea({player, ...props}: Props) {
+export default function TilesDropArea({player, ...props}: Props) {
   const ref = useRef<HTMLDivElement>(null)
   const moveTileSound = useSound(MoveTileSound)
   moveTileSound.volume = 0.5
 
   const getAreaPosition = useCallback((sourceClientOffset: XYCoord) => {
     const dropArea = ref.current!.getBoundingClientRect()
-    const y = Math.round(((sourceClientOffset.x - dropArea.x) * 7) / dropArea.width)
-    const x = Math.round(((sourceClientOffset.y - dropArea.y) * 7) / dropArea.height)
+    // TODO: reverse coordinates
+    const y = Math.round((sourceClientOffset.x - dropArea.x) * cavesSize / dropArea.width)
+    const x = Math.round((sourceClientOffset.y - dropArea.y) * cavesSize / dropArea.height)
     return {x, y}
   }, [])
 
@@ -56,12 +58,20 @@ export default function PolyominoDropArea({player, ...props}: Props) {
   dropRef(ref)
 
   return (
-    <div ref={ref} css={[toAbsolute, toFullSize]} {...props}>
+    <div ref={ref} css={style} {...props}>
       {draggedPolyo && <ValidDropAreaHighlight cave={cave} tile={draggedPolyo.polyomino} side={draggedPolyo.side}/>}
       {draggedPolyo && over && <DropShadow cave={cave} tile={draggedPolyo.polyomino} side={draggedPolyo.side} getAreaPosition={getAreaPosition}/>}
     </div>
   )
 }
+
+const style = css`
+  position: absolute;
+  left: ${caveBorder}em;
+  top: ${caveBorder}em;
+  width: ${squareSize * cavesSize}em;
+  height: ${squareSize * cavesSize}em;
+`
 
 type ValidDropAreaHighlightProps = {
   cave: PlacementSpace[][]
@@ -73,7 +83,7 @@ function ValidDropAreaHighlight({cave, tile, side}: ValidDropAreaHighlightProps)
   const area = useMemo(() => getValidDropArea(cave, tile, side), [cave, tile, side])
   return <>{
     area.map((row, y) =>
-      row.map((space, x) => space && <div key={`${x}_${y}`} css={[toAbsolute, setPercentDimension(squareSize, squareSize), position({x, y}), highlight]}/>)
+      row.map((space, x) => space && <div key={`${x}_${y}`} css={[squareCss, squarePosition(x, y), highlight]}/>)
     )
   }</>
 }
@@ -93,8 +103,6 @@ function getValidDropArea(cave: PlacementSpace[][], tile: number, side: Side): b
   return area
 }
 
-const squareSize = 14.2857
-
 type DropShadowProps = {
   cave: PlacementSpace[][]
   tile: number
@@ -111,10 +119,10 @@ function DropShadow({cave, tile, side, getAreaPosition}: DropShadowProps) {
 
   return <>{
     getPlacedTileCoordinates(placedTile).map(({x, y}) =>
-      <div key={`${x}_${y}`} css={[toAbsolute, setPercentDimension(squareSize, squareSize), position({x, y}), strongHighlight]}/>
+      <div key={`${x}_${y}`} css={[squareCss, squarePosition(x, y), strongHighlight]}/>
     )
   }</>
-  
+
 }
 
 const highlight = css`
@@ -125,7 +133,13 @@ const strongHighlight = css`
   background-color: rgba(255, 255, 255, 0.5);
 `
 
-const position = ({x, y}: Coordinates) => css`
-  left: ${x * squareSize}%;
-  top: ${y * squareSize}%;
+const squareCss = css`
+  position: absolute;
+  width: ${squareSize}em;
+  height: ${squareSize}em;
+`
+
+export const squarePosition = (x: number, y: number) => css`
+  left: ${x * squareSize}em;
+  top: ${y * squareSize}em;
 `

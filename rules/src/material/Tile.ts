@@ -130,12 +130,12 @@ export function getPolyomino(tile: Tile, side: Side): boolean[][] {
       ]
     case Tile.Buffalo4B:
       return side === 0 ? [
+        [X, X, X],
+        [_, X, _]
+      ] : [
         [_, X],
         [X, X],
         [_, X]
-      ] : [
-        [X, X, X],
-        [_, X, _]
       ]
     case Tile.Ibex4B:
     case Tile.Boar4B:

@@ -1,81 +1,24 @@
 /** @jsxImportSource @emotion/react */
-import {css, keyframes} from '@emotion/react'
-import Move from '@gamepark/prehistories/moves/Move'
-import {usePlay} from '@gamepark/react-client'
-import {Draggable} from '@gamepark/react-components'
-import {FC} from 'react'
-import {placingBackground, toAbsolute, toFullSize} from '../utils/styles'
+import {css} from '@emotion/react'
+import {Picture, PictureAttributes} from '@gamepark/react-components'
+import {squareSize} from '../utils/styles'
 import Images from '../utils/Images'
-import Tile, {Side} from "@gamepark/prehistories/material/Tile";
-import {DraggableProps} from "@gamepark/react-components/dist/Draggable/Draggable";
-
-export const HuntTile = 'HuntTile'
-
-export type DraggedTile = {
-  polyomino: number
-  side: Side
-  huntSpot: number
-}
+import Tile, {getPolyomino, Side} from "@gamepark/prehistories/material/Tile";
 
 type Props = {
   tile: Tile
-  side: 0 | 1
-} & Omit<DraggableProps, 'type'>
+  side: Side
+} & PictureAttributes
 
-const Polyomino: FC<Props> = ({tile, side, ...props}) => {
-
-  const play = usePlay<Move>()
-
+export default function AnimalTile({tile, side, ...props}: Props) {
   return (
-    <Draggable type={HuntTile} drop={play} {...props} css={toFullSize}>
-
-      <div css={[toAbsolute, toFullSize, flipTile(side)]}>
-
-        <div css={[toAbsolute, toFullSize, sideDisplay,
-          polyominoShadow,
-          placingBackground(getTileImage(tile, 0), "contain"),
-          props.canDrag && glowingAnimation
-        ]}>
-        </div>
-
-        {<div css={[toAbsolute, toFullSize, sideDisplay, polyominoShadow,
-          placingBackground(getTileImage(tile, 1), "contain"),
-          props.canDrag && glowingAnimation
-        ]}>
-        </div>}
-
-      </div>
-
-    </Draggable>
+    <Picture src={getTileImage(tile, side)} css={style(getPolyomino(tile, side))} {...props}/>
   )
-
 }
 
-const glowingKeyframes = keyframes`
-  from {
-    filter: drop-shadow(0 0 0.2em lime);
-  }
-  to {
-    filter: drop-shadow(0 0 0.8em lime) drop-shadow(0 0 0.8em lime);
-  }
-`
-
-const glowingAnimation = css`
-  animation: ${glowingKeyframes} 1s alternate infinite linear;
-`
-
-const sideDisplay = css`
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
-`
-
-const flipTile = (side: 0 | 1) => css`
-  transform-style: preserve-3d;
-  transform: rotateY(${side * 180}deg);
-  transition: transform 0.2s linear, top 0.2s cubic-bezier(1, 0, 0, 1), left 0.2s cubic-bezier(1, 0, 0, 1);
-`
-
-const polyominoShadow = css`
+const style = (polyomino: boolean[][]) => css`
+  width: ${polyomino[0].length * squareSize}em;
+  height: ${polyomino.length * squareSize}em;
   filter: drop-shadow(0 0 0.2em black);
 `
 
@@ -116,7 +59,7 @@ function getTileImage(tile: Tile, side: Side): string {
     case Tile.Buffalo4A:
       return side === 0 ? Images.polyominoType4_7A : Images.polyominoType4_7B
     case Tile.Buffalo4B:
-      return side === 0 ? Images.polyominoType4_8A : Images.polyominoType4_8B
+      return side === 0 ? Images.polyominoType4_8B : Images.polyominoType4_8A
     case Tile.Ibex1:
       return Images.polyominoType1_3
     case Tile.Ibex2:
@@ -153,5 +96,3 @@ function getTileImage(tile: Tile, side: Side): string {
       return Images.polyominoType5_5
   }
 }
-
-export default Polyomino

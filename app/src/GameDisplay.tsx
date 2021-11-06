@@ -2,17 +2,17 @@
 import {css, keyframes} from '@emotion/react'
 import GameView from '@gamepark/prehistories/GameView'
 import PlayerColor from '@gamepark/prehistories/PlayerColor'
-import { usePlay, usePlayerId } from '@gamepark/react-client'
+import {usePlay, usePlayerId} from '@gamepark/react-client'
 import {Letterbox} from '@gamepark/react-components'
-import { useMemo, useState } from 'react'
-import HuntingZone from './board/HuntingZone'
+import {useMemo, useState} from 'react'
 import Objectives from './board/Objectives'
 import PlayerBoard from './board/PlayerBoard'
 import PlayerPanel from './board/PlayerPanel'
-import SetCaveDisplayed, { setCaveDisplayedMove } from './localMoves/setCaveDisplayed'
-import { AudioLoader } from './sounds/AudioLoader'
+import SetCaveDisplayed, {setCaveDisplayedMove} from './localMoves/setCaveDisplayed'
+import {AudioLoader} from './sounds/AudioLoader'
 import PrehistoriesSounds from './sounds/PrehistoriesSounds'
 import WelcomePopUp from './utils/WelcomePopUp'
+import Board from "./board/Board";
 
 type Props = {
   game: GameView
@@ -22,7 +22,7 @@ type Props = {
 export default function GameDisplay({game, audioLoader}: Props) {
 
   const playerId = usePlayerId<PlayerColor>()
-  const players = useMemo(() => getPlayersStartingWith(game, playerId), [game, playerId]) 
+  const players = useMemo(() => getPlayersStartingWith(game, playerId), [game, playerId])
   const playerDisplayed = game.players.find(p => p.color === game.caveDisplayed)!
 
   const playSetCaveDisplayed = usePlay<SetCaveDisplayed>()
@@ -34,15 +34,12 @@ export default function GameDisplay({game, audioLoader}: Props) {
     <Letterbox id="letterbox" css={letterBoxStyle} top={0}>
       <div css={[css`position: absolute;
                     top:0;left:0;width:100%;height:100%;`, perspective]}>
-                      
-        <HuntingZone game={game}
-                     numberOfPlayers={game.players.length}    
-                     indexOfDisplayedPlayer={players.findIndex(p => p.color === playerDisplayed.color)} 
-                     indexListDisplayedPlayers={players.map(p => p.color)}     
-        />
-        <Objectives goals={game.goals}    
-                    players={game.players} 
-                    onClick={() => setWelcomePopUpClosed(false)}       
+
+        <Board game={game}/>
+
+        <Objectives goals={game.goals}
+                    players={game.players}
+                    onClick={() => setWelcomePopUpClosed(false)}
         />
         {players.map((player, index) =>
           <PlayerPanel key={player.color}
@@ -55,7 +52,7 @@ export default function GameDisplay({game, audioLoader}: Props) {
           />
         )}
 
-        <PlayerBoard player={playerDisplayed} 
+        <PlayerBoard player={playerDisplayed}
                      players={game.players}
                      phase={game.phase}
                      isActiveHuntingPlayer={game.sortedPlayers !== undefined && game.sortedPlayers[0] === playerDisplayed.color}

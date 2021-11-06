@@ -1,30 +1,30 @@
 /** @jsxImportSource @emotion/react */
-import { css, keyframes } from "@emotion/react";
-import { FC } from "react";
-import { useTranslation } from "react-i18next";
+import {css, keyframes} from "@emotion/react";
+import {FC} from "react";
+import {useTranslation} from "react-i18next";
 import Cave from "./Cave";
 import Card from './Card'
-import { getColoredDeck } from "@gamepark/prehistories/material/Hunters";
+import {getColoredDeck} from "@gamepark/prehistories/material/Hunters";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
-import { isPlayerViewSelf, PlayerHuntView, PlayerView, isPlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
-import { useDrop } from "react-dnd";
+import {isPlayerView, isPlayerViewSelf, PlayerHuntView, PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
+import {useDrop} from "react-dnd";
 import CardInHand, {isCardInHand} from "@gamepark/prehistories/types/appTypes/CardInHand";
 import CardPlayed from "@gamepark/prehistories/types/appTypes/CardPlayed";
 import MoveType from "@gamepark/prehistories/moves/MoveType";
-import { useAnimation, useAnimations, usePlay, usePlayerId, useSound } from "@gamepark/react-client";
-import Phase, { HuntPhase } from "@gamepark/prehistories/types/Phase";
-import { Hand, Picture } from "@gamepark/react-components";
+import {useAnimation, useAnimations, usePlay, usePlayerId, useSound} from "@gamepark/react-client";
+import Phase, {HuntPhase} from "@gamepark/prehistories/types/Phase";
+import {Hand, Picture} from "@gamepark/react-components";
 import Move from "@gamepark/prehistories/moves/Move";
-import { isPlayHuntCard, PlayHuntCardView } from "@gamepark/prehistories/moves/PlayHuntCard";
-import { RevealHuntCardsView, isRevealHuntCards } from "@gamepark/prehistories/moves/RevealHuntCards";
-import SpendHunter, { isSpendHunter } from "@gamepark/prehistories/moves/SpendHunter";
-import { isShuffleDiscardPile, ShuffleDiscardPileView } from "@gamepark/prehistories/moves/ShuffleDiscardPile";
-import DrawXCards, { DrawXCardsView, isDrawXCards, isDrawXCardsView } from "@gamepark/prehistories/moves/DrawXCards";
-import { getCardBack, getPlayerColor } from "../utils/getterFunctions";
-import SetSelectedHunters, { setSelectedHunterMove } from "../localMoves/setSelectedHunters";
+import {isPlayHuntCard, PlayHuntCardView} from "@gamepark/prehistories/moves/PlayHuntCard";
+import {isRevealHuntCards, RevealHuntCardsView} from "@gamepark/prehistories/moves/RevealHuntCards";
+import SpendHunter, {isSpendHunter} from "@gamepark/prehistories/moves/SpendHunter";
+import {isShuffleDiscardPile, ShuffleDiscardPileView} from "@gamepark/prehistories/moves/ShuffleDiscardPile";
+import DrawXCards, {DrawXCardsView, isDrawXCards, isDrawXCardsView} from "@gamepark/prehistories/moves/DrawXCards";
+import {getCardBack, getPlayerColor} from "../utils/getterFunctions";
+import SetSelectedHunters, {setSelectedHunterMove} from "../localMoves/setSelectedHunters";
 import MoveCardSound from "../sounds/cardMove.mp3"
 import ButtonClickSound from "../sounds/buttonClick.mp3"
-import { centerContainer, setPercentDimension, toAbsolute, toFullSize } from "../utils/styles";
+import {centerContainer, setPercentDimension, toAbsolute, toFullSize} from "../utils/styles";
 import ButtonsTab from "./ButtonsTab";
 
 type Props = {
@@ -73,7 +73,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
         canDrop: (item: CardInHand | CardPlayed) => {
 
             if(isCardInHand(item)){
-                return player.color === playerId          
+                return player.color === playerId
             } else {
                 return false
             }
@@ -85,9 +85,9 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
         drop: (item: CardInHand | CardPlayed) => {
             if(isCardInHand(item)){
                 moveCardSound.play()
-                return {type:MoveType.PlayHuntCard, card:item.card, playerId:player.color }          
+                return {type:MoveType.PlayHuntCard, card:item.card, playerId:player.color }
             } else {
-                return 
+                return
             }
         }
       })
@@ -110,28 +110,28 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
           } : ( drawXCardsAnimation ? {
             seconds:drawXCardsAnimation.duration,
             delay:0,
-            fromNeutralPosition:(!isDrawXCardsView(drawXCardsAnimation.move) && Array.isArray(playerHand)) 
+            fromNeutralPosition:(!isDrawXCardsView(drawXCardsAnimation.move) && Array.isArray(playerHand))
                 ? index > playerHand.length - drawXCardsAnimation.move.cards.length -1
                 : isDrawXCardsView(drawXCardsAnimation.move) && typeof playerHand ==='number' && index > playerHand - drawXCardsAnimation.move.cards -1
           } : undefined)
         })
       }
 
-    return(
+  return (
+    <>
+      <Cave player={player}/>
 
-        <div css={[toAbsolute, setPercentDimension(93,56), playerBoardPosition]}>
+      <div css={[toAbsolute, setPercentDimension(93, 56), playerBoardPosition]}>
 
-            <Cave player={player} />
-
-            <div css={[toAbsolute, setPercentDimension(24,65), cardHandPanelPosition]}> 
+        <div css={[toAbsolute, setPercentDimension(24, 65), cardHandPanelPosition]}>
 
                 <Hand css={[toAbsolute, handPosition, setPercentDimension(100,25.5)]} rotationOrigin={10} gapMaxAngle={3.8} maxAngle={20} sizeRatio={8/11} getItemProps={getItemProps} >
-            
+
                     {(isPlayerViewSelf(player) && Array.isArray(playerHand))
-                        ? playerHand.map((card, index) => 
+                        ? playerHand.map((card, index) =>
                             <Card key={index}
                             color={player.color}
-                            css={[smoothAngles, 
+                            css={[smoothAngles,
                                   playHuntCardAnimation && index === 0 && playHuntCardAnimationStyle(playHuntCardAnimation.duration,player.played.length),
                                   drawXCardsAnimation && !isDrawXCardsView(drawXCardsAnimation.move) && drawXCardsAnimation.move.cards.find(c => c === card) && drawXCardsAnimStyle(drawXCardsAnimation.duration, false)]}
                             power={getColoredDeck(player.color)[card].power}
@@ -142,10 +142,10 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
                             />
                     )
 
-                        : typeof playerHand === 'number' && [...Array(playerHand)].map((_, i) => 
+                        : typeof playerHand === 'number' && [...Array(playerHand)].map((_, i) =>
                             <Card key={i}
                             css = {[smoothAngles,playHuntCardAnimation && i === 0 && playHuntCardAnimationStyle(playHuntCardAnimation.duration, (player.played as number)), drawXCardsAnimation && isDrawXCardsView(drawXCardsAnimation.move) && i >= (playerHand as number) - drawXCardsAnimation.move.cards && drawXCardsAnimStyle(drawXCardsAnimation.duration, true) ]}
-                            color={player.color}   
+                            color={player.color}
                             />
                         )
                     }
@@ -154,9 +154,9 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
 
             </div>
 
-            <div css={[toAbsolute, setPercentDimension(45,53), cardPlayedPanelPosition(player.color), canDropPlayed && canDropStyle, canDropPlayed && isOverPlayed && isOverStyle]} ref = {dropRefPlayed}> 
+            <div css={[toAbsolute, setPercentDimension(45,53), cardPlayedPanelPosition(player.color), canDropPlayed && canDropStyle, canDropPlayed && isOverPlayed && isOverStyle]} ref = {dropRefPlayed}>
 
-            {(isDisplayHuntingButtons || isDisplayValidationButton || isDisplayEndTurnButton) && 
+            {(isDisplayHuntingButtons || isDisplayValidationButton || isDisplayEndTurnButton) &&
                 <ButtonsTab color={player.color}
                             hunting={player.hunting}
                             isDisplayEndTurnButton={isDisplayEndTurnButton}
@@ -167,7 +167,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
             }
 
             <span css={[toAbsolute, centerContainer, spanDropDisplay(canDropPlayed)]}>{t("Drag Here")}</span>
-            
+
             {Array.isArray(player.played) ? player.played.map((card, index) => {
                 const spendCardAnimation = spendCardAnimations.find(a => a.move.card === card)
                 return <Card key={index}
@@ -179,13 +179,13 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
                 power={getColoredDeck(player.color)[card].power}
                 speed={getColoredDeck(player.color)[card].speed}
                 onClick={() => player.color === playerId && player.hunting?.huntPhase === HuntPhase.Pay && playSelectHunter(setSelectedHunterMove(card), {local:true})}
-                
+
                 />
-            
-           } ) : [...Array(player.played)].map((_, i) => 
+
+           } ) : [...Array(player.played)].map((_, i) =>
                 <Card key={i}
                  css = {[toAbsolute, setPercentDimension(52,30), cardPlayedPosition(i), smoothAngles]}
-                 color={player.color}   
+                 color={player.color}
                  power={revealCardsAnimation ? getColoredDeck(player.color)[revealCardsAnimation.move.cardsPlayed.find(obj => obj.color === player.color)!.cards[i]].power : undefined}
                  speed={revealCardsAnimation ? getColoredDeck(player.color)[revealCardsAnimation.move.cardsPlayed.find(obj => obj.color === player.color)!.cards[i]].speed : undefined}
                 />
@@ -195,7 +195,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
 
             <div css={[toAbsolute, setPercentDimension(23,16), discardZonePosition]}>
 
-                {player.discard.map((card, index) =>  
+                {player.discard.map((card, index) =>
                     <Card key={index}
                           color={player.color}
                           power={getColoredDeck(player.color)[card].power}
@@ -205,16 +205,17 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
 
             </div>
 
-            <div css={[toAbsolute, setPercentDimension(24,16), deckZonePosition]}> 
-            
+            <div css={[toAbsolute, setPercentDimension(24,16), deckZonePosition]}>
+
                 {[...Array(player.deck - (drawXCardsAnimation ? ((!isDrawXCardsView(drawXCardsAnimation.move) && player.color === playerId) ? drawXCardsAnimation.move.cards.length : 0) : 0))].map((_, i) => <Picture key={i} alt={t('token')} src={getCardBack(player.color)} css={[toAbsolute, smoothAngles, deckOffset(i), toFullSize, deckCardShadow]} draggable={false} />)}
-            
+
             </div>
-            
+
         </div>
 
-    )
-    
+    </>
+  )
+
 }
 
 const drawHuntCardKeyframes = (isHidden:boolean) => keyframes`
@@ -340,6 +341,11 @@ const cardHandPanelPosition = css`
 const playerBoardPosition = css`
     top:7%;
     left:24%;
+    pointer-events: none; // TODO: remove this div
+    
+    & > * {
+      pointer-events: auto;
+    }
 `
 
 export default PlayerBoard
