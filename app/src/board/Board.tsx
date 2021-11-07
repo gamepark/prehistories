@@ -25,10 +25,10 @@ export default function Board({game}: Props) {
   const huntZonePositions = game.players.length < 4 ? huntZonesA : huntZonesB
   return (
     <div css={[style, background(game.players.length)]}>
-      {game.huntingBoard.map((tileNumber, zone) =>
-        tileNumber && <HuntingZone key={zone} game={game} position={huntZonePositions[zone]} tileNumber={tileNumber}
+      {game.huntingBoard.map((tile, zone) =>
+        tile && <HuntingZone key={zone} game={game} position={huntZonePositions[zone]} tile={tile}
                                    canDrag={hunting && isPlayerViewSelf(player!) && teamPower(player.played) >= getPowerLevels(game.players.length, zone)[0]}
-                                   item={{huntSpot: zone, polyomino: tileNumber, side: 0}}
+                                   item={{huntSpot: zone, tile, side: 0}}
                                    css={animation?.move.huntSpot === zone && placeTileAnimation(game, animation, huntZonePositions[zone], playerId)}/>
       )}
     </div>
@@ -83,7 +83,7 @@ const huntZone4: HuntZonePosition = {
   rotation: polyomino => {
     const base = 19
     if (polyomino.length === 2) {
-      return !polyomino[0][2] ? base : !polyomino[1][0] ? base - 180 : -15
+      return !polyomino[0][2] ? base : !polyomino[1][0] ? base - 180 : 75
     } else {
       return !polyomino[0][0] ? 90 + base : !polyomino[2][1] ? base - 90 : -15
     }

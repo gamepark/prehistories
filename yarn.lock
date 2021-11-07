@@ -1447,10 +1447,10 @@
     react-infinite-scroller "^1.2.4"
     redux ">=4.0.5"
 
-"@gamepark/react-components@~5.8.5":
-  version "5.8.5"
-  resolved "https://registry.yarnpkg.com/@gamepark/react-components/-/react-components-5.8.5.tgz#079a4939b1d476bad3c80ab68ea71d2347a3b5a6"
-  integrity sha512-rRuv85tG8JmoMxCszt632AlMN6Bws095pk5+A/OWQY1OW/dsCm0yoVqwN/V4pyIZgO9A8LVum4dSs4Q7gIKeFw==
+"@gamepark/react-components@~5.8.6":
+  version "5.8.6"
+  resolved "https://registry.yarnpkg.com/@gamepark/react-components/-/react-components-5.8.6.tgz#92e16c8dc27dd8d8fc033d528e42aafce6332cd5"
+  integrity sha512-IthmVlYsdBqVslOGwHTg9g9xLz0U4bvTYhxPggrhJObqWnFpczVCvn4HL+LTxMS3TAg+gB1BbSBiCD1Vd5VHtQ==
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^1.2.34"
     "@fortawesome/free-solid-svg-icons" "^5.15.2"

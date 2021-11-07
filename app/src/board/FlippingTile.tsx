@@ -5,7 +5,7 @@ import {usePlay, useSound} from '@gamepark/react-client'
 import {FC, useMemo, useState} from 'react'
 import MoveTileSound from '../sounds/moveTile.mp3'
 import {HuntTile} from './DraggableTile'
-import {getPolyomino, Side} from "@gamepark/prehistories/material/Tile";
+import Tile, {getPolyomino, Side} from "@gamepark/prehistories/material/Tile";
 import {glowingAnimation, squareSize} from "../utils/styles";
 import {Draggable} from "@gamepark/react-components";
 import Move from "@gamepark/prehistories/moves/Move";
@@ -15,13 +15,14 @@ import {HuntZonePosition} from "./Board";
 
 type Props = {
   game: GameView
-  tileNumber: number
+  tile: Tile
   position: HuntZonePosition
 } & Omit<DraggableProps, 'type'>
 
-const FlippingTile: FC<Props> = ({game, tileNumber, position, item, ...props}) => {
+const FlippingTile: FC<Props> = ({game, tile, position, item, ...props}) => {
   const play = usePlay<Move>()
   const [side, setSide] = useState<Side>(0)
+  const [dragging, setDragging] = useState(false)
   const moveTileSound = useSound(MoveTileSound)
   moveTileSound.volume = 0.5
 
@@ -30,15 +31,16 @@ const FlippingTile: FC<Props> = ({game, tileNumber, position, item, ...props}) =
     setSide(side => side ? 0 : 1)
   }
 
-  const polyomino0 = useMemo(() => getPolyomino(tileNumber, 0), [tileNumber])
-  const polyomino1 = useMemo(() => getPolyomino(tileNumber, 1), [tileNumber])
+  const polyomino0 = useMemo(() => getPolyomino(tile, 0), [tile])
+  const polyomino1 = useMemo(() => getPolyomino(tile, 1), [tile])
 
   return (
-    <Draggable type={HuntTile} drop={play} onClick={toggleSide} item={{...item, side}}
-               css={[style(polyomino0), rotation(position.rotation(side === 0 ? polyomino0 : polyomino1))]} {...props}>
-      <div css={[flipWrapper(polyomino0.length !== polyomino1.length), style(polyomino0), side === 1 && backface]}>
-        <AnimalTile tile={tileNumber} side={0} css={props.canDrag && glowingAnimation}/>
-        <AnimalTile tile={tileNumber} side={1} css={props.canDrag && glowingAnimation}/>
+    <Draggable type={HuntTile} draggingChange={setDragging} drop={play} onClick={toggleSide} item={{...item, side}}
+               css={[style(polyomino0)]} {...props}>
+      <div css={[flipWrapper(polyomino0.length !== polyomino1.length), style(polyomino0),
+        rotation(dragging ? 0 : position.rotation(side === 0 ? polyomino0 : polyomino1), side)]}>
+        <AnimalTile tile={tile} side={0} css={!dragging && props.canDrag && glowingAnimation}/>
+        <AnimalTile tile={tile} side={1} css={!dragging && props.canDrag && glowingAnimation}/>
       </div>
     </Draggable>
   )
@@ -50,8 +52,8 @@ const style = (polyomino: boolean[][]) => css`
   height: ${polyomino.length * squareSize}em;
 `
 
-const rotation = (degrees: number) => css`
-  transform: rotate(${degrees}deg);
+const rotation = (degrees: number, side: Side) => css`
+  transform: rotate(${degrees}deg) rotateX(${side === 0 ? 0 : 180}deg);
 `
 
 const flipWrapper = (backsideDiff: boolean) => css`
@@ -72,10 +74,6 @@ const flipWrapper = (backsideDiff: boolean) => css`
       backface-visibility: hidden;
     }
   }
-`
-
-const backface = css`
-  transform: rotateX(180deg);
 `
 
 export default FlippingTile

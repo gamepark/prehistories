@@ -9,7 +9,7 @@ import {useSound} from "@gamepark/react-client"
 import MoveTileSound from "../sounds/moveTile.mp3"
 import {placeTileMove} from "@gamepark/prehistories/moves/PlaceTile";
 import {canPlaceTile, getCavePlacementSpaces, PlacementSpace} from "@gamepark/prehistories/utils/PlacementRules";
-import {Side} from "@gamepark/prehistories/material/Tile";
+import {getPolyomino, Side} from "@gamepark/prehistories/material/Tile";
 import {getPlacedTileCoordinates} from "@gamepark/prehistories/types/PlacedTile";
 import {caveBorder, squareSize} from "../utils/styles";
 import {DraggedTile, HuntTile} from "./DraggableTile";
@@ -25,30 +25,31 @@ export default function TilesDropArea({player, ...props}: Props) {
   const moveTileSound = useSound(MoveTileSound)
   moveTileSound.volume = 0.5
 
-  const getAreaPosition = useCallback((sourceClientOffset: XYCoord) => {
+  const getAreaPosition = useCallback((sourceClientOffset: XYCoord, item: DraggedTile) => {
     const dropArea = ref.current!.getBoundingClientRect()
-    const x = Math.round((sourceClientOffset.x - dropArea.x) * cavesSize / dropArea.width)
-    const y = Math.round((sourceClientOffset.y - dropArea.y) * cavesSize / dropArea.height)
+    const rotationAdjustment = item.side === 1 && getPolyomino(item.tile, 0).length !== getPolyomino(item.tile, 1).length ? 0.5 : 0
+    const x = Math.round((sourceClientOffset.x - dropArea.x) * cavesSize / dropArea.width + rotationAdjustment)
+    const y = Math.round((sourceClientOffset.y - dropArea.y) * cavesSize / dropArea.height - rotationAdjustment)
     return {x, y}
   }, [])
 
   const cave = useMemo(() => getCavePlacementSpaces(player), [player])
 
-  const [{draggedPolyo, over}, dropRef] = useDrop({
+  const [{draggedTile, over}, dropRef] = useDrop({
     accept: HuntTile,
     canDrop: (item: DraggedTile, monitor) => {
       const sourceClientOffset = monitor.getSourceClientOffset()
       if (!sourceClientOffset) return false
-      return canPlaceTile(cave, {tile: item.polyomino, side: item.side, ...getAreaPosition(sourceClientOffset)})
+      return canPlaceTile(cave, {tile: item.tile, side: item.side, ...getAreaPosition(sourceClientOffset, item)})
     },
     drop: (item: DraggedTile, monitor) => {
       moveTileSound.play()
-      const position = getAreaPosition(monitor.getSourceClientOffset()!)
+      const position = getAreaPosition(monitor.getSourceClientOffset()!, item)
       return placeTileMove(item.huntSpot, item.side, position)
     },
     collect: (monitor: DropTargetMonitor<DraggedTile>) => {
       return ({
-        draggedPolyo: monitor.getItemType() === HuntTile ? monitor.getItem() : undefined,
+        draggedTile: monitor.getItemType() === HuntTile ? monitor.getItem() : undefined,
         over: monitor.isOver()
       })
     }
@@ -58,8 +59,8 @@ export default function TilesDropArea({player, ...props}: Props) {
 
   return (
     <div ref={ref} css={style} {...props}>
-      {draggedPolyo && <ValidDropAreaHighlight cave={cave} tile={draggedPolyo.polyomino} side={draggedPolyo.side}/>}
-      {draggedPolyo && over && <DropShadow cave={cave} tile={draggedPolyo.polyomino} side={draggedPolyo.side} getAreaPosition={getAreaPosition}/>}
+      {draggedTile && <ValidDropAreaHighlight cave={cave} item={draggedTile}/>}
+      {draggedTile && over && <DropShadow cave={cave} item={draggedTile} getAreaPosition={getAreaPosition}/>}
     </div>
   )
 }
@@ -74,12 +75,11 @@ const style = css`
 
 type ValidDropAreaHighlightProps = {
   cave: PlacementSpace[][]
-  tile: number
-  side: Side
+  item: DraggedTile
 }
 
-function ValidDropAreaHighlight({cave, tile, side}: ValidDropAreaHighlightProps) {
-  const area = useMemo(() => getValidDropArea(cave, tile, side), [cave, tile, side])
+function ValidDropAreaHighlight({cave, item}: ValidDropAreaHighlightProps) {
+  const area = useMemo(() => getValidDropArea(cave, item.tile, item.side), [cave, item])
   return <>{
     area.map((row, y) =>
       row.map((space, x) => space && <div key={`${x}_${y}`} css={[squareCss, squarePosition(x, y), highlight]}/>)
@@ -104,16 +104,15 @@ function getValidDropArea(cave: PlacementSpace[][], tile: number, side: Side): b
 
 type DropShadowProps = {
   cave: PlacementSpace[][]
-  tile: number
-  side: Side
-  getAreaPosition: (differenceFromInitialOffset: XYCoord) => Coordinates
+  item: DraggedTile
+  getAreaPosition: (differenceFromInitialOffset: XYCoord, item: DraggedTile) => Coordinates
 }
 
-function DropShadow({cave, tile, side, getAreaPosition}: DropShadowProps) {
+function DropShadow({cave, item, getAreaPosition}: DropShadowProps) {
   const sourceClientOffset = useEfficientDragLayer(monitor => monitor.getSourceClientOffset())
   if (!sourceClientOffset) return null
-  const coordinates = getAreaPosition(sourceClientOffset)
-  const placedTile = {tile, side, ...coordinates}
+  const coordinates = getAreaPosition(sourceClientOffset, item)
+  const placedTile = {...item, ...coordinates}
   if (!canPlaceTile(cave, placedTile)) return null
 
   return <>{

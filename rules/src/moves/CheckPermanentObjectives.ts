@@ -7,6 +7,7 @@ import Move from "./Move";
 import MoveType from "./MoveType";
 import {getPaintedCave, isColumnPainted, isLinePainted} from "../material/PaintedCave";
 import {getPlacedTileCoordinates} from "../types/PlacedTile";
+import {isLegendaryAnimalTile} from "../material/Tile";
 
 type ResolvePermanentObjectives = {
   type: MoveType.ResolvePermanentObjectives
@@ -39,7 +40,7 @@ export function checkPermanentObjectives(player: PlayerState | PlayerView | Play
     }
   }
 
-  return [completedLines, completedColumns, lastTilePlayed.tile >= 72]
+  return [completedLines, completedColumns, isLegendaryAnimalTile(lastTilePlayed.tile)]
 }
 
 export function isResolvePermanentObjectives(move: Move): move is ResolvePermanentObjectives {

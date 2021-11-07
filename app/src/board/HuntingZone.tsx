@@ -1,54 +1,35 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
 import GameView from '@gamepark/prehistories/GameView'
-import {usePlay} from '@gamepark/react-client'
 import {FC, useMemo} from 'react'
-import {HuntTile} from './DraggableTile'
-import {getPolyomino} from "@gamepark/prehistories/material/Tile";
+import DraggableTile from './DraggableTile'
+import Tile, {getPolyomino} from "@gamepark/prehistories/material/Tile";
 import FlippingTile from "./FlippingTile";
 import {HuntZonePosition} from "./Board";
 import {DraggableProps} from "@gamepark/react-components/dist/Draggable/Draggable";
-import {Draggable} from "@gamepark/react-components";
-import AnimalTile from "./AnimalTile";
-import {glowingAnimation, squareSize} from "../utils/styles";
-import Move from "@gamepark/prehistories/moves/Move";
+import {squareSize} from "../utils/styles";
 
 type Props = {
   game: GameView
-  tileNumber: number
+  tile: Tile
   position: HuntZonePosition
 } & Omit<DraggableProps, 'animation' | 'type'>
 
-const HuntingZone: FC<Props> = ({game, tileNumber, position, ...props}) => {
-  const play = usePlay<Move>()
-  const polyomino = useMemo(() => getPolyomino(tileNumber, 0), [tileNumber])
+const HuntingZone: FC<Props> = ({game, tile, position, ...props}) => {
+  const polyomino = useMemo(() => getPolyomino(tile, 0), [tile])
   if (position.flip) {
-    return <FlippingTile game={game} tileNumber={tileNumber} position={position}
+    return <FlippingTile game={game} tile={tile} position={position}
                          css={[huntPosition(position, polyomino)]} {...props}/>
   } else {
     return (
-      <Draggable type={HuntTile} drop={play}
-                 css={[style, huntPosition(position, polyomino), rotation(position.rotation(polyomino))]}
-                 {...props}>
-        <AnimalTile tile={tileNumber} side={0} css={props.canDrag && glowingAnimation}/>
-      </Draggable>
+      <DraggableTile tile={tile} rotation={position.rotation(polyomino)} css={huntPosition(position, polyomino)} {...props}/>
     )
   }
 }
 
-const style = css`
-  position: absolute;
-  width: fit-content;
-  height: fit-content;
-`
-
 const huntPosition = (spot: HuntZonePosition, polyomino: boolean[][]) => css`
   left: ${spot.left - polyomino[0].length * squareSize / 2}em;
   top: ${spot.top - polyomino.length * squareSize / 2}em;
-`
-
-const rotation = (degrees: number) => css`
-  transform: rotate(${degrees}deg);
 `
 
 export default HuntingZone
