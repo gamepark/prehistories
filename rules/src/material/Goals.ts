@@ -13,7 +13,7 @@ import {
   Painting
 } from "./PaintedCave";
 import {cavesSize, getHunterCoordinates, getTotemCoordinates} from "./Caves";
-import Tile, {isLegendaryAnimalTile, tiles} from "./Tile";
+import Tile, {isLegendaryAnimalTile} from "./Tile";
 
 const {Mammoth, Buffalo, Fish, Boar, Ibex} = Painting;
 
@@ -133,8 +133,7 @@ const GoalA8: Goal = {
   value: 2,
   rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
     let count = 0
-    for (const placedTile of player.cave) {
-      const tile = tiles[placedTile.tile]
+    for (const {tile} of player.cave) {
       if (tile === Tile.Ibex1 || tile === Tile.Boar1 || tile === Tile.Fish1 || tile === Tile.Mammoth1 || tile === Tile.Buffalo1) {
         if (++count === 5) {
           return true
@@ -258,7 +257,7 @@ const GoalB9: Goal = {
   hint: 'hintB9',
   value: 2,
   rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
-    const legendaryTiles = player.cave.filter(placedTile => isLegendaryAnimalTile(tiles[placedTile.tile]))
+    const legendaryTiles = player.cave.filter(placedTile => isLegendaryAnimalTile(placedTile.tile))
     for (const {x, y} of legendaryTiles) {
       if (legendaryTiles.some(tile => ((tile.x === x + 2 && tile.y === y) || (tile.y === y + 2 && tile.x === x)))) {
         return true

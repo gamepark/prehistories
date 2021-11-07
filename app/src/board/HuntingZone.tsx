@@ -4,7 +4,7 @@ import GameView from '@gamepark/prehistories/GameView'
 import {usePlay} from '@gamepark/react-client'
 import {FC, useMemo} from 'react'
 import {HuntTile} from './DraggableTile'
-import {getPolyomino, tiles} from "@gamepark/prehistories/material/Tile";
+import {getPolyomino} from "@gamepark/prehistories/material/Tile";
 import FlippingTile from "./FlippingTile";
 import {HuntZonePosition} from "./Board";
 import {DraggableProps} from "@gamepark/react-components/dist/Draggable/Draggable";
@@ -21,7 +21,7 @@ type Props = {
 
 const HuntingZone: FC<Props> = ({game, tileNumber, position, ...props}) => {
   const play = usePlay<Move>()
-  const polyomino = useMemo(() => getPolyomino(tiles[tileNumber], 0), [tileNumber])
+  const polyomino = useMemo(() => getPolyomino(tileNumber, 0), [tileNumber])
   if (position.flip) {
     return <FlippingTile game={game} tileNumber={tileNumber} position={position}
                          css={[huntPosition(position, polyomino)]} {...props}/>
@@ -30,7 +30,7 @@ const HuntingZone: FC<Props> = ({game, tileNumber, position, ...props}) => {
       <Draggable type={HuntTile} drop={play}
                  css={[style, huntPosition(position, polyomino), rotation(position.rotation(polyomino))]}
                  {...props}>
-        <AnimalTile tile={tiles[tileNumber]} side={0} css={props.canDrag && glowingAnimation}/>
+        <AnimalTile tile={tileNumber} side={0} css={props.canDrag && glowingAnimation}/>
       </Draggable>
     )
   }

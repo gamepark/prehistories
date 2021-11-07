@@ -11,7 +11,7 @@ import teamPower from "@gamepark/prehistories/utils/teamPower";
 import getPowerLevels from "@gamepark/prehistories/utils/powerLevels";
 import {isPlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
 import {boardHeight, caveBorder, caveLeft, caveTop, getPanelIndex, headerHeight, margin, squareSize} from "../utils/styles";
-import {getPolyomino, tiles} from "@gamepark/prehistories/material/Tile";
+import {getPolyomino} from "@gamepark/prehistories/material/Tile";
 
 type Props = {
   game: GameView
@@ -108,7 +108,7 @@ function createTileAnimationKeyframes(game: GameView, animation: Animation<Place
       y: caveTop + caveBorder - headerHeight + animation.move.coordinates.y * squareSize
     } :
     {x: 151, y: 25 + getPanelIndex(game, game.sortedPlayers![0], playerId) * 15.42}
-  const polyomino = getPolyomino(tiles[game.huntingBoard[animation.move.huntSpot]!], animation.move.side)
+  const polyomino = getPolyomino(game.huntingBoard[animation.move.huntSpot]!, animation.move.side)
   translation.x -= initialPosition.left - polyomino[0].length * squareSize / 2
   translation.y -= initialPosition.top - polyomino.length * squareSize / 2
   return keyframes`

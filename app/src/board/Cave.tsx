@@ -7,7 +7,6 @@ import {caveBorder, caveLeft, caveTop, squareSize} from "../utils/styles";
 import Images from "../utils/Images";
 import AnimalTile from "./AnimalTile";
 import TilesDropArea from "./TilesDropArea";
-import {tiles} from "@gamepark/prehistories/material/Tile";
 import {usePlayerId} from "@gamepark/react-client";
 
 type Props = {
@@ -20,7 +19,7 @@ const Cave: FC<Props> = ({player}) => {
     <div css={[style, background(caveBackground[player.color])]}>
       {playerId === player.color && <TilesDropArea player={player}/>}
       {player.cave.map((paint, index) =>
-        <AnimalTile key={index} tile={tiles[paint.tile]} side={paint.side} css={tilePosition(paint.x, paint.y)}/>
+        <AnimalTile key={index} tile={paint.tile} side={paint.side} css={tilePosition(paint.x, paint.y)}/>
       )}
     </div>
   )

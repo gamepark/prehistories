@@ -1,4 +1,5 @@
 import Coordinates from "../types/Coordinates";
+import {shuffle} from 'lodash'
 
 enum Tile {
   Fish1 = 1, Fish2, Fish3A, Fish3B, Fish4A, Fish4B,
@@ -9,29 +10,15 @@ enum Tile {
   Legendary1, Legendary2, Legendary3, Legendary4, Legendary5
 }
 
-export const tiles = [Tile.Fish1, Tile.Fish1, // TODO: delete those 2 useless elements
-  Tile.Fish1, Tile.Fish1, Tile.Fish1, Tile.Fish1, Tile.Fish1,
-  Tile.Mammoth1, Tile.Mammoth1, Tile.Mammoth1, Tile.Mammoth1, Tile.Mammoth1,
-  Tile.Ibex1, Tile.Ibex1, Tile.Ibex1, Tile.Ibex1, Tile.Ibex1,
-  Tile.Buffalo1, Tile.Buffalo1, Tile.Buffalo1, Tile.Buffalo1, Tile.Buffalo1,
-  Tile.Boar1, Tile.Boar1, Tile.Boar1, Tile.Boar1, Tile.Boar1,
-  Tile.Fish2, Tile.Fish2, Tile.Fish2, Tile.Fish2, Tile.Fish2,
-  Tile.Mammoth2, Tile.Mammoth2, Tile.Mammoth2, Tile.Mammoth2, Tile.Mammoth2,
-  Tile.Ibex2, Tile.Ibex2, Tile.Ibex2, Tile.Ibex2, Tile.Ibex2,
-  Tile.Buffalo2, Tile.Buffalo2, Tile.Buffalo2, Tile.Buffalo2, Tile.Buffalo2,
-  Tile.Boar2, Tile.Boar2, Tile.Boar2, Tile.Boar2, Tile.Boar2,
-  Tile.Fish3A, Tile.Fish3B,
-  Tile.Mammoth3A, Tile.Mammoth3B,
-  Tile.Ibex3A, Tile.Ibex3B,
-  Tile.Buffalo3A, Tile.Buffalo3B,
-  Tile.Boar3A, Tile.Boar3B,
-  Tile.Fish4A, Tile.Fish4B,
-  Tile.Mammoth4A, Tile.Mammoth4B,
-  Tile.Ibex4A, Tile.Ibex4B,
-  Tile.Buffalo4A, Tile.Buffalo4B,
-  Tile.Boar4A, Tile.Boar4B,
-  Tile.Legendary1, Tile.Legendary2, Tile.Legendary3, Tile.Legendary4, Tile.Legendary5
-]
+export function setupTilesDeck(): number[][] {
+  return [
+    shuffle([Tile.Fish1, Tile.Mammoth1, Tile.Buffalo1, Tile.Ibex1, Tile.Boar1].flatMap(tile => [...Array(5)].fill(tile))),
+    shuffle([Tile.Fish2, Tile.Mammoth2, Tile.Buffalo2, Tile.Ibex2, Tile.Boar2].flatMap(tile => [...Array(5)].fill(tile))),
+    shuffle([Tile.Fish3A, Tile.Fish3B, Tile.Mammoth3A, Tile.Mammoth3B, Tile.Buffalo3A, Tile.Buffalo3B, Tile.Ibex3A, Tile.Ibex3B, Tile.Boar3A, Tile.Boar3B]),
+    shuffle([Tile.Fish4A, Tile.Fish4B, Tile.Mammoth4A, Tile.Mammoth4B, Tile.Buffalo4A, Tile.Buffalo4B, Tile.Ibex4A, Tile.Ibex4B, Tile.Boar4A, Tile.Boar4B]),
+    shuffle([Tile.Legendary1, Tile.Legendary2, Tile.Legendary3, Tile.Legendary4, Tile.Legendary5])
+  ]
+}
 
 export type Side = 0 | 1
 

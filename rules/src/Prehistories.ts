@@ -32,7 +32,7 @@ import getPowerLevels from './utils/powerLevels'
 import teamPower from './utils/teamPower'
 import {canPlaceTile, getCavePlacementSpaces} from "./utils/PlacementRules";
 import caves, {cavesSize, Space} from "./material/Caves";
-import {sides, tiles} from "./material/Tile";
+import {setupTilesDeck, sides} from "./material/Tile";
 import {getPlacedTileCoordinates} from "./types/PlacedTile";
 
 export default class Prehistories extends SimultaneousGame<GameState, Move, PlayerColor>
@@ -327,16 +327,6 @@ function setupPlayers(players: PrehistoriesPlayerOptions[]): PlayerState[] {
     played: [],
     variableGoalsMade: []
   }))
-}
-
-function setupTilesDeck(): number[][] {
-  const polyominosArray: number[] = Array.from(tiles.keys())
-
-  return [shuffle(polyominosArray.filter(p => p > 1 && p < 27)),
-    shuffle(polyominosArray.filter(p => p > 26 && p < 52)),
-    shuffle(polyominosArray.filter(p => p > 51 && p < 62)),
-    shuffle(polyominosArray.filter(p => p > 61 && p < 72)),
-    shuffle(polyominosArray.filter(p => p > 71 && p < 77))]
 }
 
 function setupGoals(game: GameState, isExpertGame: boolean): number[] {

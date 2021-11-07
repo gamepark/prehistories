@@ -2,7 +2,7 @@ import PlayerState from "../PlayerState";
 import {PlayerHuntView, PlayerView, PlayerViewSelf} from "../types/PlayerView";
 import caves, {Space} from "./Caves";
 import PlacedTile, {getPlacedTileCoordinates} from "../types/PlacedTile";
-import Tile, {isLegendaryAnimalTile, tiles} from "./Tile";
+import Tile, {isLegendaryAnimalTile} from "./Tile";
 import Coordinates from "../types/Coordinates";
 
 export enum Painting {
@@ -27,7 +27,7 @@ export function getPaintedCave(player: PlayerState | PlayerView | PlayerViewSelf
   )
   for (const placedTile of player.cave) {
     for (const {x, y} of getPlacedTileCoordinates(placedTile)) {
-      cave[y][x] = getAnimal(tiles[placedTile.tile])
+      cave[y][x] = getAnimal(placedTile.tile)
     }
   }
   return cave
@@ -84,7 +84,7 @@ function getAnimal(tile: Tile): Painting {
 }
 
 export function isLegendaryTileSurroundedByPaintings(cave: Painting[][], placedTile: PlacedTile) {
-  const tile = tiles[placedTile.tile]
+  const tile = placedTile.tile
   if (!isLegendaryAnimalTile(tile)) {
     return false
   }
