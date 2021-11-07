@@ -44,8 +44,8 @@ const background = (url: string) => css`
 
 export const tilePosition = (x: number, y: number) => css`
   position: absolute;
-  top: ${x * squareSize + caveBorder}em;
-  left: ${y * squareSize + caveBorder}em;
+  left: ${x * squareSize + caveBorder}em;
+  top: ${y * squareSize + caveBorder}em;
 `
 
 const caveBackground = {

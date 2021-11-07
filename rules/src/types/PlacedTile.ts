@@ -11,17 +11,17 @@ export default PlacedTile
 
 export function getPlacedTileCoordinates(placedTile: PlacedTile): Coordinates[] {
   return getPolyominoCoordinates(getPolyomino(tiles[placedTile.tile], placedTile.side))
-    .map(({x, y}) => ({x: x + placedTile.y, y: y + placedTile.x})) // TODO: reverse PlacedTile.coordinates
+    .map(({x, y}) => ({x: x + placedTile.x, y: y + placedTile.y}))
 }
 
 export function getPlacedTileAdjacentCoordinates(placedTile: PlacedTile): Coordinates[] {
   return getPolyominoAdjacentCoordinates(getPolyomino(tiles[placedTile.tile], placedTile.side))
-    .map(({x, y}) => ({x: x + placedTile.y, y: y + placedTile.x})) // TODO: reverse PlacedTile.coordinates
+    .map(({x, y}) => ({x: x + placedTile.x, y: y + placedTile.y}))
     .filter(({x, y}) => x >= 0 && y >= 0 && x < cavesSize && y < cavesSize)
 }
 
 export function getPlacedTileSurroundingCoordinates(placedTile: PlacedTile): Coordinates[] {
   return getPolyominoAdjacentCoordinates(getPolyomino(tiles[placedTile.tile], placedTile.side))
-    .map(({x, y}) => ({x: x + placedTile.y, y: y + placedTile.x})) // TODO: reverse PlacedTile.coordinates
+    .map(({x, y}) => ({x: x + placedTile.x, y: y + placedTile.y}))
     .filter(({x, y}) => x >= 0 && y >= 0 && x < cavesSize && y < cavesSize)
 }

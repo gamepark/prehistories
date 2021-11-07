@@ -27,9 +27,8 @@ export default function TilesDropArea({player, ...props}: Props) {
 
   const getAreaPosition = useCallback((sourceClientOffset: XYCoord) => {
     const dropArea = ref.current!.getBoundingClientRect()
-    // TODO: reverse coordinates
-    const y = Math.round((sourceClientOffset.x - dropArea.x) * cavesSize / dropArea.width)
-    const x = Math.round((sourceClientOffset.y - dropArea.y) * cavesSize / dropArea.height)
+    const x = Math.round((sourceClientOffset.x - dropArea.x) * cavesSize / dropArea.width)
+    const y = Math.round((sourceClientOffset.y - dropArea.y) * cavesSize / dropArea.height)
     return {x, y}
   }, [])
 

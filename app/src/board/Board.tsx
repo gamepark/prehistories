@@ -104,9 +104,8 @@ function placeTileAnimation(game: GameView, animation: Animation<PlaceTile>, ini
 function createTileAnimationKeyframes(game: GameView, animation: Animation<PlaceTile>, initialPosition: HuntZonePosition, playerId?: PlayerColor) {
   const translation = game.caveDisplayed === game.sortedPlayers![0] ?
     {
-      // TODO reverse placed tile coordinates
-      x: caveLeft + caveBorder - margin + animation.move.coordinates.y * squareSize,
-      y: caveTop + caveBorder - headerHeight + animation.move.coordinates.x * squareSize
+      x: caveLeft + caveBorder - margin + animation.move.coordinates.x * squareSize,
+      y: caveTop + caveBorder - headerHeight + animation.move.coordinates.y * squareSize
     } :
     {x: 151, y: 25 + getPanelIndex(game, game.sortedPlayers![0], playerId) * 15.42}
   const polyomino = getPolyomino(tiles[game.huntingBoard[animation.move.huntSpot]!], animation.move.side)
