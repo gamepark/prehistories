@@ -243,9 +243,9 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         if (this.state.phase === undefined || playerId === p.color) {
           return {...p, deck: p.deck.length}
         } else {
-          const playerTEST:PlayerView = {...p, deck: p.deck.length, hand: p.hand.length + p.played.length, played: []}
+          const newPlayer:PlayerView = {...p, deck: p.deck.length, hand: p.hand.length + p.played.length, played: []}
           return (this.state.phase === Phase.Initiative || (this.state.sortedPlayers !== undefined && this.state.sortedPlayers.find(sp => sp === p.color) === undefined)) 
-            ? playerTEST 
+            ? newPlayer
             : {...p, deck: p.deck.length, hand: p.hand.length}
         }
       })
