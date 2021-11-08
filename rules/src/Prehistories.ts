@@ -54,7 +54,6 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
 
       game.huntingBoard = setupHuntingBoard(game)
       game.goals = setupGoals(game, arg.isExpertGame)
-      setupHandPlayer(game.players)
       super(game)
     } else {
       super(arg)
@@ -316,16 +315,19 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
 }
 
 function setupPlayers(players: PrehistoriesPlayerOptions[]): PlayerState[] {
-  return players.map((options) => ({
-    color: options.id,
-    cave: [],
-    totemTokens: 8,
-    deck: setupDeck(options.id),
-    discard: [],
-    hand: [],
-    played: [],
-    variableGoalsMade: []
-  }))
+  return players.map((options) => {
+    const deck = setupDeck(options.id)
+    return ({
+      color: options.id,
+      cave: [],
+      totemTokens: 8,
+      deck,
+      discard: [],
+      hand: deck.splice(0, 3),
+      played: [],
+      variableGoalsMade: []
+    })
+  })
 }
 
 function setupGoals(game: GameState, isExpertGame: boolean): number[] {
@@ -349,14 +351,6 @@ function setupHuntingBoard(game: GameState): number[] {
   } else {
     return ([game.tilesDeck[0].pop()!, game.tilesDeck[0].pop()!, game.tilesDeck[1].pop()!, game.tilesDeck[1].pop()!, game.tilesDeck[2].pop()!, game.tilesDeck[3].pop()!, game.tilesDeck[4].pop()!])
   }
-}
-
-function setupHandPlayer(players: PlayerState[]): void {
-  players.forEach(p => {
-    for (let i = 0; i < 3; i++) {
-      p.hand.push(p.deck.pop()!)
-    }
-  })
 }
 
 function getCardsToDraw(player: PlayerState): number[] {
