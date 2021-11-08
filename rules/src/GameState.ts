@@ -1,13 +1,14 @@
 import PlayerColor from './PlayerColor'
 import PlayerState from './PlayerState'
 import Phase from './types/Phase'
+import Tile from "./material/Tile";
 
 type GameState = {
   players: PlayerState[],
-  tilesDeck : number[][],
-  huntingBoard : (number|null)[],
-  goals : number[],
-  phase? : Phase, 
+  tilesDeck: Tile[][],
+  huntingBoard: (Tile | null)[],
+  goals: number[],
+  phase?: Phase,
   sortedPlayers?: PlayerColor[]
 }
 

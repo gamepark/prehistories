@@ -92,7 +92,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
     } else if (player.hunting) {
       switch (player.hunting.huntPhase) {
         case HuntPhase.Hunt : {
-          const playPolyominoMoves: (PlaceTile | EndTurn)[] = []
+          const moves: (PlaceTile | EndTurn)[] = []
           const cave = getCavePlacementSpaces(player)
           for (let huntSpot = 0; huntSpot < this.state.huntingBoard.length; huntSpot++) {
             const tile = this.state.huntingBoard[huntSpot]
@@ -103,14 +103,14 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
               for (let y = 0; y < cavesSize; y++) {
                 for (const side of sides) {
                   if (canPlaceTile(cave, {tile, side, x, y})) {
-                    playPolyominoMoves.push(placeTileMove(huntSpot, side, {x, y}))
+                    moves.push(placeTileMove(huntSpot, side, {x, y}))
                   }
                 }
               }
             }
           }
           const endTurnMove: EndTurn[] = [{type: MoveType.EndTurn}]
-          return playPolyominoMoves.concat(endTurnMove)
+          return moves.concat(endTurnMove)
         }
         case HuntPhase.Pay : {
           const spendHuntersAndValidateMoves: (SpendHunter | ValidateSpendedHunters)[] = []
