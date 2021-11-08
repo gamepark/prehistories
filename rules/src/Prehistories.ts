@@ -354,11 +354,7 @@ function setupHuntingBoard(game: GameState): number[] {
 }
 
 function getCardsToDraw(player: PlayerState): number[] {
-  const result: number[] = []
-  for (let i = 0; i < howManyCardToDraw(player); i++) {
-    result.push(player.deck[player.deck.length - 1 - i])
-  }
-  return result
+  return player.deck.slice(0, howManyCardToDraw(player))
 }
 
 export function howManyCardToDraw(player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView): number {

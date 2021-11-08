@@ -19,7 +19,7 @@ export default ShuffleDiscardPile
 
 export function shuffleDiscardPile(state: GameState, move: ShuffleDiscardPile) {
   const player = getFirstOfSortedPlayer(state) as PlayerState         // A way to remove the cast with overloading ?
-  player.deck = move.shuffledCards.concat(player.deck)
+  player.deck.push(...move.shuffledCards)
   player.discard = []
 }
 

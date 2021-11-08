@@ -22,9 +22,7 @@ export type DrawXCardsView = {
 
 export function drawXCards(state:GameState){
     const player = getFirstOfSortedPlayer(state) as PlayerState
-    for (let i=0;i<howManyCardToDraw(player);i++){
-        player.hand.push(player.deck.pop()!)
-    }
+    player.hand.push(...player.deck.splice(0, howManyCardToDraw(player)))
     player.hunting!.huntPhase = HuntPhase.ChangeActivePlayer
 }
 
