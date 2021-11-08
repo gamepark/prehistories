@@ -15,7 +15,7 @@ import {useAnimation, useAnimations, usePlay, usePlayerId, useSound} from "@game
 import Phase, {HuntPhase} from "@gamepark/prehistories/types/Phase";
 import {Hand, Picture} from "@gamepark/react-components";
 import Move from "@gamepark/prehistories/moves/Move";
-import {isPlayHuntCard, PlayHuntCardView} from "@gamepark/prehistories/moves/PlayHuntCard";
+import {isPlayHuntCardView, PlayHuntCardView} from "@gamepark/prehistories/moves/PlayHuntCard";
 import {isRevealHuntCards, RevealHuntCardsView} from "@gamepark/prehistories/moves/RevealHuntCards";
 import SpendHunter, {isSpendHunter} from "@gamepark/prehistories/moves/SpendHunter";
 import {isShuffleDiscardPile, ShuffleDiscardPileView} from "@gamepark/prehistories/moves/ShuffleDiscardPile";
@@ -47,7 +47,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
     const clickSound = useSound(ButtonClickSound)
     clickSound.volume = 0.5
 
-    const playHuntCardAnimation = useAnimation<PlayHuntCardView>(animation => isPlayHuntCard(animation.move))
+    const playHuntCardAnimation = useAnimation<PlayHuntCardView>(animation => isPlayHuntCardView(animation.move))
     const revealCardsAnimation = useAnimation<RevealHuntCardsView>(animation => isRevealHuntCards(animation.move))
     const spendCardAnimations = useAnimations<SpendHunter>(animation => isSpendHunter(animation.move))
     const shuffleDiscardAnimation = useAnimation<ShuffleDiscardPileView>(animation => isShuffleDiscardPile(animation.move))

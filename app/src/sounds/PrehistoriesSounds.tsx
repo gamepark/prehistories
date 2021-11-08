@@ -11,7 +11,7 @@ import cardMoveSound from "./cardMove.mp3";
 import moveTileSound from "./moveTile.mp3";
 import permObjectiveSound from "./permObjective.mp3";
 import varObjectiveSound from "./varObjective.mp3";
-import PlayHuntCard, { isPlayHuntCard } from "@gamepark/prehistories/moves/PlayHuntCard"
+import PlayHuntCard, { isPlayHuntCardView } from "@gamepark/prehistories/moves/PlayHuntCard"
 
 
 
@@ -26,7 +26,7 @@ const PrehistoriesSounds : FC<Props> = ({audioLoader}) => {
     const playTile = useAnimation<PlaceTile>(animation => isPlaceTile(animation.move))
     const permObjective = useAnimation<ResolvePermanentObjectives>(animation => isResolvePermanentObjectives(animation.move))
     const varObjective = useAnimation<ResolveVariableObjectives>(animation => isResolveVariableObjectives(animation.move))
-    const playCard = useAnimation<PlayHuntCard>(animation => isPlayHuntCard(animation.move))
+    const playCard = useAnimation<PlayHuntCard>(animation => isPlayHuntCardView(animation.move))
 
     useEffect(() => {
         if (revealCardsAnimation || drawCards) {
