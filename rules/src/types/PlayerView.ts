@@ -3,52 +3,42 @@ import GameView from "../GameView";
 import PlayerColor from "../PlayerColor";
 import PlayerState from "../PlayerState";
 
-export type PlayerView = Omit<PlayerState, 'deck'|'hand'|'played'> & {
+export type PlayerView = Omit<PlayerState, 'deck'|'hand'> & {
     hand:number
     deck:number
-    played:number
-}
-
-export type PlayerHuntView = Omit<PlayerState, 'deck'|'hand'> & {
-    deck:number
-    hand:number
 }
 
 export type PlayerViewSelf = Omit<PlayerState, 'deck'> & {
     deck:number
 }
 
-export function isPlayerState(state:PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView):state is PlayerState {
+export function isPlayerState(state:PlayerState | PlayerView | PlayerViewSelf):state is PlayerState {
     return Array.isArray(state.deck)
 }
 
-export function isNotPlayerState(state:PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView):state is (PlayerView | PlayerViewSelf | PlayerHuntView) {
+export function isNotPlayerState(state:PlayerState | PlayerView | PlayerViewSelf):state is (PlayerView | PlayerViewSelf) {
     return typeof state.deck === 'number'
 }
 
-export function isPlayerViewSelf(state:PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView):state is PlayerViewSelf {
+export function isPlayerViewSelf(state:PlayerState | PlayerView | PlayerViewSelf):state is PlayerViewSelf {
     return Array.isArray(state.hand) && typeof state.deck === 'number' && Array.isArray(state.played)
 }
 
-export function isPlayerHuntView(state:PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView):state is PlayerHuntView {
-    return typeof state.hand === 'number' && typeof state.deck === 'number' && Array.isArray(state.played)
-}
-
-export function isPlayerView(state:PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView):state is PlayerView {
-    return typeof state.played === 'number'
+export function isPlayerView(state:PlayerState | PlayerView | PlayerViewSelf):state is PlayerView {
+    return typeof state.hand === 'number'
 }
 
 export function getPlayers(state:GameState | GameView){
-    return (state.players as (PlayerState | PlayerView | PlayerViewSelf |PlayerHuntView)[])
+    return (state.players as (PlayerState | PlayerView | PlayerViewSelf)[])
 }
 
 export function getFirstOfSortedPlayer(state: GameState): PlayerState
-export function getFirstOfSortedPlayer(state: GameView): PlayerView | PlayerViewSelf | PlayerHuntView
-export function getFirstOfSortedPlayer(state: GameState | GameView): PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView
-export function getFirstOfSortedPlayer(state: GameState | GameView): PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView {
+export function getFirstOfSortedPlayer(state: GameView): PlayerView | PlayerViewSelf
+export function getFirstOfSortedPlayer(state: GameState | GameView): PlayerState | PlayerView | PlayerViewSelf
+export function getFirstOfSortedPlayer(state: GameState | GameView): PlayerState | PlayerView | PlayerViewSelf {
   return getPlayers(state).find(p => p.color === state.sortedPlayers![0])!
 }
 
-export function getPlayerWithColor(state:GameState | GameView, playerId:PlayerColor):PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView{
+export function getPlayerWithColor(state:GameState | GameView, playerId:PlayerColor):PlayerState | PlayerView | PlayerViewSelf{
     return getPlayers(state).find(p => p.color === playerId)!
 }

@@ -2,7 +2,7 @@ import GameState from "../GameState";
 import GameView from "../GameView";
 import {goals} from "../material/Goals";
 import PlayerState from "../PlayerState";
-import {getFirstOfSortedPlayer, PlayerHuntView, PlayerView, PlayerViewSelf} from "../types/PlayerView";
+import {getFirstOfSortedPlayer, PlayerView, PlayerViewSelf} from "../types/PlayerView";
 import Move from "./Move";
 import MoveType from "./MoveType";
 
@@ -23,7 +23,7 @@ export function resolveVariableObjectives(state:GameState | GameView, move:Resol
     
 }
 
-export function checkVariableObjectives(state:GameState | GameView, player:PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView):(false | [number, number]){
+export function checkVariableObjectives(state:GameState | GameView, player:PlayerState | PlayerView | PlayerViewSelf):(false | [number, number]){
     for(const goal of state.goals){
         if (!isPlayerAlreadyCompleteObjective(player, goal) && goals[goal].rule(player)){
             const rewardForFirstPlayer = anyPlayerCompleteObjective(goal, state.players) ? 0 : 1
@@ -33,11 +33,11 @@ export function checkVariableObjectives(state:GameState | GameView, player:Playe
     return false
 }
 
-function anyPlayerCompleteObjective(goal:number, players:(PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView)[]):boolean{
+function anyPlayerCompleteObjective(goal:number, players:(PlayerState | PlayerView | PlayerViewSelf)[]):boolean{
     return players.filter(p => p.variableGoalsMade.find(g => g === goal) !== undefined).length > 0
 }
 
-function isPlayerAlreadyCompleteObjective(player:PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView, goal:number):boolean{
+function isPlayerAlreadyCompleteObjective(player:PlayerState | PlayerView | PlayerViewSelf, goal:number):boolean{
     return player.variableGoalsMade.find(g => g === goal) !== undefined
 }
 

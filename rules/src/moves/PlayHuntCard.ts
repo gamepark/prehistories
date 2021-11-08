@@ -32,10 +32,6 @@ function playerPlayHuntCard(player: PlayerState | PlayerViewSelf, move: PlayHunt
 export function playHuntCardInView(state: GameView, move: PlayHuntCardView) {
   if (isPlayHuntCard(move)) {
     playerPlayHuntCard(state.players.find(isPlayerViewSelf)!, move)
-  } else {
-    const player = getPlayers(state).filter(isPlayerView).find(p => p.color === move.playerId)!
-    player.hand--
-    player.played++
   }
 }
 

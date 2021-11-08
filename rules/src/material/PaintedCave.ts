@@ -1,5 +1,5 @@
 import PlayerState from "../PlayerState";
-import {PlayerHuntView, PlayerView, PlayerViewSelf} from "../types/PlayerView";
+import {PlayerView, PlayerViewSelf} from "../types/PlayerView";
 import caves, {Space} from "./Caves";
 import PlacedTile, {getPlacedTileCoordinates} from "../types/PlacedTile";
 import Tile, {isLegendaryAnimalTile} from "./Tile";
@@ -10,7 +10,7 @@ export enum Painting {
   Legendary1, Legendary2, Legendary3, Legendary4, Legendary5
 }
 
-export function getPaintedCave(player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView): Painting[][] {
+export function getPaintedCave(player: PlayerState | PlayerView | PlayerViewSelf): Painting[][] {
   const cave: Painting[][] = caves[player.color].map(row =>
     row.map(space => {
       switch (space) {

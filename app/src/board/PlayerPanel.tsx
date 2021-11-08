@@ -4,7 +4,7 @@ import { css, keyframes } from "@emotion/react";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import { getPlayerName } from "@gamepark/prehistories/PrehistoriesOptions";
 import Phase from "@gamepark/prehistories/types/Phase";
-import { PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
+import { PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
 import { PlayerTimer, usePlayer } from "@gamepark/react-client";
 import { Picture } from "@gamepark/react-components";
 import { FC, HTMLAttributes } from "react";
@@ -14,7 +14,7 @@ import Images, { bluePowerBanners, greenPowerBanners, redPowerBanners, whitePowe
 import AvatarPanel from "./AvatarPanel";
 
 type Props = {
-    player: PlayerView | PlayerViewSelf | PlayerHuntView,
+    player: PlayerView | PlayerViewSelf,
     phase?:Phase
     position:number
     huntOrder?:PlayerColor[] 

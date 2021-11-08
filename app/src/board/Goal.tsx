@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css, keyframes } from "@emotion/react"
-import { PlayerHuntView, PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView"
+import { PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView"
 import { Picture } from "@gamepark/react-components"
 import { FC, HTMLAttributes } from "react"
 import { useTranslation } from "react-i18next/"
@@ -10,7 +10,7 @@ import { getTotem } from "./PlayerPanel"
 
 type Props = {
     goal:number
-    players:(PlayerView | PlayerViewSelf | PlayerHuntView)[]
+    players:(PlayerView | PlayerViewSelf)[]
 } & HTMLAttributes<HTMLDivElement>
 
 const Goal : FC<Props> = ({goal, players, ...props}) => {

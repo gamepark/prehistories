@@ -1,7 +1,7 @@
 import GameState from "../GameState";
 import GameView from "../GameView";
 import PlayerState from "../PlayerState";
-import { getFirstOfSortedPlayer, getPlayers, isPlayerHuntView, isPlayerViewSelf, PlayerViewSelf } from "../types/PlayerView";
+import { getFirstOfSortedPlayer, getPlayers, isPlayerView, isPlayerViewSelf, PlayerViewSelf } from "../types/PlayerView";
 import Move from "./Move";
 import MoveType from "./MoveType";
 
@@ -25,9 +25,9 @@ export function takeBackPlayedCardsInView(state:GameView, move:TakeBackPlayedCar
     if (!isTakeBackPlayedCardsView(move)){
         playerTakeBackPlayedCards(state.players.find(isPlayerViewSelf)!)
     } else {
-        const player = getPlayers(state).filter(isPlayerHuntView).find(p => p.color === state.sortedPlayers![0])!
+        const player = getPlayers(state).filter(isPlayerView).find(p => p.color === state.sortedPlayers![0])!
         player.hand += move.playedLength
-        getFirstOfSortedPlayer(state).played = 0
+        getFirstOfSortedPlayer(state).played = []
     }
 }
 

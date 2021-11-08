@@ -1,10 +1,9 @@
 import GameState from './GameState'
 import PlayerColor from './PlayerColor'
-import PlayerState from './PlayerState'
-import { PlayerHuntView, PlayerView, PlayerViewSelf } from './types/PlayerView'
+import { PlayerView, PlayerViewSelf } from './types/PlayerView'
 
 type GameView = Omit<GameState, 'players' | 'tilesDeck'> & {
-  players: (PlayerView | PlayerViewSelf |PlayerHuntView)[]
+  players: (PlayerView | PlayerViewSelf)[]
   tilesDeck: number[]
   caveDisplayed:PlayerColor
   huntersSelected?:number[]

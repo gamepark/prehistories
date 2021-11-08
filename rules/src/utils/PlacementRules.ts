@@ -1,5 +1,5 @@
 import PlayerState from "../PlayerState";
-import {PlayerHuntView, PlayerView, PlayerViewSelf} from "../types/PlayerView";
+import {PlayerView, PlayerViewSelf} from "../types/PlayerView";
 import caves, {Space} from "../material/Caves";
 import PlacedTile, {getPlacedTileAdjacentCoordinates, getPlacedTileCoordinates} from "../types/PlacedTile";
 import {getAdjacentCoordinates} from "../types/Coordinates";
@@ -8,7 +8,7 @@ export enum PlacementSpace {
   BLOCKED, FREE, CONNECTED
 }
 
-export function getCavePlacementSpaces(player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView): PlacementSpace[][] {
+export function getCavePlacementSpaces(player: PlayerState | PlayerView | PlayerViewSelf): PlacementSpace[][] {
   const cave = caves[player.color]
   const placementSpaces: PlacementSpace[][] = cave.map(row => row.map(space =>
     space === Space.Hunter || space === Space.TotemAnimal ? PlacementSpace.BLOCKED : PlacementSpace.FREE

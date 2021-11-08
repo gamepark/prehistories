@@ -6,7 +6,7 @@ import Cave from "./Cave";
 import Card from './Card'
 import {getColoredDeck} from "@gamepark/prehistories/material/Hunters";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
-import {isPlayerView, isPlayerViewSelf, PlayerHuntView, PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
+import {isPlayerView, isPlayerViewSelf, PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
 import {useDrop} from "react-dnd";
 import CardInHand, {isCardInHand} from "@gamepark/prehistories/types/appTypes/CardInHand";
 import CardPlayed from "@gamepark/prehistories/types/appTypes/CardPlayed";
@@ -28,9 +28,9 @@ import {centerContainer, setPercentDimension, toAbsolute, toFullSize} from "../u
 import ButtonsTab from "./ButtonsTab";
 
 type Props = {
-    player:PlayerView | PlayerViewSelf | PlayerHuntView,
+    player:PlayerView | PlayerViewSelf,
     phase:Phase | undefined,
-    players:(PlayerView | PlayerViewSelf | PlayerHuntView)[]
+    players:(PlayerView | PlayerViewSelf)[]
     isActiveHuntingPlayer:boolean
     goals:number[]
     selectedHunters:number[]|undefined
@@ -47,7 +47,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
     const clickSound = useSound(ButtonClickSound)
     clickSound.volume = 0.5
 
-    const playHuntCardAnimation = useAnimation<PlayHuntCardView>(animation => isPlayHuntCardView(animation.move))
+    const playHuntCardAnimation = useAnimation<PlayHuntCardView>(animation => isPlayHuntCardView(animation.move) && animation.move.playerId === playerId)
     const revealCardsAnimation = useAnimation<RevealHuntCardsView>(animation => isRevealHuntCards(animation.move))
     const spendCardAnimations = useAnimations<SpendHunter>(animation => isSpendHunter(animation.move))
     const shuffleDiscardAnimation = useAnimation<ShuffleDiscardPileView>(animation => isShuffleDiscardPile(animation.move))
@@ -144,7 +144,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
 
                         : typeof playerHand === 'number' && [...Array(playerHand)].map((_, i) =>
                             <Card key={i}
-                            css = {[smoothAngles,playHuntCardAnimation && i === 0 && playHuntCardAnimationStyle(playHuntCardAnimation.duration, (player.played as number)), drawXCardsAnimation && isDrawXCardsView(drawXCardsAnimation.move) && i >= (playerHand as number) - drawXCardsAnimation.move.cards && drawXCardsAnimStyle(drawXCardsAnimation.duration, true) ]}
+                            css = {[smoothAngles]}
                             color={player.color}
                             />
                         )
@@ -168,7 +168,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
 
             <span css={[toAbsolute, centerContainer, spanDropDisplay(canDropPlayed)]}>{t("Drag Here")}</span>
 
-            {Array.isArray(player.played) ? player.played.map((card, index) => {
+            {Array.isArray(player.played) && player.played.map((card, index) => {
                 const spendCardAnimation = spendCardAnimations.find(a => a.move.card === card)
                 return <Card key={index}
                 css = {[toAbsolute, setPercentDimension(52,30), cardPlayedPosition(index), smoothAngles,
@@ -182,14 +182,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
 
                 />
 
-           } ) : [...Array(player.played)].map((_, i) =>
-                <Card key={i}
-                 css = {[toAbsolute, setPercentDimension(52,30), cardPlayedPosition(i), smoothAngles]}
-                 color={player.color}
-                 power={revealCardsAnimation ? getColoredDeck(player.color)[revealCardsAnimation.move.cardsPlayed.find(obj => obj.color === player.color)!.cards[i]].power : undefined}
-                 speed={revealCardsAnimation ? getColoredDeck(player.color)[revealCardsAnimation.move.cardsPlayed.find(obj => obj.color === player.color)!.cards[i]].speed : undefined}
-                />
-            )}
+           }) }
 
         </div>
 

@@ -2,7 +2,7 @@ import PlayerState from "../PlayerState";
 import {getAdjacentCoordinates} from "../types/Coordinates";
 import Face from "../types/Face";
 import Goal from "../types/Goal";
-import {PlayerHuntView, PlayerView, PlayerViewSelf} from "../types/PlayerView";
+import {PlayerView, PlayerViewSelf} from "../types/PlayerView";
 import {
   getPaintedCave,
   hasGroupOfIdenticalAnimals,
@@ -22,7 +22,7 @@ const GoalA1: Goal = {
   text: 'goalA1',
   hint: 'hintA1',
   value: 2,
-  rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
+  rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
     const cave = getPaintedCave(player)
     for (let y = 0; y < cave.length; y++) {
       for (let x = 0; x < cave[y].length; x++) {
@@ -42,7 +42,7 @@ const GoalA2: Goal = {
   text: 'goalA2',
   hint: 'hintA2',
   value: 2,
-  rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
+  rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
     const cave = getPaintedCave(player)
     for (let y = 2; y <= 4; y++) {
       for (let x = 2; x <= 4; x++) {
@@ -60,7 +60,7 @@ const GoalA3: Goal = {
   text: 'goalA3',
   hint: 'hintA3',
   value: 2,
-  rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
+  rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
     const cave = getPaintedCave(player)
     for (let x = 0; x < cavesSize; x++) {
       const column = new Set<Painting>()
@@ -80,7 +80,7 @@ const GoalA4: Goal = {
   text: 'goalA4',
   hint: 'hintA4',
   value: 2,
-  rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => hasGroupOfIdenticalAnimals(getPaintedCave(player), 8)
+  rule: (player: PlayerState | PlayerView | PlayerViewSelf) => hasGroupOfIdenticalAnimals(getPaintedCave(player), 8)
 }
 
 const GoalA5: Goal = {
@@ -88,7 +88,7 @@ const GoalA5: Goal = {
   text: 'goalA5',
   hint: 'hintA5',
   value: 2,
-  rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
+  rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
     return isSpaceSurrounded(getPaintedCave(player), getHunterCoordinates(player.color))
   }
 }
@@ -98,7 +98,7 @@ const GoalA6: Goal = {
   text: 'goalA6',
   hint: 'hintA6',
   value: 2,
-  rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
+  rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
     const cave = getPaintedCave(player)
     for (let x = 0; x < cavesSize; x++) {
       const column = {[Mammoth]: 0, [Buffalo]: 0, [Fish]: 0, [Boar]: 0, [Ibex]: 0}
@@ -120,7 +120,7 @@ const GoalA7: Goal = {
   text: 'goalA7',
   hint: 'hintA7',
   value: 2,
-  rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
+  rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
     const cave = getPaintedCave(player)
     return cave[0][0] !== Painting.Empty && cave[cavesSize - 1][cavesSize - 1] !== Painting.Empty
   }
@@ -131,7 +131,7 @@ const GoalA8: Goal = {
   text: 'goalA8',
   hint: 'hintA8',
   value: 2,
-  rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
+  rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
     let count = 0
     for (const {tile} of player.cave) {
       if (tile === Tile.Ibex1 || tile === Tile.Boar1 || tile === Tile.Fish1 || tile === Tile.Mammoth1 || tile === Tile.Buffalo1) {
@@ -149,7 +149,7 @@ const GoalA9: Goal = {
   text: 'goalA9',
   hint: 'hintA9',
   value: 2,
-  rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
+  rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
     const cave = getPaintedCave(player)
     return player.cave.some(placedTile => isLegendaryTileSurroundedByPaintings(cave, placedTile))
   }
@@ -160,7 +160,7 @@ const GoalB1: Goal = {
   text: 'goalB1',
   hint: 'hintB1',
   value: 3,
-  rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
+  rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
     const cave = getPaintedCave(player)
     return getTotemCoordinates(player.color).every(totem => isSpaceSurrounded(cave, totem))
   }
@@ -171,7 +171,7 @@ const GoalB2: Goal = {
   text: 'goalB2',
   hint: 'hintB2',
   value: 2,
-  rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
+  rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
     const cave = getPaintedCave(player)
     return isColumnPainted(cave, cavesSize - 1)
   }
@@ -182,7 +182,7 @@ const GoalB3: Goal = {
   text: 'goalB3',
   hint: 'hintB3',
   value: 2,
-  rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
+  rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
     return getPaintedCave(player).some(line => new Set(line.filter(isAnimalPainting)).size >= 5)
   }
 }
@@ -192,7 +192,7 @@ const GoalB4: Goal = {
   text: 'goalB4',
   hint: 'hintB4',
   value: 3,
-  rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => hasGroupOfIdenticalAnimals(getPaintedCave(player), 10)
+  rule: (player: PlayerState | PlayerView | PlayerViewSelf) => hasGroupOfIdenticalAnimals(getPaintedCave(player), 10)
 }
 
 const GoalB5: Goal = {
@@ -200,7 +200,7 @@ const GoalB5: Goal = {
   text: 'goalB5',
   hint: 'hintB5',
   value: 2,
-  rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
+  rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
     const cave = getPaintedCave(player)
     const {x, y} = getHunterCoordinates(player.color)
     const paintings = [cave[y][x - 1], cave[y - 1][x], cave[y][x + 1], cave[y + 1][x]]
@@ -213,7 +213,7 @@ const GoalB6: Goal = {
   text: 'goalB6',
   hint: 'hintB6',
   value: 2,
-  rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
+  rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
     const cave = getPaintedCave(player)
     for (const line of cave) {
       const count = {[Mammoth]: 0, [Buffalo]: 0, [Fish]: 0, [Boar]: 0, [Ibex]: 0}
@@ -234,7 +234,7 @@ const GoalB7: Goal = {
   text: 'goalB7',
   hint: 'hintB7',
   value: 3,
-  rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
+  rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
     const cave = getPaintedCave(player)
     return cave[0][0] !== Painting.Empty && cave[0][cavesSize - 1] !== Painting.Empty
       && cave[cavesSize - 1][0] !== Painting.Empty && cave[cavesSize - 1][cavesSize - 1] !== Painting.Empty
@@ -246,7 +246,7 @@ const GoalB8: Goal = {
   text: 'goalB8',
   hint: 'hintB8',
   value: 2,
-  rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
+  rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
     return (player.hunting?.tilesHunted ?? 0) >= 3
   }
 }
@@ -256,7 +256,7 @@ const GoalB9: Goal = {
   text: 'goalB9',
   hint: 'hintB9',
   value: 2,
-  rule: (player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView) => {
+  rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
     const legendaryTiles = player.cave.filter(placedTile => isLegendaryAnimalTile(placedTile.tile))
     for (const {x, y} of legendaryTiles) {
       if (legendaryTiles.some(tile => ((tile.x === x + 2 && tile.y === y) || (tile.y === y + 2 && tile.x === x)))) {

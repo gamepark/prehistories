@@ -3,7 +3,7 @@ import GameView from "../GameView";
 import PlayerColor from "../PlayerColor";
 import PlayerState from "../PlayerState";
 import Phase, { HuntPhase } from "../types/Phase";
-import { getFirstOfSortedPlayer, PlayerHuntView, PlayerViewSelf } from "../types/PlayerView";
+import { getFirstOfSortedPlayer, isPlayerViewSelf, PlayerViewSelf } from "../types/PlayerView";
 import teamPower from "../utils/teamPower";
 import teamSpeed from "../utils/teamSpeed";
 import Move from "./Move";
@@ -32,10 +32,13 @@ export function revealHuntCards(state:GameState){
 export function revealHuntCardsInView(state:GameView, move:RevealHuntCardsView){
     state.players.forEach(p => {
         p.played = move.cardsPlayed.find(obj => obj.color === p.color)!.cards
+        if(!isPlayerViewSelf(p)){
+            p.hand -= p.played.length
+        }
         delete p.isReady
     })
     state.phase = Phase.Hunt
-    state.sortedPlayers = sortPlayers(state.players as (PlayerViewSelf | PlayerHuntView)[]) ;
+    state.sortedPlayers = sortPlayers(state.players as PlayerViewSelf[]) ;
     getFirstOfSortedPlayer(state).hunting = {huntPhase : HuntPhase.Hunt,huntSpotTakenLevels:undefined,injuries:0,tilesHunted:0}
 }
 
@@ -43,8 +46,8 @@ export function isRevealHuntCards(move: Move | MoveView):move is RevealHuntCards
     return move.type === MoveType.RevealHuntCards
 }
 
-function sortPlayers(players:PlayerState[] | (PlayerViewSelf | PlayerHuntView)[]):PlayerColor[]{
-    const result:(PlayerState | PlayerViewSelf | PlayerHuntView)[] = []
+function sortPlayers(players:PlayerState[] | PlayerViewSelf[]):PlayerColor[]{
+    const result:(PlayerState | PlayerViewSelf)[] = []
     for (const elem of players){
         result.push(elem)
     }

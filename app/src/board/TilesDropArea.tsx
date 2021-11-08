@@ -2,7 +2,7 @@
 import Coordinates from "@gamepark/prehistories/types/Coordinates"
 import {HTMLAttributes, useCallback, useMemo, useRef} from "react"
 import {DropTargetMonitor, useDrop, XYCoord} from "react-dnd"
-import {PlayerHuntView, PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
+import {PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
 import {css} from "@emotion/react"
 import useEfficientDragLayer from '@gamepark/react-components/dist/Draggable/useEfficientDragLayer'
 import {useSound} from "@gamepark/react-client"
@@ -17,7 +17,7 @@ import {cavesSize} from "@gamepark/prehistories/material/Caves";
 
 
 type Props = {
-  player: PlayerView | PlayerViewSelf | PlayerHuntView
+  player: PlayerView | PlayerViewSelf
 } & HTMLAttributes<HTMLDivElement>
 
 export default function TilesDropArea({player, ...props}: Props) {

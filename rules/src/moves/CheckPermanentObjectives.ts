@@ -2,7 +2,7 @@ import GameState from "../GameState";
 import GameView from "../GameView";
 import PlayerState from "../PlayerState";
 import {HuntPhase} from "../types/Phase";
-import {getFirstOfSortedPlayer, PlayerHuntView, PlayerView, PlayerViewSelf} from "../types/PlayerView";
+import {getFirstOfSortedPlayer, PlayerView, PlayerViewSelf} from "../types/PlayerView";
 import Move from "./Move";
 import MoveType from "./MoveType";
 import {getPaintedCave, isColumnPainted, isLinePainted} from "../material/PaintedCave";
@@ -22,7 +22,7 @@ export function resolvePermanentObjectives(state: GameState | GameView, move: Re
   player.hunting!.huntPhase = HuntPhase.CheckVariableObjectives
 }
 
-export function checkPermanentObjectives(player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView): [number[], number[], boolean] {
+export function checkPermanentObjectives(player: PlayerState | PlayerView | PlayerViewSelf): [number[], number[], boolean] {
   const completedLines: number[] = [], completedColumns: number[] = []
   const cave = getPaintedCave(player)
   const lastTilePlayed = player.cave[player.cave.length - 1]

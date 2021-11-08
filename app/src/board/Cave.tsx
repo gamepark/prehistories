@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import {css} from "@emotion/react";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
-import {PlayerHuntView, PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
+import {PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
 import {FC} from "react";
 import {caveBorder, caveLeft, caveTop, squareSize} from "../utils/styles";
 import Images from "../utils/Images";
@@ -10,7 +10,7 @@ import TilesDropArea from "./TilesDropArea";
 import {usePlayerId} from "@gamepark/react-client";
 
 type Props = {
-  player: PlayerView | PlayerViewSelf | PlayerHuntView
+  player: PlayerView | PlayerViewSelf
 }
 
 const Cave: FC<Props> = ({player}) => {

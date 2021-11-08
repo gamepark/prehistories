@@ -32,10 +32,6 @@ export function drawXCardsInView(state:GameView, move:DrawXCards|DrawXCardsView)
         player.deck = Math.max(player.deck-howManyCardToDraw(player),0)
         player.hunting!.huntPhase = HuntPhase.ChangeActivePlayer
     } else {
-
-        if (getPlayers(state).filter(isPlayerView).find(p => p.color === state.sortedPlayers![0]) === undefined){
-            getPlayers(state).find(p => p.color === state.sortedPlayers![0])!.played = 0
-        }
         const player = getPlayers(state).filter(isPlayerView).find(p => p.color === state.sortedPlayers![0])!
         player.hand = Math.min(player.hand + howManyCardToDraw(player),player.hand+player.deck)
         player.deck = Math.max(player.deck -howManyCardToDraw(player),0)

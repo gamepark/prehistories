@@ -27,7 +27,7 @@ import PlayerColor from './PlayerColor'
 import PlayerState, {setupDeck} from './PlayerState'
 import {isGameOptions, PrehistoriesOptions, PrehistoriesPlayerOptions} from './PrehistoriesOptions'
 import Phase, {HuntPhase} from './types/Phase'
-import {PlayerHuntView, PlayerView, PlayerViewSelf} from './types/PlayerView'
+import {PlayerView, PlayerViewSelf} from './types/PlayerView'
 import getPowerLevels from './utils/powerLevels'
 import teamPower from './utils/teamPower'
 import {canPlaceTile, getCavePlacementSpaces} from "./utils/PlacementRules";
@@ -243,9 +243,10 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         if (this.state.phase === undefined || playerId === p.color) {
           return {...p, deck: p.deck.length}
         } else {
-          return (this.state.phase === Phase.Initiative || (this.state.sortedPlayers !== undefined && this.state.sortedPlayers.find(sp => sp === p.color) === undefined)) ? {
-            ...p, deck: p.deck.length, hand: p.hand.length, played: p.played.length
-          } : {...p, deck: p.deck.length, hand: p.hand.length}
+          const playerTEST:PlayerView = {...p, deck: p.deck.length, hand: p.hand.length + p.played.length, played: []}
+          return (this.state.phase === Phase.Initiative || (this.state.sortedPlayers !== undefined && this.state.sortedPlayers.find(sp => sp === p.color) === undefined)) 
+            ? playerTEST 
+            : {...p, deck: p.deck.length, hand: p.hand.length}
         }
       })
     }
@@ -352,11 +353,11 @@ function setupHuntingBoard(game: GameState): number[] {
   }
 }
 
-export function howManyCardToDraw(player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView): number {
+export function howManyCardToDraw(player: PlayerState | PlayerView | PlayerViewSelf): number {
   return player.hunting!.tilesHunted === undefined ? 3 : (player.hunting!.injuries === undefined ? 2 + areHandPrintsRecovered(player) : Math.max(0, 2 - player.hunting!.injuries) + areHandPrintsRecovered(player))
 }
 
-export function areHandPrintsRecovered(player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView): number {
+export function areHandPrintsRecovered(player: PlayerState | PlayerView | PlayerViewSelf): number {
   let result: number = 0
   if (player.hunting!.tilesHunted === undefined) {
     return result
