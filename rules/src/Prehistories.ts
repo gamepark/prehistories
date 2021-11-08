@@ -218,11 +218,10 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
               return {type: MoveType.TakeBackPlayedCards}
             } else {
               const cardsToDraw: number = howManyCardToDraw(player)
-              const canAndMustShuffleDiscard = player.deck.length < cardsToDraw && player.deck.length + player.discard.length >= cardsToDraw
-              if (canAndMustShuffleDiscard) {
+              if (player.deck.length < cardsToDraw && player.discard.length > 0) {
                 return {type: MoveType.ShuffleDiscardPile, shuffledCards: shuffle(player.discard)}
               } else {
-                return {type: MoveType.DrawXCards, cards: getCardsToDraw(player)}
+                return {type: MoveType.DrawXCards, cards: player.deck.slice(0, Math.max(howManyCardToDraw(player), player.deck.length))}
               }
             }
           }
@@ -351,10 +350,6 @@ function setupHuntingBoard(game: GameState): number[] {
   } else {
     return ([game.tilesDeck[0].pop()!, game.tilesDeck[0].pop()!, game.tilesDeck[1].pop()!, game.tilesDeck[1].pop()!, game.tilesDeck[2].pop()!, game.tilesDeck[3].pop()!, game.tilesDeck[4].pop()!])
   }
-}
-
-function getCardsToDraw(player: PlayerState): number[] {
-  return player.deck.slice(0, howManyCardToDraw(player))
 }
 
 export function howManyCardToDraw(player: PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView): number {
