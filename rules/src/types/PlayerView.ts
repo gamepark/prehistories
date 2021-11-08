@@ -1,6 +1,5 @@
-import { GameSpeed } from "@gamepark/rules-api";
 import GameState from "../GameState";
-import GameView, { isGameView } from "../GameView";
+import GameView from "../GameView";
 import PlayerColor from "../PlayerColor";
 import PlayerState from "../PlayerState";
 
@@ -39,14 +38,15 @@ export function isPlayerView(state:PlayerState | PlayerView | PlayerViewSelf | P
     return typeof state.played === 'number'
 }
 
-
-
 export function getPlayers(state:GameState | GameView){
-    return (state.players as (PlayerState | PlayerView | PlayerViewSelf |PlayerHuntView)[]) 
+    return (state.players as (PlayerState | PlayerView | PlayerViewSelf |PlayerHuntView)[])
 }
 
-export function getFirstOfSortedPlayer(state:GameState | GameView):PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView{
-    return getPlayers(state).find(p => p.color === state.sortedPlayers![0])! 
+export function getFirstOfSortedPlayer(state: GameState): PlayerState
+export function getFirstOfSortedPlayer(state: GameView): PlayerView | PlayerViewSelf | PlayerHuntView
+export function getFirstOfSortedPlayer(state: GameState | GameView): PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView
+export function getFirstOfSortedPlayer(state: GameState | GameView): PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView {
+  return getPlayers(state).find(p => p.color === state.sortedPlayers![0])!
 }
 
 export function getPlayerWithColor(state:GameState | GameView, playerId:PlayerColor):PlayerState | PlayerView | PlayerViewSelf | PlayerHuntView{

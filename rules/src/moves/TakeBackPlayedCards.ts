@@ -17,7 +17,7 @@ export type TakeBackPlayedCardsView = {
 }
 
 export function takeBackPlayedCards(state:GameState){
-    const player = getFirstOfSortedPlayer(state) as PlayerState         // A way to remove the cast with overloading ?
+    const player = getFirstOfSortedPlayer(state)
     playerTakeBackPlayedCards(player)
 }
 
@@ -27,7 +27,7 @@ export function takeBackPlayedCardsInView(state:GameView, move:TakeBackPlayedCar
     } else {
         const player = getPlayers(state).filter(isPlayerHuntView).find(p => p.color === state.sortedPlayers![0])!
         player.hand += move.playedLength
-        getFirstOfSortedPlayer(state).played = 0 
+        getFirstOfSortedPlayer(state).played = 0
     }
 }
 

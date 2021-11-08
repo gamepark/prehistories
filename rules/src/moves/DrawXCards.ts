@@ -1,9 +1,8 @@
 import GameState from "../GameState";
 import GameView from "../GameView";
-import PlayerState from "../PlayerState";
-import { howManyCardToDraw } from "../Prehistories";
-import { HuntPhase } from "../types/Phase";
-import { getFirstOfSortedPlayer, getPlayers, isPlayerView, isPlayerViewSelf } from "../types/PlayerView";
+import {howManyCardToDraw} from "../Prehistories";
+import {HuntPhase} from "../types/Phase";
+import {getFirstOfSortedPlayer, getPlayers, isPlayerView, isPlayerViewSelf} from "../types/PlayerView";
 import Move from "./Move";
 import MoveType from "./MoveType";
 import MoveView from "./MoveView";
@@ -21,7 +20,7 @@ export type DrawXCardsView = {
 }
 
 export function drawXCards(state:GameState){
-    const player = getFirstOfSortedPlayer(state) as PlayerState
+    const player = getFirstOfSortedPlayer(state)
     player.hand.push(...player.deck.splice(0, howManyCardToDraw(player)))
     player.hunting!.huntPhase = HuntPhase.ChangeActivePlayer
 }
