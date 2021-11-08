@@ -221,8 +221,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
               const cardsToDraw: number = howManyCardToDraw(player)
               const canAndMustShuffleDiscard = player.deck.length < cardsToDraw && player.deck.length + player.discard.length >= cardsToDraw
               if (canAndMustShuffleDiscard) {
-                const shuffledDiscardPile = shuffle(player.discard)
-                return {type: MoveType.ShuffleDiscardPile, newDeck: shuffledDiscardPile}
+                return {type: MoveType.ShuffleDiscardPile, shuffledCards: shuffle(player.discard)}
               } else {
                 return {type: MoveType.DrawXCards, cards: getCardsToDraw(player)}
               }
@@ -301,7 +300,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
           }
         }
       case MoveType.ShuffleDiscardPile:
-        return {type: MoveType.ShuffleDiscardPile, newDeckLength: move.newDeck.length}
+        return {type: MoveType.ShuffleDiscardPile}
       default :
         return move
     }
@@ -335,7 +334,7 @@ function setupGoals(game: GameState, isExpertGame: boolean): number[] {
   const numberOfGoals: number = game.players.length < 4 ? 4 : 5
   const goalCards = goalCardsShuffled.slice(0, numberOfGoals)
   if (isExpertGame) {
-    for (let i = 0; i < goalCards.length; i++){
+    for (let i = 0; i < goalCards.length; i++) {
       if (Math.random() < 0.5) {
         goalCards[i] = goalCards[i] + numberOfGoalCards // Moon side is the second part of the goals array
       }

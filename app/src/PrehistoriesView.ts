@@ -63,7 +63,7 @@ export default class PrehistoriesView implements Game<GameView, MoveView>, Undo<
       case MoveType.DrawXCards:
         return drawXCardsInView(this.state, move)
       case MoveType.ShuffleDiscardPile:
-        return shuffleDiscardPileInView(this.state, move)
+        return shuffleDiscardPileInView(this.state)
       case MoveType.ChangeActivePlayer:
         return changeActivePlayer(this.state)
       case MoveType.RefillHuntingBoard:
