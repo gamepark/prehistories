@@ -26,6 +26,7 @@ import MoveCardSound from "../sounds/cardMove.mp3"
 import ButtonClickSound from "../sounds/buttonClick.mp3"
 import {centerContainer, setPercentDimension, toAbsolute, toFullSize} from "../utils/styles";
 import ButtonsTab from "./ButtonsTab";
+import TakeBackPlayedCards, { isTakeBackPlayedCards, isTakeBackPlayedCardsView, TakeBackPlayedCardsView } from "@gamepark/prehistories/moves/TakeBackPlayedCards";
 
 type Props = {
     player:PlayerView | PlayerViewSelf,
@@ -52,13 +53,21 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
     const spendCardAnimations = useAnimations<SpendHunter>(animation => isSpendHunter(animation.move))
     const shuffleDiscardAnimation = useAnimation<ShuffleDiscardPileView>(animation => isShuffleDiscardPile(animation.move))
     const drawXCardsAnimation = useAnimation<DrawXCards|DrawXCardsView>(animation => isDrawXCards(animation.move))
+    const takeBackCardsAnimation = useAnimation<TakeBackPlayedCards|TakeBackPlayedCardsView>(animation => isTakeBackPlayedCards(animation.move))
     let playerHand:number|number[] = isPlayerViewSelf(player) ? [...player.hand] : player.hand
 
     if(drawXCardsAnimation){
-        if(!isDrawXCardsView(drawXCardsAnimation.move) && Array.isArray(playerHand)){
+        if (!isDrawXCardsView(drawXCardsAnimation.move) && Array.isArray(playerHand)){
             playerHand.push(...drawXCardsAnimation.move.cards)
-        } else if(isDrawXCardsView(drawXCardsAnimation.move) && typeof playerHand === 'number'){
+        } else if (isDrawXCardsView(drawXCardsAnimation.move) && typeof playerHand === 'number'){
             playerHand +=drawXCardsAnimation.move.cards
+        }
+    }
+    if(takeBackCardsAnimation){
+        if (!isTakeBackPlayedCardsView(takeBackCardsAnimation.move) && Array.isArray(playerHand)){
+            playerHand.push(...player.played)
+        } else if (isTakeBackPlayedCardsView(takeBackCardsAnimation.move) && typeof playerHand === 'number'){
+            playerHand += player.played.length
         }
     }
 
@@ -134,7 +143,9 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
                             color={player.color}
                             css={[smoothAngles,
                                   playHuntCardAnimation && index === 0 && playHuntCardAnimationStyle(playHuntCardAnimation.duration,player.played.length),
-                                  drawXCardsAnimation && !isDrawXCardsView(drawXCardsAnimation.move) && drawXCardsAnimation.move.cards.find(c => c === card) && drawXCardsAnimStyle(drawXCardsAnimation.duration, false)]}
+                                  drawXCardsAnimation && !isDrawXCardsView(drawXCardsAnimation.move) && drawXCardsAnimation.move.cards.find(c => c === card) && drawXCardsAnimStyle(drawXCardsAnimation.duration, false),
+                                  takeBackCardsAnimation && Array.isArray(playerHand) && index >= playerHand.length - player.played.length && takeBackCardsAnimationStyle(playerHand.length - index, takeBackCardsAnimation.duration)
+                                ]}
                             power={getColoredDeck(player.color)[card].power}
                             speed={getColoredDeck(player.color)[card].speed}
                             draggable={player.isReady !== true}
@@ -216,13 +227,22 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
 
 }
 
+const takeBackCardsKeyframes = (index:number) => keyframes`
+from{transform:translate(${38+Math.floor(index/3)*68.5 }%,${-195+(index%3)*43.5}%) scale(0.94);}
+to{}
+`
+
+const takeBackCardsAnimationStyle = (index:number, duration:number) => css`
+animation: ${takeBackCardsKeyframes(index)} ${duration}s ease-in-out;
+`
+
 const revealCardsKeyframes = (index:number) => keyframes`
 from{}
 to{transform:translate(${38+Math.floor(index/3)*68.5 }%,${-195+(index%3)*43.5}%) scale(0.94);}
 `
 
 const revealCardsAnimationStyle = (index:number, duration:number) => css`
-    animation: ${revealCardsKeyframes(index)} ${duration}s ease-in-out infinite;
+    animation: ${revealCardsKeyframes(index)} ${duration}s ease-in-out;
 `
 
 const drawHuntCardKeyframes = (isHidden:boolean) => keyframes`
