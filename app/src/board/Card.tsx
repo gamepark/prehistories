@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react"
+import { css, keyframes } from "@emotion/react"
 import PlayerColor from "@gamepark/prehistories/PlayerColor"
 import { FC, HTMLAttributes } from "react"
 import { BlueHunters, GreenHunters, RedHunters, WhiteHunters, YellowHunters } from "../utils/Images"
@@ -13,6 +13,7 @@ import { isRevealHuntCards, RevealHuntCardsView } from "@gamepark/prehistories/m
 import MoveCardSound from "../sounds/cardMove.mp3"
 import { placingBackground, toAbsolute, toFullSize } from "../utils/styles"
 import { getCardBack } from "../utils/getterFunctions"
+import TakeBackPlayedCards, { isTakeBackPlayedCards, isTakeBackPlayedCardsView, takeBackPlayedCards, TakeBackPlayedCardsView } from "@gamepark/prehistories/moves/TakeBackPlayedCards"
 
 type Props = {
     color:PlayerColor
@@ -21,9 +22,10 @@ type Props = {
     draggable?:boolean
     type?:'CardInHand' | 'CardPlayed'
     draggableItem?: CardInHand | CardPlayed
+    isTakeBackAnimation?:boolean
 } & Omit<HTMLAttributes<HTMLDivElement>, 'color'>
 
-const Card : FC<Props> = ({color, power, speed, draggable=false, type='', draggableItem, ...props}) => {
+const Card : FC<Props> = ({color, power, speed, draggable=false, type='', draggableItem, isTakeBackAnimation, ...props}) => {
 
     const play = usePlay<Move>()
     const moveCardSound = useSound(MoveCardSound)
@@ -35,6 +37,8 @@ const Card : FC<Props> = ({color, power, speed, draggable=false, type='', dragga
     }
 
     const revealCardsAnimation = useAnimation<RevealHuntCardsView>(animation => isRevealHuntCards(animation.move))
+    const takeBackCardsAnimation = useAnimation<TakeBackPlayedCards>(animation => isTakeBackPlayedCards(animation.move))
+
 
     return(
 
@@ -45,7 +49,7 @@ const Card : FC<Props> = ({color, power, speed, draggable=false, type='', dragga
                    {...props}
                    css={[toAbsolute, toFullSize, cardPosition]}>
 
-            <div css={[toAbsolute, toFullSize, cardPosition, faceToShow(power, revealCardsAnimation !== undefined, revealCardsAnimation?.duration ?? 0)]}>
+            <div css={[toAbsolute, toFullSize, cardPosition, faceToShow(power, revealCardsAnimation !== undefined, revealCardsAnimation?.duration ?? 0), isTakeBackAnimation && rotateAnimation(takeBackCardsAnimation?.duration ?? 0)]}>
 
                 <div css={[toAbsolute, toFullSize, cardPosition, front, placingBackground(getCardImage(color, power, speed), "cover")]}></div>
                 <div css={[toAbsolute, toFullSize, cardPosition, back, placingBackground(getCardImage(color, undefined, undefined), "cover")]}></div>
@@ -57,6 +61,15 @@ const Card : FC<Props> = ({color, power, speed, draggable=false, type='', dragga
     )
 
 }
+
+const rotateKeyframes = keyframes`
+    from{transform:rotateY(0deg);}
+    to{transform:rotateY(180deg);}
+`
+
+const rotateAnimation = (duration:number) => css`
+    animation:${rotateKeyframes} ${duration}s linear;
+`
 
 const faceToShow = (power:undefined|number, isAnimation:boolean, duration:number) => css`
     box-shadow:0 0 0.5em black;

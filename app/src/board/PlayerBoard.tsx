@@ -171,8 +171,9 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
                                     takeBackCardsAnimation && typeof playerHand === 'number' && typeof player.hand === 'number' && i >= playerHand - player.played.length && takeBackCardsAnimationStyle(i - player.hand, takeBackCardsAnimation.duration)
                                 ]}
                             color={player.color}
-                            power={playerCardsInRevealAnimation && i < playerCardsInRevealAnimation.length ? getColoredDeck(player.color)[playerCardsInRevealAnimation[i]].power : undefined}
-                            speed={playerCardsInRevealAnimation && i < playerCardsInRevealAnimation.length ? getColoredDeck(player.color)[playerCardsInRevealAnimation[i]].speed : undefined}
+                            power={(playerCardsInRevealAnimation && i < playerCardsInRevealAnimation.length) ? getColoredDeck(player.color)[playerCardsInRevealAnimation[i]].power : (takeBackCardsAnimation && typeof playerHand === 'number' && typeof player.hand === 'number' && i >= playerHand - player.played.length ? getColoredDeck(player.color)[player.played[i-player.hand]].power : undefined)}
+                            speed={(playerCardsInRevealAnimation && i < playerCardsInRevealAnimation.length) ? getColoredDeck(player.color)[playerCardsInRevealAnimation[i]].speed : (takeBackCardsAnimation && typeof playerHand === 'number' && typeof player.hand === 'number' && i >= playerHand - player.played.length ? getColoredDeck(player.color)[player.played[i-player.hand]].speed : undefined)}
+                            isTakeBackAnimation={takeBackCardsAnimation && typeof playerHand === 'number' && typeof player.hand === 'number' && i >= playerHand - player.played.length}
                             />
                         )
                     }
