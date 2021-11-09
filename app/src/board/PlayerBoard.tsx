@@ -55,6 +55,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
     const drawXCardsAnimation = useAnimation<DrawXCards|DrawXCardsView>(animation => isDrawXCards(animation.move))
     const takeBackCardsAnimation = useAnimation<TakeBackPlayedCards|TakeBackPlayedCardsView>(animation => isTakeBackPlayedCards(animation.move))
     let playerHand:number|number[] = isPlayerViewSelf(player) ? [...player.hand] : player.hand
+    let playerPlayed:number[] = player.played
 
     if(drawXCardsAnimation){
         if (!isDrawXCardsView(drawXCardsAnimation.move) && Array.isArray(playerHand)){
@@ -66,8 +67,10 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
     if(takeBackCardsAnimation){
         if (!isTakeBackPlayedCardsView(takeBackCardsAnimation.move) && Array.isArray(playerHand)){
             playerHand.push(...player.played)
+            playerPlayed = []
         } else if (isTakeBackPlayedCardsView(takeBackCardsAnimation.move) && typeof playerHand === 'number'){
             playerHand += player.played.length
+            playerPlayed = []
         }
     }
 
@@ -104,13 +107,13 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
       const getItemProps = (index: number) => {
         const card:number = player.hand[index]      // if playerView ==> undefined
         return ({
-          ignore:isPlayerView(player) && ((playHuntCardAnimation && index === 0) || (revealCardsAnimation && index < revealCardsAnimation.move.cardsPlayed.find(obj => obj.color === player.color)!.cards.length)),
+          ignore:isPlayerView(player) ? ((playHuntCardAnimation && index === 0) || (playerCardsInRevealAnimation && index < playerCardsInRevealAnimation.length)) : (revealCardsAnimation && Array.isArray(playerHand) && index >= playerHand.length - player.played.length ),
           hoverStyle: isPlayerViewSelf(player) ? css`transform: translateY(-25%) scale(1.7);` : undefined,
           drag: {
             type: "CardInHand",
             item: {type:"CardInHand", card},
             canDrag: player.color === playerId && phase === Phase.Initiative ,
-            drop: () => play({type:MoveType.PlayHuntCard, card:card, playerId:player.color })
+            drop: () => play({type:MoveType.PlayHuntCard, card:card, playerId:player.color})
           },
           animation:revealCardsAnimation ? {
             seconds:revealCardsAnimation.duration,
@@ -122,7 +125,14 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
             fromNeutralPosition:(!isDrawXCardsView(drawXCardsAnimation.move) && Array.isArray(playerHand))
                 ? index > playerHand.length - drawXCardsAnimation.move.cards.length -1
                 : isDrawXCardsView(drawXCardsAnimation.move) && typeof playerHand ==='number' && index > playerHand - drawXCardsAnimation.move.cards -1
-          } : undefined)
+          } : ( takeBackCardsAnimation  
+              ? {seconds:takeBackCardsAnimation.duration,
+                 delay:0,
+                 fromNeutralPosition:(!isTakeBackPlayedCardsView(takeBackCardsAnimation.move) && Array.isArray(playerHand))
+                    ? index >= playerHand.length - player.played.length 
+                    : isTakeBackPlayedCardsView(takeBackCardsAnimation.move) && typeof playerHand ==='number' && index >= playerHand - player.played.length
+                }
+              : undefined))
         })
       }
 
@@ -144,7 +154,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
                             css={[smoothAngles,
                                   playHuntCardAnimation && index === 0 && playHuntCardAnimationStyle(playHuntCardAnimation.duration,player.played.length),
                                   drawXCardsAnimation && !isDrawXCardsView(drawXCardsAnimation.move) && drawXCardsAnimation.move.cards.find(c => c === card) && drawXCardsAnimStyle(drawXCardsAnimation.duration, false),
-                                  takeBackCardsAnimation && Array.isArray(playerHand) && index >= playerHand.length - player.played.length && takeBackCardsAnimationStyle(playerHand.length - index, takeBackCardsAnimation.duration)
+                                  takeBackCardsAnimation && Array.isArray(playerHand) && index >= playerHand.length - player.played.length && takeBackCardsAnimationStyle(index - player.hand.length, takeBackCardsAnimation.duration)
                                 ]}
                             power={getColoredDeck(player.color)[card].power}
                             speed={getColoredDeck(player.color)[card].speed}
@@ -158,7 +168,8 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
                             <Card key={i}
                             css = {[smoothAngles,
                                     playerCardsInRevealAnimation && playerCardsInRevealAnimation.length > i && revealCardsAnimationStyle(i, revealCardsAnimation!.duration) ,
-                                   ]}
+                                    takeBackCardsAnimation && typeof playerHand === 'number' && typeof player.hand === 'number' && i >= playerHand - player.played.length && takeBackCardsAnimationStyle(i - player.hand, takeBackCardsAnimation.duration)
+                                ]}
                             color={player.color}
                             power={playerCardsInRevealAnimation && i < playerCardsInRevealAnimation.length ? getColoredDeck(player.color)[playerCardsInRevealAnimation[i]].power : undefined}
                             speed={playerCardsInRevealAnimation && i < playerCardsInRevealAnimation.length ? getColoredDeck(player.color)[playerCardsInRevealAnimation[i]].speed : undefined}
@@ -184,11 +195,11 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
 
             <span css={[toAbsolute, centerContainer, spanDropDisplay(canDropPlayed)]}>{t("Drag Here")}</span>
 
-            {Array.isArray(player.played) && player.played.map((card, index) => {
+            {playerPlayed.map((card, index) => {
                 const spendCardAnimation = spendCardAnimations.find(a => a.move.card === card)
                 return <Card key={index}
                 css = {[toAbsolute, setPercentDimension(52,30), cardPlayedPosition(index), smoothAngles,
-                        spendCardAnimation && index === (player.played as number[]).findIndex(card => card === spendCardAnimation.move.card) && spendAnimation(player.discard.length, spendCardAnimation.duration),
+                        spendCardAnimation && index === (playerPlayed as number[]).findIndex(card => card === spendCardAnimation.move.card) && spendAnimation(player.discard.length, spendCardAnimation.duration),
                         selectedHunters?.find(c => c === card) !== undefined && selectedCard
                     ]}
                 color={player.color}
@@ -198,7 +209,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
 
                 />
 
-           }) }
+           })}
 
         </div>
 
