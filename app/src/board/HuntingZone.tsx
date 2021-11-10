@@ -8,21 +8,24 @@ import FlippingTile from "./FlippingTile";
 import {HuntZonePosition} from "./Board";
 import {DraggableProps} from "@gamepark/react-components/dist/Draggable/Draggable";
 import {squareSize} from "../utils/styles";
+import {Animation} from "@gamepark/react-client";
+import PlaceTile from "@gamepark/prehistories/moves/PlaceTile";
 
 type Props = {
   game: GameView
   tile: Tile
   position: HuntZonePosition
+  animation?: Animation<PlaceTile>
 } & Omit<DraggableProps, 'animation' | 'type'>
 
-const HuntingZone: FC<Props> = ({game, tile, position, ...props}) => {
+const HuntingZone: FC<Props> = ({game, tile, position, animation, ...props}) => {
   const polyomino = useMemo(() => getPolyomino(tile, 0), [tile])
   if (position.flip) {
-    return <FlippingTile game={game} tile={tile} position={position}
+    return <FlippingTile game={game} tile={tile} position={position} animation={animation}
                          css={[huntPosition(position, polyomino)]} {...props}/>
   } else {
     return (
-      <DraggableTile tile={tile} rotation={position.rotation(polyomino)} css={huntPosition(position, polyomino)} {...props}/>
+      <DraggableTile tile={tile} rotation={animation ? 0 : position.rotation(polyomino)} css={huntPosition(position, polyomino)} {...props}/>
     )
   }
 }

@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import {css} from '@emotion/react'
 import GameView from '@gamepark/prehistories/GameView'
-import {usePlay, useSound} from '@gamepark/react-client'
+import {Animation, usePlay, useSound} from '@gamepark/react-client'
 import {FC, useMemo, useState} from 'react'
 import MoveTileSound from '../sounds/moveTile.mp3'
 import {HuntTile} from './DraggableTile'
@@ -12,14 +12,16 @@ import Move from "@gamepark/prehistories/moves/Move";
 import {DraggableProps} from "@gamepark/react-components/dist/Draggable/Draggable";
 import AnimalTile from "./AnimalTile";
 import {HuntZonePosition} from "./Board";
+import PlaceTile from "@gamepark/prehistories/moves/PlaceTile";
 
 type Props = {
   game: GameView
   tile: Tile
   position: HuntZonePosition
-} & Omit<DraggableProps, 'type'>
+  animation?: Animation<PlaceTile>
+} & Omit<DraggableProps, 'animation' | 'type'>
 
-const FlippingTile: FC<Props> = ({game, tile, position, item, ...props}) => {
+const FlippingTile: FC<Props> = ({game, tile, position, item, animation, ...props}) => {
   const play = usePlay<Move>()
   const [side, setSide] = useState<Side>(0)
   const [dragging, setDragging] = useState(false)
@@ -38,7 +40,7 @@ const FlippingTile: FC<Props> = ({game, tile, position, item, ...props}) => {
     <Draggable type={HuntTile} draggingChange={setDragging} drop={play} onClick={toggleSide} item={{...item, side}}
                css={[style(polyomino0)]} {...props}>
       <div css={[flipWrapper(polyomino0.length !== polyomino1.length), style(polyomino0),
-        rotation(dragging ? 0 : position.rotation(side === 0 ? polyomino0 : polyomino1), side)]}>
+        rotation(dragging || animation ? 0 : position.rotation(side === 0 ? polyomino0 : polyomino1), animation?.move.side ?? side)]}>
         <AnimalTile tile={tile} side={0} css={!dragging && props.canDrag && glowingAnimation}/>
         <AnimalTile tile={tile} side={1} css={!dragging && props.canDrag && glowingAnimation}/>
       </div>
