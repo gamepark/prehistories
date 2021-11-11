@@ -94,66 +94,66 @@ import totemWhite from '../images/TotemWhite.jpg'
 import totemGreen from '../images/TotemGreen.jpg'
 import totemRed from '../images/TotemRed.jpg'
 import totemYellow from '../images/TotemYellow.jpg'
-import polyominoType1_1 from '../images/PolyominoType1-1.png'
-import polyominoType1_2 from '../images/PolyominoType1-2.png'
-import polyominoType1_3 from '../images/PolyominoType1-3.png'
-import polyominoType1_4 from '../images/PolyominoType1-4.png'
-import polyominoType1_5 from '../images/PolyominoType1-5.png'
-import polyominoType2_1A from '../images/PolyominoType2-1A.png'
-import polyominoType2_1B from '../images/PolyominoType2-1B.png'
-import polyominoType2_2A from '../images/PolyominoType2-2A.png'
-import polyominoType2_2B from '../images/PolyominoType2-2B.png'
-import polyominoType2_3A from '../images/PolyominoType2-3A.png'
-import polyominoType2_3B from '../images/PolyominoType2-3B.png'
-import polyominoType2_4A from '../images/PolyominoType2-4A.png'
-import polyominoType2_4B from '../images/PolyominoType2-4B.png'
-import polyominoType2_5A from '../images/PolyominoType2-5A.png'
-import polyominoType2_5B from '../images/PolyominoType2-5B.png'
-import polyominoType3_1A from '../images/PolyominoType3-1A.png'
-import polyominoType3_1B from '../images/PolyominoType3-1B.png'
-import polyominoType3_2A from '../images/PolyominoType3-2A.png'
-import polyominoType3_2B from '../images/PolyominoType3-2B.png'
-import polyominoType3_3A from '../images/PolyominoType3-3A.png'
-import polyominoType3_3B from '../images/PolyominoType3-3B.png'
-import polyominoType3_4A from '../images/PolyominoType3-4A.png'
-import polyominoType3_4B from '../images/PolyominoType3-4B.png'
-import polyominoType3_5A from '../images/PolyominoType3-5A.png'
-import polyominoType3_5B from '../images/PolyominoType3-5B.png'
-import polyominoType3_6A from '../images/PolyominoType3-6A.png'
-import polyominoType3_6B from '../images/PolyominoType3-6B.png'
-import polyominoType3_7A from '../images/PolyominoType3-7A.png'
-import polyominoType3_7B from '../images/PolyominoType3-7B.png'
-import polyominoType3_8A from '../images/PolyominoType3-8A.png'
-import polyominoType3_8B from '../images/PolyominoType3-8B.png'
-import polyominoType3_9A from '../images/PolyominoType3-9A.png'
-import polyominoType3_9B from '../images/PolyominoType3-9B.png'
-import polyominoType3_10A from '../images/PolyominoType3-10A.png'
-import polyominoType3_10B from '../images/PolyominoType3-10B.png'
-import polyominoType4_1A from '../images/PolyominoType4-1A.png'
-import polyominoType4_1B from '../images/PolyominoType4-1B.png'
-import polyominoType4_2A from '../images/PolyominoType4-2A.png'
-import polyominoType4_2B from '../images/PolyominoType4-2B.png'
-import polyominoType4_3A from '../images/PolyominoType4-3A.png'
-import polyominoType4_3B from '../images/PolyominoType4-3B.png'
-import polyominoType4_4A from '../images/PolyominoType4-4A.png'
-import polyominoType4_4B from '../images/PolyominoType4-4B.png'
-import polyominoType4_5A from '../images/PolyominoType4-5A.png'
-import polyominoType4_5B from '../images/PolyominoType4-5B.png'
-import polyominoType4_6A from '../images/PolyominoType4-6A.png'
-import polyominoType4_6B from '../images/PolyominoType4-6B.png'
-import polyominoType4_7A from '../images/PolyominoType4-7A.png'
-import polyominoType4_7B from '../images/PolyominoType4-7B.png'
-import polyominoType4_8A from '../images/PolyominoType4-8A.png'
-import polyominoType4_8B from '../images/PolyominoType4-8B.png'
-import polyominoType4_9A from '../images/PolyominoType4-9A.png'
-import polyominoType4_9B from '../images/PolyominoType4-9B.png'
-import polyominoType4_10A from '../images/PolyominoType4-10A.png'
-import polyominoType4_10B from '../images/PolyominoType4-10B.png'
-import polyominoType5_1 from '../images/PolyominoType5-1.png'
-import polyominoType5_2 from '../images/PolyominoType5-2.png'
-import polyominoType5_3 from '../images/PolyominoType5-3.png'
-import polyominoType5_4 from '../images/PolyominoType5-4.png'
-import polyominoType5_5 from '../images/PolyominoType5-5.png'
+import fish1 from '../images/tiles/fish1.png'
+import mammoth1 from '../images/tiles/mammoth1.png'
+import ibex1 from '../images/tiles/ibex1.png'
+import buffalo1 from '../images/tiles/buffalo1.png'
+import boar1 from '../images/tiles/boar1.png'
+import fish2Front from '../images/tiles/fish2-front.png'
+import fish2Back from '../images/tiles/fish2-back.png'
+import mammoth2Front from '../images/tiles/mammoth2-front.png'
+import mammoth2Back from '../images/tiles/mammoth2-back.png'
+import ibex2Front from '../images/tiles/ibex2-front.png'
+import ibex2Back from '../images/tiles/ibex2-back.png'
+import buffalo2Front from '../images/tiles/buffalo2-front.png'
+import buffalo2Back from '../images/tiles/buffalo2-back.png'
+import boar2Front from '../images/tiles/boar2-front.png'
+import boar2Back from '../images/tiles/boar2-back.png'
+import fish3AFront from '../images/tiles/fish3A-front.png'
+import fish3ABack from '../images/tiles/fish3A-back.png'
+import fish3BFront from '../images/tiles/fish3B-front.png'
+import fish3BBack from '../images/tiles/fish3B-back.png'
+import mammoth3AFront from '../images/tiles/mammoth3A-front.png'
+import mammoth3ABack from '../images/tiles/mammoth3A-back.png'
+import mammoth3BFront from '../images/tiles/mammoth3B-front.png'
+import mammoth3BBack from '../images/tiles/mammoth3B-back.png'
+import ibex3AFront from '../images/tiles/ibex3A-front.png'
+import ibex3ABack from '../images/tiles/ibex3A-back.png'
+import ibex3BFront from '../images/tiles/ibex3B-front.png'
+import ibex3BBack from '../images/tiles/ibex3B-back.png'
+import buffalo3AFront from '../images/tiles/buffalo3A-front.png'
+import buffalo3ABack from '../images/tiles/buffalo3A-back.png'
+import buffalo3BFront from '../images/tiles/buffalo3B-front.png'
+import buffalo3BBack from '../images/tiles/buffalo3B-back.png'
+import boar3AFront from '../images/tiles/boar3A-front.png'
+import boar3ABack from '../images/tiles/boar3A-back.png'
+import boar3BFront from '../images/tiles/boar3B-front.png'
+import boar3BBack from '../images/tiles/boar3B-back.png'
+import fish4AFront from '../images/tiles/fish4A-front.png'
+import fish4ABack from '../images/tiles/fish4A-back.png'
+import fish4BFront from '../images/tiles/fish4B-front.png'
+import fish4BBack from '../images/tiles/fish4B-back.png'
+import mammoth4AFront from '../images/tiles/mammoth4A-front.png'
+import mammoth4ABack from '../images/tiles/mammoth4A-back.png'
+import mammoth4BFront from '../images/tiles/mammoth4B-front.png'
+import mammoth4BBack from '../images/tiles/mammoth4B-back.png'
+import ibex4AFront from '../images/tiles/ibex4A-front.png'
+import ibex4ABack from '../images/tiles/ibex4A-back.png'
+import ibex4BFront from '../images/tiles/ibex4B-front.png'
+import ibex4BBack from '../images/tiles/ibex4B-back.png'
+import buffalo4AFront from '../images/tiles/buffalo4A-front.png'
+import buffalo4ABack from '../images/tiles/buffalo4A-back.png'
+import buffalo4BBack from '../images/tiles/buffalo4B-back.png'
+import buffalo4BFront from '../images/tiles/buffalo4B-front.png'
+import boar4AFront from '../images/tiles/boar4A-front.png'
+import boar4ABack from '../images/tiles/boar4A-back.png'
+import boar4BFront from '../images/tiles/boar4B-front.png'
+import boar4BBack from '../images/tiles/boar4B-back.png'
+import legendary1 from '../images/tiles/legendary1.png'
+import legendary2 from '../images/tiles/legendary2.png'
+import legendary3 from '../images/tiles/legendary3.png'
+import legendary4 from '../images/tiles/legendary4.png'
+import legendary5 from '../images/tiles/legendary5.png'
 import whiteBGtest from '../images/whiteBGtest.jpg'
 import blueBGtest from '../images/blueBGtest.jpg'
 import yellowBGtest from '../images/yellowBGtest.jpg'
@@ -191,30 +191,37 @@ import arrowBrokenIcon from '../images/brokenArrow.jpg'
 
 const Images = {
 
-    huntingBoard23Players, huntingBoard45Players,
-    caveBlue, caveGreen, caveRed, caveWhite, caveYellow,
-    cardBackBlue, cardBackWhite, cardBackGreen, cardBackRed, cardBackYellow, 
-    hunterBlue1_1, hunterBlue1_2, hunterBlue2_1, hunterBlue2_2, hunterBlue3_1, hunterBlue3_2, hunterBlue4_1, hunterBlue4_2, hunterBlue5_1, hunterBlue5_2, hunterBlue6_1, hunterBlue6_2,
-    hunterWhite1_1, hunterWhite1_2, hunterWhite2_1, hunterWhite2_2, hunterWhite3_1, hunterWhite3_2, hunterWhite4_1, hunterWhite4_2, hunterWhite5_1, hunterWhite5_2, hunterWhite6_1, hunterWhite6_2, 
-    hunterGreen1_1, hunterGreen1_2, hunterGreen2_1, hunterGreen2_2, hunterGreen3_1, hunterGreen3_2, hunterGreen4_1, hunterGreen4_2, hunterGreen5_1, hunterGreen5_2, hunterGreen6_1, hunterGreen6_2,
-    hunterRed1_1, hunterRed1_2, hunterRed2_1, hunterRed2_2, hunterRed3_1, hunterRed3_2, hunterRed4_1, hunterRed4_2, hunterRed5_1, hunterRed5_2, hunterRed6_1, hunterRed6_2, 
-    hunterYellow1_1, hunterYellow1_2, hunterYellow2_1, hunterYellow2_2, hunterYellow3_1, hunterYellow3_2, hunterYellow4_1, hunterYellow4_2, hunterYellow5_1, hunterYellow5_2, hunterYellow6_1, hunterYellow6_2, 
-    objective0, objective1A, objective1B, objective2A, objective2B, objective3A, objective3B, objective4A, objective4B, objective5A, objective5B, objective6A, objective6B, objective7A, objective7B, objective8A, objective8B, objective9A, objective9B,
-    totemBlue, totemGreen, totemRed, totemWhite, totemYellow, 
-    polyominoType1_1, polyominoType1_2, polyominoType1_3, polyominoType1_4, polyominoType1_5,
-    polyominoType2_1A, polyominoType2_2A, polyominoType2_3A, polyominoType2_4A, polyominoType2_5A, polyominoType2_1B, polyominoType2_2B, polyominoType2_3B, polyominoType2_4B, polyominoType2_5B, 
-    polyominoType3_1A, polyominoType3_2A, polyominoType3_3A, polyominoType3_4A, polyominoType3_5A, polyominoType3_6A, polyominoType3_7A, polyominoType3_8A, polyominoType3_9A, polyominoType3_10A, polyominoType3_1B, polyominoType3_2B, polyominoType3_3B, polyominoType3_4B, polyominoType3_5B, polyominoType3_6B, polyominoType3_7B, polyominoType3_8B, polyominoType3_9B, polyominoType3_10B, 
-    polyominoType4_1A, polyominoType4_2A, polyominoType4_3A, polyominoType4_4A, polyominoType4_5A, polyominoType4_6A, polyominoType4_7A, polyominoType4_8A, polyominoType4_9A, polyominoType4_10A, polyominoType4_1B, polyominoType4_2B, polyominoType4_3B, polyominoType4_4B, polyominoType4_5B, polyominoType4_6B, polyominoType4_7B, polyominoType4_8B, polyominoType4_9B, polyominoType4_10B, 
-    polyominoType5_1, polyominoType5_2, polyominoType5_3, polyominoType5_4, polyominoType5_5, 
-
-    whiteBGtest, blueBGtest, yellowBGtest, redBGtest, greenBGtest, hunterBG, caveBGYellow,
-
-    powerBlue1, powerBlue2, powerBlue3, powerBlue4, powerBlue5,
-    powerRed1, powerRed2, powerRed3, powerRed4, powerRed5,
-    powerWhite1, powerWhite2, powerWhite3, powerWhite4, powerWhite5,
-    powerGreen1, powerGreen2, powerGreen3, powerGreen4, powerGreen5,
-    powerYellow1, powerYellow2, powerYellow3, powerYellow4, powerYellow5,
-    arrowCleanIcon, arrowBrokenIcon
+  huntingBoard23Players, huntingBoard45Players,
+  caveBlue, caveGreen, caveRed, caveWhite, caveYellow,
+  cardBackBlue, cardBackWhite, cardBackGreen, cardBackRed, cardBackYellow,
+  hunterBlue1_1, hunterBlue1_2, hunterBlue2_1, hunterBlue2_2, hunterBlue3_1, hunterBlue3_2,
+  hunterBlue4_1, hunterBlue4_2, hunterBlue5_1, hunterBlue5_2, hunterBlue6_1, hunterBlue6_2,
+  hunterWhite1_1, hunterWhite1_2, hunterWhite2_1, hunterWhite2_2, hunterWhite3_1, hunterWhite3_2,
+  hunterWhite4_1, hunterWhite4_2, hunterWhite5_1, hunterWhite5_2, hunterWhite6_1, hunterWhite6_2,
+  hunterGreen1_1, hunterGreen1_2, hunterGreen2_1, hunterGreen2_2, hunterGreen3_1, hunterGreen3_2,
+  hunterGreen4_1, hunterGreen4_2, hunterGreen5_1, hunterGreen5_2, hunterGreen6_1, hunterGreen6_2,
+  hunterRed1_1, hunterRed1_2, hunterRed2_1, hunterRed2_2, hunterRed3_1, hunterRed3_2,
+  hunterRed4_1, hunterRed4_2, hunterRed5_1, hunterRed5_2, hunterRed6_1, hunterRed6_2,
+  hunterYellow1_1, hunterYellow1_2, hunterYellow2_1, hunterYellow2_2, hunterYellow3_1, hunterYellow3_2,
+  hunterYellow4_1, hunterYellow4_2, hunterYellow5_1, hunterYellow5_2, hunterYellow6_1, hunterYellow6_2,
+  objective0, objective1A, objective1B, objective2A, objective2B, objective3A, objective3B, objective4A, objective4B, objective5A, objective5B,
+  objective6A, objective6B, objective7A, objective7B, objective8A, objective8B, objective9A, objective9B,
+  totemBlue, totemGreen, totemRed, totemWhite, totemYellow,
+  fish1, fish2Front, fish2Back, fish3AFront, fish3ABack, fish3BFront, fish3BBack, fish4AFront, fish4ABack, fish4BFront, fish4BBack,
+  mammoth1, mammoth2Front, mammoth2Back, mammoth3AFront, mammoth3ABack, mammoth3BFront, mammoth3BBack,
+  mammoth4AFront, mammoth4ABack, mammoth4BFront, mammoth4BBack,
+  buffalo1, buffalo2Front, buffalo2Back, buffalo3AFront, buffalo3ABack, buffalo3BFront, buffalo3BBack,
+  buffalo4AFront, buffalo4ABack, buffalo4BFront, buffalo4BBack,
+  ibex1, ibex2Front, ibex2Back, ibex3AFront, ibex3ABack, ibex3BFront, ibex3BBack, ibex4AFront, ibex4ABack, ibex4BFront, ibex4BBack,
+  boar1, boar2Front, boar2Back, boar3AFront, boar3ABack, boar3BFront, boar3BBack, boar4AFront, boar4ABack, boar4BFront, boar4BBack,
+  legendary1, legendary2, legendary3, legendary4, legendary5,
+  whiteBGtest, blueBGtest, yellowBGtest, redBGtest, greenBGtest, hunterBG, caveBGYellow,
+  powerBlue1, powerBlue2, powerBlue3, powerBlue4, powerBlue5,
+  powerRed1, powerRed2, powerRed3, powerRed4, powerRed5,
+  powerWhite1, powerWhite2, powerWhite3, powerWhite4, powerWhite5,
+  powerGreen1, powerGreen2, powerGreen3, powerGreen4, powerGreen5,
+  powerYellow1, powerYellow2, powerYellow3, powerYellow4, powerYellow5,
+  arrowCleanIcon, arrowBrokenIcon
 
 }
 

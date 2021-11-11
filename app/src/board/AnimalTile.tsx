@@ -25,74 +25,74 @@ const style = (polyomino: boolean[][]) => css`
 function getTileImage(tile: Tile, side: Side): string {
   switch (tile) {
     case Tile.Fish1:
-      return Images.polyominoType1_1
+      return Images.fish1
     case Tile.Fish2:
-      return side === 0 ? Images.polyominoType2_1A : Images.polyominoType2_1B
+      return side === 0 ? Images.fish2Front : Images.fish2Back
     case Tile.Fish3A:
-      return side === 0 ? Images.polyominoType3_1A : Images.polyominoType3_1B
+      return side === 0 ? Images.fish3AFront : Images.fish3ABack
     case Tile.Fish3B:
-      return side === 0 ? Images.polyominoType3_2A : Images.polyominoType3_2B
+      return side === 0 ? Images.fish3BFront : Images.fish3BBack
     case Tile.Fish4A:
-      return side === 0 ? Images.polyominoType4_1A : Images.polyominoType4_1B
+      return side === 0 ? Images.fish4AFront : Images.fish4ABack
     case Tile.Fish4B:
-      return side === 0 ? Images.polyominoType4_2A : Images.polyominoType4_2B
+      return side === 0 ? Images.fish4BFront : Images.fish4BBack
     case Tile.Mammoth1:
-      return Images.polyominoType1_2
+      return Images.mammoth1
     case Tile.Mammoth2:
-      return side === 0 ? Images.polyominoType2_2A : Images.polyominoType2_2B
+      return side === 0 ? Images.mammoth2Front : Images.mammoth2Back
     case Tile.Mammoth3A:
-      return side === 0 ? Images.polyominoType3_3A : Images.polyominoType3_3B
+      return side === 0 ? Images.mammoth3AFront : Images.mammoth3ABack
     case Tile.Mammoth3B:
-      return side === 0 ? Images.polyominoType3_4A : Images.polyominoType3_4B
+      return side === 0 ? Images.mammoth3BFront : Images.mammoth3BBack
     case Tile.Mammoth4A:
-      return side === 0 ? Images.polyominoType4_3A : Images.polyominoType4_3B
+      return side === 0 ? Images.mammoth4AFront : Images.mammoth4ABack
     case Tile.Mammoth4B:
-      return side === 0 ? Images.polyominoType4_4A : Images.polyominoType4_4B
+      return side === 0 ? Images.mammoth4BFront : Images.mammoth4BBack
     case Tile.Buffalo1:
-      return Images.polyominoType1_4
+      return Images.buffalo1
     case Tile.Buffalo2:
-      return side === 0 ? Images.polyominoType2_4A : Images.polyominoType2_4B
+      return side === 0 ? Images.buffalo2Front : Images.buffalo2Back
     case Tile.Buffalo3A:
-      return side === 0 ? Images.polyominoType3_7A : Images.polyominoType3_7B
+      return side === 0 ? Images.buffalo3AFront : Images.buffalo3ABack
     case Tile.Buffalo3B:
-      return side === 0 ? Images.polyominoType3_8A : Images.polyominoType3_8B
+      return side === 0 ? Images.buffalo3BFront : Images.buffalo3BBack
     case Tile.Buffalo4A:
-      return side === 0 ? Images.polyominoType4_7A : Images.polyominoType4_7B
+      return side === 0 ? Images.buffalo4AFront : Images.buffalo4ABack
     case Tile.Buffalo4B:
-      return side === 0 ? Images.polyominoType4_8B : Images.polyominoType4_8A
+      return side === 0 ? Images.buffalo4BFront : Images.buffalo4BBack
     case Tile.Ibex1:
-      return Images.polyominoType1_3
+      return Images.ibex1
     case Tile.Ibex2:
-      return side === 0 ? Images.polyominoType2_3A : Images.polyominoType2_3B
+      return side === 0 ? Images.ibex2Front : Images.ibex2Back
     case Tile.Ibex3A:
-      return side === 0 ? Images.polyominoType3_5A : Images.polyominoType3_5B
+      return side === 0 ? Images.ibex3AFront : Images.ibex3ABack
     case Tile.Ibex3B:
-      return side === 0 ? Images.polyominoType3_6A : Images.polyominoType3_6B
+      return side === 0 ? Images.ibex3BFront : Images.ibex3BBack
     case Tile.Ibex4A:
-      return side === 0 ? Images.polyominoType4_5A : Images.polyominoType4_5B
+      return side === 0 ? Images.ibex4AFront : Images.ibex4ABack
     case Tile.Ibex4B:
-      return side === 0 ? Images.polyominoType4_6A : Images.polyominoType4_6B
+      return side === 0 ? Images.ibex4BFront : Images.ibex4BBack
     case Tile.Boar1:
-      return Images.polyominoType1_5
+      return Images.boar1
     case Tile.Boar2:
-      return side === 0 ? Images.polyominoType2_5A : Images.polyominoType2_5B
+      return side === 0 ? Images.boar2Front : Images.boar2Back
     case Tile.Boar3A:
-      return side === 0 ? Images.polyominoType3_9A : Images.polyominoType3_9B
+      return side === 0 ? Images.boar3AFront : Images.boar3ABack
     case Tile.Boar3B:
-      return side === 0 ? Images.polyominoType3_10A : Images.polyominoType3_10B
+      return side === 0 ? Images.boar3BFront : Images.boar3BBack
     case Tile.Boar4A:
-      return side === 0 ? Images.polyominoType4_9A : Images.polyominoType4_9B
+      return side === 0 ? Images.boar4AFront : Images.boar4ABack
     case Tile.Boar4B:
-      return side === 0 ? Images.polyominoType4_10A : Images.polyominoType4_10B
+      return side === 0 ? Images.boar4BFront : Images.boar4BBack
     case Tile.Legendary1:
-      return Images.polyominoType5_1
+      return Images.legendary1
     case Tile.Legendary2:
-      return Images.polyominoType5_2
+      return Images.legendary2
     case Tile.Legendary3:
-      return Images.polyominoType5_3
+      return Images.legendary3
     case Tile.Legendary4:
-      return Images.polyominoType5_4
+      return Images.legendary4
     case Tile.Legendary5:
-      return Images.polyominoType5_5
+      return Images.legendary5
   }
 }
