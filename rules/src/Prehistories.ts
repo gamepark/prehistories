@@ -292,7 +292,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
       case MoveType.DrawCards:
         if (playerId === this.state.sortedPlayers![0]) {
           const player = this.state.players.find(p => p.color === this.state.sortedPlayers![0])!
-          return {...move, cards: player.deck.slice(0, Math.min(playerCouldDraw(player), player.deck.length))}
+          return {...move, cards: player.deck.slice(0, playerWillDraw(player))}
         } else {
           return move
         }
@@ -360,7 +360,7 @@ export function playerCouldDraw(player: PlayerState | PlayerView | PlayerViewSel
 
 export function playerWillDraw(player: PlayerState | PlayerView | PlayerViewSelf) {
   const deckSize = isPlayerState(player) ? player.deck.length : player.deck
-  return Math.max(playerCouldDraw(player), deckSize)
+  return Math.min(playerCouldDraw(player), deckSize)
 }
 
 export function handPrintsJustRecovered(player: PlayerState | PlayerView | PlayerViewSelf): number {

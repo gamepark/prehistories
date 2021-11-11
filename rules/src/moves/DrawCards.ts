@@ -1,6 +1,6 @@
 import GameState from "../GameState"
 import GameView from "../GameView"
-import {playerCouldDraw} from "../Prehistories"
+import {playerWillDraw} from "../Prehistories"
 import {HuntPhase} from "../types/Phase"
 import {getFirstOfSortedPlayer, isPlayerViewSelf} from "../types/PlayerView"
 import Move from "./Move"
@@ -20,18 +20,18 @@ export type DrawCardsView = {
 
 export function drawCards(state: GameState) {
   const player = getFirstOfSortedPlayer(state)
-  player.hand.push(...player.deck.splice(0, Math.min(playerCouldDraw(player), player.deck.length)))
+  player.hand.push(...player.deck.splice(0, playerWillDraw(player)))
   player.hunting!.huntPhase = HuntPhase.ChangeActivePlayer
 }
 
 export function drawCardsInView(state: GameView, move: DrawCards | DrawCardsView) {
   const player = state.players.find(player => player.color === state.sortedPlayers![0])!
-  player.deck = Math.max(player.deck - playerCouldDraw(player), 0)
+  player.deck -= playerWillDraw(player)
   if (isPlayerViewSelf(player)) {
     if (!isDrawCardsView(move)) throw 'Error: I should receive the information about the cards that I draw'
     player.hand.push(...move.cards)
   } else {
-    player.hand = Math.min(player.hand + playerCouldDraw(player), player.hand + player.deck)
+    player.hand += playerWillDraw(player)
   }
   player.hunting!.huntPhase = HuntPhase.ChangeActivePlayer
 }
