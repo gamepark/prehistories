@@ -70,25 +70,25 @@ import hunterYellow5_1 from '../images/HunterYellow5-1.jpg'
 import hunterYellow5_2 from '../images/HunterYellow5-2.jpg'
 import hunterYellow6_1 from '../images/HunterYellow6-1.jpg'
 import hunterYellow6_2 from '../images/HunterYellow6-2.jpg'
-import objective0 from '../images/Objective0.jpg'
-import objective1A from '../images/Objective1A.jpg'
-import objective1B from '../images/Objective1B.jpg'
-import objective2A from '../images/Objective2A.jpg'
-import objective2B from '../images/Objective2B.jpg'
-import objective3A from '../images/Objective3A.jpg'
-import objective3B from '../images/Objective3B.jpg'
-import objective4A from '../images/Objective4A.jpg'
-import objective4B from '../images/Objective4B.jpg'
-import objective5A from '../images/Objective5A.jpg'
-import objective5B from '../images/Objective5B.jpg'
-import objective6A from '../images/Objective6A.jpg'
-import objective6B from '../images/Objective6B.jpg'
-import objective7A from '../images/Objective7A.jpg'
-import objective7B from '../images/Objective7B.jpg'
-import objective8A from '../images/Objective8A.jpg'
-import objective8B from '../images/Objective8B.jpg'
-import objective9A from '../images/Objective9A.jpg'
-import objective9B from '../images/Objective9B.jpg'
+import goal0 from '../images/goals/goal0.jpg'
+import goal1A from '../images/goals/goal1A.jpg'
+import goal1B from '../images/goals/goal1B.jpg'
+import goal2A from '../images/goals/goal2A.jpg'
+import goal2B from '../images/goals/goal2B.jpg'
+import goal3A from '../images/goals/goal3A.jpg'
+import goal3B from '../images/goals/goal3B.jpg'
+import goal4A from '../images/goals/goal4A.jpg'
+import goal4B from '../images/goals/goal4B.jpg'
+import goal5A from '../images/goals/goal5A.jpg'
+import goal5B from '../images/goals/goal5B.jpg'
+import goal6A from '../images/goals/goal6A.jpg'
+import goal6B from '../images/goals/goal6B.jpg'
+import goal7A from '../images/goals/goal7A.jpg'
+import goal7B from '../images/goals/goal7B.jpg'
+import goal8A from '../images/goals/goal8A.jpg'
+import goal8B from '../images/goals/goal8B.jpg'
+import goal9A from '../images/goals/goal9A.jpg'
+import goal9B from '../images/goals/goal9B.jpg'
 import totemBlue from '../images/TotemBlue.jpg'
 import totemWhite from '../images/TotemWhite.jpg'
 import totemGreen from '../images/TotemGreen.jpg'
@@ -204,8 +204,8 @@ const Images = {
   hunterRed4_1, hunterRed4_2, hunterRed5_1, hunterRed5_2, hunterRed6_1, hunterRed6_2,
   hunterYellow1_1, hunterYellow1_2, hunterYellow2_1, hunterYellow2_2, hunterYellow3_1, hunterYellow3_2,
   hunterYellow4_1, hunterYellow4_2, hunterYellow5_1, hunterYellow5_2, hunterYellow6_1, hunterYellow6_2,
-  objective0, objective1A, objective1B, objective2A, objective2B, objective3A, objective3B, objective4A, objective4B, objective5A, objective5B,
-  objective6A, objective6B, objective7A, objective7B, objective8A, objective8B, objective9A, objective9B,
+  goal0, goal1A, goal1B, goal2A, goal2B, goal3A, goal3B, goal4A, goal4B, goal5A, goal5B,
+  goal6A, goal6B, goal7A, goal7B, goal8A, goal8B, goal9A, goal9B,
   totemBlue, totemGreen, totemRed, totemWhite, totemYellow,
   fish1, fish2Front, fish2Back, fish3AFront, fish3ABack, fish3BFront, fish3BBack, fish4AFront, fish4ABack, fish4BFront, fish4BBack,
   mammoth1, mammoth2Front, mammoth2Back, mammoth3AFront, mammoth3ABack, mammoth3BFront, mammoth3BBack,

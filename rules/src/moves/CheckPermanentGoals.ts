@@ -9,20 +9,20 @@ import {getPaintedCave, isColumnPainted, isLinePainted} from "../material/Painte
 import {getPlacedTileCoordinates} from "../types/PlacedTile";
 import {isLegendaryAnimalTile} from "../material/Tile";
 
-type ResolvePermanentObjectives = {
-  type: MoveType.ResolvePermanentObjectives
-  objectivesCompleted: [number[], number[], boolean];
+type ResolvePermanentGoals = {
+  type: MoveType.ResolvePermanentGoals
+  goalsCompleted: [number[], number[], boolean];
 }
 
-export default ResolvePermanentObjectives
+export default ResolvePermanentGoals
 
-export function resolvePermanentObjectives(state: GameState | GameView, move: ResolvePermanentObjectives) {
+export function resolvePermanentGoals(state: GameState | GameView, move: ResolvePermanentGoals) {
   const player = getFirstOfSortedPlayer(state)
-  player.totemTokens = Math.max(0, player.totemTokens - (move.objectivesCompleted[0].length + move.objectivesCompleted[1].length + (move.objectivesCompleted[2] ? 1 : 0)))
-  player.hunting!.huntPhase = HuntPhase.CheckVariableObjectives
+  player.totemTokens = Math.max(0, player.totemTokens - (move.goalsCompleted[0].length + move.goalsCompleted[1].length + (move.goalsCompleted[2] ? 1 : 0)))
+  player.hunting!.huntPhase = HuntPhase.CheckVariableGoals
 }
 
-export function checkPermanentObjectives(player: PlayerState | PlayerView | PlayerViewSelf): [number[], number[], boolean] {
+export function checkPermanentGoals(player: PlayerState | PlayerView | PlayerViewSelf): [number[], number[], boolean] {
   const completedLines: number[] = [], completedColumns: number[] = []
   const cave = getPaintedCave(player)
   const lastTilePlayed = player.cave[player.cave.length - 1]
@@ -43,6 +43,6 @@ export function checkPermanentObjectives(player: PlayerState | PlayerView | Play
   return [completedLines, completedColumns, isLegendaryAnimalTile(lastTilePlayed.tile)]
 }
 
-export function isResolvePermanentObjectives(move: Move): move is ResolvePermanentObjectives {
-  return move.type === MoveType.ResolvePermanentObjectives
+export function isResolvePermanentGoals(move: Move): move is ResolvePermanentGoals {
+  return move.type === MoveType.ResolvePermanentGoals
 }

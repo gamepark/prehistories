@@ -16,7 +16,7 @@ export function validateSpentHunters(state: GameState | GameView) {
   const player = getFirstOfSortedPlayer(state)
   setPlayerInjuries(player.hunting!)
   delete player.hunting!.huntSpotTakenLevels
-  player.hunting!.huntPhase = HuntPhase.CheckPermanentObjectives
+  player.hunting!.huntPhase = HuntPhase.CheckPermanentGoals
 
 }
 

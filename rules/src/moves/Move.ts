@@ -1,6 +1,6 @@
 import ChangeActivePlayer from './ChangeActivePlayer'
-import ResolvePermanentObjectives from './CheckPermanentObjectives'
-import ResolveVariableObjectives from './CheckVariableObjectives'
+import ResolvePermanentGoals from './CheckPermanentGoals'
+import ResolveVariableGoals from './CheckVariableGoals'
 import DrawCards from './DrawCards'
 import EndGame from './EndGame'
 import EndTurn from './EndTurn'
@@ -21,8 +21,8 @@ type Move = PlayHuntCard |
             PlaceTile |
             SpendHunter |
             ValidateSpendedHunters |
-            ResolvePermanentObjectives |
-            ResolveVariableObjectives |
+            ResolvePermanentGoals |
+            ResolveVariableGoals |
             SetHuntPhase |
             EndTurn |
             TakeBackPlayedCards |
