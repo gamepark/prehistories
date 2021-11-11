@@ -10,7 +10,7 @@ enum MoveType {
   SetHuntPhase,
   EndTurn,
   TakeBackPlayedCards,
-  DrawXCards,
+  DrawCards,
   ShuffleDiscardPile,
   ChangeActivePlayer,
   RefillHuntingBoard,

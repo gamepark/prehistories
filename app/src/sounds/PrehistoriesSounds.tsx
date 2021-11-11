@@ -1,18 +1,17 @@
-import ResolvePermanentObjectives, { isResolvePermanentObjectives } from "@gamepark/prehistories/moves/CheckPermanentObjectives"
-import ResolveVariableObjectives, { isResolveVariableObjectives } from "@gamepark/prehistories/moves/CheckVariableObjectives"
-import DrawXCards, { isDrawXCards } from "@gamepark/prehistories/moves/DrawXCards"
-import PlaceTile, { isPlaceTile } from "@gamepark/prehistories/moves/PlaceTile"
-import { isRevealHuntCards, RevealHuntCardsView } from "@gamepark/prehistories/moves/RevealHuntCards"
-import { useAnimation } from "@gamepark/react-client"
-import { FC, useEffect } from "react"
-import { AudioLoader } from "./AudioLoader"
+import ResolvePermanentObjectives, {isResolvePermanentObjectives} from "@gamepark/prehistories/moves/CheckPermanentObjectives"
+import ResolveVariableObjectives, {isResolveVariableObjectives} from "@gamepark/prehistories/moves/CheckVariableObjectives"
+import DrawCards, {isDrawCards} from "@gamepark/prehistories/moves/DrawCards"
+import PlaceTile, {isPlaceTile} from "@gamepark/prehistories/moves/PlaceTile"
+import {isRevealHuntCards, RevealHuntCardsView} from "@gamepark/prehistories/moves/RevealHuntCards"
+import {useAnimation} from "@gamepark/react-client"
+import {FC, useEffect} from "react"
+import {AudioLoader} from "./AudioLoader"
 import cardFlipSound from "./cardFlip.mp3";
 import cardMoveSound from "./cardMove.mp3";
 import moveTileSound from "./moveTile.mp3";
 import permObjectiveSound from "./permObjective.mp3";
 import varObjectiveSound from "./varObjective.mp3";
-import PlayHuntCard, { isPlayHuntCardView } from "@gamepark/prehistories/moves/PlayHuntCard"
-
+import PlayHuntCard, {isPlayHuntCardView} from "@gamepark/prehistories/moves/PlayHuntCard"
 
 
 type Props = {
@@ -22,7 +21,7 @@ type Props = {
 const PrehistoriesSounds : FC<Props> = ({audioLoader}) => {
 
     const revealCardsAnimation = useAnimation<RevealHuntCardsView>(animation => isRevealHuntCards(animation.move))
-    const drawCards = useAnimation<DrawXCards>(animation => isDrawXCards(animation.move))
+    const drawCards = useAnimation<DrawCards>(animation => isDrawCards(animation.move))
     const playTile = useAnimation<PlaceTile>(animation => isPlaceTile(animation.move))
     const permObjective = useAnimation<ResolvePermanentObjectives>(animation => isResolvePermanentObjectives(animation.move))
     const varObjective = useAnimation<ResolveVariableObjectives>(animation => isResolveVariableObjectives(animation.move))

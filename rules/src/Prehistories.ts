@@ -7,7 +7,7 @@ import {goals} from './material/Goals'
 import {changeActivePlayer} from './moves/ChangeActivePlayer'
 import {checkPermanentObjectives, resolvePermanentObjectives} from './moves/CheckPermanentObjectives'
 import {checkVariableObjectives, resolveVariableObjectives} from './moves/CheckVariableObjectives'
-import {drawXCards} from './moves/DrawXCards'
+import {drawCards} from './moves/DrawCards'
 import {endGame} from './moves/EndGame'
 import EndTurn, {endTurn} from './moves/EndTurn'
 import Move from './moves/Move'
@@ -155,8 +155,8 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         return endTurn(this.state)
       case MoveType.TakeBackPlayedCards:
         return takeBackPlayedCards(this.state)
-      case MoveType.DrawXCards:
-        return drawXCards(this.state)
+      case MoveType.DrawCards:
+        return drawCards(this.state)
       case MoveType.ShuffleDiscardPile:
         return shuffleDiscardPile(this.state, move)
       case MoveType.ChangeActivePlayer:
@@ -221,7 +221,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
               if (player.deck.length < cardsToDraw && player.discard.length > 0) {
                 return {type: MoveType.ShuffleDiscardPile, shuffledCards: shuffle(player.discard)}
               } else {
-                return {type: MoveType.DrawXCards, cards: player.deck.slice(0, Math.min(howManyCardToDraw(player), player.deck.length))}
+                return {type: MoveType.DrawCards, cards: player.deck.slice(0, Math.min(howManyCardToDraw(player), player.deck.length))}
               }
             }
           }
@@ -289,12 +289,12 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
             playedLength: this.state.players.find(p => p.color === this.state.sortedPlayers![0])!.played.length
           }
         }
-      case MoveType.DrawXCards:
+      case MoveType.DrawCards:
         if (playerId === this.state.sortedPlayers![0]) {
           return move
         } else {
           return {
-            type: MoveType.DrawXCards, playerId: this.state.sortedPlayers![0],
+            type: MoveType.DrawCards, playerId: this.state.sortedPlayers![0],
             cards: howManyCardToDraw(this.state.players.find(p => p.color === this.state.sortedPlayers![0])!)
           }
         }

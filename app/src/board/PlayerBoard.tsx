@@ -19,14 +19,14 @@ import {isPlayHuntCardView, PlayHuntCardView} from "@gamepark/prehistories/moves
 import {isRevealHuntCards, RevealHuntCardsView} from "@gamepark/prehistories/moves/RevealHuntCards";
 import SpendHunter, {isSpendHunter} from "@gamepark/prehistories/moves/SpendHunter";
 import {isShuffleDiscardPile, ShuffleDiscardPileView} from "@gamepark/prehistories/moves/ShuffleDiscardPile";
-import DrawXCards, {DrawXCardsView, isDrawXCards, isDrawXCardsView} from "@gamepark/prehistories/moves/DrawXCards";
+import DrawCards, {DrawCardsView, isDrawCards, isDrawCardsView} from "@gamepark/prehistories/moves/DrawCards";
 import {getCardBack, getPlayerColor} from "../utils/getterFunctions";
 import SetSelectedHunters, {setSelectedHunterMove} from "../localMoves/setSelectedHunters";
 import MoveCardSound from "../sounds/cardMove.mp3"
 import ButtonClickSound from "../sounds/buttonClick.mp3"
 import {centerContainer, setPercentDimension, toAbsolute, toFullSize} from "../utils/styles";
 import ButtonsTab from "./ButtonsTab";
-import TakeBackPlayedCards, { isTakeBackPlayedCards, isTakeBackPlayedCardsView, TakeBackPlayedCardsView } from "@gamepark/prehistories/moves/TakeBackPlayedCards";
+import TakeBackPlayedCards, {isTakeBackPlayedCards, isTakeBackPlayedCardsView, TakeBackPlayedCardsView} from "@gamepark/prehistories/moves/TakeBackPlayedCards";
 
 type Props = {
     player:PlayerView | PlayerViewSelf,
@@ -52,16 +52,16 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
     const revealCardsAnimation = useAnimation<RevealHuntCardsView>(animation => isRevealHuntCards(animation.move))
     const spendCardAnimations = useAnimations<SpendHunter>(animation => isSpendHunter(animation.move))
     const shuffleDiscardAnimation = useAnimation<ShuffleDiscardPileView>(animation => isShuffleDiscardPile(animation.move))
-    const drawXCardsAnimation = useAnimation<DrawXCards|DrawXCardsView>(animation => isDrawXCards(animation.move))
+    const drawCardsAnimation = useAnimation<DrawCards|DrawCardsView>(animation => isDrawCards(animation.move))
     const takeBackCardsAnimation = useAnimation<TakeBackPlayedCards|TakeBackPlayedCardsView>(animation => isTakeBackPlayedCards(animation.move))
     let playerHand:number|number[] = isPlayerViewSelf(player) ? [...player.hand] : player.hand
     let playerPlayed:number[] = player.played
 
-    if(drawXCardsAnimation){
-        if (!isDrawXCardsView(drawXCardsAnimation.move) && Array.isArray(playerHand)){
-            playerHand.push(...drawXCardsAnimation.move.cards)
-        } else if (isDrawXCardsView(drawXCardsAnimation.move) && typeof playerHand === 'number'){
-            playerHand +=drawXCardsAnimation.move.cards
+    if(drawCardsAnimation){
+        if (!isDrawCardsView(drawCardsAnimation.move) && Array.isArray(playerHand)){
+            playerHand.push(...drawCardsAnimation.move.cards)
+        } else if (isDrawCardsView(drawCardsAnimation.move) && typeof playerHand === 'number'){
+            playerHand +=drawCardsAnimation.move.cards
         }
     }
     if(takeBackCardsAnimation){
@@ -119,12 +119,12 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
             seconds:revealCardsAnimation.duration,
             delay:0,
             fromNeutralPosition:false
-          } : ( drawXCardsAnimation ? {
-            seconds:drawXCardsAnimation.duration,
+          } : ( drawCardsAnimation ? {
+            seconds:drawCardsAnimation.duration,
             delay:0,
-            fromNeutralPosition:(!isDrawXCardsView(drawXCardsAnimation.move) && Array.isArray(playerHand))
-                ? index > playerHand.length - drawXCardsAnimation.move.cards.length -1
-                : isDrawXCardsView(drawXCardsAnimation.move) && typeof playerHand ==='number' && index > playerHand - drawXCardsAnimation.move.cards -1
+            fromNeutralPosition:(!isDrawCardsView(drawCardsAnimation.move) && Array.isArray(playerHand))
+                ? index > playerHand.length - drawCardsAnimation.move.cards.length -1
+                : isDrawCardsView(drawCardsAnimation.move) && typeof playerHand ==='number' && index > playerHand - drawCardsAnimation.move.cards -1
           } : ( takeBackCardsAnimation  
               ? {seconds:takeBackCardsAnimation.duration,
                  delay:0,
@@ -153,7 +153,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
                             color={player.color}
                             css={[smoothAngles,
                                   playHuntCardAnimation && index === 0 && playHuntCardAnimationStyle(playHuntCardAnimation.duration,player.played.length),
-                                  drawXCardsAnimation && !isDrawXCardsView(drawXCardsAnimation.move) && drawXCardsAnimation.move.cards.find(c => c === card) && drawXCardsAnimStyle(drawXCardsAnimation.duration, false),
+                                  drawCardsAnimation && !isDrawCardsView(drawCardsAnimation.move) && drawCardsAnimation.move.cards.find(c => c === card) && drawCardsAnimStyle(drawCardsAnimation.duration, false),
                                   takeBackCardsAnimation && Array.isArray(playerHand) && index >= playerHand.length - player.played.length && takeBackCardsAnimationStyle(index - player.hand.length, takeBackCardsAnimation.duration)
                                 ]}
                             power={getColoredDeck(player.color)[card].power}
@@ -228,7 +228,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
 
             <div css={[toAbsolute, setPercentDimension(24,16), deckZonePosition]}>
 
-                {[...Array(player.deck - (drawXCardsAnimation ? ((!isDrawXCardsView(drawXCardsAnimation.move) && player.color === playerId) ? drawXCardsAnimation.move.cards.length : 0) : 0))].map((_, i) => <Picture key={i} alt={t('token')} src={getCardBack(player.color)} css={[toAbsolute, smoothAngles, deckOffset(i), toFullSize, deckCardShadow]} draggable={false} />)}
+                {[...Array(player.deck - (drawCardsAnimation ? ((!isDrawCardsView(drawCardsAnimation.move) && player.color === playerId) ? drawCardsAnimation.move.cards.length : 0) : 0))].map((_, i) => <Picture key={i} alt={t('token')} src={getCardBack(player.color)} css={[toAbsolute, smoothAngles, deckOffset(i), toFullSize, deckCardShadow]} draggable={false} />)}
 
             </div>
 
@@ -263,7 +263,7 @@ const drawHuntCardKeyframes = (isHidden:boolean) => keyframes`
     to{}
 `
 
-const drawXCardsAnimStyle = (duration:number, isHidden:boolean) => css`
+const drawCardsAnimStyle = (duration:number, isHidden:boolean) => css`
     transform-style:preserve-3d;
     animation:${drawHuntCardKeyframes(isHidden)} ${duration}s ease-in-out forwards;
 `

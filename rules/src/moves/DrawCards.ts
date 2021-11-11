@@ -7,26 +7,26 @@ import Move from "./Move";
 import MoveType from "./MoveType";
 import MoveView from "./MoveView";
 
-type DrawXCards = {
-    type:MoveType.DrawXCards
+type DrawCards = {
+    type:MoveType.DrawCards
     cards:number[]
 }
 
-export default DrawXCards
+export default DrawCards
 
-export type DrawXCardsView = {
-    type:MoveType.DrawXCards
+export type DrawCardsView = {
+    type:MoveType.DrawCards
     cards:number
 }
 
-export function drawXCards(state:GameState){
+export function drawCards(state:GameState){
     const player = getFirstOfSortedPlayer(state)
     player.hand.push(...player.deck.splice(0, Math.min(howManyCardToDraw(player), player.deck.length)))
     player.hunting!.huntPhase = HuntPhase.ChangeActivePlayer
 }
 
-export function drawXCardsInView(state:GameView, move:DrawXCards|DrawXCardsView){
-    if (!isDrawXCardsView(move)){
+export function drawCardsInView(state:GameView, move:DrawCards|DrawCardsView){
+    if (!isDrawCardsView(move)){
         const player = getPlayers(state).filter(isPlayerViewSelf).find(p => p.color === state.sortedPlayers![0])!
         player.hand = player.hand.concat(move.cards.filter(elem => elem !== undefined && elem !== null))
         player.deck = Math.max(player.deck-howManyCardToDraw(player),0)
@@ -39,10 +39,10 @@ export function drawXCardsInView(state:GameView, move:DrawXCards|DrawXCardsView)
     }
 }
 
-export function isDrawXCards(move:Move| MoveView):move is DrawXCards{
-    return move.type === MoveType.DrawXCards
+export function isDrawCards(move:Move| MoveView):move is DrawCards{
+    return move.type === MoveType.DrawCards
 }
 
-export function isDrawXCardsView(move:DrawXCards | DrawXCardsView): move is DrawXCardsView{
+export function isDrawCardsView(move:DrawCards | DrawCardsView): move is DrawCardsView{
     return typeof move.cards === 'number'
 }

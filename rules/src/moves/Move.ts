@@ -1,7 +1,7 @@
 import ChangeActivePlayer from './ChangeActivePlayer'
 import ResolvePermanentObjectives from './CheckPermanentObjectives'
 import ResolveVariableObjectives from './CheckVariableObjectives'
-import DrawXCards from './DrawXCards'
+import DrawCards from './DrawCards'
 import EndGame from './EndGame'
 import EndTurn from './EndTurn'
 import PlayHuntCard from './PlayHuntCard'
@@ -27,7 +27,7 @@ type Move = PlayHuntCard |
             EndTurn |
             TakeBackPlayedCards |
             RefillHuntingBoard |
-            DrawXCards |
+            DrawCards |
             ShuffleDiscardPile |
             ChangeActivePlayer |
             EndGame
