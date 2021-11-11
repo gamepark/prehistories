@@ -27,7 +27,7 @@ import PlayerColor from './PlayerColor'
 import PlayerState, {setupDeck} from './PlayerState'
 import {isGameOptions, PrehistoriesOptions, PrehistoriesPlayerOptions} from './PrehistoriesOptions'
 import Phase, {HuntPhase} from './types/Phase'
-import {PlayerView, PlayerViewSelf} from './types/PlayerView'
+import {isPlayerState, PlayerView, PlayerViewSelf} from './types/PlayerView'
 import getPowerLevels from './utils/powerLevels'
 import teamPower from './utils/teamPower'
 import {canPlaceTile, getCavePlacementSpaces} from "./utils/PlacementRules";
@@ -217,11 +217,11 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
             if (player.played.length !== 0) {
               return {type: MoveType.TakeBackPlayedCards}
             } else {
-              const cardsToDraw: number = howManyCardToDraw(player)
+              const cardsToDraw: number = playerCouldDraw(player)
               if (player.deck.length < cardsToDraw && player.discard.length > 0) {
                 return {type: MoveType.ShuffleDiscardPile, shuffledCards: shuffle(player.discard)}
               } else {
-                return {type: MoveType.DrawCards, cards: player.deck.slice(0, Math.min(howManyCardToDraw(player), player.deck.length))}
+                return {type: MoveType.DrawCards}
               }
             }
           }
@@ -243,8 +243,8 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         if (this.state.phase === undefined || playerId === p.color) {
           return {...p, deck: p.deck.length}
         } else {
-          const newPlayer:PlayerView = {...p, deck: p.deck.length, hand: p.hand.length + p.played.length, played: []}
-          return (this.state.phase === Phase.Initiative || (this.state.sortedPlayers !== undefined && this.state.sortedPlayers.find(sp => sp === p.color) === undefined)) 
+          const newPlayer: PlayerView = {...p, deck: p.deck.length, hand: p.hand.length + p.played.length, played: []}
+          return (this.state.phase === Phase.Initiative || (this.state.sortedPlayers !== undefined && this.state.sortedPlayers.find(sp => sp === p.color) === undefined))
             ? newPlayer
             : {...p, deck: p.deck.length, hand: p.hand.length}
         }
@@ -291,12 +291,10 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         }
       case MoveType.DrawCards:
         if (playerId === this.state.sortedPlayers![0]) {
-          return move
+          const player = this.state.players.find(p => p.color === this.state.sortedPlayers![0])!
+          return {...move, cards: player.deck.slice(0, Math.min(playerCouldDraw(player), player.deck.length))}
         } else {
-          return {
-            type: MoveType.DrawCards, playerId: this.state.sortedPlayers![0],
-            cards: howManyCardToDraw(this.state.players.find(p => p.color === this.state.sortedPlayers![0])!)
-          }
+          return move
         }
       case MoveType.ShuffleDiscardPile:
         return {type: MoveType.ShuffleDiscardPile}
@@ -353,26 +351,23 @@ function setupHuntingBoard(game: GameState): number[] {
   }
 }
 
-export function howManyCardToDraw(player: PlayerState | PlayerView | PlayerViewSelf): number {
-  return player.hunting!.tilesHunted === 0 ? 3 : (player.hunting!.injuries === 0 ? 2 + areHandPrintsRecovered(player) : Math.max(0, 2 - player.hunting!.injuries) + areHandPrintsRecovered(player))
+export function playerCouldDraw(player: PlayerState | PlayerView | PlayerViewSelf): number {
+  if (player.hunting!.tilesHunted === 0) {
+    return 3
+  }
+  return Math.max(0, 2 - player.hunting!.injuries) + handPrintsJustRecovered(player)
 }
 
-export function areHandPrintsRecovered(player: PlayerState | PlayerView | PlayerViewSelf): number {
-  let result: number = 0
-  if (player.hunting!.tilesHunted === 0) {
-    return result
-  } else {
-    for (let i = 0; i < player.hunting!.tilesHunted; i++) {
-      const placedTile = player.cave[player.cave.length - 1 - i]
-      for (const {x, y} of getPlacedTileCoordinates(placedTile)) {
-        if (caves[player.color][y][x] === Space.Hand) {
-          result++
-        } else if (caves[player.color][y][x] === Space.Hand2) {
-          result += 2
-        }
-      }
-    }
-    return result
-  }
+export function playerWillDraw(player: PlayerState | PlayerView | PlayerViewSelf) {
+  const deckSize = isPlayerState(player) ? player.deck.length : player.deck
+  return Math.max(playerCouldDraw(player), deckSize)
+}
 
+export function handPrintsJustRecovered(player: PlayerState | PlayerView | PlayerViewSelf): number {
+  if (!player.hunting?.tilesHunted) return 0
+  return player.cave.slice(-player.hunting.tilesHunted).reduce((sum, placedTile) =>
+      sum + getPlacedTileCoordinates(placedTile).reduce((sum, {x, y}) =>
+          caves[player.color][y][x] === Space.Hand ? sum + 1 : caves[player.color][y][x] === Space.Hand2 ? sum + 2 : sum
+        , 0)
+    , 0)
 }

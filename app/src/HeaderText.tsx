@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import GameView from '@gamepark/prehistories/GameView'
 import PlayerColor from '@gamepark/prehistories/PlayerColor'
-import { howManyCardToDraw } from '@gamepark/prehistories/Prehistories'
+import { playerCouldDraw } from '@gamepark/prehistories/Prehistories'
 import { getPlayerName } from '@gamepark/prehistories/PrehistoriesOptions'
 import Phase, { HuntPhase } from '@gamepark/prehistories/types/Phase'
 import { Player as PlayerInfo, usePlayerId, usePlayers } from '@gamepark/react-client'
@@ -76,7 +76,7 @@ function HeaderOnGoingGameText({game}:{game:GameView}){
           return activePlayer.color === playerId ? <> {t("hunt.you.pay.tile")} </> : <> {t("hunt.player.pay.tile",{player:getPseudo(activePlayer.color,players,t)})} </>
         }
         case HuntPhase.DrawCards:{
-          const cardsDraw:number = howManyCardToDraw(activePlayer)
+          const cardsDraw:number = playerCouldDraw(activePlayer)
           if (cardsDraw !== 0){
             return activePlayer.color === playerId ? <> {t("hunt.you.draw.cards", {cards:cardsDraw})} </> : <> {t("hunt.player.draw.cards",{player:getPseudo(activePlayer.color,players,t), cards:cardsDraw})} </>
           } else {

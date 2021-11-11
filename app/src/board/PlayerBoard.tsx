@@ -27,6 +27,7 @@ import ButtonClickSound from "../sounds/buttonClick.mp3"
 import {centerContainer, setPercentDimension, toAbsolute, toFullSize} from "../utils/styles";
 import ButtonsTab from "./ButtonsTab";
 import TakeBackPlayedCards, {isTakeBackPlayedCards, isTakeBackPlayedCardsView, TakeBackPlayedCardsView} from "@gamepark/prehistories/moves/TakeBackPlayedCards";
+import {playerWillDraw} from "@gamepark/prehistories/Prehistories";
 
 type Props = {
     player:PlayerView | PlayerViewSelf,
@@ -58,10 +59,10 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
     let playerPlayed:number[] = player.played
 
     if(drawCardsAnimation){
-        if (!isDrawCardsView(drawCardsAnimation.move) && Array.isArray(playerHand)){
+        if (isDrawCardsView(drawCardsAnimation.move) && Array.isArray(playerHand)){
             playerHand.push(...drawCardsAnimation.move.cards)
-        } else if (isDrawCardsView(drawCardsAnimation.move) && typeof playerHand === 'number'){
-            playerHand +=drawCardsAnimation.move.cards
+        } else if (!isDrawCardsView(drawCardsAnimation.move) && typeof playerHand === 'number'){
+            playerHand += playerWillDraw(player)
         }
     }
     if(takeBackCardsAnimation){
@@ -122,9 +123,9 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
           } : ( drawCardsAnimation ? {
             seconds:drawCardsAnimation.duration,
             delay:0,
-            fromNeutralPosition:(!isDrawCardsView(drawCardsAnimation.move) && Array.isArray(playerHand))
+            fromNeutralPosition:(isDrawCardsView(drawCardsAnimation.move) && Array.isArray(playerHand))
                 ? index > playerHand.length - drawCardsAnimation.move.cards.length -1
-                : isDrawCardsView(drawCardsAnimation.move) && typeof playerHand ==='number' && index > playerHand - drawCardsAnimation.move.cards -1
+                : !isDrawCardsView(drawCardsAnimation.move) && typeof playerHand ==='number' && index > playerHand - playerWillDraw(player) -1
           } : ( takeBackCardsAnimation  
               ? {seconds:takeBackCardsAnimation.duration,
                  delay:0,
@@ -153,7 +154,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
                             color={player.color}
                             css={[smoothAngles,
                                   playHuntCardAnimation && index === 0 && playHuntCardAnimationStyle(playHuntCardAnimation.duration,player.played.length),
-                                  drawCardsAnimation && !isDrawCardsView(drawCardsAnimation.move) && drawCardsAnimation.move.cards.find(c => c === card) && drawCardsAnimStyle(drawCardsAnimation.duration, false),
+                                  drawCardsAnimation && isDrawCardsView(drawCardsAnimation.move) && drawCardsAnimation.move.cards.find(c => c === card) && drawCardsAnimStyle(drawCardsAnimation.duration, false),
                                   takeBackCardsAnimation && Array.isArray(playerHand) && index >= playerHand.length - player.played.length && takeBackCardsAnimationStyle(index - player.hand.length, takeBackCardsAnimation.duration)
                                 ]}
                             power={getColoredDeck(player.color)[card].power}
@@ -228,7 +229,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
 
             <div css={[toAbsolute, setPercentDimension(24,16), deckZonePosition]}>
 
-                {[...Array(player.deck - (drawCardsAnimation ? ((!isDrawCardsView(drawCardsAnimation.move) && player.color === playerId) ? drawCardsAnimation.move.cards.length : 0) : 0))].map((_, i) => <Picture key={i} alt={t('token')} src={getCardBack(player.color)} css={[toAbsolute, smoothAngles, deckOffset(i), toFullSize, deckCardShadow]} draggable={false} />)}
+                {[...Array(player.deck - (drawCardsAnimation ? ((isDrawCardsView(drawCardsAnimation.move) && player.color === playerId) ? drawCardsAnimation.move.cards.length : 0) : 0))].map((_, i) => <Picture key={i} alt={t('token')} src={getCardBack(player.color)} css={[toAbsolute, smoothAngles, deckOffset(i), toFullSize, deckCardShadow]} draggable={false} />)}
 
             </div>
 
@@ -314,8 +315,8 @@ const deckCardShadow = css`
 `
 
 const deckOffset = (index:number) => css`
-    top:${-index*1}%;
-    left:${index*1}%;
+    top:${-index}%;
+    left:${index}%;
 `
 
 const handPosition = css`
