@@ -70,25 +70,25 @@ import hunterYellow5_1 from '../images/HunterYellow5-1.jpg'
 import hunterYellow5_2 from '../images/HunterYellow5-2.jpg'
 import hunterYellow6_1 from '../images/HunterYellow6-1.jpg'
 import hunterYellow6_2 from '../images/HunterYellow6-2.jpg'
-import objective0 from '../images/Objective0.jpg'
-import objective1A from '../images/Objective1A.jpg'
-import objective1B from '../images/Objective1B.jpg'
-import objective2A from '../images/Objective2A.jpg'
-import objective2B from '../images/Objective2B.jpg'
-import objective3A from '../images/Objective3A.jpg'
-import objective3B from '../images/Objective3B.jpg'
-import objective4A from '../images/Objective4A.jpg'
-import objective4B from '../images/Objective4B.jpg'
-import objective5A from '../images/Objective5A.jpg'
-import objective5B from '../images/Objective5B.jpg'
-import objective6A from '../images/Objective6A.jpg'
-import objective6B from '../images/Objective6B.jpg'
-import objective7A from '../images/Objective7A.jpg'
-import objective7B from '../images/Objective7B.jpg'
-import objective8A from '../images/Objective8A.jpg'
-import objective8B from '../images/Objective8B.jpg'
-import objective9A from '../images/Objective9A.jpg'
-import objective9B from '../images/Objective9B.jpg'
+import permanentObjectives from '../images/objectives/permanent-objectives.jpg'
+import objectiveSunTotems from '../images/objectives/objective-sun-totems.jpg'
+import objectiveMoonTotems from '../images/objectives/objective-moon-totems.jpg'
+import objectiveSunMiddle from '../images/objectives/objective-sun-middle.jpg'
+import objectiveMoonLastColumn from '../images/objectives/objective-moon-last-column.jpg'
+import objectiveSunDiffAnimals from '../images/objectives/objective-sun-diff-animals.jpg'
+import objectiveMoonDiffAnimals from '../images/objectives/objective-moon-diff-animals.jpg'
+import objectiveSunAnimalArea from '../images/objectives/objective-sun-animal-area.jpg'
+import objectiveMoonAnimalArea from '../images/objectives/objective-moon-animal-area.jpg'
+import objectiveSunHunter from '../images/objectives/objective-sun-hunter.jpg'
+import objectiveMoonHunter from '../images/objectives/objective-moon-hunter.jpg'
+import objectiveSunSameAnimal from '../images/objectives/objective-sun-same-animal.jpg'
+import objectiveMoonSameAnimal from '../images/objectives/objective-moon-same-animal.jpg'
+import objectiveSunCorners from '../images/objectives/objective-sun-corners.jpg'
+import objectiveMoonCorners from '../images/objectives/objective-moon-corners.jpg'
+import objectiveSunSmallTiles from '../images/objectives/objective-sun-small-tiles.jpg'
+import objectiveMoonCollect from '../images/objectives/objective-moon-collect.jpg'
+import objectiveSunLegendary from '../images/objectives/objective-sun-legendary.jpg'
+import objectiveMoonLegendary from '../images/objectives/objective-moon-legendary.jpg'
 import totemBlue from '../images/TotemBlue.jpg'
 import totemWhite from '../images/TotemWhite.jpg'
 import totemGreen from '../images/TotemGreen.jpg'
@@ -204,8 +204,8 @@ const Images = {
   hunterRed4_1, hunterRed4_2, hunterRed5_1, hunterRed5_2, hunterRed6_1, hunterRed6_2,
   hunterYellow1_1, hunterYellow1_2, hunterYellow2_1, hunterYellow2_2, hunterYellow3_1, hunterYellow3_2,
   hunterYellow4_1, hunterYellow4_2, hunterYellow5_1, hunterYellow5_2, hunterYellow6_1, hunterYellow6_2,
-  objective0, objective1A, objective1B, objective2A, objective2B, objective3A, objective3B, objective4A, objective4B, objective5A, objective5B,
-  objective6A, objective6B, objective7A, objective7B, objective8A, objective8B, objective9A, objective9B,
+  permanentObjectives, objectiveSunTotems, objectiveMoonTotems, objectiveSunMiddle, objectiveMoonLastColumn, objectiveSunDiffAnimals, objectiveMoonDiffAnimals, objectiveSunAnimalArea, objectiveMoonAnimalArea, objectiveSunHunter, objectiveMoonHunter,
+  objectiveSunSameAnimal, objectiveMoonSameAnimal, objectiveSunCorners, objectiveMoonCorners, objectiveSunSmallTiles, objectiveMoonCollect, objectiveSunLegendary, objectiveMoonLegendary,
   totemBlue, totemGreen, totemRed, totemWhite, totemYellow,
   fish1, fish2Front, fish2Back, fish3AFront, fish3ABack, fish3BFront, fish3BBack, fish4AFront, fish4ABack, fish4BFront, fish4BBack,
   mammoth1, mammoth2Front, mammoth2Back, mammoth3AFront, mammoth3ABack, mammoth3BFront, mammoth3BBack,

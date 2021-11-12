@@ -31,7 +31,7 @@ const Objectives : FC<Props> = ({objectives,players, ...props}) => {
             )}
         </div>
 
-        <div css={[toAbsolute, permanentObjectivePosition, setPercentDimension(15.9,20), placingBackground(Images.objective0, "cover")]}>
+        <div css={[toAbsolute, permanentObjectivePosition, setPercentDimension(15.9,20), placingBackground(Images.permanentObjectives, "cover")]}>
             {players.map((player, indexPlayer) => 
                 [...Array(8-player.variableObjectivesMade.length-player.totemTokens)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[toAbsolute, totemStyle(indexPlayer,i), incomingAnimation]} draggable={false} />)
             )}

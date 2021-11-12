@@ -62,43 +62,43 @@ const objectiveStyle = css`
 function getObjectiveCardImage(objective:number):string{
     switch (objective){
         case 0 :
-            return Images.objective1A
+            return Images.objectiveSunTotems
         case 1 : 
-            return Images.objective2A
+            return Images.objectiveSunMiddle
         case 2 :
-            return Images.objective3A
+            return Images.objectiveSunDiffAnimals
         case 3 : 
-            return Images.objective4A
+            return Images.objectiveSunAnimalArea
         case 4 :
-            return Images.objective5A
+            return Images.objectiveSunHunter
         case 5 : 
-            return Images.objective6A
+            return Images.objectiveSunSameAnimal
         case 6 :
-            return Images.objective7A
+            return Images.objectiveSunCorners
         case 7 : 
-            return Images.objective8A
+            return Images.objectiveSunSmallTiles
         case 8 : 
-            return Images.objective9A
+            return Images.objectiveSunLegendary
         case 9 :
-            return Images.objective1B
+            return Images.objectiveMoonTotems
         case 10 : 
-            return Images.objective2B
+            return Images.objectiveMoonLastColumn
         case 11 :
-            return Images.objective3B
+            return Images.objectiveMoonDiffAnimals
         case 12 : 
-            return Images.objective4B
+            return Images.objectiveMoonAnimalArea
         case 13 :
-            return Images.objective5B
+            return Images.objectiveMoonHunter
         case 14 : 
-            return Images.objective6B
+            return Images.objectiveMoonSameAnimal
         case 15 :
-            return Images.objective7B
+            return Images.objectiveMoonCorners
         case 16 : 
-            return Images.objective8B
+            return Images.objectiveMoonCollect
         case 17 : 
-            return Images.objective9B
+            return Images.objectiveMoonLegendary
         default :
-            return Images.objective0
+            return Images.permanentObjectives
     }
 }
 
