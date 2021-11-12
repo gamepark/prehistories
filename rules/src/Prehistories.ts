@@ -3,7 +3,7 @@ import {shuffle} from 'lodash'
 import canUndo from './canUndo'
 import GameState from './GameState'
 import GameView from './GameView'
-import {goals} from './material/Goals'
+import {objectives} from './material/Objectives'
 import {changeActivePlayer} from './moves/ChangeActivePlayer'
 import {checkPermanentObjectives, resolvePermanentObjectives} from './moves/CheckPermanentObjectives'
 import {checkVariableObjectives, resolveVariableObjectives} from './moves/CheckVariableObjectives'
@@ -47,13 +47,13 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         players: setupPlayers(arg.players),
         tilesDeck: setupTilesDeck(),
         huntingBoard: [],
-        goals: [],
+        objectives: [],
         phase: Phase.Initiative,
         sortedPlayers: undefined
       }
 
       game.huntingBoard = setupHuntingBoard(game)
-      game.goals = setupGoals(game, arg.isExpertGame)
+      game.objectives = setupObjectives(game, arg.isExpertGame)
       super(game)
     } else {
       super(arg)
@@ -207,7 +207,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
           case HuntPhase.CheckVariableObjectives: {
             const result = checkVariableObjectives(this.state, player)
             if (result) {
-              return {type: MoveType.ResolveVariableObjectives, goal: result[0], tokens: result[1]}
+              return {type: MoveType.ResolveVariableObjectives, objective: result[0], tokens: result[1]}
             } else {
               return {type: MoveType.SetHuntPhase}
             }
@@ -323,24 +323,24 @@ function setupPlayers(players: PrehistoriesPlayerOptions[]): PlayerState[] {
       discard: [],
       hand: deck.splice(0, 3),
       played: [],
-      variableGoalsMade: []
+      variableObjectivesMade: []
     })
   })
 }
 
-function setupGoals(game: GameState, isExpertGame: boolean): number[] {
-  const numberOfGoalCards = goals.length / 2
-  const goalCardsShuffled = shuffle(Array.from(goals.slice(0, numberOfGoalCards).keys()))
-  const numberOfGoals: number = game.players.length < 4 ? 4 : 5
-  const goalCards = goalCardsShuffled.slice(0, numberOfGoals)
+function setupObjectives(game: GameState, isExpertGame: boolean): number[] {
+  const numberOfObjectiveCards = objectives.length / 2
+  const objectiveCardsShuffled = shuffle(Array.from(objectives.slice(0, numberOfObjectiveCards).keys()))
+  const numberOfObjectives: number = game.players.length < 4 ? 4 : 5
+  const objectiveCards = objectiveCardsShuffled.slice(0, numberOfObjectives)
   if (isExpertGame) {
-    for (let i = 0; i < goalCards.length; i++) {
+    for (let i = 0; i < objectiveCards.length; i++) {
       if (Math.random() < 0.5) {
-        goalCards[i] = goalCards[i] + numberOfGoalCards // Moon side is the second part of the goals array
+        objectiveCards[i] = objectiveCards[i] + numberOfObjectiveCards // Moon side is the second part of the objectives array
       }
     }
   }
-  return goalCards
+  return objectiveCards
 }
 
 function setupHuntingBoard(game: GameState): number[] {

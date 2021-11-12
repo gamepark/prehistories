@@ -6,15 +6,15 @@ import { FC, HTMLAttributes } from "react"
 import { useTranslation } from "react-i18next";
 import { centerContent, placingBackground, setPercentDimension, toAbsolute } from "../utils/styles";
 import Images from "../utils/Images"
-import Goal from "./Goal"
+import Objective from "./Objective"
 import { getTotem } from "./PlayerPanel"
 
 type Props = {
-    goals:number[],
+    objectives:number[],
     players:(PlayerView | PlayerViewSelf)[]
 } & HTMLAttributes<HTMLDivElement>
 
-const Objectives : FC<Props> = ({goals,players, ...props}) => {
+const Objectives : FC<Props> = ({objectives,players, ...props}) => {
 
     const {t} = useTranslation()
 
@@ -23,9 +23,9 @@ const Objectives : FC<Props> = ({goals,players, ...props}) => {
         <>
 
         <div css={[toAbsolute, variableObjectivesPosition, setPercentDimension(24.4,56), centerContent]} {...props}>
-            {goals.map((goal, index) => 
-                <div key={index} css={[setPercentDimension(100,18), goalMargin]}>  
-                    <Goal goal={goal}
+            {objectives.map((objective, index) => 
+                <div key={index} css={[setPercentDimension(100,18), objectiveMargin]}>  
+                    <Objective objective={objective}
                           players={players}/>
                 </div>
             )}
@@ -33,7 +33,7 @@ const Objectives : FC<Props> = ({goals,players, ...props}) => {
 
         <div css={[toAbsolute, permanentObjectivePosition, setPercentDimension(15.9,20), placingBackground(Images.objective0, "cover")]}>
             {players.map((player, indexPlayer) => 
-                [...Array(8-player.variableGoalsMade.length-player.totemTokens)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[toAbsolute, totemStyle(indexPlayer,i), incomingAnimation]} draggable={false} />)
+                [...Array(8-player.variableObjectivesMade.length-player.totemTokens)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[toAbsolute, totemStyle(indexPlayer,i), incomingAnimation]} draggable={false} />)
             )}
 
         </div>
@@ -69,7 +69,7 @@ const permanentObjectivePosition = css`
     border:0.1em solid black;
 `
 
-const goalMargin = css`
+const objectiveMargin = css`
     margin:0 0.5em;
 `
 

@@ -2,7 +2,7 @@ import PlayerState from "../PlayerState"
 import Face from "./Face"
 import { PlayerView, PlayerViewSelf } from "./PlayerView"
 
-type Goal = {
+type Objective = {
     face:Face,
     text:string,
     hint:string
@@ -10,4 +10,4 @@ type Goal = {
     rule:(player:PlayerState | PlayerView | PlayerViewSelf) => boolean
 }
 
-export default Goal
+export default Objective

@@ -1,7 +1,7 @@
 import PlayerState from "../PlayerState";
 import {getAdjacentCoordinates} from "../types/Coordinates";
 import Face from "../types/Face";
-import Goal from "../types/Goal";
+import Objective from "../types/Objective";
 import {PlayerView, PlayerViewSelf} from "../types/PlayerView";
 import {
   getPaintedCave,
@@ -17,9 +17,9 @@ import Tile, {isLegendaryAnimalTile} from "./Tile";
 
 const {Mammoth, Buffalo, Fish, Boar, Ibex} = Painting;
 
-const GoalA1: Goal = {
+const objectiveA1: Objective = {
   face: Face.A,
-  text: 'goalA1',
+  text: 'objectiveA1',
   hint: 'hintA1',
   value: 2,
   rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
@@ -37,9 +37,9 @@ const GoalA1: Goal = {
   }
 }
 
-const GoalA2: Goal = {
+const objectiveA2: Objective = {
   face: Face.A,
-  text: 'goalA2',
+  text: 'objectiveA2',
   hint: 'hintA2',
   value: 2,
   rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
@@ -55,9 +55,9 @@ const GoalA2: Goal = {
   }
 }
 
-const GoalA3: Goal = {
+const objectiveA3: Objective = {
   face: Face.A,
-  text: 'goalA3',
+  text: 'objectiveA3',
   hint: 'hintA3',
   value: 2,
   rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
@@ -75,17 +75,17 @@ const GoalA3: Goal = {
   }
 }
 
-const GoalA4: Goal = {
+const objectiveA4: Objective = {
   face: Face.A,
-  text: 'goalA4',
+  text: 'objectiveA4',
   hint: 'hintA4',
   value: 2,
   rule: (player: PlayerState | PlayerView | PlayerViewSelf) => hasGroupOfIdenticalAnimals(getPaintedCave(player), 8)
 }
 
-const GoalA5: Goal = {
+const objectiveA5: Objective = {
   face: Face.A,
-  text: 'goalA5',
+  text: 'objectiveA5',
   hint: 'hintA5',
   value: 2,
   rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
@@ -93,9 +93,9 @@ const GoalA5: Goal = {
   }
 }
 
-const GoalA6: Goal = {
+const objectiveA6: Objective = {
   face: Face.A,
-  text: 'goalA6',
+  text: 'objectiveA6',
   hint: 'hintA6',
   value: 2,
   rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
@@ -115,9 +115,9 @@ const GoalA6: Goal = {
   }
 }
 
-const GoalA7: Goal = {
+const objectiveA7: Objective = {
   face: Face.A,
-  text: 'goalA7',
+  text: 'objectiveA7',
   hint: 'hintA7',
   value: 2,
   rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
@@ -126,9 +126,9 @@ const GoalA7: Goal = {
   }
 }
 
-const GoalA8: Goal = {
+const objectiveA8: Objective = {
   face: Face.A,
-  text: 'goalA8',
+  text: 'objectiveA8',
   hint: 'hintA8',
   value: 2,
   rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
@@ -144,9 +144,9 @@ const GoalA8: Goal = {
   }
 }
 
-const GoalA9: Goal = {
+const objectiveA9: Objective = {
   face: Face.A,
-  text: 'goalA9',
+  text: 'objectiveA9',
   hint: 'hintA9',
   value: 2,
   rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
@@ -155,9 +155,9 @@ const GoalA9: Goal = {
   }
 }
 
-const GoalB1: Goal = {
+const objectiveB1: Objective = {
   face: Face.B,
-  text: 'goalB1',
+  text: 'objectiveB1',
   hint: 'hintB1',
   value: 3,
   rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
@@ -166,9 +166,9 @@ const GoalB1: Goal = {
   }
 }
 
-const GoalB2: Goal = {
+const objectiveB2: Objective = {
   face: Face.B,
-  text: 'goalB2',
+  text: 'objectiveB2',
   hint: 'hintB2',
   value: 2,
   rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
@@ -177,9 +177,9 @@ const GoalB2: Goal = {
   }
 }
 
-const GoalB3: Goal = {
+const objectiveB3: Objective = {
   face: Face.B,
-  text: 'goalB3',
+  text: 'objectiveB3',
   hint: 'hintB3',
   value: 2,
   rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
@@ -187,17 +187,17 @@ const GoalB3: Goal = {
   }
 }
 
-const GoalB4: Goal = {
+const objectiveB4: Objective = {
   face: Face.B,
-  text: 'goalB4',
+  text: 'objectiveB4',
   hint: 'hintB4',
   value: 3,
   rule: (player: PlayerState | PlayerView | PlayerViewSelf) => hasGroupOfIdenticalAnimals(getPaintedCave(player), 10)
 }
 
-const GoalB5: Goal = {
+const objectiveB5: Objective = {
   face: Face.B,
-  text: 'goalB5',
+  text: 'objectiveB5',
   hint: 'hintB5',
   value: 2,
   rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
@@ -208,9 +208,9 @@ const GoalB5: Goal = {
   }
 }
 
-const GoalB6: Goal = {
+const objectiveB6: Objective = {
   face: Face.B,
-  text: 'goalB6',
+  text: 'objectiveB6',
   hint: 'hintB6',
   value: 2,
   rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
@@ -229,9 +229,9 @@ const GoalB6: Goal = {
   }
 }
 
-const GoalB7: Goal = {
+const objectiveB7: Objective = {
   face: Face.B,
-  text: 'goalB7',
+  text: 'objectiveB7',
   hint: 'hintB7',
   value: 3,
   rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
@@ -241,9 +241,9 @@ const GoalB7: Goal = {
   }
 }
 
-const GoalB8: Goal = {
+const objectiveB8: Objective = {
   face: Face.B,
-  text: 'goalB8',
+  text: 'objectiveB8',
   hint: 'hintB8',
   value: 2,
   rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
@@ -251,9 +251,9 @@ const GoalB8: Goal = {
   }
 }
 
-const GoalB9: Goal = {
+const objectiveB9: Objective = {
   face: Face.B,
-  text: 'goalB9',
+  text: 'objectiveB9',
   hint: 'hintB9',
   value: 2,
   rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
@@ -267,7 +267,7 @@ const GoalB9: Goal = {
   }
 }
 
-export const goals = [
-  GoalA1, GoalA2, GoalA3, GoalA4, GoalA5, GoalA6, GoalA7, GoalA8, GoalA9,
-  GoalB1, GoalB2, GoalB3, GoalB4, GoalB5, GoalB6, GoalB7, GoalB8, GoalB9
+export const objectives = [
+  objectiveA1, objectiveA2, objectiveA3, objectiveA4, objectiveA5, objectiveA6, objectiveA7, objectiveA8, objectiveA9,
+  objectiveB1, objectiveB2, objectiveB3, objectiveB4, objectiveB5, objectiveB6, objectiveB7, objectiveB8, objectiveB9
 ]

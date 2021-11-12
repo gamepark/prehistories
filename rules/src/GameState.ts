@@ -7,7 +7,7 @@ type GameState = {
   players: PlayerState[],
   tilesDeck: Tile[][],
   huntingBoard: (Tile | null)[],
-  goals: number[],
+  objectives: number[],
   phase?: Phase,
   sortedPlayers?: PlayerColor[]
 }

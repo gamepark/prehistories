@@ -11,8 +11,8 @@ import {getPlayerName} from "@gamepark/prehistories/PrehistoriesOptions"
 import Button from "./Button"
 import {css} from "@emotion/react"
 import {getBG} from "../board/PlayerPanel"
-import Goal from "../board/Goal"
-import {goals} from "@gamepark/prehistories/material/Goals"
+import Objective from "../board/Objective"
+import {objectives} from "@gamepark/prehistories/material/Objectives"
 
 const WelcomePopUp : FC<{player:PlayerColor | undefined, game:GameView, close: () => void}> = ({player, game, close}) => {
 
@@ -21,7 +21,7 @@ const WelcomePopUp : FC<{player:PlayerColor | undefined, game:GameView, close: (
     const playerId = usePlayerId<PlayerColor>()
     const isSpec = playerId === undefined
 
-    const [goalSelected, setGoalSelected] = useState(-1)
+    const [objectiveSelected, setObjectiveSelected] = useState(-1)
 
     return(
 
@@ -38,18 +38,18 @@ const WelcomePopUp : FC<{player:PlayerColor | undefined, game:GameView, close: (
 
                 <p>{isSpec ? t("welcome.spec.objectives") : t("welcome.player.objectives")}</p>
 
-                <div css={goalsPosition}>
-                    {game.goals.map((goal, index) => 
-                        <Goal key={index}
-                              goal={goal}
+                <div css={objectivesPosition}>
+                    {game.objectives.map((objective, index) => 
+                        <Objective key={index}
+                              objective={objective}
                               players={game.players}
-                              css={[goalSize, goalSelected === goal && selectEffect(goal > 8)]}
-                              onClick={() => setGoalSelected(goal)}
+                              css={[objectiveSize, objectiveSelected === objective && selectEffect(objective > 8)]}
+                              onClick={() => setObjectiveSelected(objective)}
                         />
                     )}
                 </div>
 
-                <p> {goalSelected === -1 ? t("goal.default.text") : t(goals[goalSelected].text) } </p>
+                <p> {objectiveSelected === -1 ? t("objective.default.text") : t(objectives[objectiveSelected].text) } </p>
 
                 <Button css={buttonPosition} colorButton={player ?? PlayerColor.White} onClick={close}>{t("Let's Hunt !")}</Button>
 
@@ -66,14 +66,14 @@ box-shadow:0 0 0.5em 1em ${isExpert ? `#1991d3` : `#f7ab01` };
 transition:box-shadow 0.5s linear;
 `
 
-const goalSize = css`
+const objectiveSize = css`
 width:19.5%;
 height:100%;
 cursor:pointer;
 transition:box-shadow 0.5s linear;
 `
 
-const goalsPosition = css`
+const objectivesPosition = css`
 position:relative;
 width:100%;
 height:50%;

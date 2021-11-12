@@ -9,22 +9,22 @@ import Images from "../utils/Images"
 import { getTotem } from "./PlayerPanel"
 
 type Props = {
-    goal:number
+    objective:number
     players:(PlayerView | PlayerViewSelf)[]
 } & HTMLAttributes<HTMLDivElement>
 
-const Goal : FC<Props> = ({goal, players, ...props}) => {
+const Objective : FC<Props> = ({objective, players, ...props}) => {
     
     const playerNewArray = players.filter(p => p)
-    const sortedPlayers = playerNewArray.sort((a,b) => -a.variableGoalsMade.filter(g => g === goal).length+b.variableGoalsMade.filter(g => g === goal).length)
+    const sortedPlayers = playerNewArray.sort((a,b) => -a.variableObjectivesMade.filter(g => g === objective).length+b.variableObjectivesMade.filter(g => g === objective).length)
     const {t} = useTranslation()
 
     return(
 
-        <div css={[goalPosition, toFullSize, goalStyle, placingBackground(getGoalCardImage(goal), "cover")]} {...props}>
+        <div css={[objectivePosition, toFullSize, objectiveStyle, placingBackground(getObjectiveCardImage(objective), "cover")]} {...props}>
 
             {sortedPlayers.map((player, indexPlayer) => 
-                [...Array(player.variableGoalsMade.filter(g => g === goal).length)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[toAbsolute, setPercentDimension(12.3,17), totemStyle(indexPlayer,i), incomingAnimation]} draggable={false} />)
+                [...Array(player.variableObjectivesMade.filter(g => g === objective).length)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[toAbsolute, setPercentDimension(12.3,17), totemStyle(indexPlayer,i), incomingAnimation]} draggable={false} />)
             )}
 
         </div>
@@ -50,17 +50,17 @@ const totemStyle = (iPlayer:number, iToken:number) => css`
     margin:0.5em auto;
 `
 
-const goalPosition = css`
+const objectivePosition = css`
     position:relative;
 `
 
-const goalStyle = css`
+const objectiveStyle = css`
     border-radius:8% / 5%;
     box-shadow:0 0 0.5em black;
 `
 
-function getGoalCardImage(goal:number):string{
-    switch (goal){
+function getObjectiveCardImage(objective:number):string{
+    switch (objective){
         case 0 :
             return Images.objective1A
         case 1 : 
@@ -102,4 +102,4 @@ function getGoalCardImage(goal:number):string{
     }
 }
 
-export default Goal
+export default Objective

@@ -12,7 +12,7 @@ export default interface PlayerState {
   hand:number[]
   deck:number[]
   played:number[]
-  variableGoalsMade:number[]
+  variableObjectivesMade:number[]
   isReady?:boolean
   hunting?:Hunting
 }

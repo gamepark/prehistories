@@ -34,7 +34,7 @@ type Props = {
     phase:Phase | undefined,
     players:(PlayerView | PlayerViewSelf)[]
     isActiveHuntingPlayer:boolean
-    goals:number[]
+    objectives:number[]
     selectedHunters:number[]|undefined
     caveDisplayed:PlayerColor
 }

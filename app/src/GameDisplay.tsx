@@ -37,7 +37,7 @@ export default function GameDisplay({game, audioLoader}: Props) {
 
         <Board game={game}/>
 
-        <Objectives goals={game.goals}
+        <Objectives objectives={game.objectives}
                     players={game.players}
                     onClick={() => setWelcomePopUpClosed(false)}
         />
@@ -56,7 +56,7 @@ export default function GameDisplay({game, audioLoader}: Props) {
                      players={game.players}
                      phase={game.phase}
                      isActiveHuntingPlayer={game.sortedPlayers !== undefined && game.sortedPlayers[0] === playerDisplayed.color}
-                     goals={game.goals}
+                     objectives={game.objectives}
                      caveDisplayed = {game.caveDisplayed}
                      selectedHunters={game.huntersSelected}
         />
