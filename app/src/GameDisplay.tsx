@@ -5,7 +5,7 @@ import PlayerColor from '@gamepark/prehistories/PlayerColor'
 import {usePlay, usePlayerId} from '@gamepark/react-client'
 import {Letterbox} from '@gamepark/react-components'
 import {useMemo, useState} from 'react'
-import Goals from './board/Goals'
+import Objectives from './board/Objectives'
 import PlayerBoard from './board/PlayerBoard'
 import PlayerPanel from './board/PlayerPanel'
 import SetCaveDisplayed, {setCaveDisplayedMove} from './localMoves/setCaveDisplayed'
@@ -37,9 +37,9 @@ export default function GameDisplay({game, audioLoader}: Props) {
 
         <Board game={game}/>
 
-        <Goals goals={game.goals}
-               players={game.players}
-               onClick={() => setWelcomePopUpClosed(false)}
+        <Objectives goals={game.goals}
+                    players={game.players}
+                    onClick={() => setWelcomePopUpClosed(false)}
         />
         {players.map((player, index) =>
           <PlayerPanel key={player.color}

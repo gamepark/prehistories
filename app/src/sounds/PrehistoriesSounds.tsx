@@ -1,5 +1,5 @@
-import ResolvePermanentGoals, {isResolvePermanentGoals} from "@gamepark/prehistories/moves/CheckPermanentGoals"
-import ResolveVariableGoals, {isResolveVariableGoals} from "@gamepark/prehistories/moves/CheckVariableGoals"
+import ResolvePermanentObjectives, {isResolvePermanentObjectives} from "@gamepark/prehistories/moves/CheckPermanentObjectives"
+import ResolveVariableObjectives, {isResolveVariableObjectives} from "@gamepark/prehistories/moves/CheckVariableObjectives"
 import DrawCards, {isDrawCards} from "@gamepark/prehistories/moves/DrawCards"
 import PlaceTile, {isPlaceTile} from "@gamepark/prehistories/moves/PlaceTile"
 import {isRevealHuntCards, RevealHuntCardsView} from "@gamepark/prehistories/moves/RevealHuntCards"
@@ -9,8 +9,8 @@ import {AudioLoader} from "./AudioLoader"
 import cardFlipSound from "./cardFlip.mp3";
 import cardMoveSound from "./cardMove.mp3";
 import moveTileSound from "./moveTile.mp3";
-import permGoalSound from "./permGoal.mp3";
-import varGoalSound from "./varGoal.mp3";
+import permObjectiveSound from "./permObjective.mp3";
+import varObjectiveSound from "./varObjective.mp3";
 import PlayHuntCard, {isPlayHuntCardView} from "@gamepark/prehistories/moves/PlayHuntCard"
 
 
@@ -23,8 +23,8 @@ const PrehistoriesSounds : FC<Props> = ({audioLoader}) => {
     const revealCardsAnimation = useAnimation<RevealHuntCardsView>(animation => isRevealHuntCards(animation.move))
     const drawCards = useAnimation<DrawCards>(animation => isDrawCards(animation.move))
     const playTile = useAnimation<PlaceTile>(animation => isPlaceTile(animation.move))
-    const permGoal = useAnimation<ResolvePermanentGoals>(animation => isResolvePermanentGoals(animation.move))
-    const varGoal = useAnimation<ResolveVariableGoals>(animation => isResolveVariableGoals(animation.move))
+    const permObjective = useAnimation<ResolvePermanentObjectives>(animation => isResolvePermanentObjectives(animation.move))
+    const varObjective = useAnimation<ResolveVariableObjectives>(animation => isResolveVariableObjectives(animation.move))
     const playCard = useAnimation<PlayHuntCard>(animation => isPlayHuntCardView(animation.move))
 
     useEffect(() => {
@@ -46,16 +46,16 @@ const PrehistoriesSounds : FC<Props> = ({audioLoader}) => {
       }, [playTile?.move])
 
       useEffect(() => {
-        if (permGoal) {
-          audioLoader.play(permGoalSound, false, 0.5)
+        if (permObjective) {
+          audioLoader.play(permObjectiveSound, false, 0.5)
         }
-      }, [permGoal?.move])
+      }, [permObjective?.move])
 
       useEffect(() => {
-        if (varGoal) {
-          audioLoader.play(varGoalSound, false, 0.5)
+        if (varObjective) {
+          audioLoader.play(varObjectiveSound, false, 0.5)
         }
-      }, [varGoal?.move])
+      }, [varObjective?.move])
 
     return null
 }

@@ -36,7 +36,7 @@ const WelcomePopUp : FC<{player:PlayerColor | undefined, game:GameView, close: (
                     : getPlayerName(player!,t)
                   : t("dear spectator")})}</h2>
 
-                <p>{isSpec ? t("welcome.spec.goals") : t("welcome.player.goals")}</p>
+                <p>{isSpec ? t("welcome.spec.objectives") : t("welcome.player.objectives")}</p>
 
                 <div css={goalsPosition}>
                     {game.goals.map((goal, index) => 

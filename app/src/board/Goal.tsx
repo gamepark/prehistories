@@ -62,43 +62,43 @@ const goalStyle = css`
 function getGoalCardImage(goal:number):string{
     switch (goal){
         case 0 :
-            return Images.goal1A
+            return Images.objective1A
         case 1 : 
-            return Images.goal2A
+            return Images.objective2A
         case 2 :
-            return Images.goal3A
+            return Images.objective3A
         case 3 : 
-            return Images.goal4A
+            return Images.objective4A
         case 4 :
-            return Images.goal5A
+            return Images.objective5A
         case 5 : 
-            return Images.goal6A
+            return Images.objective6A
         case 6 :
-            return Images.goal7A
+            return Images.objective7A
         case 7 : 
-            return Images.goal8A
+            return Images.objective8A
         case 8 : 
-            return Images.goal9A
+            return Images.objective9A
         case 9 :
-            return Images.goal1B
+            return Images.objective1B
         case 10 : 
-            return Images.goal2B
+            return Images.objective2B
         case 11 :
-            return Images.goal3B
+            return Images.objective3B
         case 12 : 
-            return Images.goal4B
+            return Images.objective4B
         case 13 :
-            return Images.goal5B
+            return Images.objective5B
         case 14 : 
-            return Images.goal6B
+            return Images.objective6B
         case 15 :
-            return Images.goal7B
+            return Images.objective7B
         case 16 : 
-            return Images.goal8B
+            return Images.objective8B
         case 17 : 
-            return Images.goal9B
+            return Images.objective9B
         default :
-            return Images.goal0
+            return Images.objective0
     }
 }
 

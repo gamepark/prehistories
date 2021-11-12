@@ -14,7 +14,7 @@ type Props = {
     players:(PlayerView | PlayerViewSelf)[]
 } & HTMLAttributes<HTMLDivElement>
 
-const Goals : FC<Props> = ({goals,players, ...props}) => {
+const Objectives : FC<Props> = ({goals,players, ...props}) => {
 
     const {t} = useTranslation()
 
@@ -22,7 +22,7 @@ const Goals : FC<Props> = ({goals,players, ...props}) => {
 
         <>
 
-        <div css={[toAbsolute, variableGoalsPosition, setPercentDimension(24.4,56), centerContent]} {...props}>
+        <div css={[toAbsolute, variableObjectivesPosition, setPercentDimension(24.4,56), centerContent]} {...props}>
             {goals.map((goal, index) => 
                 <div key={index} css={[setPercentDimension(100,18), goalMargin]}>  
                     <Goal goal={goal}
@@ -31,7 +31,7 @@ const Goals : FC<Props> = ({goals,players, ...props}) => {
             )}
         </div>
 
-        <div css={[toAbsolute, permanentGoalPosition, setPercentDimension(15.9,20), placingBackground(Images.goal0, "cover")]}>
+        <div css={[toAbsolute, permanentObjectivePosition, setPercentDimension(15.9,20), placingBackground(Images.objective0, "cover")]}>
             {players.map((player, indexPlayer) => 
                 [...Array(8-player.variableGoalsMade.length-player.totemTokens)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[toAbsolute, totemStyle(indexPlayer,i), incomingAnimation]} draggable={false} />)
             )}
@@ -62,7 +62,7 @@ const totemStyle = (iPlayer:number, iToken:number) => css`
     margin:0.5em auto;
 `
 
-const permanentGoalPosition = css`
+const permanentObjectivePosition = css`
     top:7%;
     right:0%;
     border-radius:0.8em;
@@ -73,10 +73,10 @@ const goalMargin = css`
     margin:0 0.5em;
 `
 
-const variableGoalsPosition = css`
+const variableObjectivesPosition = css`
     top:7.5%;
     left:24%;
     z-index:1;
     cursor:pointer;
 `
-export default Goals
+export default Objectives

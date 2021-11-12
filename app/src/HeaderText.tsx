@@ -84,7 +84,7 @@ function HeaderOnGoingGameText({game}:{game:GameView}){
           }
         }
         default:{
-          return activePlayer.color === playerId ? <> {t("hunt.you.complete.goals")} </> : <> {t("hunt.player.complete.goals",{player:getPseudo(activePlayer.color,players,t)})} </>
+          return activePlayer.color === playerId ? <> {t("hunt.you.complete.objectives")} </> : <> {t("hunt.player.complete.objectives",{player:getPseudo(activePlayer.color,players,t)})} </>
         }
       }
     } 

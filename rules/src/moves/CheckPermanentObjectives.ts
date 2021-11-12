@@ -9,20 +9,20 @@ import {getPaintedCave, isColumnPainted, isLinePainted} from "../material/Painte
 import {getPlacedTileCoordinates} from "../types/PlacedTile";
 import {isLegendaryAnimalTile} from "../material/Tile";
 
-type ResolvePermanentGoals = {
-  type: MoveType.ResolvePermanentGoals
-  goalsCompleted: [number[], number[], boolean];
+type ResolvePermanentObjectives = {
+  type: MoveType.ResolvePermanentObjectives
+  objectivesCompleted: [number[], number[], boolean];
 }
 
-export default ResolvePermanentGoals
+export default ResolvePermanentObjectives
 
-export function resolvePermanentGoals(state: GameState | GameView, move: ResolvePermanentGoals) {
+export function resolvePermanentObjectives(state: GameState | GameView, move: ResolvePermanentObjectives) {
   const player = getFirstOfSortedPlayer(state)
-  player.totemTokens = Math.max(0, player.totemTokens - (move.goalsCompleted[0].length + move.goalsCompleted[1].length + (move.goalsCompleted[2] ? 1 : 0)))
-  player.hunting!.huntPhase = HuntPhase.CheckVariableGoals
+  player.totemTokens = Math.max(0, player.totemTokens - (move.objectivesCompleted[0].length + move.objectivesCompleted[1].length + (move.objectivesCompleted[2] ? 1 : 0)))
+  player.hunting!.huntPhase = HuntPhase.CheckVariableObjectives
 }
 
-export function checkPermanentGoals(player: PlayerState | PlayerView | PlayerViewSelf): [number[], number[], boolean] {
+export function checkPermanentObjectives(player: PlayerState | PlayerView | PlayerViewSelf): [number[], number[], boolean] {
   const completedLines: number[] = [], completedColumns: number[] = []
   const cave = getPaintedCave(player)
   const lastTilePlayed = player.cave[player.cave.length - 1]
@@ -43,6 +43,6 @@ export function checkPermanentGoals(player: PlayerState | PlayerView | PlayerVie
   return [completedLines, completedColumns, isLegendaryAnimalTile(lastTilePlayed.tile)]
 }
 
-export function isResolvePermanentGoals(move: Move): move is ResolvePermanentGoals {
-  return move.type === MoveType.ResolvePermanentGoals
+export function isResolvePermanentObjectives(move: Move): move is ResolvePermanentObjectives {
+  return move.type === MoveType.ResolvePermanentObjectives
 }

@@ -4,9 +4,9 @@ import PlayerState from "../PlayerState"
 import PlacedTile from "../types/PlacedTile"
 import Tile from "../material/Tile";
 
-describe('Test Goals', () => {
+describe('Test Objectives', () => {
 
-  test('Goal1', () => {          // PathFinding between two totems
+  test('Objective1', () => {          // PathFinding between two totems
 
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
@@ -22,7 +22,7 @@ describe('Test Goals', () => {
     expect(goals[0].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
   })
 
-  test("Goal2", () => {          // 3x3 central square filled
+  test("Objective2", () => {          // 3x3 central square filled
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Legendary1, side: 0, x: 3, y: 3},
@@ -41,7 +41,7 @@ describe('Test Goals', () => {
     expect(goals[1].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
   })
 
-  test("Goal3", () => {          // column of 5 animals
+  test("Objective3", () => {          // column of 5 animals
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Legendary1, side: 0, x: 0, y: 5},
@@ -60,7 +60,7 @@ describe('Test Goals', () => {
     expect(goals[2].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
   })
 
-  test("Goal4", () => {          // group of 8 same animals (no legend)
+  test("Objective4", () => {          // group of 8 same animals (no legend)
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Buffalo4B, side: 0, x: 0, y: 5},
@@ -81,7 +81,7 @@ describe('Test Goals', () => {
     expect(goals[3].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
   })
 
-  test("Goal5", () => {          // surround hunter tile
+  test("Objective5", () => {          // surround hunter tile
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Buffalo3A, side: 0, x: 2, y: 1},
@@ -100,7 +100,7 @@ describe('Test Goals', () => {
     expect(goals[4].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
   })
 
-  test("Goal6", () => {          // Column of 5 same animal no legend
+  test("Objective6", () => {          // Column of 5 same animal no legend
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Buffalo4B, side: 0, x: 1, y: 5},
@@ -119,7 +119,7 @@ describe('Test Goals', () => {
     expect(goals[5].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
   })
 
-  test("Goal7", () => {          // Pathfinding betwenn top left corner and bottom right corner
+  test("Objective7", () => {          // Pathfinding betwenn top left corner and bottom right corner
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Buffalo4B, side: 0, x: 2, y: 4},
@@ -137,7 +137,7 @@ describe('Test Goals', () => {
     expect(goals[6].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
   })
 
-  test("Goal8", () => {          // 5 tiles 1x1 built
+  test("Objective8", () => {          // 5 tiles 1x1 built
     const goodCave: PlacedTile[] = [
       {tile: Tile.Fish1, side: 0, x: 0, y: 0},
       {tile: Tile.Fish1, side: 1, x: 1, y: 0},
@@ -157,7 +157,7 @@ describe('Test Goals', () => {
     expect(goals[7].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
   })
 
-  test("Goal9", () => {          // Surround a legendary tile
+  test("Objective9", () => {          // Surround a legendary tile
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Buffalo4B, side: 0, x: 2, y: 4},
@@ -178,7 +178,7 @@ describe('Test Goals', () => {
     expect(goals[8].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
   })
 
-  test("Goal10", () => {          // Surround two totems
+  test("Objective10", () => {          // Surround two totems
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Buffalo4B, side: 0, x: 1, y: 0},
@@ -204,7 +204,7 @@ describe('Test Goals', () => {
     expect(goals[9].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
   })
 
-  test("Goal11", () => {          // Fill the right column
+  test("Objective11", () => {          // Fill the right column
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 5, y: 4},
       {tile: Tile.Buffalo4B, side: 0, x: 1, y: 0},
@@ -226,7 +226,7 @@ describe('Test Goals', () => {
     expect(goals[10].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
   })
 
-  test("Goal12", () => {          // Line of 5 different animals
+  test("Objective12", () => {          // Line of 5 different animals
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Boar3A, side: 1, x: 4, y: 0},
@@ -245,7 +245,7 @@ describe('Test Goals', () => {
     expect(goals[11].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
   })
 
-  test("Goal13", () => {          // Group of 10 same animal
+  test("Objective13", () => {          // Group of 10 same animal
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Buffalo4B, side: 0, x: 2, y: 2},
@@ -262,7 +262,7 @@ describe('Test Goals', () => {
     expect(goals[12].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
   })
 
-  test("Goal14", () => {          // surround hunter with 4 different animals
+  test("Objective14", () => {          // surround hunter with 4 different animals
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Fish1, side: 0, x: 2, y: 2},
@@ -280,7 +280,7 @@ describe('Test Goals', () => {
     expect(goals[13].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
   })
 
-  test("Goal15", () => {          // line of 5 same animals (no Legendary)
+  test("Objective15", () => {          // line of 5 same animals (no Legendary)
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Buffalo4B, side: 0, x: 2, y: 2},
@@ -295,7 +295,7 @@ describe('Test Goals', () => {
     expect(goals[14].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
   })
 
-  test("Goal16", () => {          // fill 4 corners
+  test("Objective16", () => {          // fill 4 corners
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Buffalo4B, side: 0, x: 3, y: 3},
@@ -319,7 +319,7 @@ describe('Test Goals', () => {
     expect(goals[15].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
   })
 
-  test("Goal18", () => {          // 2 legendary side by side
+  test("Objective18", () => {          // 2 legendary side by side
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Buffalo4B, side: 0, x: 3, y: 3},

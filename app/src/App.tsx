@@ -15,8 +15,8 @@ import buttonClick from './sounds/buttonClick.mp3'
 import cardFlipSound from "./sounds/cardFlip.mp3";
 import cardMoveSound from "./sounds/cardMove.mp3";
 import moveTileSound from "./sounds/moveTile.mp3";
-import permGoalSound from "./sounds/permGoal.mp3";
-import varGoalSound from "./sounds/varGoal.mp3";
+import permObjectiveSound from "./sounds/permObjective.mp3";
+import varObjectiveSound from "./sounds/varObjective.mp3";
 import playerTurnSound from "./sounds/playerTurn.mp3";
 
 export default function App() {
@@ -40,7 +40,7 @@ export default function App() {
                      developer="Théo Gregorio"/>
       <Header><HeaderText loading={loading} game={game}/></Header>
       <ImagesLoader images={Object.values(Images)} onImagesLoad={() => setImagesLoading(false)} />
-      <SoundLoader sounds={[buttonClick, cardFlipSound, cardMoveSound, moveTileSound, permGoalSound, varGoalSound, playerTurnSound]} onSoundLoad={() => setSoundLoading(false)} onSoundsPrepared={ (audioLoader) => setAudioLoader(audioLoader) }/>
+      <SoundLoader sounds={[buttonClick, cardFlipSound, cardMoveSound, moveTileSound, permObjectiveSound, varObjectiveSound, playerTurnSound]} onSoundLoad={() => setSoundLoading(false)} onSoundsPrepared={ (audioLoader) => setAudioLoader(audioLoader) }/>
       <Menu/>
       <FailuresDialog/>
       <FullscreenDialog/>
