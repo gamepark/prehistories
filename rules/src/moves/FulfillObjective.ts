@@ -6,15 +6,15 @@ import {getFirstOfSortedPlayer, PlayerView, PlayerViewSelf} from "../types/Playe
 import Move from "./Move";
 import MoveType from "./MoveType";
 
-type ResolveVariableObjectives = {
-    type : MoveType.ResolveVariableObjectives
+type FulfillObjective = {
+    type : MoveType.FulfillObjective
     objective:number
     tokens:number
 }
 
-export default ResolveVariableObjectives
+export default FulfillObjective
 
-export function resolveVariableObjectives(state:GameState | GameView, move:ResolveVariableObjectives){
+export function fulfillObjective(state:GameState | GameView, move:FulfillObjective){
     const player = getFirstOfSortedPlayer(state)
     for(let i=0; i<move.tokens;i++){
         player.variableObjectivesMade.push(move.objective)
@@ -23,17 +23,17 @@ export function resolveVariableObjectives(state:GameState | GameView, move:Resol
     
 }
 
-export function checkVariableObjectives(state:GameState | GameView, player:PlayerState | PlayerView | PlayerViewSelf):(false | [number, number]){
+export function checkObjectives(state:GameState | GameView, player:PlayerState | PlayerView | PlayerViewSelf):(false | [number, number]){
     for(const objective of state.objectives){
         if (!isPlayerAlreadyCompleteObjective(player, objective) && objectives[objective].rule(player)){
-            const rewardForFirstPlayer = anyPlayerCompleteObjective(objective, state.players) ? 0 : 1
+            const rewardForFirstPlayer = anyPlayerAlreadyFulfilledObjective(objective, state.players) ? 0 : 1
             return [objective, objectives[objective].value-1 + rewardForFirstPlayer]
         }
     }
     return false
 }
 
-function anyPlayerCompleteObjective(objective:number, players:(PlayerState | PlayerView | PlayerViewSelf)[]):boolean{
+function anyPlayerAlreadyFulfilledObjective(objective:number, players:(PlayerState | PlayerView | PlayerViewSelf)[]):boolean{
     return players.filter(p => p.variableObjectivesMade.find(g => g === objective) !== undefined).length > 0
 }
 
@@ -41,7 +41,7 @@ function isPlayerAlreadyCompleteObjective(player:PlayerState | PlayerView | Play
     return player.variableObjectivesMade.find(g => g === objective) !== undefined
 }
 
-export function isResolveVariableObjectives(move: Move):move is ResolveVariableObjectives{
-    return move.type === MoveType.ResolveVariableObjectives
+export function isFulfillObjective(move: Move):move is FulfillObjective{
+    return move.type === MoveType.FulfillObjective
 }
 

@@ -5,8 +5,8 @@ import GameState from './GameState'
 import GameView from './GameView'
 import {objectives} from './material/Objectives'
 import {changeActivePlayer} from './moves/ChangeActivePlayer'
-import {checkPermanentObjectives, resolvePermanentObjectives} from './moves/CheckPermanentObjectives'
-import {checkVariableObjectives, resolveVariableObjectives} from './moves/CheckVariableObjectives'
+import {checkPermanentObjectives, fulfillPermanentObjectives} from './moves/FulfillPermanentObjectives'
+import {checkObjectives, fulfillObjective} from './moves/FulfillObjective'
 import {drawCards} from './moves/DrawCards'
 import {endGame} from './moves/EndGame'
 import EndTurn, {endTurn} from './moves/EndTurn'
@@ -143,10 +143,10 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         return spendHunter(this.state, move)
       case MoveType.ValidateSpentHunters:
         return validateSpentHunters(this.state)
-      case MoveType.ResolvePermanentObjectives:
-        return resolvePermanentObjectives(this.state, move)
-      case MoveType.ResolveVariableObjectives:
-        return resolveVariableObjectives(this.state, move)
+      case MoveType.FulfillPermanentObjectives:
+        return fulfillPermanentObjectives(this.state, move)
+      case MoveType.FulfillObjective:
+        return fulfillObjective(this.state, move)
       case MoveType.SetHuntPhase:
         return setHuntPhase(this.state)
       case MoveType.RefillHuntingBoard:
@@ -198,16 +198,16 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
           case HuntPhase.CheckPermanentObjectives: {
             const result = checkPermanentObjectives(player)
             if (result[0].length !== 0 || result[1].length !== 0 || result[2]) {
-              return {type: MoveType.ResolvePermanentObjectives, objectivesCompleted: result}
+              return {type: MoveType.FulfillPermanentObjectives, objectivesCompleted: result}
             } else {
               return {type: MoveType.SetHuntPhase}
             }
           }
 
           case HuntPhase.CheckVariableObjectives: {
-            const result = checkVariableObjectives(this.state, player)
+            const result = checkObjectives(this.state, player)
             if (result) {
-              return {type: MoveType.ResolveVariableObjectives, objective: result[0], tokens: result[1]}
+              return {type: MoveType.FulfillObjective, objective: result[0], tokens: result[1]}
             } else {
               return {type: MoveType.SetHuntPhase}
             }

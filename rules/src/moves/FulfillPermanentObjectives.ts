@@ -9,14 +9,14 @@ import {getPaintedCave, isColumnPainted, isLinePainted} from "../material/Painte
 import {getPlacedTileCoordinates} from "../types/PlacedTile";
 import {isLegendaryAnimalTile} from "../material/Tile";
 
-type ResolvePermanentObjectives = {
-  type: MoveType.ResolvePermanentObjectives
+type FulfillPermanentObjectives = {
+  type: MoveType.FulfillPermanentObjectives
   objectivesCompleted: [number[], number[], boolean];
 }
 
-export default ResolvePermanentObjectives
+export default FulfillPermanentObjectives
 
-export function resolvePermanentObjectives(state: GameState | GameView, move: ResolvePermanentObjectives) {
+export function fulfillPermanentObjectives(state: GameState | GameView, move: FulfillPermanentObjectives) {
   const player = getFirstOfSortedPlayer(state)
   player.totemTokens = Math.max(0, player.totemTokens - (move.objectivesCompleted[0].length + move.objectivesCompleted[1].length + (move.objectivesCompleted[2] ? 1 : 0)))
   player.hunting!.huntPhase = HuntPhase.CheckVariableObjectives
@@ -43,6 +43,6 @@ export function checkPermanentObjectives(player: PlayerState | PlayerView | Play
   return [completedLines, completedColumns, isLegendaryAnimalTile(lastTilePlayed.tile)]
 }
 
-export function isResolvePermanentObjectives(move: Move): move is ResolvePermanentObjectives {
-  return move.type === MoveType.ResolvePermanentObjectives
+export function isFulfillPermanentObjectives(move: Move): move is FulfillPermanentObjectives {
+  return move.type === MoveType.FulfillPermanentObjectives
 }

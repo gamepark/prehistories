@@ -9,8 +9,8 @@ import {revealHuntCardsInView} from '@gamepark/prehistories/moves/RevealHuntCard
 import {placeTile} from '@gamepark/prehistories/moves/PlaceTile'
 import {spendHunter} from '@gamepark/prehistories/moves/SpendHunter'
 import {validateSpentHunters} from '@gamepark/prehistories/moves/ValidateSpentHunters'
-import {resolvePermanentObjectives} from '@gamepark/prehistories/moves/CheckPermanentObjectives'
-import {resolveVariableObjectives} from '@gamepark/prehistories/moves/CheckVariableObjectives'
+import {fulfillPermanentObjectives} from '@gamepark/prehistories/moves/FulfillPermanentObjectives'
+import {fulfillObjective} from '@gamepark/prehistories/moves/FulfillObjective'
 import {refillHuntingBoardInView} from '@gamepark/prehistories/moves/RefillHuntingBoard'
 import {endTurn} from '@gamepark/prehistories/moves/EndTurn'
 import {takeBackPlayedCardsInView} from '@gamepark/prehistories/moves/TakeBackPlayedCards'
@@ -50,10 +50,10 @@ export default class PrehistoriesView implements Game<GameView, MoveView>, Undo<
         return spendHunter(this.state, move)
       case MoveType.ValidateSpentHunters:
         return validateSpentHunters(this.state)
-      case MoveType.ResolvePermanentObjectives:
-        return resolvePermanentObjectives(this.state, move)
-      case MoveType.ResolveVariableObjectives:
-        return resolveVariableObjectives(this.state, move)
+      case MoveType.FulfillPermanentObjectives:
+        return fulfillPermanentObjectives(this.state, move)
+      case MoveType.FulfillObjective:
+        return fulfillObjective(this.state, move)
       case MoveType.SetHuntPhase:
         return setHuntPhase(this.state);
       case MoveType.EndTurn:
