@@ -1,6 +1,5 @@
 import PlayerState from "../PlayerState";
 import {getAdjacentCoordinates} from "../types/Coordinates";
-import Face from "../types/Face";
 import Objective from "../types/Objective";
 import {PlayerView, PlayerViewSelf} from "../types/PlayerView";
 import {
@@ -18,7 +17,6 @@ import Tile, {isLegendaryAnimalTile} from "./Tile";
 const {Mammoth, Buffalo, Fish, Boar, Ibex} = Painting;
 
 const objectiveA1: Objective = {
-  face: Face.A,
   text: 'objectiveA1',
   hint: 'hintA1',
   value: 2,
@@ -38,7 +36,6 @@ const objectiveA1: Objective = {
 }
 
 const objectiveA2: Objective = {
-  face: Face.A,
   text: 'objectiveA2',
   hint: 'hintA2',
   value: 2,
@@ -56,7 +53,6 @@ const objectiveA2: Objective = {
 }
 
 const objectiveA3: Objective = {
-  face: Face.A,
   text: 'objectiveA3',
   hint: 'hintA3',
   value: 2,
@@ -76,7 +72,6 @@ const objectiveA3: Objective = {
 }
 
 const objectiveA4: Objective = {
-  face: Face.A,
   text: 'objectiveA4',
   hint: 'hintA4',
   value: 2,
@@ -84,7 +79,6 @@ const objectiveA4: Objective = {
 }
 
 const objectiveA5: Objective = {
-  face: Face.A,
   text: 'objectiveA5',
   hint: 'hintA5',
   value: 2,
@@ -94,7 +88,6 @@ const objectiveA5: Objective = {
 }
 
 const objectiveA6: Objective = {
-  face: Face.A,
   text: 'objectiveA6',
   hint: 'hintA6',
   value: 2,
@@ -116,7 +109,6 @@ const objectiveA6: Objective = {
 }
 
 const objectiveA7: Objective = {
-  face: Face.A,
   text: 'objectiveA7',
   hint: 'hintA7',
   value: 2,
@@ -127,7 +119,6 @@ const objectiveA7: Objective = {
 }
 
 const objectiveA8: Objective = {
-  face: Face.A,
   text: 'objectiveA8',
   hint: 'hintA8',
   value: 2,
@@ -145,7 +136,6 @@ const objectiveA8: Objective = {
 }
 
 const objectiveA9: Objective = {
-  face: Face.A,
   text: 'objectiveA9',
   hint: 'hintA9',
   value: 2,
@@ -156,7 +146,6 @@ const objectiveA9: Objective = {
 }
 
 const objectiveB1: Objective = {
-  face: Face.B,
   text: 'objectiveB1',
   hint: 'hintB1',
   value: 3,
@@ -167,7 +156,6 @@ const objectiveB1: Objective = {
 }
 
 const objectiveB2: Objective = {
-  face: Face.B,
   text: 'objectiveB2',
   hint: 'hintB2',
   value: 2,
@@ -178,7 +166,6 @@ const objectiveB2: Objective = {
 }
 
 const objectiveB3: Objective = {
-  face: Face.B,
   text: 'objectiveB3',
   hint: 'hintB3',
   value: 2,
@@ -188,7 +175,6 @@ const objectiveB3: Objective = {
 }
 
 const objectiveB4: Objective = {
-  face: Face.B,
   text: 'objectiveB4',
   hint: 'hintB4',
   value: 3,
@@ -196,7 +182,6 @@ const objectiveB4: Objective = {
 }
 
 const objectiveB5: Objective = {
-  face: Face.B,
   text: 'objectiveB5',
   hint: 'hintB5',
   value: 2,
@@ -209,7 +194,6 @@ const objectiveB5: Objective = {
 }
 
 const objectiveB6: Objective = {
-  face: Face.B,
   text: 'objectiveB6',
   hint: 'hintB6',
   value: 2,
@@ -230,7 +214,6 @@ const objectiveB6: Objective = {
 }
 
 const objectiveB7: Objective = {
-  face: Face.B,
   text: 'objectiveB7',
   hint: 'hintB7',
   value: 3,
@@ -242,7 +225,6 @@ const objectiveB7: Objective = {
 }
 
 const objectiveB8: Objective = {
-  face: Face.B,
   text: 'objectiveB8',
   hint: 'hintB8',
   value: 2,
@@ -252,7 +234,6 @@ const objectiveB8: Objective = {
 }
 
 const objectiveB9: Objective = {
-  face: Face.B,
   text: 'objectiveB9',
   hint: 'hintB9',
   value: 2,
