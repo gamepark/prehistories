@@ -1,19 +1,19 @@
 /** @jsxImportSource @emotion/react */
-import { css, keyframes } from "@emotion/react"
-import { PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView"
-import { Picture } from "@gamepark/react-components"
-import { FC, HTMLAttributes } from "react"
-import { useTranslation } from "react-i18next/"
-import { placingBackground, setPercentDimension, toAbsolute, toFullSize } from "../utils/styles"
+import {css, keyframes} from "@emotion/react"
+import {PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView"
+import {Picture} from "@gamepark/react-components"
+import {FC, HTMLAttributes} from "react"
+import {useTranslation} from "react-i18next/"
+import {placingBackground, setPercentDimension, toAbsolute, toFullSize} from "../utils/styles"
 import Images from "../utils/Images"
-import { getTotem } from "./PlayerPanel"
+import {getTotem} from "./PlayerPanel"
 
 type Props = {
     objective:number
     players:(PlayerView | PlayerViewSelf)[]
 } & HTMLAttributes<HTMLDivElement>
 
-const Objective : FC<Props> = ({objective, players, ...props}) => {
+const ObjectiveCard : FC<Props> = ({objective, players, ...props}) => {
     
     const playerNewArray = players.filter(p => p)
     const sortedPlayers = playerNewArray.sort((a,b) => -a.variableObjectivesMade.filter(g => g === objective).length+b.variableObjectivesMade.filter(g => g === objective).length)
@@ -102,4 +102,4 @@ function getObjectiveCardImage(objective:number):string{
     }
 }
 
-export default Objective
+export default ObjectiveCard

@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-
 import GameView from "@gamepark/prehistories/GameView"
 import PlayerColor from "@gamepark/prehistories/PlayerColor"
 import {usePlayer, usePlayerId} from "@gamepark/react-client"
@@ -11,7 +10,7 @@ import {getPlayerName} from "@gamepark/prehistories/PrehistoriesOptions"
 import Button from "./Button"
 import {css} from "@emotion/react"
 import {getBG} from "../board/PlayerPanel"
-import Objective from "../board/Objective"
+import ObjectiveCard from "../board/ObjectiveCard"
 import {objectives} from "@gamepark/prehistories/material/Objectives"
 
 const WelcomePopUp : FC<{player:PlayerColor | undefined, game:GameView, close: () => void}> = ({player, game, close}) => {
@@ -40,11 +39,11 @@ const WelcomePopUp : FC<{player:PlayerColor | undefined, game:GameView, close: (
 
                 <div css={objectivesPosition}>
                     {game.objectives.map((objective, index) => 
-                        <Objective key={index}
-                              objective={objective}
-                              players={game.players}
-                              css={[objectiveSize, objectiveSelected === objective && selectEffect(objective > 8)]}
-                              onClick={() => setObjectiveSelected(objective)}
+                        <ObjectiveCard key={index}
+                                       objective={objective}
+                                       players={game.players}
+                                       css={[objectiveSize, objectiveSelected === objective && selectEffect(objective > 8)]}
+                                       onClick={() => setObjectiveSelected(objective)}
                         />
                     )}
                 </div>

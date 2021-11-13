@@ -1,20 +1,20 @@
 /** @jsxImportSource @emotion/react */
-import { css, keyframes } from "@emotion/react"
-import { PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView"
-import { Picture } from "@gamepark/react-components"
-import { FC, HTMLAttributes } from "react"
-import { useTranslation } from "react-i18next";
-import { centerContent, placingBackground, setPercentDimension, toAbsolute } from "../utils/styles";
+import {css, keyframes} from "@emotion/react"
+import {PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView"
+import {Picture} from "@gamepark/react-components"
+import {FC, HTMLAttributes} from "react"
+import {useTranslation} from "react-i18next"
+import {centerContent, placingBackground, setPercentDimension, toAbsolute} from "../utils/styles"
 import Images from "../utils/Images"
-import Objective from "./Objective"
-import { getTotem } from "./PlayerPanel"
+import ObjectiveCard from "./ObjectiveCard"
+import {getTotem} from "./PlayerPanel"
 
 type Props = {
     objectives:number[],
     players:(PlayerView | PlayerViewSelf)[]
 } & HTMLAttributes<HTMLDivElement>
 
-const Objectives : FC<Props> = ({objectives,players, ...props}) => {
+const ObjectiveCards : FC<Props> = ({objectives,players, ...props}) => {
 
     const {t} = useTranslation()
 
@@ -25,8 +25,8 @@ const Objectives : FC<Props> = ({objectives,players, ...props}) => {
         <div css={[toAbsolute, variableObjectivesPosition, setPercentDimension(24.4,56), centerContent]} {...props}>
             {objectives.map((objective, index) => 
                 <div key={index} css={[setPercentDimension(100,18), objectiveMargin]}>  
-                    <Objective objective={objective}
-                          players={players}/>
+                    <ObjectiveCard objective={objective}
+                                   players={players}/>
                 </div>
             )}
         </div>
@@ -79,4 +79,4 @@ const variableObjectivesPosition = css`
     z-index:1;
     cursor:pointer;
 `
-export default Objectives
+export default ObjectiveCards
