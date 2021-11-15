@@ -6,6 +6,7 @@ type Objective = {
     hint:string
     value:number,
     rule:(player:PlayerState | PlayerView | PlayerViewSelf) => boolean
+    squaresIfFulfilled?:(player:PlayerState | PlayerView | PlayerViewSelf) => boolean[][] | undefined
 }
 
 export default Objective

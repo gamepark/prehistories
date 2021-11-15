@@ -18,7 +18,7 @@ type Props = {
 
 const X:boolean = true
 const _:boolean = false
-let caveExample:boolean[][] | undefined 
+let caveExample:boolean[][] | undefined = undefined
 
 enum Borders {Top = 1, Bottom, Left, Right} 
 
