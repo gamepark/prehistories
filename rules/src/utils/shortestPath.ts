@@ -1,15 +1,14 @@
 import { Painting } from "../material/PaintedCave";
 import Coordinates from "../types/Coordinates";
 
-export function shortestPathBinaryMatrix(grid:Painting[][]):Coordinates[] {
-    if(grid[0][0] === Painting.Empty) return []; // modify return type
-    const queue:{coordinates:Coordinates|null, distance:number}[] = [{coordinates:{x:0,y:0}, distance:1}];             // Start
-    const dest:Coordinates = {x:grid.length - 1, y:grid[0].length - 1};   //destination
+export function shortestPathBinaryMatrix(grid:Painting[][], start:Coordinates, finish:Coordinates):Coordinates[] {
+    if(grid[start.y][start.x] === Painting.Empty) return []; // modify return type
+    const queue:{coordinates:Coordinates|null, distance:number}[] = [{coordinates:start, distance:1}];             // Start
     const visited:{nextCoord:Coordinates, previousCoord:Coordinates|null}[] = [];
-    visited.push({nextCoord:{x:0,y:0}, previousCoord:null}); // Mark source as visited
+    visited.push({nextCoord:start, previousCoord:null}); // Mark source as visited
   
     const getNextSteps = ({x,y}:Coordinates) => {
-        const dirs:Coordinates[] = [{x:1, y:0}, {x:-1, y:0} , {x:0,y:1}, {x:0,y:-1}];
+        const dirs:Coordinates[] = [{x:1, y:0}, {x:-1, y:0}, {x:0,y:1}, {x:0,y:-1}];
         const nextSteps:Coordinates[] = [];
         for(const {x:nx, y:ny} of dirs) {
             if(x+nx >= 0 && x+nx <=6 && y+ny >= 0 && y+ny <=6 && grid[y + ny][x + nx] !== Painting.Empty){
@@ -21,7 +20,7 @@ export function shortestPathBinaryMatrix(grid:Painting[][]):Coordinates[] {
     
     for (let currentPainting of queue) {
         // Move the visited check to the loop
-        if (currentPainting.coordinates!.x === dest.x && currentPainting.coordinates!.y === dest.y && grid[dest.x][dest.y] !== Painting.Empty) {
+        if (currentPainting.coordinates!.x === finish.x && currentPainting.coordinates!.y === finish.y && grid[finish.y][finish.x] !== Painting.Empty) {
             // Derive the path from the linked list we now have in the visited structure:
             let path = [];
             while (currentPainting.coordinates) {

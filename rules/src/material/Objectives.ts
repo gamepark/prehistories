@@ -1,5 +1,5 @@
 import PlayerState from "../PlayerState";
-import {getAdjacentCoordinates} from "../types/Coordinates";
+import Coordinates, {getAdjacentCoordinates} from "../types/Coordinates";
 import Objective from "../types/Objective";
 import {PlayerView, PlayerViewSelf} from "../types/PlayerView";
 import {
@@ -13,6 +13,7 @@ import {
 } from "./PaintedCave";
 import {cavesSize, getHunterCoordinates, getTotemCoordinates, Space} from "./Caves";
 import Tile, {isLegendaryAnimalTile} from "./Tile";
+import { shortestPathBinaryMatrix } from "../utils/shortestPath";
 
 const {Mammoth, Buffalo, Fish, Boar, Ibex} = Painting;
 const X = true
@@ -43,6 +44,18 @@ const objectiveA1: Objective = {
       }
     }
     return true
+  },
+  squaresIfFulfilled: (player: PlayerState | PlayerView | PlayerViewSelf) => {
+    const cave = getPaintedCave(player)
+    const result = canvasCave.map(function(arr) {
+      return arr.slice();
+    });
+
+    const path :Coordinates[] = shortestPathBinaryMatrix(cave, getTotemCoordinates(player.color)[0], getTotemCoordinates(player.color)[1])
+    path.forEach(coord => {
+      result[coord.y][coord.x] = X
+    })
+    return result
   }
 }
 
@@ -99,10 +112,10 @@ const objectiveA3: Objective = {
         if (isAnimalPainting(cave[y][x])) {
           column.add(cave[y][x])
           if (column.size >= 5) {
-            const result = canvasCave.slice()
-            result.forEach(row => {
-              row[y]=X
-            })
+            const result = canvasCave.map(function(arr) {return arr.slice();});
+            for (let i=0;i<7;i++){
+              result[i][x] = X
+            }
             return result
           }
         }
@@ -127,11 +140,11 @@ const objectiveA5: Objective = {
     return isSpaceSurrounded(getPaintedCave(player), getHunterCoordinates(player.color))
   },
   squaresIfFulfilled:(player: PlayerState | PlayerView | PlayerViewSelf) => {
-    const result = canvasCave.slice()
+    const result = canvasCave.map(function(arr) {return arr.slice();});
     const hunter = getHunterCoordinates(player.color)  
     for(let i=hunter.x-1;i<=hunter.x+1;i++){
       for(let j=hunter.y-1;j<=hunter.y+1;j++){
-        result[i][j] = X
+        result[j][i] = X
       }
     }
     return result
@@ -165,10 +178,10 @@ const objectiveA6: Objective = {
         const painting = cave[y][x]
         if (column[painting] !== undefined) {
           if (++column[painting] >= 5) {
-            const result = canvasCave.slice()
-            result.forEach(row => {
-              row[y]=X
-            })
+            const result = canvasCave.map(function(arr) {return arr.slice();});
+            for (let i=0;i<7;i++){
+              result[i][x] = X
+            }
             return result
           }
         }
@@ -186,6 +199,15 @@ const objectiveA7: Objective = {
   rule: (player: PlayerState | PlayerView | PlayerViewSelf) => {
     const cave = getPaintedCave(player)
     return cave[0][0] !== Painting.Empty && cave[cavesSize - 1][cavesSize - 1] !== Painting.Empty
+  },
+  squaresIfFulfilled: (player: PlayerState | PlayerView | PlayerViewSelf) => {
+    const cave = getPaintedCave(player)
+    const result = canvasCave.map(function(arr) {return arr.slice();});
+    const path :Coordinates[] = shortestPathBinaryMatrix(cave, {x:0,y:0}, {x:6,y:6})
+    path.forEach(coord => {
+      result[coord.y][coord.x] = X
+    })
+    return result
   }
 }
 
@@ -205,10 +227,10 @@ const objectiveA8: Objective = {
     return false
   },
   squaresIfFulfilled:(player: PlayerState | PlayerView | PlayerViewSelf) => {
-    const result = canvasCave.slice()
+    const result = canvasCave.map(function(arr) {return arr.slice();});
     player.cave.forEach(tile => {
       if(tile.tile === Tile.Ibex1 || tile.tile === Tile.Boar1 || tile.tile === Tile.Fish1 || tile.tile === Tile.Mammoth1 || tile.tile === Tile.Buffalo1){
-        result[tile.x][tile.y] = X
+        result[tile.y][tile.x] = X
       }
     })
     return result
@@ -225,12 +247,14 @@ const objectiveA9: Objective = {
   },
   squaresIfFulfilled:(player:PlayerState | PlayerView | PlayerViewSelf) => {
     const cave = getPaintedCave(player)
-    const result = canvasCave.slice()
+    const result = canvasCave.map(function(arr) {return arr.slice();});
     player.cave.forEach(placedTile => {
       if (isLegendaryTileSurroundedByPaintings(cave, placedTile)){
         for(let i = placedTile.x-1;i<=placedTile.x+2;i++){
           for(let j = placedTile.y-1;j<=placedTile.y+2;j++){
-            result[i][j] = X
+            if(i>=0 && i<=6 && j>=0 && j<=6) {
+              result[j][i] = X
+            }
           }
         }
       }
@@ -248,12 +272,12 @@ const objectiveB1: Objective = {
     return getTotemCoordinates(player.color).every(totem => isSpaceSurrounded(cave, totem))
   },
   squaresIfFulfilled:(player: PlayerState | PlayerView | PlayerViewSelf) => {
-    const result = canvasCave.slice()
+    const result = canvasCave.map(function(arr) {return arr.slice();});
     const totems = getTotemCoordinates(player.color)
     for(const totem of totems){
       for(let i = totem.x-1;i<=totem.x+1;i++){
         for(let j = totem.y-1;j<=totem.y+1;j++){
-          result[i][j] = X
+          result[j][i] = X
         }
       }
     }
@@ -270,7 +294,7 @@ const objectiveB2: Objective = {
     return isColumnPainted(cave, cavesSize - 1)
   },
   squaresIfFulfilled:(player: PlayerState | PlayerView | PlayerViewSelf) => {
-    const result = canvasCave.slice()
+    const result = canvasCave.map(function(arr) {return arr.slice();});
     for(let i=0;i<7;i++){
       result[i][6] = X
     }
@@ -293,10 +317,10 @@ const objectiveB3: Objective = {
         if (isAnimalPainting(cave[y][x])) {
           line.add(cave[y][x])
           if (line.size >= 5) {
-            const result = canvasCave.slice()
-            result.forEach(column => {
-              column[x]=X
-            })
+            const result = canvasCave.map(function(arr) {return arr.slice();});
+            for (let i=0;i<7;i++){
+              result[y][i] = X
+            }
             return result
           }
         }
@@ -324,13 +348,13 @@ const objectiveB5: Objective = {
     return !paintings.includes(Painting.Empty) && new Set(paintings).size === 4
   },
   squaresIfFulfilled:(player: PlayerState | PlayerView | PlayerViewSelf) => {
-    const result = canvasCave.slice()
+    const result = canvasCave.map(function(arr) {return arr.slice();});
     const hunter = getHunterCoordinates(player.color)
-    result[hunter.x][hunter.y] = X
-    result[hunter.x+1][hunter.y] = X
-    result[hunter.x-1][hunter.y] = X
-    result[hunter.x][hunter.y+1] = X
-    result[hunter.x][hunter.y-1] = X
+    result[hunter.y][hunter.x] = X
+    result[hunter.y+1][hunter.x] = X
+    result[hunter.y-1][hunter.x] = X
+    result[hunter.y][hunter.x+1] = X
+    result[hunter.y][hunter.x-1] = X
     return result
   }
 }
@@ -361,10 +385,10 @@ const objectiveB6: Objective = {
         const painting = cave[y][x]
         if (line[painting] !== undefined) {
           if (++line[painting] >= 5) {
-            const result = canvasCave.slice()
-            result.forEach(column => {
-              column[x]=X
-            })
+            const result = canvasCave.map(function(arr) {return arr.slice();});
+            for (let i=0;i<7;i++){
+              result[y][i] = X
+            }
             return result
           }
         }
@@ -384,7 +408,7 @@ const objectiveB7: Objective = {
       && cave[cavesSize - 1][0] !== Painting.Empty && cave[cavesSize - 1][cavesSize - 1] !== Painting.Empty
   },
   squaresIfFulfilled:(player: PlayerState | PlayerView | PlayerViewSelf) => {
-    const result = canvasCave.slice()
+    const result = canvasCave.map(function(arr) {return arr.slice();});
     result[0][0] = X
     result[0][6] = X
     result[6][0] = X
@@ -401,9 +425,9 @@ const objectiveB8: Objective = {
     return (player.hunting?.tilesHunted ?? 0) >= 3
   },
   squaresIfFulfilled:(player: PlayerState | PlayerView | PlayerViewSelf) => {
-    const result = canvasCave.slice()
+    const result = canvasCave.map(function(arr) {return arr.slice();});
     for(let i=player.cave.length-1;i>=player.cave.length-3;i--){
-      result[player.cave[i].x][player.cave[i].y] = X
+      result[player.cave[i].y][player.cave[i].x] = X
     }
     return result
   }
@@ -424,21 +448,22 @@ const objectiveB9: Objective = {
     return false
   },
   squaresIfFulfilled:(player: PlayerState | PlayerView | PlayerViewSelf) => {
-    const result = canvasCave.slice()
+    const result = canvasCave.map(function(arr) {return arr.slice();});
     const legendaryTiles = player.cave.filter(placedTile => isLegendaryAnimalTile(placedTile.tile))
     for (const {x, y} of legendaryTiles) {
       for (const tile of legendaryTiles){
         if (tile.x === x + 2 && tile.y === y){
-          for(let i=0;i<2;i++){
-            for(let j=0;j<4;j++){
-              result[i][j] = X
+          for(let i=x;i<x+4;i++){
+            for(let j=y;j<y+2;j++){
+              result[j][i] = X
             }
           }
           return result
         } else if (tile.y === y + 2 && tile.x === x){
-          for(let i=0;i<4;i++){
-            for(let j=0;j<2;j++){
-              result[i][j] = X
+
+          for(let i=x;i<x+2;i++){
+            for(let j=y;j<y+4;j++){
+              result[j][i] = X
             }
           }
           return result
