@@ -150,10 +150,9 @@ export default function getObjectiveSquaresHighlight(objective: Objective, playe
     case Objective.PaintAdjacentLegendary: {
       const result = [...Array(cavesSize)].map(() => Array(cavesSize).fill(false))
       let legendaryTiles = player.cave.filter(placedTile => isLegendaryAnimalTile(placedTile.tile))
-      legendaryTiles = legendaryTiles.filter(({
-                                                x,
-                                                y
-                                              }) => legendaryTiles.some(tile => ((tile.x === x + 2 && tile.y === y) || (tile.y === y + 2 && tile.x === x))))
+      legendaryTiles = legendaryTiles.filter(({x, y}) => legendaryTiles.some(tile =>
+        (tile.x === x + 2 && tile.y === y) || (tile.y === y + 2 && tile.x === x) || (tile.x === x - 2 && tile.y === y) || (tile.y === y - 2 && tile.x === x)
+      ))
       for (const placedTile of legendaryTiles) {
         for (const {x, y} of getPlacedTileCoordinates(placedTile)) {
           result[y][x] = true
