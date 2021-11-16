@@ -49,7 +49,7 @@ export default function getObjectiveSquaresHighlight(objective: Objective, playe
       return result
     }
     case Objective.Legendary: {
-      const result = [...Array(cavesSize).map(() => Array(cavesSize).fill(false))]
+      const result = [...Array(cavesSize)].map(() => Array(cavesSize).fill(false))
       for (const {x, y} of getPlacedTileCoordinates(player.cave[player.cave.length - 1])) {
         result[y][x] = true
       }
@@ -139,7 +139,7 @@ export default function getObjectiveSquaresHighlight(objective: Objective, playe
         [X, _, _, _, _, _, X]
       ]
     case Objective.Collect3Tiles: {
-      const result = [...Array(cavesSize).map(() => Array(cavesSize).fill(false))]
+      const result = [...Array(cavesSize)].map(() => Array(cavesSize).fill(false))
       for (const placedTile of player.cave.slice(-3)) {
         for (const {x, y} of getPlacedTileCoordinates(placedTile)) {
           result[y][x] = true
@@ -148,7 +148,7 @@ export default function getObjectiveSquaresHighlight(objective: Objective, playe
       return result
     }
     case Objective.PaintAdjacentLegendary: {
-      const result = [...Array(cavesSize).map(() => Array(cavesSize).fill(false))]
+      const result = [...Array(cavesSize)].map(() => Array(cavesSize).fill(false))
       let legendaryTiles = player.cave.filter(placedTile => isLegendaryAnimalTile(placedTile.tile))
       legendaryTiles = legendaryTiles.filter(({
                                                 x,
@@ -245,7 +245,7 @@ function getLegendarySurroundedTile(player: Player) {
 }
 
 function getSurrounding(coordinates: Coordinates[]) {
-  const result = [...Array(cavesSize).map(() => Array(cavesSize).fill(false))]
+  const result = [...Array(cavesSize)].map(() => Array(cavesSize).fill(false))
   for (const c of coordinates) {
     for (let x = c.x - 1; x <= c.x + 1; x++) {
       for (let y = c.y - 1; y <= c.y + 1; y++) {
