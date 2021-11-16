@@ -35,7 +35,7 @@ export function getObjectiveValue(objective: Objective, isFirstToFulfill?: boole
   }
 }
 
-export type HuntingPlayer = Pick<PlayerState, 'color' | 'cave'> & { hunting: Hunting }
+export type HuntingPlayer = Pick<PlayerState, 'color' | 'cave' | 'totemTokens'> & { hunting: Hunting }
 
 export function getFulfilledObjectives(game: GameState | GameView): Objective[] {
   const fulfilledObjectives = []
@@ -53,7 +53,7 @@ export function getFulfilledObjectives(game: GameState | GameView): Objective[] 
     fulfilledObjectives.push(Objective.Legendary)
   }
   for (const objective of game.objectives) {
-    if (isCardObjectiveFulfilled(objective, cave, player)) {
+    if (!player.totemTokens.includes(objective) && isCardObjectiveFulfilled(objective, cave, player)) {
       fulfilledObjectives.push(objective)
     }
   }
