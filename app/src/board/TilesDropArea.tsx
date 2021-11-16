@@ -23,7 +23,7 @@ type Props = {
 export default function TilesDropArea({player, ...props}: Props) {
   const ref = useRef<HTMLDivElement>(null)
   const moveTileSound = useSound(MoveTileSound)
-  moveTileSound.volume = 0.5
+  moveTileSound.volume = 0.8
 
   const getAreaPosition = useCallback((sourceClientOffset: XYCoord, item: DraggedTile) => {
     const dropArea = ref.current!.getBoundingClientRect()

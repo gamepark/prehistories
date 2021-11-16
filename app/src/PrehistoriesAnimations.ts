@@ -20,7 +20,7 @@ const prehistoriesAnimations : Animations<GameView, MoveView, PlayerColor> = {
         } else if (move.type === MoveType.TakeBackPlayedCards){
             return getFirstOfSortedPlayer(state).played.length !== 0 ? 2 : 0
         } else if(move.type === MoveType.FulfillObjective){
-            return 1
+            return 3
         } else if(move.type === MoveType.RevealHuntCards){
             return state.caveDisplayed === playerId ? 0 : 2
         }

@@ -26,7 +26,7 @@ const FlippingTile: FC<Props> = ({game, tile, position, item, animation, ...prop
   const [side, setSide] = useState<Side>(0)
   const [dragging, setDragging] = useState(false)
   const moveTileSound = useSound(MoveTileSound)
-  moveTileSound.volume = 0.5
+  moveTileSound.volume = 0.8
 
   function toggleSide() {
     moveTileSound.play()

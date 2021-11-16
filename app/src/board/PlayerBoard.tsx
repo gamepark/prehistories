@@ -45,9 +45,9 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
     const playerId = usePlayerId<PlayerColor>()
     const play = usePlay<Move>()
     const moveCardSound = useSound(MoveCardSound)
-    moveCardSound.volume = 0.5
+    moveCardSound.volume = 0.8
     const clickSound = useSound(ButtonClickSound)
-    clickSound.volume = 0.5
+    clickSound.volume = 0.8
 
     const playHuntCardAnimation = useAnimation<PlayHuntCardView>(animation => isPlayHuntCardView(animation.move) && animation.move.playerId === playerId)
     const revealCardsAnimation = useAnimation<RevealHuntCardsView>(animation => isRevealHuntCards(animation.move))

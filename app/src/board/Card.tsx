@@ -31,7 +31,7 @@ const Card : FC<Props> = ({color, power, speed, draggable=false, type='', dragga
     const moveCardSound = useSound(MoveCardSound)
     const item = {...draggableItem}
     const onDrop = (move:PlayHuntCard) => {
-        moveCardSound.volume = 0.5
+        moveCardSound.volume = 0.8
         moveCardSound.play()
         play(move)
     }

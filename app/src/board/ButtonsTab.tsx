@@ -31,9 +31,9 @@ const ButtonsTab : FC<Props> = ({color, hunting, isDisplayHuntingButtons, isDisp
     const heightOfHuntingButtonsPanel:number = (isDisplayValidationButton || isDisplayEndTurnButton) ? 20 : 30
     const spendCardAnimations = useAnimations<SpendHunter>(animation => isSpendHunter(animation.move))
     const clickSound = useSound(ButtonClickSound)
-    clickSound.volume = 0.5
+    clickSound.volume = 0.8
     const moveCardSound = useSound(MoveCardSound)
-    moveCardSound.volume = 0.5
+    moveCardSound.volume = 0.8
 
     const powerOfSelectedHunters:number = selectedHunters !== undefined ? selectedHunters.reduce((acc, cv) => acc + getColoredDeck(color)[cv].power,0) : 0
 
