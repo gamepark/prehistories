@@ -1,26 +1,24 @@
 import Objective from "@gamepark/prehistories/material/Objective"
 import {
-  getGroupOfIdenticalAnimals,
+  getGroupCreatedWithLastTile,
   getPaintedCave,
   isAnimalPainting,
   isColumnPainted,
   isLegendaryTileSurroundedByPaintings,
   isLinePainted,
-  Painting
+  Painting,
+  PlayerWithCave
 } from "@gamepark/prehistories/material/PaintedCave"
 import {shortestPathBinaryMatrix} from "@gamepark/prehistories/utils/shortestPath"
 import caves, {cavesSize, getHunterCoordinates, getTotemCoordinates} from "@gamepark/prehistories/material/Caves"
 import Coordinates from "@gamepark/prehistories/types/Coordinates";
 import Tile, {isLegendaryAnimalTile, revertMatrix} from "@gamepark/prehistories/material/Tile";
 import {getPlacedTileCoordinates} from "@gamepark/prehistories/types/PlacedTile";
-import PlayerState from "@gamepark/prehistories/PlayerState";
 
 const {Mammoth, Buffalo, Fish, Boar, Ibex} = Painting
 const X = true, _ = false
 
-type Player = Pick<PlayerState, 'cave' | 'color'>
-
-export default function getObjectiveSquaresHighlight(objective: Objective, player: Player): boolean[][] {
+export default function getObjectiveSquaresHighlight(objective: Objective, player: PlayerWithCave): boolean[][] {
   switch (objective) {
     case Objective.AnyColumn: {
       const cave = getPaintedCave(player)
@@ -69,10 +67,11 @@ export default function getObjectiveSquaresHighlight(objective: Objective, playe
       ]
     case Objective.Column5Different:
       return revertMatrix(get5DifferentAnimalsInLine(revertMatrix(getPaintedCave(player))))
-    case Objective.AnimalArea8: {
+    case Objective.AnimalArea8:
+    case Objective.AnimalArea10: {
       const cave = getPaintedCave(player)
       const result = cave.map(row => row.map(() => false))
-      for (const {x, y} of getGroupOfIdenticalAnimals(cave, 8)!) {
+      for (const {x, y} of getGroupCreatedWithLastTile(player)) {
         result[y][x] = true
       }
       return result
@@ -109,14 +108,6 @@ export default function getObjectiveSquaresHighlight(objective: Objective, playe
       ]
     case Objective.Line5Different:
       return get5DifferentAnimalsInLine(getPaintedCave(player))
-    case Objective.AnimalArea10: {
-      const cave = getPaintedCave(player)
-      const result = cave.map(row => row.map(() => false))
-      for (const {x, y} of getGroupOfIdenticalAnimals(cave, 10)!) {
-        result[y][x] = true
-      }
-      return result
-    }
     case Objective.SurroundHunterDifferent: {
       const result = caves[player.color].map(row => row.map(() => false))
       const {x, y} = getHunterCoordinates(player.color)
@@ -163,7 +154,7 @@ export default function getObjectiveSquaresHighlight(objective: Objective, playe
   }
 }
 
-function getPathBetweenTotems(player: Player) {
+function getPathBetweenTotems(player: PlayerWithCave) {
   const cave = getPaintedCave(player)
   const result = cave.map(row => row.map(() => false))
   const totemCoordinates = getTotemCoordinates(player.color);
@@ -218,7 +209,7 @@ function get5SameAnimalsInLine(cave: Painting[][]) {
   return result
 }
 
-function getPathBetweenOppositeCorners(player: Player) {
+function getPathBetweenOppositeCorners(player: PlayerWithCave) {
   const cave = getPaintedCave(player)
   const result = cave.map(row => row.map(() => false))
   const path = shortestPathBinaryMatrix(cave, {x: 0, y: 0}, {x: 6, y: 6})
@@ -228,7 +219,7 @@ function getPathBetweenOppositeCorners(player: Player) {
   return result
 }
 
-function getLegendarySurroundedTile(player: Player) {
+function getLegendarySurroundedTile(player: PlayerWithCave) {
   const cave = getPaintedCave(player)
   const result = cave.map(row => row.map(() => false))
   player.cave.forEach(placedTile => {

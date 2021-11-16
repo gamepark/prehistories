@@ -3,11 +3,12 @@ import PlayerState from "../PlayerState";
 import Hunting from "../types/Hunting";
 import Tile, {isLegendaryAnimalTile} from "./Tile";
 import {
+  getGroupCreatedWithLastTile,
   getPaintedCave,
-  getGroupOfIdenticalAnimals,
   isAnimalPainting,
   isColumnPainted,
-  isLegendaryTileSurroundedByPaintings, isLinePainted,
+  isLegendaryTileSurroundedByPaintings,
+  isLinePainted,
   isSpaceSurrounded,
   Painting
 } from "./PaintedCave";
@@ -79,7 +80,7 @@ function isCardObjectiveFulfilled(objective: Objective, cave: Painting[][], play
     case Objective.Column5Different:
       return hasColumnWith5DifferentAnimals(cave)
     case Objective.AnimalArea8:
-      return getGroupOfIdenticalAnimals(cave, 8) !== undefined
+      return getGroupCreatedWithLastTile(player).length >= 8
     case Objective.SurroundHunter:
       return isSpaceSurrounded(cave, getHunterCoordinates(player.color))
     case Objective.Column5Same:
@@ -97,7 +98,7 @@ function isCardObjectiveFulfilled(objective: Objective, cave: Painting[][], play
     case Objective.Line5Different:
       return cave.some(line => new Set(line.filter(isAnimalPainting)).size >= 5)
     case Objective.AnimalArea10:
-      return getGroupOfIdenticalAnimals(cave, 10) !== undefined
+      return getGroupCreatedWithLastTile(player).length >= 10
     case Objective.SurroundHunterDifferent:
       return isSpaceSurroundedWith4DifferentAnimals(cave, getHunterCoordinates(player.color))
     case Objective.Line5Same:

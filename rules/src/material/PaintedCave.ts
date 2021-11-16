@@ -1,5 +1,5 @@
 import PlayerState from "../PlayerState";
-import caves, {Space} from "./Caves";
+import caves, {cavesSize, Space} from "./Caves";
 import PlacedTile, {getPlacedTileCoordinates} from "../types/PlacedTile";
 import Tile, {isLegendaryAnimalTile} from "./Tile";
 import Coordinates from "../types/Coordinates";
@@ -9,7 +9,9 @@ export enum Painting {
   Legendary1, Legendary2, Legendary3, Legendary4, Legendary5
 }
 
-export function getPaintedCave(player: Pick<PlayerState, 'color' | 'cave'>): Painting[][] {
+export type PlayerWithCave = Pick<PlayerState, 'color' | 'cave'>;
+
+export function getPaintedCave(player: PlayerWithCave): Painting[][] {
   const cave: Painting[][] = caves[player.color].map(row =>
     row.map(space => {
       switch (space) {
@@ -113,39 +115,20 @@ export function isAnimalPainting(painting: Painting) {
   return painting !== Painting.Empty && painting !== Painting.Hunter
 }
 
-function isCommonAnimal(painting: Painting) {
-  return painting === Painting.Buffalo || painting === Painting.Boar || painting === Painting.Ibex || painting === Painting.Fish || painting === Painting.Mammoth
-}
-
-export function getGroupOfIdenticalAnimals(cave: Painting[][], size: number): Coordinates[] | undefined {
-  const areaMap: { painting: Painting, squares: Coordinates[] }[][] = cave.map((row, y) => row.map((painting, x) => ({painting, squares: [{x, y}]})))
-  for (let y = 0; y < cave.length; y++) {
-    for (let x = 0; x < cave.length; x++) {
-      const painting = cave[y][x]
-      if (isCommonAnimal(painting)) {
-        const samePaintingY = y > 0 && areaMap[y - 1][x].painting === painting
-        const samePaintingX = x > 0 && areaMap[y][x - 1].painting === painting
-        if (samePaintingY && samePaintingX && areaMap[y - 1][x] !== areaMap[y][x - 1]) { // reunite 2 areas
-          areaMap[y][x] = areaMap[y][x - 1]
-          areaMap[y][x].squares.push(...areaMap[y - 1][x].squares)
-          for (const square of areaMap[y - 1][x].squares) {
-            areaMap[square.y][square.x] = areaMap[y][x]
-          }
-        } else if (samePaintingY) {
-          areaMap[y][x] = areaMap[y - 1][x]
-        } else if (samePaintingX) {
-          areaMap[y][x] = areaMap[y][x - 1]
-        }
-        if (samePaintingY || samePaintingX) {
-          areaMap[y][x].squares.push({x, y})
-          if (areaMap[y][x].squares.length >= size) {
-            return areaMap[y][x].squares
-          }
-        }
-      }
-    }
+export function getGroupCreatedWithLastTile(player: PlayerWithCave): Coordinates[] {
+  const cave = getPaintedCave(player)
+  const result: Coordinates[] = []
+  const recursiveFunction = ({x, y}: Coordinates) => {
+    const painting = cave[y][x]
+    result.push({x, y})
+    cave[y][x] = Painting.Empty
+    if (y > 0 && cave[y - 1][x] === painting) recursiveFunction({y: y - 1, x})
+    if (x > 0 && cave[y][x - 1] === painting) recursiveFunction({y, x: x - 1})
+    if (y + 1 < cavesSize && cave[y + 1][x] === painting) recursiveFunction({y: y + 1, x})
+    if (x + 1 < cavesSize && cave[y][x + 1] === painting) recursiveFunction({y, x: x + 1})
   }
-  return
+  recursiveFunction(getPlacedTileCoordinates(player.cave[player.cave.length - 1])[0])
+  return result
 }
 
 export function isColumnPainted(cave: Painting[][], column: number) {

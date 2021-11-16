@@ -60,11 +60,10 @@ describe('Test fulfilled objectives highlighting', () => {
     const cave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Buffalo4B, side: 0, x: 0, y: 5},
-      {tile: Tile.Buffalo3A, side: 0, x: 2, y: 1},
       {tile: Tile.Buffalo3B, side: 0, x: 3, y: 2},
-      {tile: Tile.Boar3A, side: 0, x: 0, y: 3}
+      {tile: Tile.Boar3A, side: 0, x: 0, y: 3},
+      {tile: Tile.Buffalo3A, side: 0, x: 2, y: 1}
     ]
-    // TODO: Test does not work because the algorithm stops as soon as 8 squares are found. We need a better algorithm based on the last tile placed.
     expect(getObjectiveSquaresHighlight(Objective.AnimalArea8, {cave, color: PlayerColor.Yellow})).toStrictEqual([
       [_, _, _, _, _, _, _],
       [X, _, X, _, _, _, _],

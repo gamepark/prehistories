@@ -63,16 +63,16 @@ describe('Test Objectives', () => {
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Buffalo4B, side: 0, x: 0, y: 5},
-      {tile: Tile.Buffalo3A, side: 0, x: 2, y: 1},
       {tile: Tile.Buffalo3B, side: 0, x: 3, y: 2},
-      {tile: Tile.Boar3A, side: 0, x: 0, y: 3}
+      {tile: Tile.Boar3A, side: 0, x: 0, y: 3},
+      {tile: Tile.Buffalo3A, side: 0, x: 2, y: 1}
     ]
     const wrongCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Buffalo4B, side: 0, x: 0, y: 5},
-      {tile: Tile.Buffalo3A, side: 0, x: 2, y: 1},
       {tile: Tile.Buffalo3B, side: 0, x: 2, y: 5},
-      {tile: Tile.Boar3A, side: 0, x: 0, y: 3}
+      {tile: Tile.Boar3A, side: 0, x: 0, y: 3},
+      {tile: Tile.Buffalo3A, side: 0, x: 2, y: 1}
     ]
 
     expect(getFulfilledObjectives(createGameState([Objective.AnimalArea8], goodCave))).toContain(Objective.AnimalArea8)
