@@ -77,7 +77,7 @@ const objectiveMargin = css`
 const variableObjectivesPosition = css`
     top:7.5%;
     left:24%;
-    z-index:1;
+    z-index:0;
     cursor:pointer;
 `
 export default ObjectiveCards

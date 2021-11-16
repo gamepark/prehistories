@@ -9,6 +9,8 @@ import Images from "../utils/Images"
 import {getTotem} from "./PlayerPanel"
 import Objective from "@gamepark/prehistories/material/Objective";
 import {TFunction} from "i18next";
+import { usePlayerId } from "@gamepark/react-client"
+import PlayerColor from "@gamepark/prehistories/PlayerColor"
 
 type Props = {
     objective: Objective
@@ -19,11 +21,16 @@ const ObjectiveCard : FC<Props> = ({objective, players, ...props}) => {
     
     const playerNewArray = players.filter(p => p)
     const sortedPlayers = playerNewArray.sort((a,b) => -a.totemTokens.filter(g => g === objective).length+b.totemTokens.filter(g => g === objective).length)
+    const playerId = usePlayerId<PlayerColor>()
     const {t} = useTranslation()
 
     return(
 
-        <div css={[objectivePosition, toFullSize, objectiveStyle, placingBackground(getObjectiveCardImage(objective), "cover")]} {...props}>
+        <div css={[objectivePosition, toFullSize, objectiveStyle ]} {...props}>
+
+            <div css={[toFullSize, objectiveStyle, placingBackground(getObjectiveCardImage(objective), "cover"), sortedPlayers.find(p => p.color === playerId)?.totemTokens.filter(g => g === objective).length !== 0 && desaturate]}>
+
+            </div>
 
             {sortedPlayers.map((player, indexPlayer) => 
                 [...Array(player.totemTokens.filter(g => g === objective).length)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[toAbsolute, setPercentDimension(12.3,17), totemStyle(indexPlayer,i), incomingAnimation]} draggable={false} />)
@@ -34,6 +41,11 @@ const ObjectiveCard : FC<Props> = ({objective, players, ...props}) => {
     )
 
 }
+
+const desaturate = css`
+    transition:filter 1s linear;
+    filter:saturate(40%);
+`
 
 const incomingKeyframes = keyframes`
     from{bottom:150%;}

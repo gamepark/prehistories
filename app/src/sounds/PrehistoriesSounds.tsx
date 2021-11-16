@@ -46,7 +46,7 @@ const PrehistoriesSounds : FC<Props> = ({audioLoader}) => {
         if (objective) {
             audioLoader.play(objectiveSound, false, 0.8)
         }
-      }, [objective])
+      }, [objective?.move])
 
     return null
 }

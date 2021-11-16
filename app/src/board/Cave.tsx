@@ -2,7 +2,7 @@
 import {css, keyframes} from "@emotion/react";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import {PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
-import {FC} from "react";
+import {FC, HTMLAttributes} from "react";
 import {caveBorder, caveLeft, caveTop, setPercentDimension, squareSize, toAbsolute} from "../utils/styles";
 import Images from "../utils/Images";
 import AnimalTile from "./AnimalTile";
@@ -15,16 +15,17 @@ import getObjectiveSquaresHighlight from "./ObjectiveSquaresHighlight";
 
 type Props = {
   player: PlayerView | PlayerViewSelf
-}
+  isActiveHuntingPlayer:boolean
+} & HTMLAttributes<HTMLDivElement>
 
 enum Borders {Top = 1, Bottom, Left, Right} 
 
-const Cave: FC<Props> = ({player}) => {
+const Cave: FC<Props> = ({player, isActiveHuntingPlayer, ...props}) => {
 
   const playerId = usePlayerId()
-  const fulfillObjectiveAnimation = useAnimation<FulfillObjective>(animation => isFulfillObjective(animation.move) && player.color === playerId)
+  const fulfillObjectiveAnimation = useAnimation<FulfillObjective>(animation => isFulfillObjective(animation.move))
   
-  let caveExample:boolean[][] | undefined = fulfillObjectiveAnimation ? getObjectiveSquaresHighlight(fulfillObjectiveAnimation?.move.objective, player) : undefined
+  let caveExample:boolean[][] | undefined = fulfillObjectiveAnimation && isActiveHuntingPlayer ? getObjectiveSquaresHighlight(fulfillObjectiveAnimation?.move.objective, player) : undefined
   
   function getBorders(coordinates:Coordinates, cave:boolean[][]):Borders[]{
     const result:Borders[] = []
@@ -36,7 +37,7 @@ const Cave: FC<Props> = ({player}) => {
   }
 
   return (
-    <div css={[style, background(caveBackground[player.color]), fulfillObjectiveAnimation && scaleCaveAnimation(fulfillObjectiveAnimation.duration)]}>
+    <div css={[style, background(caveBackground[player.color]), fulfillObjectiveAnimation && isActiveHuntingPlayer && scaleCaveAnimation(fulfillObjectiveAnimation.duration)]}>
       {playerId === player.color && <TilesDropArea player={player}/>}
       {player.cave.map((paint, index) =>
         <AnimalTile key={index} tile={paint.tile} side={paint.side} css={tilePosition(paint.x, paint.y)}/>
@@ -60,7 +61,7 @@ to{transform:scale(1);
 `
 
 const scaleCaveAnimation = (duration:number) => css`
-z-index:2;
+z-index:3;
 transform-origin:top left;
 animation: ${scaleCaveKeyframes} ${duration}s ease-out;
 `

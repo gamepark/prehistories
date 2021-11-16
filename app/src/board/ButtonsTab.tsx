@@ -147,7 +147,7 @@ const huntingButtonsPosition = (color:PlayerColor) => css`
     left:50%;
     bottom:101.5%;
     transform:translateX(-50%);
-    z-index:1;
+    z-index:0;
     border-top:0.6em solid ${getPlayerColor(color)};
     border-left:0.6em solid ${getPlayerColor(color)};
     border-right:0.6em solid ${getPlayerColor(color)};

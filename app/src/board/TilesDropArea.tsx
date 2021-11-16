@@ -135,6 +135,7 @@ const squareCss = css`
   position: absolute;
   width: ${squareSize}em;
   height: ${squareSize}em;
+  z-index:11;
 `
 
 export const squarePosition = (x: number, y: number) => css`

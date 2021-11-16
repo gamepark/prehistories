@@ -39,7 +39,7 @@ type Props = {
     caveDisplayed:PlayerColor
 }
 
-const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}) => {
+const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, isActiveHuntingPlayer, caveDisplayed}) => {
 
     const {t} = useTranslation()
     const playerId = usePlayerId<PlayerColor>()
@@ -140,7 +140,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, caveDisplayed}
     const playerCardsInRevealAnimation = revealCardsAnimation ? revealCardsAnimation.move.cardsPlayed.find(obj => obj.color === player.color)!.cards : undefined
   return (
     <>
-      <Cave player={player}/>
+      <Cave player={player} isActiveHuntingPlayer={isActiveHuntingPlayer} css={css`z-index:1`}/>
 
       <div css={[toAbsolute, setPercentDimension(93, 56), playerBoardPosition]}>
 
@@ -288,12 +288,10 @@ const shufflingAnimation = (index:number, duration:number, discardLength:number)
 `
 
 const spendHunterKeyFrames = (discardLength:number) => keyframes`
-    from{z-index:11}
     to{
         transform:rotateZ(0) scale(1.02);
         top:${108-discardLength*0.5}%;
         left:${71+discardLength*0.5}%;
-        z-index:11;
     }
 `
 
@@ -358,7 +356,7 @@ const discardZonePosition = css`
     right:1%;
     transform-style: preserve-3d;
     transform: perspective(200em);
-    z-index:1;
+    z-index:0;
 `
 
 const cardPlayedPosition = (key:number) => css`
