@@ -9,7 +9,6 @@ import {revealHuntCardsInView} from '@gamepark/prehistories/moves/RevealHuntCard
 import {placeTile} from '@gamepark/prehistories/moves/PlaceTile'
 import {spendHunter} from '@gamepark/prehistories/moves/SpendHunter'
 import {validateSpentHunters} from '@gamepark/prehistories/moves/ValidateSpentHunters'
-import {fulfillPermanentObjectives} from '@gamepark/prehistories/moves/FulfillPermanentObjectives'
 import {fulfillObjective} from '@gamepark/prehistories/moves/FulfillObjective'
 import {refillHuntingBoardInView} from '@gamepark/prehistories/moves/RefillHuntingBoard'
 import {endTurn} from '@gamepark/prehistories/moves/EndTurn'
@@ -50,8 +49,6 @@ export default class PrehistoriesView implements Game<GameView, MoveView>, Undo<
         return spendHunter(this.state, move)
       case MoveType.ValidateSpentHunters:
         return validateSpentHunters(this.state)
-      case MoveType.FulfillPermanentObjectives:
-        return fulfillPermanentObjectives(this.state, move)
       case MoveType.FulfillObjective:
         return fulfillObjective(this.state, move)
       case MoveType.SetHuntPhase:

@@ -188,4 +188,8 @@ export function isLegendaryAnimalTile(tile: Tile) {
   return tile === Tile.Legendary1 || tile === Tile.Legendary2 || tile === Tile.Legendary3 || tile === Tile.Legendary4 || tile === Tile.Legendary5
 }
 
+export function revertMatrix<T>(matrix: T[][]): T[][] {
+  return matrix[0].map((_, x) => matrix.map((_, y) => matrix[y][x]))
+}
+
 export default Tile

@@ -3,10 +3,8 @@ import {shuffle} from 'lodash'
 import canUndo from './canUndo'
 import GameState from './GameState'
 import GameView from './GameView'
-import {objectives} from './material/Objectives'
 import {changeActivePlayer} from './moves/ChangeActivePlayer'
-import {checkPermanentObjectives, fulfillPermanentObjectives} from './moves/FulfillPermanentObjectives'
-import {checkObjectives, fulfillObjective} from './moves/FulfillObjective'
+import {fulfillObjective, fulfillObjectiveMove} from './moves/FulfillObjective'
 import {drawCards} from './moves/DrawCards'
 import {endGame} from './moves/EndGame'
 import EndTurn, {endTurn} from './moves/EndTurn'
@@ -34,6 +32,8 @@ import {canPlaceTile, getCavePlacementSpaces} from "./utils/PlacementRules";
 import caves, {cavesSize, Space} from "./material/Caves";
 import {setupTilesDeck, sides} from "./material/Tile";
 import {getPlacedTileCoordinates} from "./types/PlacedTile";
+import {setupObjectives} from "./material/Objective";
+import {getFulfilledObjectives} from "./material/ObjectiveRules";
 
 export default class Prehistories extends SimultaneousGame<GameState, Move, PlayerColor>
   implements SecretInformation<GameState, GameView, Move, MoveView, PlayerColor>, Undo<GameState, Move, PlayerColor> {
@@ -53,7 +53,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
       }
 
       game.huntingBoard = setupHuntingBoard(game)
-      game.objectives = setupObjectives(game, arg.isExpertGame)
+      game.objectives = setupObjectives(game.players.length, arg.isExpertGame)
       super(game)
     } else {
       super(arg)
@@ -143,8 +143,6 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         return spendHunter(this.state, move)
       case MoveType.ValidateSpentHunters:
         return validateSpentHunters(this.state)
-      case MoveType.FulfillPermanentObjectives:
-        return fulfillPermanentObjectives(this.state, move)
       case MoveType.FulfillObjective:
         return fulfillObjective(this.state, move)
       case MoveType.SetHuntPhase:
@@ -168,7 +166,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
     }
   }
 
-  getAutomaticMove(): void | Move {
+  getAutomaticMove(): void | Move | Move[] {
 
     switch (this.state.phase) {
       case Phase.Initiative: {
@@ -182,7 +180,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
           return {type: MoveType.RefillHuntingBoard}
         }
 
-        if (this.state.players.some(p => p.totemTokens === 0)) {
+        if (this.state.players.some(p => p.totemTokens.length >= 8)) {
           return {type: MoveType.EndGame}
         }
 
@@ -195,24 +193,9 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
               return {type: MoveType.ValidateSpentHunters}
             } else return
           }
-          case HuntPhase.CheckPermanentObjectives: {
-            const result = checkPermanentObjectives(player)
-            if (result[0].length !== 0 || result[1].length !== 0 || result[2]) {
-              return {type: MoveType.FulfillPermanentObjectives, objectivesCompleted: result}
-            } else {
-              return {type: MoveType.SetHuntPhase}
-            }
+          case HuntPhase.CheckObjectives: {
+            return [...getFulfilledObjectives(this.state).map(fulfillObjectiveMove), {type: MoveType.SetHuntPhase}]
           }
-
-          case HuntPhase.CheckVariableObjectives: {
-            const result = checkObjectives(this.state, player)
-            if (result) {
-              return {type: MoveType.FulfillObjective, objective: result[0], tokens: result[1]}
-            } else {
-              return {type: MoveType.SetHuntPhase}
-            }
-          }
-
           case HuntPhase.DrawCards: {
             if (player.played.length !== 0) {
               return {type: MoveType.TakeBackPlayedCards}
@@ -318,29 +301,14 @@ function setupPlayers(players: PrehistoriesPlayerOptions[]): PlayerState[] {
     return ({
       color: options.id,
       cave: [],
-      totemTokens: 8,
+      totemTokens: [],
       deck,
       discard: [],
       hand: deck.splice(0, 3),
       played: [],
-      variableObjectivesMade: []
+      tokensOnObjective: []
     })
   })
-}
-
-function setupObjectives(game: GameState, isExpertGame: boolean): number[] {
-  const numberOfObjectiveCards = objectives.length / 2
-  const objectiveCardsShuffled = shuffle(Array.from(objectives.slice(0, numberOfObjectiveCards).keys()))
-  const numberOfObjectives: number = game.players.length < 4 ? 4 : 5
-  const objectiveCards = objectiveCardsShuffled.slice(0, numberOfObjectives)
-  if (isExpertGame) {
-    for (let i = 0; i < objectiveCards.length; i++) {
-      if (Math.random() < 0.5) {
-        objectiveCards[i] = objectiveCards[i] + numberOfObjectiveCards // Moon side is the second part of the objectives array
-      }
-    }
-  }
-  return objectiveCards
 }
 
 function setupHuntingBoard(game: GameState): number[] {

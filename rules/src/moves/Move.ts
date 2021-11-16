@@ -1,5 +1,4 @@
 import ChangeActivePlayer from './ChangeActivePlayer'
-import FulfillPermanentObjectives from './FulfillPermanentObjectives'
 import FulfillObjective from './FulfillObjective'
 import DrawCards from './DrawCards'
 import EndGame from './EndGame'
@@ -13,15 +12,14 @@ import ShuffleDiscardPile from './ShuffleDiscardPile'
 import SpendHunter from './SpendHunter'
 import TakeBackPlayedCards from './TakeBackPlayedCards'
 import TellYouAreReady from './TellYouAreReady'
-import ValidateSpendedHunters from './ValidateSpentHunters'
+import ValidateSpentHunters from './ValidateSpentHunters'
 
 type Move = PlayHuntCard |
             TellYouAreReady |
             RevealHuntCards |
             PlaceTile |
             SpendHunter |
-            ValidateSpendedHunters |
-            FulfillPermanentObjectives |
+            ValidateSpentHunters |
             FulfillObjective |
             SetHuntPhase |
             EndTurn |

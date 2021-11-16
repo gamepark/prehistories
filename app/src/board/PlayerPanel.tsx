@@ -39,7 +39,7 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, hunting}, position
             <h1 css={[nameStyle]}>{playerInfo?.name === undefined ? getPlayerName(color, t) : playerInfo?.name}</h1>
             <div css={totemRemainingPosition}>
 
-                {[...Array(totemTokens)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(color)} css={totemStyle(totemTokens)} draggable={false} />)}
+                {[...Array(8 - totemTokens.length)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(color)} css={totemStyle(8 - totemTokens.length)} draggable={false} />)}
 
             </div>
             <PlayerTimer playerId={color} css={[TimerStyle]}/>

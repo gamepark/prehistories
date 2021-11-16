@@ -8,6 +8,7 @@ import {centerContent, placingBackground, setPercentDimension, toAbsolute} from 
 import Images from "../utils/Images"
 import ObjectiveCard from "./ObjectiveCard"
 import {getTotem} from "./PlayerPanel"
+import {permanentObjectives} from "@gamepark/prehistories/material/Objective";
 
 type Props = {
     objectives:number[],
@@ -33,7 +34,7 @@ const ObjectiveCards : FC<Props> = ({objectives,players, ...props}) => {
 
         <div css={[toAbsolute, permanentObjectivePosition, setPercentDimension(15.9,20), placingBackground(Images.permanentObjectives, "cover")]}>
             {players.map((player, indexPlayer) => 
-                [...Array(8-player.variableObjectivesMade.length-player.totemTokens)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[toAbsolute, totemStyle(indexPlayer,i), incomingAnimation]} draggable={false} />)
+                [...Array(player.totemTokens.filter(o => permanentObjectives.includes(o)).length)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[toAbsolute, totemStyle(indexPlayer,i), incomingAnimation]} draggable={false} />)
             )}
 
         </div>

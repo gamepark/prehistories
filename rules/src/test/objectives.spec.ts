@@ -1,15 +1,14 @@
-import {objectives} from "../material/Objectives"
 import PlayerColor from "../PlayerColor"
-import PlayerState from "../PlayerState"
 import PlacedTile from "../types/PlacedTile"
 import Tile from "../material/Tile";
+import GameState from "../GameState";
+import Objective from "../material/Objective";
+import Phase, {HuntPhase} from "../types/Phase";
+import {getFulfilledObjectives} from "../material/ObjectiveRules";
 
 describe('Test Objectives', () => {
 
-  const X = true
-  const _ = false
-
-  test('Objective1', () => {          // PathFinding between two totems
+  test('ConnectTotemAnimals', () => {          // PathFinding between two totems
 
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
@@ -20,22 +19,11 @@ describe('Test Objectives', () => {
       {tile: Tile.Legendary1, side: 0, x: 3, y: 2}
     ]
 
-    const fulfilledSquares = [[_,_,_,_,_,_,_],
-                              [_,X,_,_,_,_,_],
-                              [_,X,_,_,_,_,_],
-                              [_,X,X,X,X,_,_],
-                              [_,_,_,_,X,_,_],
-                              [_,_,_,_,X,_,_],
-                              [_,_,_,_,_,_,_]];
-
-    expect(objectives[0].rule(withCave([], PlayerColor.Yellow))).toBe(false)
-    expect(objectives[0].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true)
-    expect(objectives[0].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
-    expect(objectives[0].squaresIfFulfilled!(withCave(goodCave, PlayerColor.Yellow))).toEqual(expect.arrayContaining(fulfilledSquares))
-
+    expect(getFulfilledObjectives(createGameState([Objective.ConnectTotemAnimals], goodCave))).toContain(Objective.ConnectTotemAnimals)
+    expect(getFulfilledObjectives(createGameState([Objective.ConnectTotemAnimals], wrongCave))).not.toContain(Objective.ConnectTotemAnimals)
   })
 
-  test("Objective2", () => {          // 3x3 central square filled
+  test("PaintMiddle9", () => {          // 3x3 central square filled
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Legendary1, side: 0, x: 3, y: 3},
@@ -49,22 +37,11 @@ describe('Test Objectives', () => {
       {tile: Tile.Boar3A, side: 0, x: 2, y: 4}
     ]
 
-    const fulfilledSquares = [[_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_],
-                              [_,_,X,X,X,_,_],
-                              [_,_,X,X,X,_,_],
-                              [_,_,X,X,X,_,_],
-                              [_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_]];
-
-    expect(objectives[1].rule(withCave([], PlayerColor.Yellow))).toBe(false)
-    expect(objectives[1].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true)
-    expect(objectives[1].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
-    expect(objectives[1].squaresIfFulfilled!(withCave(goodCave, PlayerColor.Yellow))).toEqual(expect.arrayContaining(fulfilledSquares))
-
+    expect(getFulfilledObjectives(createGameState([Objective.PaintMiddle9], goodCave))).toContain(Objective.PaintMiddle9)
+    expect(getFulfilledObjectives(createGameState([Objective.PaintMiddle9], wrongCave))).not.toContain(Objective.PaintMiddle9)
   })
 
-  test("Objective3", () => {          // column of 5 animals
+  test("Column5Different", () => {          // column of 5 animals
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Legendary1, side: 0, x: 0, y: 5},
@@ -78,22 +55,11 @@ describe('Test Objectives', () => {
       {tile: Tile.Boar3A, side: 0, x: 0, y: 3}
     ]
 
-    const fulfilledSquares = [[_,X,_,_,_,_,_],
-                              [_,X,_,_,_,_,_],
-                              [_,X,_,_,_,_,_],
-                              [_,X,_,_,_,_,_],
-                              [_,X,_,_,_,_,_],
-                              [_,X,_,_,_,_,_],
-                              [_,X,_,_,_,_,_]];
-
-    expect(objectives[2].rule(withCave([], PlayerColor.Yellow))).toBe(false)
-    expect(objectives[2].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true)
-    expect(objectives[2].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
-    expect(objectives[2].squaresIfFulfilled!(withCave(goodCave, PlayerColor.Yellow))).toEqual(expect.arrayContaining(fulfilledSquares))
-
+    expect(getFulfilledObjectives(createGameState([Objective.Column5Different], goodCave))).toContain(Objective.Column5Different)
+    expect(getFulfilledObjectives(createGameState([Objective.Column5Different], wrongCave))).not.toContain(Objective.Column5Different)
   })
 
-  test("Objective4", () => {          // group of 8 same animals (no legend)
+  test("AnimalArea8", () => {          // group of 8 same animals (no legend)
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Buffalo4B, side: 0, x: 0, y: 5},
@@ -109,12 +75,11 @@ describe('Test Objectives', () => {
       {tile: Tile.Boar3A, side: 0, x: 0, y: 3}
     ]
 
-    expect(objectives[3].rule(withCave([], PlayerColor.Yellow))).toBe(false)
-    expect(objectives[3].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true)
-    expect(objectives[3].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
+    expect(getFulfilledObjectives(createGameState([Objective.AnimalArea8], goodCave))).toContain(Objective.AnimalArea8)
+    expect(getFulfilledObjectives(createGameState([Objective.AnimalArea8], wrongCave))).not.toContain(Objective.AnimalArea8)
   })
 
-  test("Objective5", () => {          // surround hunter tile
+  test("SurroundHunter", () => {          // surround hunter tile
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Buffalo3A, side: 0, x: 2, y: 1},
@@ -128,22 +93,11 @@ describe('Test Objectives', () => {
       {tile: Tile.Boar3A, side: 0, x: 3, y: 5}
     ]
 
-    const fulfilledSquares = [[_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_],
-                              [_,X,X,X,_,_,_],
-                              [_,X,X,X,_,_,_],
-                              [_,X,X,X,_,_,_],
-                              [_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_]];
-
-    expect(objectives[4].rule(withCave([], PlayerColor.Yellow))).toBe(false)
-    expect(objectives[4].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true)
-    expect(objectives[4].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
-    expect(objectives[4].squaresIfFulfilled!(withCave(goodCave, PlayerColor.Yellow))).toEqual(expect.arrayContaining(fulfilledSquares))
-
+    expect(getFulfilledObjectives(createGameState([Objective.SurroundHunter], goodCave))).toContain(Objective.SurroundHunter)
+    expect(getFulfilledObjectives(createGameState([Objective.SurroundHunter], wrongCave))).not.toContain(Objective.SurroundHunter)
   })
 
-  test("Objective6", () => {          // Column of 5 same animal no legend
+  test("Column5Same", () => {          // Column of 5 same animal no legend
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Buffalo4B, side: 0, x: 1, y: 5},
@@ -157,22 +111,11 @@ describe('Test Objectives', () => {
       {tile: Tile.Buffalo3B, side: 0, x: 2, y: 3},
     ]
 
-    const fulfilledSquares = [[_,_,X,_,_,_,_],
-                              [_,_,X,_,_,_,_],
-                              [_,_,X,_,_,_,_],
-                              [_,_,X,_,_,_,_],
-                              [_,_,X,_,_,_,_],
-                              [_,_,X,_,_,_,_],
-                              [_,_,X,_,_,_,_]];
-
-    expect(objectives[5].rule(withCave([], PlayerColor.Yellow))).toBe(false)
-    expect(objectives[5].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true)
-    expect(objectives[5].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
-    expect(objectives[5].squaresIfFulfilled!(withCave(goodCave, PlayerColor.Yellow))).toEqual(expect.arrayContaining(fulfilledSquares))
-
+    expect(getFulfilledObjectives(createGameState([Objective.Column5Same], goodCave))).toContain(Objective.Column5Same)
+    expect(getFulfilledObjectives(createGameState([Objective.Column5Same], wrongCave))).not.toContain(Objective.Column5Same)
   })
 
-  test("Objective7", () => {          // Pathfinding betwenn top left corner and bottom right corner
+  test("ConnectDiagonalCorners", () => {          // Pathfinding betwenn top left corner and bottom right corner
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Buffalo4B, side: 0, x: 2, y: 4},
@@ -185,22 +128,11 @@ describe('Test Objectives', () => {
       {tile: Tile.Buffalo3A, side: 0, x: 5, y: 5},
     ]
 
-    const fulfilledSquares = [[X,_,_,_,_,_,_],
-                              [X,X,_,_,_,_,_],
-                              [_,X,_,_,_,_,_],
-                              [_,X,X,_,_,_,_],
-                              [_,_,X,X,X,_,_],
-                              [_,_,_,_,X,X,_],
-                              [_,_,_,_,_,X,X]];
-
-    expect(objectives[6].rule(withCave([], PlayerColor.Yellow))).toBe(false)
-    expect(objectives[6].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true)
-    expect(objectives[6].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
-    expect(objectives[6].squaresIfFulfilled!(withCave(goodCave, PlayerColor.Yellow))).toEqual(expect.arrayContaining(fulfilledSquares))
-
+    expect(getFulfilledObjectives(createGameState([Objective.ConnectDiagonalCorners], goodCave))).toContain(Objective.ConnectDiagonalCorners)
+    expect(getFulfilledObjectives(createGameState([Objective.ConnectDiagonalCorners], wrongCave))).not.toContain(Objective.ConnectDiagonalCorners)
   })
 
-  test("Objective8", () => {          // 5 tiles 1x1 built
+  test("Paint5SmallestTiles", () => {          // 5 tiles 1x1 built
     const goodCave: PlacedTile[] = [
       {tile: Tile.Fish1, side: 0, x: 0, y: 0},
       {tile: Tile.Fish1, side: 1, x: 1, y: 0},
@@ -215,22 +147,11 @@ describe('Test Objectives', () => {
       {tile: Tile.Fish1, side: 1, x: 3, y: 0}
     ]
 
-    const fulfilledSquares = [[X,X,X,X,X,_,_],
-                              [_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_]];
-
-    expect(objectives[7].rule(withCave([], PlayerColor.Yellow))).toBe(false)
-    expect(objectives[7].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true)
-    expect(objectives[7].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
-    expect(objectives[7].squaresIfFulfilled!(withCave(goodCave, PlayerColor.Yellow))).toEqual(expect.arrayContaining(fulfilledSquares))
-
+    expect(getFulfilledObjectives(createGameState([Objective.Paint5SmallestTiles], goodCave))).toContain(Objective.Paint5SmallestTiles)
+    expect(getFulfilledObjectives(createGameState([Objective.Paint5SmallestTiles], wrongCave))).not.toContain(Objective.Paint5SmallestTiles)
   })
 
-  test("Objective9", () => {          // Surround a legendary tile
+  test("SurroundLegendary", () => {          // Surround a legendary tile
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Buffalo4B, side: 0, x: 2, y: 4},
@@ -246,23 +167,11 @@ describe('Test Objectives', () => {
       {tile: Tile.Legendary2, side: 0, x: 5, y: 5}
     ]
 
-    const fulfilledSquares = [[_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_],
-                              [_,_,_,_,X,X,X],
-                              [_,_,_,_,X,X,X],
-                              [_,_,_,_,X,X,X]];
-                              
-
-    expect(objectives[8].rule(withCave([], PlayerColor.Yellow))).toBe(false)
-    expect(objectives[8].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true)
-    expect(objectives[8].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
-    expect(objectives[8].squaresIfFulfilled!(withCave(goodCave, PlayerColor.Yellow))).toEqual(expect.arrayContaining(fulfilledSquares))
-
+    expect(getFulfilledObjectives(createGameState([Objective.SurroundLegendary], goodCave))).toContain(Objective.SurroundLegendary)
+    expect(getFulfilledObjectives(createGameState([Objective.SurroundLegendary], wrongCave))).not.toContain(Objective.SurroundLegendary)
   })
 
-  test("Objective10", () => {          // Surround two totems
+  test("SurroundTotemAnimals", () => {          // Surround two totems
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Buffalo4B, side: 0, x: 1, y: 0},
@@ -282,22 +191,12 @@ describe('Test Objectives', () => {
       {tile: Tile.Fish1, side: 0, x: 0, y: 0},
       {tile: Tile.Fish1, side: 0, x: 5, y: 4},
     ]
-    const fulfilledSquares = [[X,X,X,_,_,_,_],
-                              [X,X,X,_,_,_,_],
-                              [X,X,X,_,_,_,_],
-                              [_,_,_,_,_,_,_],
-                              [_,_,_,X,X,X,_],
-                              [_,_,_,X,X,X,_],
-                              [_,_,_,X,X,X,_]];
 
-    expect(objectives[9].rule(withCave([], PlayerColor.Yellow))).toBe(false)
-    expect(objectives[9].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true)
-    expect(objectives[9].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
-    expect(objectives[9].squaresIfFulfilled!(withCave(goodCave, PlayerColor.Yellow))).toEqual(expect.arrayContaining(fulfilledSquares))
-
+    expect(getFulfilledObjectives(createGameState([Objective.SurroundTotemAnimals], goodCave))).toContain(Objective.SurroundTotemAnimals)
+    expect(getFulfilledObjectives(createGameState([Objective.SurroundTotemAnimals], wrongCave))).not.toContain(Objective.SurroundTotemAnimals)
   })
 
-  test("Objective11", () => {          // Fill the right column
+  test("PaintLastColumn", () => {          // Fill the right column
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 5, y: 4},
       {tile: Tile.Buffalo4B, side: 0, x: 1, y: 0},
@@ -313,22 +212,12 @@ describe('Test Objectives', () => {
       {tile: Tile.Buffalo3B, side: 0, x: 5, y: 1},
       {tile: Tile.Fish1, side: 0, x: 0, y: 0},
     ]
-    const fulfilledSquares = [[_,_,_,_,_,_,X],
-                              [_,_,_,_,_,_,X],
-                              [_,_,_,_,_,_,X],
-                              [_,_,_,_,_,_,X],
-                              [_,_,_,_,_,_,X],
-                              [_,_,_,_,_,_,X],
-                              [_,_,_,_,_,_,X]];
 
-    expect(objectives[10].rule(withCave([], PlayerColor.Yellow))).toBe(false)
-    expect(objectives[10].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true)
-    expect(objectives[10].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
-    expect(objectives[10].squaresIfFulfilled!(withCave(goodCave, PlayerColor.Yellow))).toEqual(expect.arrayContaining(fulfilledSquares))
-
+    expect(getFulfilledObjectives(createGameState([Objective.PaintLastColumn], goodCave))).toContain(Objective.PaintLastColumn)
+    expect(getFulfilledObjectives(createGameState([Objective.PaintLastColumn], wrongCave))).not.toContain(Objective.PaintLastColumn)
   })
 
-  test("Objective12", () => {          // Line of 5 different animals
+  test("Line5Different", () => {          // Line of 5 different animals
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Boar3A, side: 1, x: 4, y: 0},
@@ -342,22 +231,11 @@ describe('Test Objectives', () => {
       {tile: Tile.Ibex4B, side: 0, x: 1, y: 0},
     ]
 
-    const fulfilledSquares = [[_,_,_,_,_,_,_],
-                              [X,X,X,X,X,X,X],
-                              [_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_]];
-
-    expect(objectives[11].rule(withCave([], PlayerColor.Yellow))).toBe(false)
-    expect(objectives[11].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true)
-    expect(objectives[11].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
-    expect(objectives[11].squaresIfFulfilled!(withCave(goodCave, PlayerColor.Yellow))).toEqual(expect.arrayContaining(fulfilledSquares))
-
+    expect(getFulfilledObjectives(createGameState([Objective.Line5Different], goodCave))).toContain(Objective.Line5Different)
+    expect(getFulfilledObjectives(createGameState([Objective.Line5Different], wrongCave))).not.toContain(Objective.Line5Different)
   })
 
-  test("Objective13", () => {          // Group of 10 same animal
+  test("AnimalArea10", () => {          // Group of 10 same animal
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Buffalo4B, side: 0, x: 2, y: 2},
@@ -369,13 +247,11 @@ describe('Test Objectives', () => {
       {tile: Tile.Buffalo3B, side: 0, x: 1, y: 4}
     ]
 
-    expect(objectives[12].rule(withCave([], PlayerColor.Yellow))).toBe(false)
-    expect(objectives[12].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true)
-    expect(objectives[12].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
-    
+    expect(getFulfilledObjectives(createGameState([Objective.AnimalArea10], goodCave))).toContain(Objective.AnimalArea10)
+    expect(getFulfilledObjectives(createGameState([Objective.AnimalArea10], wrongCave))).not.toContain(Objective.AnimalArea10)
   })
 
-  test("Objective14", () => {          // surround hunter with 4 different animals
+  test("SurroundHunterDifferent", () => {          // surround hunter with 4 different animals
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Fish1, side: 0, x: 2, y: 2},
@@ -387,22 +263,12 @@ describe('Test Objectives', () => {
       {tile: Tile.Buffalo4B, side: 0, x: 2, y: 2},
       {tile: Tile.Buffalo3B, side: 0, x: 1, y: 4}
     ]
-    const fulfilledSquares = [[_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_],
-                              [_,_,X,_,_,_,_],
-                              [_,X,X,X,_,_,_],
-                              [_,_,X,_,_,_,_],
-                              [_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_]];
 
-    expect(objectives[13].rule(withCave([], PlayerColor.Yellow))).toBe(false)
-    expect(objectives[13].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true)
-    expect(objectives[13].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
-    expect(objectives[13].squaresIfFulfilled!(withCave(goodCave, PlayerColor.Yellow))).toEqual(expect.arrayContaining(fulfilledSquares))
-
+    expect(getFulfilledObjectives(createGameState([Objective.SurroundHunterDifferent], goodCave))).toContain(Objective.SurroundHunterDifferent)
+    expect(getFulfilledObjectives(createGameState([Objective.SurroundHunterDifferent], wrongCave))).not.toContain(Objective.SurroundHunterDifferent)
   })
 
-  test("Objective15", () => {          // line of 5 same animals (no Legendary)
+  test("Line5Same", () => {          // line of 5 same animals (no Legendary)
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Buffalo4B, side: 0, x: 2, y: 2},
@@ -411,22 +277,12 @@ describe('Test Objectives', () => {
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Buffalo4B, side: 0, x: 3, y: 3},
     ]
-    const fulfilledSquares = [[_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_],
-                              [X,X,X,X,X,X,X],
-                              [_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_]];
 
-    expect(objectives[14].rule(withCave([], PlayerColor.Yellow))).toBe(false)
-    expect(objectives[14].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true)
-    expect(objectives[14].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
-    expect(objectives[14].squaresIfFulfilled!(withCave(goodCave, PlayerColor.Yellow))).toEqual(expect.arrayContaining(fulfilledSquares))
-
+    expect(getFulfilledObjectives(createGameState([Objective.Line5Same], goodCave))).toContain(Objective.Line5Same)
+    expect(getFulfilledObjectives(createGameState([Objective.Line5Same], wrongCave))).not.toContain(Objective.Line5Same)
   })
 
-  test("Objective16", () => {          // fill 4 corners
+  test("PaintAllCorners", () => {          // fill 4 corners
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Buffalo4B, side: 0, x: 3, y: 3},
@@ -444,22 +300,12 @@ describe('Test Objectives', () => {
       {tile: Tile.Fish4B, side: 0, x: 5, y: 4},
       {tile: Tile.Fish1, side: 0, x: 6, y: 3},
     ]
-    const fulfilledSquares = [[X,_,_,_,_,_,X],
-                              [_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_],
-                              [X,_,_,_,_,_,X]];
 
-    expect(objectives[15].rule(withCave([], PlayerColor.Yellow))).toBe(false)
-    expect(objectives[15].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true)
-    expect(objectives[15].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
-    expect(objectives[15].squaresIfFulfilled!(withCave(goodCave, PlayerColor.Yellow))).toEqual(expect.arrayContaining(fulfilledSquares))
-
+    expect(getFulfilledObjectives(createGameState([Objective.PaintAllCorners], goodCave))).toContain(Objective.PaintAllCorners)
+    expect(getFulfilledObjectives(createGameState([Objective.PaintAllCorners], wrongCave))).not.toContain(Objective.PaintAllCorners)
   })
 
-  test("Objective18", () => {          // 2 legendary side by side
+  test("PaintAdjacentLegendary", () => {          // 2 legendary side by side
     const goodCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Buffalo4B, side: 0, x: 3, y: 3},
@@ -472,23 +318,32 @@ describe('Test Objectives', () => {
       {tile: Tile.Legendary2, side: 0, x: 2, y: 1},
       {tile: Tile.Legendary3, side: 0, x: 4, y: 0}
     ]
-    const fulfilledSquares = [[_,_,_,_,_,_,_],
-                              [_,_,X,X,X,X,_],
-                              [_,_,X,X,X,X,_],
-                              [_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_],
-                              [_,_,_,_,_,_,_]];
 
-    expect(objectives[17].rule(withCave([], PlayerColor.Yellow))).toBe(false)
-    expect(objectives[17].rule(withCave(goodCave, PlayerColor.Yellow))).toBe(true)
-    expect(objectives[17].rule(withCave(wrongCave, PlayerColor.Yellow))).toBe(false)
-    expect(objectives[17].squaresIfFulfilled!(withCave(goodCave, PlayerColor.Yellow))).toEqual(expect.arrayContaining(fulfilledSquares))
-
+    expect(getFulfilledObjectives(createGameState([Objective.PaintAdjacentLegendary], goodCave))).toContain(Objective.PaintAdjacentLegendary)
+    expect(getFulfilledObjectives(createGameState([Objective.PaintAdjacentLegendary], wrongCave))).not.toContain(Objective.PaintAdjacentLegendary)
   })
 
 })
 
-function withCave(cave: PlacedTile[], color: PlayerColor): PlayerState {
-  return {cave, color, deck: [], discard: [], variableObjectivesMade: [], hand: [], played: [], totemTokens: 8}
+function createGameState(objectives: Objective[], cave: PlacedTile[]): GameState {
+  return {
+    players: [
+      {
+        cave,
+        color: PlayerColor.Yellow,
+        deck: [],
+        discard: [],
+        hand: [],
+        played: [],
+        totemTokens: [],
+        hunting: {tilesHunted: 0, huntPhase: HuntPhase.CheckObjectives, huntSpotTakenLevels: [], injuries: 0}
+      },
+      {cave: [], color: PlayerColor.Blue, deck: [], discard: [], hand: [], played: [], totemTokens: []}
+    ],
+    objectives,
+    sortedPlayers: [PlayerColor.Yellow, PlayerColor.Blue],
+    huntingBoard: [],
+    phase: Phase.Hunt,
+    tilesDeck: []
+  }
 }

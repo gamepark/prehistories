@@ -1,5 +1,4 @@
 import PlayerState from "../PlayerState";
-import {PlayerView, PlayerViewSelf} from "../types/PlayerView";
 import caves, {Space} from "./Caves";
 import PlacedTile, {getPlacedTileCoordinates} from "../types/PlacedTile";
 import Tile, {isLegendaryAnimalTile} from "./Tile";
@@ -10,7 +9,7 @@ export enum Painting {
   Legendary1, Legendary2, Legendary3, Legendary4, Legendary5
 }
 
-export function getPaintedCave(player: PlayerState | PlayerView | PlayerViewSelf): Painting[][] {
+export function getPaintedCave(player: Pick<PlayerState, 'color' | 'cave'>): Painting[][] {
   const cave: Painting[][] = caves[player.color].map(row =>
     row.map(space => {
       switch (space) {
@@ -118,7 +117,7 @@ function isCommonAnimal(painting: Painting) {
   return painting === Painting.Buffalo || painting === Painting.Boar || painting === Painting.Ibex || painting === Painting.Fish || painting === Painting.Mammoth
 }
 
-export function hasGroupOfIdenticalAnimals(cave: Painting[][], size: number) {
+export function getGroupOfIdenticalAnimals(cave: Painting[][], size: number): Coordinates[] | undefined {
   const areaMap: { painting: Painting, squares: Coordinates[] }[][] = cave.map((row, y) => row.map((painting, x) => ({painting, squares: [{x, y}]})))
   for (let y = 0; y < cave.length; y++) {
     for (let x = 0; x < cave.length; x++) {
@@ -140,13 +139,13 @@ export function hasGroupOfIdenticalAnimals(cave: Painting[][], size: number) {
         if (samePaintingY || samePaintingX) {
           areaMap[y][x].squares.push({x, y})
           if (areaMap[y][x].squares.length >= size) {
-            return true
+            return areaMap[y][x].squares
           }
         }
       }
     }
   }
-  return false
+  return
 }
 
 export function isColumnPainted(cave: Painting[][], column: number) {
