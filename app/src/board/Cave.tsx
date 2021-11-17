@@ -2,7 +2,7 @@
 import {css, keyframes} from "@emotion/react";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import {PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
-import {FC, HTMLAttributes} from "react";
+import {FC, HTMLAttributes, useState} from "react";
 import {caveBorder, caveLeft, caveTop, setPercentDimension, squareSize, toAbsolute} from "../utils/styles";
 import Images from "../utils/Images";
 import AnimalTile from "./AnimalTile";
@@ -24,7 +24,7 @@ const Cave: FC<Props> = ({player, isActiveHuntingPlayer, ...props}) => {
 
   const playerId = usePlayerId()
   const fulfillObjectiveAnimation = useAnimation<FulfillObjective>(animation => isFulfillObjective(animation.move))
-  
+    
   let caveExample:boolean[][] | undefined = fulfillObjectiveAnimation && isActiveHuntingPlayer ? getObjectiveSquaresHighlight(fulfillObjectiveAnimation?.move.objective, player) : undefined
   
   function getBorders(coordinates:Coordinates, cave:boolean[][]):Borders[]{
@@ -63,7 +63,7 @@ to{transform:scale(1);
 const scaleCaveAnimation = (duration:number) => css`
 z-index:3;
 transform-origin:top left;
-animation: ${scaleCaveKeyframes} ${duration}s ease-out;
+animation: ${scaleCaveKeyframes} ${duration}s ease-out infinite;
 `
 
 const opacityKeyframes = keyframes`
@@ -73,7 +73,7 @@ to{opacity:0;transform:scale(1);}
 `
 
 const opacityAnimation = (duration:number) => css`
-animation: ${opacityKeyframes} ${duration}s ease-in;
+animation: ${opacityKeyframes} ${duration}s ease-in infinite;
 `
 
 const squarePosition = (x:number, y:number) => css`
