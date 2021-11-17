@@ -27,7 +27,7 @@ export default function Board({game}: Props) {
     <div css={[style, background(game.players.length)]}>
       {game.huntingBoard.map((tile, zone) =>
         tile && <HuntingZone key={zone} game={game} position={huntZonePositions[zone]} tile={tile}
-                             canDrag={hunting && isPlayerViewSelf(player!) && teamPower(player.played) >= getPowerLevels(game.players.length, zone)[0]}
+                             canDrag={hunting && player !== undefined && isPlayerViewSelf(player) && teamPower(player.played) >= getPowerLevels(game.players.length, zone)[0]}
                              item={{huntSpot: zone, tile, side: 0}} animation={animation?.move.huntSpot === zone ? animation : undefined}
                              css={animation?.move.huntSpot === zone && placeTileAnimation(game, animation, huntZonePositions[zone], playerId)}/>
       )}

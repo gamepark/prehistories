@@ -49,12 +49,12 @@ function HeaderGameOverText({game}:{game:GameView}){
 function HeaderOnGoingGameText({game}:{game:GameView}){
   const {t} = useTranslation()
   const playerId = usePlayerId<PlayerColor>()
-  const player = game.players.find(p => p.color === playerId)!
+  const player = game.players.find(p => p.color === playerId)
   const players = usePlayers<PlayerColor>()
 
   switch(game.phase){
     case Phase.Initiative:{
-      if(player.isReady === true){
+      if(player === undefined || player.isReady === true){
         if(game.players.every(p => p.isReady === true)){
           return <> {t("initiative.reveal")} </>
         } else if (game.players.filter(p => p.isReady === false).length === 1){
