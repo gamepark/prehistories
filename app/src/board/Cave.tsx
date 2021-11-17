@@ -12,6 +12,7 @@ import {cavesSize} from "@gamepark/prehistories/material/Caves";
 import Coordinates from "@gamepark/prehistories/types/Coordinates";
 import FulfillObjective, { isFulfillObjective } from "@gamepark/prehistories/moves/FulfillObjective";
 import getObjectiveSquaresHighlight from "./ObjectiveSquaresHighlight";
+import {getPlayerColor} from "../utils/getterFunctions"
 
 type Props = {
   player: PlayerView | PlayerViewSelf
@@ -46,7 +47,7 @@ const Cave: FC<Props> = ({player, isActiveHuntingPlayer, ...props}) => {
         <div css={innerCave}>
           {caveExample.map((line, y) => 
             line.map((column, x) => 
-              column === true && <div key={x+"_"+y} css={[toAbsolute, squarePosition(x,y),setPercentDimension(14.2857, 14.2857),drawBorder(getBorders({x,y}, caveExample!)), fulfillObjectiveAnimation && opacityAnimation(fulfillObjectiveAnimation.duration)]}></div>
+              column === true && <div key={x+"_"+y} css={[toAbsolute, squarePosition(x,y),setPercentDimension(15.5, 15.5),drawBorder(getBorders({x,y}, caveExample!), getPlayerColor(player.color)), fulfillObjectiveAnimation && opacityAnimation(fulfillObjectiveAnimation.duration)]}></div>
             )
           )}
         </div>}
@@ -67,7 +68,7 @@ animation: ${scaleCaveKeyframes} ${duration}s ease-out infinite;
 `
 
 const opacityKeyframes = keyframes`
-from,20%{opacity:0; transform:scale(1.5);}
+from,20%{opacity:0; transform:scale(1);}
 50%,80%{opacity:1;transform:scale(1);}
 to{opacity:0;transform:scale(1);}
 `
@@ -77,15 +78,15 @@ animation: ${opacityKeyframes} ${duration}s ease-in infinite;
 `
 
 const squarePosition = (x:number, y:number) => css`
-top:${14.2857*y}%;
-left:${14.2857*x}%;
+top:${14.2857*y-0.5}%;
+left:${14.2857*x-0.5}%;
 `
 
-const drawBorder = (borders:Borders[]) => css`
-${borders.includes(Borders.Top) && `border-top:0.5em solid white;`}
-${borders.includes(Borders.Bottom) && `border-bottom:0.5em solid white;`}
-${borders.includes(Borders.Left) && `border-left:0.5em solid white;`}
-${borders.includes(Borders.Right) && `border-right:0.5em solid white;`}
+const drawBorder = (borders:Borders[], color:string) => css`
+${borders.includes(Borders.Top) && `border-top:0.5em solid ${color};`}
+${borders.includes(Borders.Bottom) && `border-bottom:0.5em solid ${color};`}
+${borders.includes(Borders.Left) && `border-left:0.5em solid ${color};`}
+${borders.includes(Borders.Right) && `border-right:0.5em solid ${color};`}
 `
 
 const innerCave = css`

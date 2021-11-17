@@ -9,8 +9,9 @@ import Images from "../utils/Images"
 import {getTotem} from "./PlayerPanel"
 import Objective from "@gamepark/prehistories/material/Objective";
 import {TFunction} from "i18next";
-import { usePlayerId } from "@gamepark/react-client"
+import { useAnimation, usePlayerId } from "@gamepark/react-client"
 import PlayerColor from "@gamepark/prehistories/PlayerColor"
+import FulfillObjective, { fulfillObjective, isFulfillObjective } from "@gamepark/prehistories/moves/FulfillObjective"
 
 type Props = {
     objective: Objective
@@ -24,9 +25,12 @@ const ObjectiveCard : FC<Props> = ({objective, players, ...props}) => {
     const playerId = usePlayerId<PlayerColor>()
     const {t} = useTranslation()
 
+    const fulfillObjectiveAnimation = useAnimation<FulfillObjective>(animation => isFulfillObjective(animation.move))
+
+
     return(
 
-        <div css={[objectivePosition, toFullSize, objectiveStyle ]} {...props}>
+        <div css={[objectivePosition, toFullSize, objectiveStyle, fulfillObjectiveAnimation && fulfillObjectiveAnimation.move.objective === objective && fulfillingEffect(objective > 20)]} {...props}>
 
             <div css={[toFullSize, objectiveStyle, placingBackground(getObjectiveCardImage(objective), "cover"), sortedPlayers.find(p => p.color === playerId)?.totemTokens.filter(g => g === objective).length !== 0 && desaturate]}>
 
@@ -41,6 +45,12 @@ const ObjectiveCard : FC<Props> = ({objective, players, ...props}) => {
     )
 
 }
+
+const fulfillingEffect = (isExpert:boolean) => css`
+box-shadow:0 0 0.5em 1em ${isExpert ? `#1991d3` : `#f7ab01` };
+transition:box-shadow 0.5s linear;
+z-index:2;
+transition:box-shadow 0.5s linear;`
 
 const desaturate = css`
     transition:filter 1s linear;
@@ -66,6 +76,7 @@ const totemStyle = (iPlayer:number, iToken:number) => css`
 
 const objectivePosition = css`
     position:relative;
+    transition:box-shadow 0.5s linear;
 `
 
 const objectiveStyle = css`
