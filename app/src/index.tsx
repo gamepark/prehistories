@@ -9,6 +9,7 @@ import App from './App'
 import prehistoriesAnimations from './PrehistoriesAnimations'
 import PrehistoriesView from './PrehistoriesView'
 import translations from './translations.json'
+import PrehistoriesTutorial from './tutorial/Tutorial'
 import Images from './utils/Images'
 
 setupTranslation(translations,{debug:false})
@@ -65,7 +66,9 @@ ReactDOM.render(
                   Rules={Prehistories} 
                   RulesView={PrehistoriesView} 
                   optionsSpec={PrehistoriesOptionsSpec}
-                  animations={prehistoriesAnimations}>
+                  animations={prehistoriesAnimations}
+                  tutorial={PrehistoriesTutorial}
+                  >
       <App/>
     </GameProvider>
     <Global styles={[normalize, style]}/>

@@ -44,12 +44,13 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
     if (isGameOptions(arg)) {
 
       const game: GameState = {
-        players: setupPlayers(arg.players),
+        players: setupPlayers(arg.players, false),
         tilesDeck: setupTilesDeck(),
         huntingBoard: [],
         objectives: [],
         phase: Phase.Initiative,
-        sortedPlayers: undefined
+        sortedPlayers: undefined,
+        tutorial:false
       }
 
       game.huntingBoard = setupHuntingBoard(game)
@@ -295,9 +296,9 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
   }
 }
 
-function setupPlayers(players: PrehistoriesPlayerOptions[]): PlayerState[] {
+export function setupPlayers(players: PrehistoriesPlayerOptions[], isTutorial:boolean): PlayerState[] {
   return players.map((options) => {
-    const deck = setupDeck(options.id)
+    const deck = setupDeck(options.id, isTutorial)
     return ({
       color: options.id,
       cave: [],

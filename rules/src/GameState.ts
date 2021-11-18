@@ -10,7 +10,8 @@ type GameState = {
   huntingBoard: (Tile | null)[],
   objectives: Objective[],
   phase?: Phase,
-  sortedPlayers?: PlayerColor[]
+  sortedPlayers?: PlayerColor[],
+  tutorial:boolean
 }
 
 export default GameState

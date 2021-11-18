@@ -2,7 +2,7 @@
 import {css, keyframes} from '@emotion/react'
 import GameView from '@gamepark/prehistories/GameView'
 import PlayerColor from '@gamepark/prehistories/PlayerColor'
-import {usePlay, usePlayerId} from '@gamepark/react-client'
+import {usePlay, usePlayerId, useTutorial} from '@gamepark/react-client'
 import {Letterbox} from '@gamepark/react-components'
 import {useMemo, useState} from 'react'
 import ObjectiveCards from './board/ObjectiveCards'
@@ -13,6 +13,7 @@ import {AudioLoader} from './sounds/AudioLoader'
 import PrehistoriesSounds from './sounds/PrehistoriesSounds'
 import WelcomePopUp from './utils/WelcomePopUp'
 import Board from "./board/Board";
+import TutorialPopup from './tutorial/TutorialPopUp'
 
 type Props = {
   game: GameView
@@ -24,10 +25,11 @@ export default function GameDisplay({game, audioLoader}: Props) {
   const playerId = usePlayerId<PlayerColor>()
   const players = useMemo(() => getPlayersStartingWith(game, playerId), [game, playerId])
   const playerDisplayed = game.players.find(p => p.color === game.caveDisplayed)!
+  const tutorial = useTutorial()
 
   const playSetCaveDisplayed = usePlay<SetCaveDisplayed>()
 
-  const [welcomePopUpClosed, setWelcomePopUpClosed] = useState(playerDisplayed.cave.length > 0)
+  const [welcomePopUpClosed, setWelcomePopUpClosed] = useState(tutorial ? true : playerDisplayed.cave.length > 0)
   const showWelcomePopup = !welcomePopUpClosed
 
   return (
@@ -64,6 +66,8 @@ export default function GameDisplay({game, audioLoader}: Props) {
         {showWelcomePopup && <WelcomePopUp player={playerId} game={game} close={() => setWelcomePopUpClosed(true)} />}
 
       </div>
+
+      {tutorial && <TutorialPopup game={game} tutorial={tutorial}/>}
 
       <PrehistoriesSounds audioLoader={audioLoader} />
 
