@@ -1,11 +1,11 @@
-import GameView from "@gamepark/prehistories/GameView";
 import MoveType from "@gamepark/prehistories/moves/MoveType";
 import MoveView from "@gamepark/prehistories/moves/MoveView";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import {getFirstOfSortedPlayer} from "@gamepark/prehistories/types/PlayerView";
 import {Animations} from "@gamepark/react-client";
+import GameLocalView from "./GameLocalView";
 
-const prehistoriesAnimations : Animations<GameView, MoveView, PlayerColor> = {
+const prehistoriesAnimations : Animations<GameLocalView, MoveView, PlayerColor> = {
 
     getAnimationDuration(move:MoveView,{action, state, playerId}){
 

@@ -8,15 +8,16 @@ import {useMemo, useState} from 'react'
 import ObjectiveCards from './board/ObjectiveCards'
 import PlayerBoard from './board/PlayerBoard'
 import PlayerPanel from './board/PlayerPanel'
-import SetCaveDisplayed, {setCaveDisplayedMove} from './localMoves/setCaveDisplayed'
+import SetCaveDisplayed, {getCaveDisplayed, setCaveDisplayedMove} from './localMoves/setCaveDisplayed'
 import {AudioLoader} from './sounds/AudioLoader'
 import PrehistoriesSounds from './sounds/PrehistoriesSounds'
 import WelcomePopUp from './utils/WelcomePopUp'
 import Board from "./board/Board";
 import TutorialPopup from './tutorial/TutorialPopUp'
+import GameLocalView from "./GameLocalView";
 
 type Props = {
-  game: GameView
+  game: GameLocalView
   audioLoader: AudioLoader
 }
 
@@ -24,7 +25,7 @@ export default function GameDisplay({game, audioLoader}: Props) {
 
   const playerId = usePlayerId<PlayerColor>()
   const players = useMemo(() => getPlayersStartingWith(game, playerId), [game, playerId])
-  const playerDisplayed = game.players.find(p => p.color === game.caveDisplayed)!
+  const playerDisplayed = game.players.find(p => p.color === getCaveDisplayed(game, playerId))!
   const tutorial = useTutorial()
 
   const playSetCaveDisplayed = usePlay<SetCaveDisplayed>()
@@ -59,7 +60,7 @@ export default function GameDisplay({game, audioLoader}: Props) {
                      phase={game.phase}
                      isActiveHuntingPlayer={game.sortedPlayers !== undefined && game.sortedPlayers[0] === playerDisplayed.color}
                      objectives={game.objectives}
-                     caveDisplayed = {game.caveDisplayed}
+                     caveDisplayed = {getCaveDisplayed(game, playerId)}
                      selectedHunters={game.huntersSelected}
         />
 

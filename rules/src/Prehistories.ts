@@ -221,7 +221,6 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
   getView(playerId?: PlayerColor): GameView {
     return {
       ...this.state,
-      caveDisplayed: playerId === undefined ? PlayerColor.Yellow : playerId,
       tilesDeck: this.state.tilesDeck.map(pile => pile.length),
       players: this.state.players.map(p => {
         if (this.state.phase === undefined || playerId === p.color) {

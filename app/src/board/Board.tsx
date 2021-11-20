@@ -12,6 +12,7 @@ import getPowerLevels from "@gamepark/prehistories/utils/powerLevels";
 import {isPlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
 import {boardHeight, caveBorder, caveLeft, caveTop, getPanelIndex, headerHeight, margin, squareSize} from "../utils/styles";
 import {getPolyomino} from "@gamepark/prehistories/material/Tile";
+import GameLocalView from "../GameLocalView";
 
 type Props = {
   game: GameView
@@ -101,7 +102,7 @@ function placeTileAnimation(game: GameView, animation: Animation<PlaceTile>, ini
   `
 }
 
-function createTileAnimationKeyframes(game: GameView, animation: Animation<PlaceTile>, initialPosition: HuntZonePosition, playerId?: PlayerColor) {
+function createTileAnimationKeyframes(game: GameLocalView, animation: Animation<PlaceTile>, initialPosition: HuntZonePosition, playerId?: PlayerColor) {
   const translation = game.caveDisplayed === game.sortedPlayers![0] ?
     {
       x: caveLeft + caveBorder - margin + animation.move.coordinates.x * squareSize,
