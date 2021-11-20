@@ -7,12 +7,12 @@
   "license": "ISC",
   "dependencies": {
     "@emotion/react": "^11.1.5",
-    "@gamepark/react-client": "~5.8.3",
+    "@gamepark/react-client": "~5.8.8",
     "@gamepark/react-components": "~5.8.6",
     "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "@types/jest": "^26.0.15",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.0.3",
     "@types/react": "^17.0.34",
     "@types/react-dnd-multi-backend": "^6.0.0",
     "@types/react-dom": "^17.0.0",
@@ -31,10 +31,10 @@
     "react-dnd-multi-backend": "^6.0.2",
     "react-dnd-touch-backend": "^14.0.0",
     "react-dom": "^17.0.1",
-    "react-i18next": "^11.8.8",
+    "react-i18next": "^11.14.2",
     "react-redux": "^7.2.2",
     "react-scripts": "4.0.3",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^2.1.2"
   },
   "scripts": {
     "start": "react-app-rewired start",
