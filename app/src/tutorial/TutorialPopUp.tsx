@@ -198,10 +198,10 @@ const popupStyle = css`
   padding: 2%;
   margin: 0 2%;
   outline: none;
-  box-shadow: 1em 2em 2.5em -1.5em hsla(0, 0%, 0%, 0.2);
+  box-shadow: 1em 2em 2.5em -1.5em hsla(0, 0%, 0%, 0.95);
   border:1em black solid;
   background: url();
-  background-color: rgba(254,165,0,0.8);
+  background-color: rgba(254,165,0,0.95);
   border-radius: 40em 3em 40em 3em/3em 40em 3em 40em;
   color:black;
   font-family: 'Mulish', sans-serif;
@@ -330,54 +330,54 @@ const tutorialDescription:TutorialStepDescription[][] = [
             text: 'tuto.welcome',
             boxTop: 50,
             boxLeft: 50,
-            boxWidth: 50
+            boxWidth: 70
         },
         {
           title: (t: TFunction) => t('title.your.tribe'),
             text: 'tuto.your.tribe',
-            boxTop: 50,
-            boxLeft: 50,
+            boxTop: 33,
+            boxLeft: 48,
             boxWidth: 50,
             arrow: {
-                angle: 180,
-                top: 50,
-                left: 50
+                angle: 90,
+                top: 25,
+                left: 68
             }
         },
         {
             title: (t: TFunction) => t('title.their.tribes'),
             text: 'tuto.their.tribes',
-            boxTop: 50,
-            boxLeft: 50,
+            boxTop: 54,
+            boxLeft: 48,
             boxWidth: 50,
             arrow: {
-                angle: 180,
-                top: 50,
-                left: 50
+                angle: 90,
+                top: 47,
+                left: 68
             }
         },
         {
             title: (t: TFunction) => t('title.how.to.win'),
             text: 'tuto.how.to.win',
-            boxTop: 50,
-            boxLeft: 50,
+            boxTop: 42,
+            boxLeft: 72,
             boxWidth: 50,
             arrow: {
-                angle: 180,
-                top: 50,
-                left: 50
+                angle: 0,
+                top: 29,
+                left: 78
             }
         },
         {
             title: (t: TFunction) => t('title.your.hand'),
             text: 'tuto.your.hand',
-            boxTop: 50,
-            boxLeft: 50,
-            boxWidth: 50,
+            boxTop: 67,
+            boxLeft: 49,
+            boxWidth: 60,
             arrow: {
                 angle: 180,
-                top: 50,
-                left: 50
+                top: 66,
+                left: 41
             }
         },
         {
@@ -386,59 +386,49 @@ const tutorialDescription:TutorialStepDescription[][] = [
           boxTop: 50,
           boxLeft: 50,
           boxWidth: 50,
-          arrow: {
-              angle: 180,
-              top: 50,
-              left: 50
-          }
-      },
+        },
         {
             title: (t: TFunction) => t('title.initiative.phase'),
             text: 'tuto.initiative.phase',
             boxTop: 50,
             boxLeft: 50,
             boxWidth: 50,
-            arrow: {
-                angle: 180,
-                top: 50,
-                left: 50
-            }
         },
         {
             title: (t: TFunction) => t('title.play.card'),
             text: 'tuto.play.card',
-            boxTop: 50,
-            boxLeft: 50,
-            boxWidth: 50,
+            boxTop: 54,
+            boxLeft: 26,
+            boxWidth: 45,
             arrow: {
-                angle: 180,
-                top: 50,
-                left: 50
+                angle: 90,
+                top: 47,
+                left: 44
             }
         }
     ],[
         {
             title: (t: TFunction) => t('title.playing.zone'),
             text: 'tuto.playing.zone',
-            boxTop: 50,
-            boxLeft: 50,
-            boxWidth: 50,
+            boxTop: 45,
+            boxLeft: 25,
+            boxWidth: 40,
             arrow: {
-                angle: 180,
-                top: 50,
-                left: 50
+                angle: 90,
+                top: 38,
+                left: 40
             }
         },
         {
             title: (t: TFunction) => t('title.turn1.validate'),
             text: 'tuto.turn1.validate',
-            boxTop: 50,
-            boxLeft: 50,
-            boxWidth: 50,
+            boxTop: 33,
+            boxLeft: 31,
+            boxWidth: 45,
             arrow: {
-                angle: 180,
-                top: 50,
-                left: 50
+                angle: 90,
+                top: 22,
+                left: 48
             }
         }
     ],[
@@ -446,12 +436,12 @@ const tutorialDescription:TutorialStepDescription[][] = [
             title: (t: TFunction) => t('title.reveal'),
             text: 'tuto.reveal',
             boxTop: 50,
-            boxLeft: 50,
+            boxLeft: 48,
             boxWidth: 50,
             arrow: {
-                angle: 180,
-                top: 50,
-                left: 50
+                angle: 90,
+                top: 40,
+                left: 68
             }
         },
         {
@@ -460,22 +450,17 @@ const tutorialDescription:TutorialStepDescription[][] = [
             boxTop: 50,
             boxLeft: 50,
             boxWidth: 50,
-            arrow: {
-                angle: 180,
-                top: 50,
-                left: 50
-            }
         },
         {
             title: (t: TFunction) => t('title.your.order'),
             text: 'tuto.your.order',
-            boxTop: 50,
-            boxLeft: 50,
+            boxTop: 35,
+            boxLeft: 49,
             boxWidth: 50,
             arrow: {
-                angle: 180,
-                top: 50,
-                left: 50
+                angle: 90,
+                top: 28,
+                left: 69
             }
         },
         {
@@ -483,35 +468,30 @@ const tutorialDescription:TutorialStepDescription[][] = [
           text: 'tuto.hunt.phase',
           boxTop: 50,
           boxLeft: 50,
-          boxWidth: 50,
-          arrow: {
-              angle: 180,
-              top: 50,
-              left: 50
-          }
+          boxWidth: 60,
         }, 
         {
             title: (t: TFunction) => t('title.huntBoard'),
             text: 'tuto.huntBoard',
-            boxTop: 50,
-            boxLeft: 50,
-            boxWidth: 50,
+            boxTop: 45,
+            boxLeft: 49,
+            boxWidth: 45,
             arrow: {
-                angle: 180,
-                top: 50,
-                left: 50
+                angle: 270,
+                top: 40,
+                left: 15
             }
         }, 
         {
             title: (t: TFunction) => t('title.your.cave'),
             text: 'tuto.your.cave',
             boxTop: 50,
-            boxLeft: 50,
-            boxWidth: 50,
+            boxLeft: 71,
+            boxWidth: 40,
             arrow: {
-                angle: 180,
-                top: 50,
-                left: 50
+                angle: 270,
+                top: 48,
+                left: 40
             }
         },
         {
@@ -519,23 +499,18 @@ const tutorialDescription:TutorialStepDescription[][] = [
             text: 'tuto.placement.rules',
             boxTop: 50,
             boxLeft: 50,
-            boxWidth: 50,
-            arrow: {
-                angle: 180,
-                top: 50,
-                left: 50
-            }
+            boxWidth: 65,
         },
         {
             title: (t: TFunction) => t('title.place.1x1.tile'),
             text: 'tuto.place.1x1.tile',
-            boxTop: 50,
-            boxLeft: 50,
-            boxWidth: 50,
+            boxTop: 40,
+            boxLeft: 53,
+            boxWidth: 40,
             arrow: {
-                angle: 180,
-                top: 50,
-                left: 50
+                angle: 270,
+                top: 36,
+                left: 22
             }
         }
     ],[
@@ -545,46 +520,41 @@ const tutorialDescription:TutorialStepDescription[][] = [
           boxTop: 50,
           boxLeft: 50,
           boxWidth: 50,
-          arrow: {
-              angle: 180,
-              top: 50,
-              left: 50
-            }
         },
         {
           title: (t: TFunction) => t('title.spend.costs'),
           text: 'tuto.spend.costs',
-          boxTop: 50,
-          boxLeft: 50,
-          boxWidth: 50,
+          boxTop: 25,
+          boxLeft: 30,
+          boxWidth: 60,
           arrow: {
-              angle: 180,
-              top: 50,
-              left: 50
+              angle: 0,
+              top: 13,
+              left: -3
             }
         },
         {
           title: (t: TFunction) => t('title.spend.cost.huntspot'),
           text: 'tuto.spend.cost.huntspot',
-          boxTop: 50,
-          boxLeft: 50,
-          boxWidth: 50,
+          boxTop: 25,
+          boxLeft: 30,
+          boxWidth: 60,
           arrow: {
-              angle: 180,
-              top: 50,
-              left: 50
+              angle: 0,
+              top: 13,
+              left: -3
             }
         },
         {
             title: (t: TFunction) => t('title.spend.hunter'),
             text: 'tuto.spend.hunter',
             boxTop: 50,
-            boxLeft: 50,
-            boxWidth: 50,
+            boxLeft: 25,
+            boxWidth: 40,
             arrow: {
-                angle: 180,
-                top: 50,
-                left: 50
+                angle: 90,
+                top: 40,
+                left: 40
             }
         }
     ],[
@@ -594,35 +564,30 @@ const tutorialDescription:TutorialStepDescription[][] = [
             boxTop: 50,
             boxLeft: 50,
             boxWidth: 50,
-            arrow: {
-                angle: 180,
-                top: 50,
-                left: 50
-            }
         },
         {
             title: (t: TFunction) => t('title.end.your.turn'),
             text: 'tuto.end.your.turn',
-            boxTop: 50,
+            boxTop: 43,
             boxLeft: 50,
             boxWidth: 50,
             arrow: {
-                angle: 180,
-                top: 50,
-                left: 50
+                angle: 0,
+                top: 30,
+                left: 55
             }
         }
     ],[
         {
             title: (t: TFunction) => t('title.draw.cards'),
             text: 'tuto.draw.cards',
-            boxTop: 50,
+            boxTop: 70,
             boxLeft: 50,
-            boxWidth: 50,
+            boxWidth: 60,
             arrow: {
                 angle: 180,
-                top: 50,
-                left: 50
+                top: 70,
+                left: 42
             }
         },
         {
@@ -631,99 +596,74 @@ const tutorialDescription:TutorialStepDescription[][] = [
             boxTop: 50,
             boxLeft: 50,
             boxWidth: 50,
-            arrow: {
-                angle: 180,
-                top: 50,
-                left: 50
-            }
         }
     ],[],[],[],[
         {
             title: (t: TFunction) => t('title.turn2.validate'),
             text: 'tuto.turn2.validate',
-            boxTop: 50,
-            boxLeft: 50,
-            boxWidth: 50,
+            boxTop: 30,
+            boxLeft: 30.5,
+            boxWidth: 45,
             arrow: {
-                angle: 180,
-                top: 50,
-                left: 50
+                angle: 90,
+                top: 22,
+                left: 48
             }
         }
     ],[
       {
-        title: (t: TFunction) => t('title.placemebt.rules.2'),
+        title: (t: TFunction) => t('title.placement.rules.2'),
         text: 'tuto.placement.rules.2',
         boxTop: 50,
         boxLeft: 50,
         boxWidth: 50,
-        arrow: {
-            angle: 180,
-            top: 50,
-            left: 50
-          }
       },
       {
         title: (t: TFunction) => t('title.turn.tiles'),
         text: 'tuto.turn.tiles',
         boxTop: 50,
         boxLeft: 50,
-        boxWidth: 50,
-        arrow: {
-            angle: 180,
-            top: 50,
-            left: 50
-        }
+        boxWidth: 60,
     },
     {
       title: (t: TFunction) => t('title.place.2x1.tile'),
       text: 'tuto.place.2x1.tile',
-      boxTop: 50,
-      boxLeft: 50,
-      boxWidth: 50,
+      boxTop: 40,
+      boxLeft: 58,
+      boxWidth: 40,
       arrow: {
-          angle: 180,
-          top: 50,
-          left: 50
+          angle: 270,
+          top: 36,
+          left: 27
       }
     }
         
     ],[
       {
         title: (t: TFunction) => t('title.spend.hunters'),
-        text: 'tuto.spend.two.hunters',
-        boxTop: 50,
-        boxLeft: 50,
-        boxWidth: 50,
-        arrow: {
-            angle: 180,
-            top: 50,
-            left: 50
-        }
+        text: 'tuto.spend.hunters',
+        boxTop: 55,
+        boxLeft: 25,
+        boxWidth: 45,
       },
       {
-        title: (t: TFunction) => t('title.spend.hunters'),
+        title: (t: TFunction) => t('title.spend.two.hunters'),
         text: 'tuto.spend.two.hunters',
-        boxTop: 50,
-        boxLeft: 50,
-        boxWidth: 50,
-        arrow: {
-            angle: 180,
-            top: 50,
-            left: 50
-        }
+        boxTop: 55,
+        boxLeft: 25,
+        boxWidth: 45,
       }
     ],[],[],[
       {
         title: (t: TFunction) => t('title.injury.hunt'),
         text: 'tuto.injury.hunt',
-        boxTop: 50,
+        boxTop: 35,
         boxLeft: 50,
-        boxWidth: 50,
+        boxWidth: 55,
         arrow: {
-            angle: 180,
-            top: 50,
-            left: 50
+            angle: 90,
+            top: 28,
+            left: 73
         }
       },
       {
@@ -731,24 +671,14 @@ const tutorialDescription:TutorialStepDescription[][] = [
         text: 'tuto.drawing.rules',
         boxTop: 50,
         boxLeft: 50,
-        boxWidth: 50,
-        arrow: {
-            angle: 180,
-            top: 50,
-            left: 50
-        }
+        boxWidth: 75,
       },
       {
         title: (t: TFunction) => t('title.end.turn'),
         text: 'tuto.end.turn',
         boxTop: 50,
-        boxLeft: 50,
-        boxWidth: 50,
-        arrow: {
-            angle: 180,
-            top: 50,
-            left: 50
-        }
+        boxLeft: 25,
+        boxWidth: 45,
       }
       
     ],[
@@ -758,11 +688,6 @@ const tutorialDescription:TutorialStepDescription[][] = [
         boxTop: 50,
         boxLeft: 50,
         boxWidth: 50,
-        arrow: {
-            angle: 180,
-            top: 50,
-            left: 50
-        }
       }
     ],[],[],[
       {
@@ -771,11 +696,6 @@ const tutorialDescription:TutorialStepDescription[][] = [
         boxTop: 50,
         boxLeft: 50,
         boxWidth: 50,
-        arrow: {
-            angle: 180,
-            top: 50,
-            left: 50
-        }
       }
     ],[
       {
@@ -784,58 +704,53 @@ const tutorialDescription:TutorialStepDescription[][] = [
         boxTop: 50,
         boxLeft: 50,
         boxWidth: 50,
-        arrow: {
-            angle: 180,
-            top: 50,
-            left: 50
-        }
       },
       {
         title: (t: TFunction) => t('title.permanent.objectives'),
         text: 'tuto.permanent.objectives',
-        boxTop: 50,
-        boxLeft: 50,
-        boxWidth: 50,
+        boxTop: 29,
+        boxLeft: 68,
+        boxWidth: 60,
         arrow: {
-            angle: 180,
-            top: 50,
-            left: 50
+            angle: 0,
+            top: 16,
+            left: 80
         }
       },
       {
         title: (t: TFunction) => t('title.variable.objectives'),
         text: 'tuto.variable.objectives',
-        boxTop: 50,
-        boxLeft: 50,
-        boxWidth: 50,
+        boxTop: 29,
+        boxLeft: 58,
+        boxWidth: 60,
         arrow: {
-            angle: 180,
-            top: 50,
-            left: 50
+            angle: 0,
+            top: 16,
+            left: 42
         }
       },
       {
         title: (t: TFunction) => t('title.link.totems.objective'),
         text: 'tuto.link.totems.objective',
-        boxTop: 50,
-        boxLeft: 50,
-        boxWidth: 50,
+        boxTop: 30,
+        boxLeft: 34,
+        boxWidth: 45,
         arrow: {
-            angle: 180,
-            top: 50,
-            left: 50
+            angle: 90,
+            top: 12,
+            left: 52
         }
       },
       {
         title: (t: TFunction) => t('title.play.legendary.tile'),
         text: 'tuto.play.legendary.tile',
-        boxTop: 50,
-        boxLeft: 50,
+        boxTop: 55,
+        boxLeft: 68,
         boxWidth: 50,
         arrow: {
-            angle: 180,
+            angle: 270,
             top: 50,
-            left: 50
+            left: 32
         }
       }
     ],[
@@ -844,60 +759,50 @@ const tutorialDescription:TutorialStepDescription[][] = [
         text: 'tuto.spend.all.hunters',
         boxTop: 50,
         boxLeft: 50,
-        boxWidth: 50,
-        arrow: {
-            angle: 180,
-            top: 50,
-            left: 50
-        }
+        boxWidth: 50
       }
-    ],[],[],[],[],[
+    ],[],[],[],[
       {
         title: (t: TFunction) => t('title.objectives.validate'),
-        text: 'tuto.bbjectives.validate',
+        text: 'tuto.objectives.validate',
         boxTop: 50,
         boxLeft: 50,
-        boxWidth: 50,
-        arrow: {
-            angle: 180,
-            top: 50,
-            left: 50
-        }
+        boxWidth: 60,
       },
       {
         title: (t: TFunction) => t('title.handprints.1'),
         text: 'tuto.handprints.1',
-        boxTop: 50,
-        boxLeft: 50,
-        boxWidth: 50,
+        boxTop: 55,
+        boxLeft: 68,
+        boxWidth: 45,
         arrow: {
-            angle: 180,
-            top: 50,
-            left: 50
+            angle: 270,
+            top: 53,
+            left: 34
         }
       },
       {
         title: (t: TFunction) => t('title.handprints.2'),
         text: 'tuto.handprints.2',
-        boxTop: 50,
-        boxLeft: 50,
-        boxWidth: 50,
+        boxTop: 55,
+        boxLeft: 73,
+        boxWidth: 51,
         arrow: {
-            angle: 180,
-            top: 50,
-            left: 50
+            angle: 270,
+            top: 42,
+            left: 36
         }
       },
       {
         title: (t: TFunction) => t('title.review.objectives'),
         text: 'tuto.review.objectives',
-        boxTop: 50,
-        boxLeft: 50,
-        boxWidth: 50,
+        boxTop: 29,
+        boxLeft: 58,
+        boxWidth: 60,
         arrow: {
-            angle: 180,
-            top: 50,
-            left: 50
+            angle: 0,
+            top: 16,
+            left: 42
         }
       },
       {
@@ -905,12 +810,7 @@ const tutorialDescription:TutorialStepDescription[][] = [
         text: 'tuto.end.tuto',
         boxTop: 50,
         boxLeft: 50,
-        boxWidth: 50,
-        arrow: {
-            angle: 180,
-            top: 50,
-            left: 50
-        }
+        boxWidth: 60,
       },
     ]
 ]
@@ -918,9 +818,9 @@ const tutorialDescription:TutorialStepDescription[][] = [
 const tutorialEndGame = {
   title: (t: TFunction) => t('Congratulations'),
   text: 'You have finished your first game! You can now play with your friends, or meet other players via our chat room on Discord.',
-  boxTop: 29,
+  boxTop: 80,
   boxLeft: 50,
-  boxWidth: 80
+  boxWidth: 90
 }
 
 
