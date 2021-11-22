@@ -1,11 +1,12 @@
 import GameState from "../GameState";
 import GameView from "../GameView";
-import { getColoredDeck } from "../material/Hunters";
+import {getColoredDeck} from "../material/Hunters";
 import PlayerState from "../PlayerState";
-import { getFirstOfSortedPlayer, PlayerView, PlayerViewSelf } from "../types/PlayerView";
+import {PlayerView, PlayerViewSelf} from "../types/PlayerView";
 import Move from "./Move";
 import MoveType from "./MoveType";
 import MoveView from "./MoveView";
+import HuntingPlayer, {getHuntingPlayer} from "../types/HuntingPlayer";
 
 type SpendHunter = {
     type:MoveType.SpendHunter
@@ -15,7 +16,7 @@ type SpendHunter = {
 export default SpendHunter
 
 export function spendHunter(state:GameState|GameView, move:SpendHunter){
-    const player = getFirstOfSortedPlayer(state)
+    const player = getHuntingPlayer(state)!
     discardHunter(player, move.card)
     adjustHuntingLevels(player, move.card)
 
@@ -26,7 +27,7 @@ function discardHunter(player:PlayerState | PlayerViewSelf | PlayerView, card:nu
     player.discard.push(card)
 }
 
-function adjustHuntingLevels(player:PlayerState | PlayerViewSelf | PlayerView, card:number){
+function adjustHuntingLevels(player: HuntingPlayer, card:number){
     player.hunting!.huntSpotTakenLevels![0] -= getColoredDeck(player.color)[card].power
     player.hunting!.huntSpotTakenLevels![1] -= getColoredDeck(player.color)[card].power
 }

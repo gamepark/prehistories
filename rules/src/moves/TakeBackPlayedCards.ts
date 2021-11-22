@@ -1,9 +1,10 @@
 import GameState from "../GameState";
 import GameView from "../GameView";
 import PlayerState from "../PlayerState";
-import {getFirstOfSortedPlayer, isPlayerViewSelf, PlayerViewSelf} from "../types/PlayerView";
+import {isPlayerViewSelf, PlayerViewSelf} from "../types/PlayerView";
 import Move from "./Move";
 import MoveType from "./MoveType";
+import {getHuntingPlayer} from "../types/HuntingPlayer";
 
 type TakeBackPlayedCards = {
     type:MoveType.TakeBackPlayedCards
@@ -12,12 +13,11 @@ type TakeBackPlayedCards = {
 export default TakeBackPlayedCards
 
 export function takeBackPlayedCards(state:GameState){
-    const player = getFirstOfSortedPlayer(state)
-    playerTakeBackPlayedCards(player)
+    playerTakeBackPlayedCards(getHuntingPlayer(state)!)
 }
 
 export function takeBackPlayedCardsInView(state:GameView){
-    const player = getFirstOfSortedPlayer(state)
+    const player = getHuntingPlayer(state)!
     if (isPlayerViewSelf(player)) {
         playerTakeBackPlayedCards(player)
     } else {

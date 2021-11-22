@@ -2,30 +2,35 @@ import GameState from "../GameState"
 import GameView from "../GameView"
 import {playerWillDraw} from "../Prehistories"
 import {HuntPhase} from "../types/Phase"
-import {getFirstOfSortedPlayer, isPlayerViewSelf} from "../types/PlayerView"
+import {isPlayerViewSelf} from "../types/PlayerView"
 import Move from "./Move"
 import MoveType from "./MoveType"
 import MoveView from "./MoveView"
+import PlayerColor from "../PlayerColor";
 
 type DrawCards = {
   type: MoveType.DrawCards
+  player: PlayerColor
 }
 
 export default DrawCards
 
-export type DrawCardsView = {
-  type: MoveType.DrawCards
+export type DrawCardsView = DrawCards & {
   cards: number[]
 }
 
-export function drawCards(state: GameState) {
-  const player = getFirstOfSortedPlayer(state)
+export const drawCardsMove = (player: PlayerColor): DrawCards => ({type: MoveType.DrawCards, player})
+
+export function drawCards(state: GameState, move: DrawCards) {
+  const player = state.players.find(p => p.color === move.player)!
   player.hand.push(...player.deck.splice(0, playerWillDraw(player)))
-  player.hunting!.huntPhase = HuntPhase.ChangeActivePlayer
+  if (player.hunting) {
+    player.hunting.huntPhase = HuntPhase.ChangeActivePlayer
+  }
 }
 
 export function drawCardsInView(state: GameView, move: DrawCards | DrawCardsView) {
-  const player = state.players.find(player => player.color === state.sortedPlayers![0])!
+  const player = state.players.find(p => p.color === move.player)!
   if (isPlayerViewSelf(player)) {
     if (!isDrawCardsView(move)) throw 'Error: I should receive the information about the cards that I draw'
     player.deck -= move.cards.length
@@ -35,7 +40,9 @@ export function drawCardsInView(state: GameView, move: DrawCards | DrawCardsView
     player.deck -= numberOfCards
     player.hand += numberOfCards
   }
-  player.hunting!.huntPhase = HuntPhase.ChangeActivePlayer
+  if (player.hunting) {
+    player.hunting.huntPhase = HuntPhase.ChangeActivePlayer
+  }
 }
 
 export function isDrawCards(move: Move | MoveView): move is DrawCards {

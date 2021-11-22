@@ -32,13 +32,6 @@ export function getPlayers(state:GameState | GameView){
     return (state.players as (PlayerState | PlayerView | PlayerViewSelf)[])
 }
 
-export function getFirstOfSortedPlayer(state: GameState): PlayerState
-export function getFirstOfSortedPlayer(state: GameView): PlayerView | PlayerViewSelf
-export function getFirstOfSortedPlayer(state: GameState | GameView): PlayerState | PlayerView | PlayerViewSelf
-export function getFirstOfSortedPlayer(state: GameState | GameView): PlayerState | PlayerView | PlayerViewSelf {
-  return getPlayers(state).find(p => p.color === state.sortedPlayers![0])!
-}
-
 export function getPlayerWithColor(state:GameState | GameView, playerId:PlayerColor):PlayerState | PlayerView | PlayerViewSelf{
     return getPlayers(state).find(p => p.color === playerId)!
 }

@@ -13,6 +13,7 @@ import {isPlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
 import {boardHeight, caveBorder, caveLeft, caveTop, getPanelIndex, headerHeight, margin, squareSize} from "../utils/styles";
 import {getPolyomino} from "@gamepark/prehistories/material/Tile";
 import GameLocalView from "../GameLocalView";
+import {getHuntingPlayer} from "@gamepark/prehistories/types/HuntingPlayer";
 
 type Props = {
   game: GameView
@@ -103,12 +104,13 @@ function placeTileAnimation(game: GameView, animation: Animation<PlaceTile>, ini
 }
 
 function createTileAnimationKeyframes(game: GameLocalView, animation: Animation<PlaceTile>, initialPosition: HuntZonePosition, playerId?: PlayerColor) {
-  const translation = game.caveDisplayed === game.sortedPlayers![0] ?
+  const huntingPlayer = getHuntingPlayer(game)!
+  const translation = game.caveDisplayed === huntingPlayer.color ?
     {
       x: caveLeft + caveBorder - margin + animation.move.coordinates.x * squareSize,
       y: caveTop + caveBorder - headerHeight + animation.move.coordinates.y * squareSize
     } :
-    {x: 151, y: 25 + getPanelIndex(game, game.sortedPlayers![0], playerId) * 15.42}
+    {x: 151, y: 25 + getPanelIndex(game, huntingPlayer.color, playerId) * 15.42}
   const polyomino = getPolyomino(game.huntingBoard[animation.move.huntSpot]!, animation.move.side)
   translation.x -= initialPosition.left - polyomino[0].length * squareSize / 2
   translation.y -= initialPosition.top - polyomino.length * squareSize / 2

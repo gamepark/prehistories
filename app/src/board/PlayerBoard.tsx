@@ -33,13 +33,11 @@ type Props = {
     player:PlayerView | PlayerViewSelf,
     phase:Phase | undefined,
     players:(PlayerView | PlayerViewSelf)[]
-    isActiveHuntingPlayer:boolean
     objectives:number[]
     selectedHunters:number[]|undefined
-    caveDisplayed:PlayerColor
 }
 
-const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, isActiveHuntingPlayer, caveDisplayed}) => {
+const PlayerBoard : FC<Props> = ({player, phase, selectedHunters}) => {
 
     const {t} = useTranslation()
     const playerId = usePlayerId<PlayerColor>()
@@ -51,10 +49,10 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, isActiveHuntin
 
     const playHuntCardAnimation = useAnimation<PlayHuntCardView>(animation => isPlayHuntCardView(animation.move) && animation.move.playerId === playerId)
     const revealCardsAnimation = useAnimation<RevealHuntCardsView>(animation => isRevealHuntCards(animation.move))
-    const spendCardAnimations = useAnimations<SpendHunter>(animation => isSpendHunter(animation.move) && isActiveHuntingPlayer)
-    const shuffleDiscardAnimation = useAnimation<ShuffleDiscardPileView>(animation => isShuffleDiscardPile(animation.move)  && isActiveHuntingPlayer)
-    const drawCardsAnimation = useAnimation<DrawCards|DrawCardsView>(animation => isDrawCards(animation.move)  && isActiveHuntingPlayer)
-    const takeBackCardsAnimation = useAnimation<TakeBackPlayedCards>(animation => isTakeBackPlayedCards(animation.move) && isActiveHuntingPlayer )
+    const spendCardAnimations = useAnimations<SpendHunter>(animation => isSpendHunter(animation.move) && player.hunting !== undefined)
+    const shuffleDiscardAnimation = useAnimation<ShuffleDiscardPileView>(animation => isShuffleDiscardPile(animation.move) && player.hunting !== undefined)
+    const drawCardsAnimation = useAnimation<DrawCards|DrawCardsView>(animation => isDrawCards(animation.move) && animation.move.player === player.color)
+    const takeBackCardsAnimation = useAnimation<TakeBackPlayedCards>(animation => isTakeBackPlayedCards(animation.move) && player.hunting !== undefined )
     let playerHand:number|number[] = isPlayerViewSelf(player) ? [...player.hand] : player.hand
     let playerPlayed:number[] = player.played
 
@@ -140,7 +138,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, isActiveHuntin
     const playerCardsInRevealAnimation = revealCardsAnimation ? revealCardsAnimation.move.cardsPlayed.find(obj => obj.color === player.color)!.cards : undefined
   return (
     <>
-      <Cave player={player} isActiveHuntingPlayer={isActiveHuntingPlayer} css={css`z-index:1`}/>
+      <Cave player={player}/>
 
       <div css={[toAbsolute, setPercentDimension(93, 56), playerBoardPosition]}>
 
@@ -222,7 +220,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, isActiveHuntin
                           color={player.color}
                           power={getColoredDeck(player.color)[card].power}
                           speed={getColoredDeck(player.color)[card].speed}
-                          css={[toAbsolute, deckOffset(index), smoothAngles, shuffleDiscardAnimation && player.color === caveDisplayed && shufflingAnimation(index, shuffleDiscardAnimation.duration, player.discard.length)]}
+                          css={[toAbsolute, deckOffset(index), smoothAngles, shuffleDiscardAnimation && shufflingAnimation(index, shuffleDiscardAnimation.duration, player.discard.length)]}
                     />)}
 
             </div>

@@ -17,22 +17,19 @@ type Props = {
     player: PlayerView | PlayerViewSelf,
     phase?:Phase
     position:number
-    huntOrder?:PlayerColor[] 
-    nbPlayers:number
+    noOfPassage?: number
 } & HTMLAttributes<HTMLDivElement>
 
-const PlayerPanel : FC<Props> = ({player:{color, totemTokens, hunting}, position, phase, huntOrder, nbPlayers, ...props}) => {
+const PlayerPanel : FC<Props> = ({player:{color, totemTokens, hunting}, position, phase, noOfPassage, ...props}) => {
 
     const playerInfo = usePlayer(color)
     const {t} = useTranslation()
-
-    const noOfPassage:number|undefined = huntOrder !== undefined && huntOrder.findIndex(c => c === color) !== -1 ? huntOrder.findIndex(c => c === color) + (nbPlayers - huntOrder.length) : -1
 
     return (
 
         <div {...props} css={[placingBackground(getBG(color),"cover"), playerPanelBorder, toAbsolute, setPercentDimension(15,20), playerPanelPosition(position)]}>
 
-            {huntOrder !== undefined && <div css={[toAbsolute, setPercentDimension(40,18), powerPosition, placingBackground(getPowerBanner(color)[noOfPassage],"contain"), powerShadow, entryBannerAnim]}> </div>}
+            {noOfPassage !== undefined && <div css={[toAbsolute, setPercentDimension(40,18), powerPosition, placingBackground(getPowerBanner(color)[noOfPassage],"contain"), powerShadow, entryBannerAnim]}> </div>}
 
             <AvatarPanel playerInfo={playerInfo} color={color} css={css`z-index:5;`}/>
 

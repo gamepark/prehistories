@@ -348,7 +348,6 @@ function createGameState(objectives: Objective[], cave: PlacedTile[]): GameState
       {cave: [], color: PlayerColor.Blue, deck: [], discard: [], hand: [], played: [], totemTokens: []}
     ],
     objectives,
-    sortedPlayers: [PlayerColor.Yellow, PlayerColor.Blue],
     huntingBoard: [],
     phase: Phase.Hunt,
     tilesDeck: [],

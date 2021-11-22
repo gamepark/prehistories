@@ -1,7 +1,7 @@
 import GameView from "@gamepark/prehistories/GameView";
-import { getColoredDeck } from "@gamepark/prehistories/material/Hunters";
-import { HuntPhase } from "@gamepark/prehistories/types/Phase";
-import { getFirstOfSortedPlayer } from "@gamepark/prehistories/types/PlayerView";
+import {getColoredDeck} from "@gamepark/prehistories/material/Hunters";
+import {HuntPhase} from "@gamepark/prehistories/types/Phase";
+import {getHuntingPlayer} from "@gamepark/prehistories/types/HuntingPlayer";
 
 export default interface SetSelectedHunters{
     type:'SetSelectedHunters'
@@ -22,8 +22,8 @@ export const resetSelectedHuntersMove = ():ResetSelectedHunters => ({
 })
 
 export function setSelectedHunters(state:GameView, move:SetSelectedHunters){
-    const player = getFirstOfSortedPlayer(state)
-    if (player.hunting?.huntPhase === HuntPhase.Pay){
+    const player = getHuntingPlayer(state)!
+    if (player.hunting.huntPhase === HuntPhase.Pay){
         if (state.huntersSelected === undefined){
             state.huntersSelected = [move.hunter]
         } else {

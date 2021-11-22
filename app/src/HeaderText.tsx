@@ -4,9 +4,12 @@ import PlayerColor from '@gamepark/prehistories/PlayerColor'
 import {playerWillDraw} from '@gamepark/prehistories/Prehistories'
 import {getPlayerName} from '@gamepark/prehistories/PrehistoriesOptions'
 import Phase, {HuntPhase} from '@gamepark/prehistories/types/Phase'
-import {Player as PlayerInfo, usePlayerId, usePlayers} from '@gamepark/react-client'
+import {Player as PlayerInfo, useAnimation, usePlayerId, usePlayers} from '@gamepark/react-client'
 import {TFunction} from 'i18next'
 import {useTranslation} from 'react-i18next'
+import {getHuntingPlayer} from "@gamepark/prehistories/types/HuntingPlayer";
+import Move from "@gamepark/prehistories/moves/Move";
+import MoveType from "@gamepark/prehistories/moves/MoveType";
 
 type Props = {
   loading: boolean
@@ -51,6 +54,20 @@ function HeaderOnGoingGameText({game}:{game:GameView}){
   const playerId = usePlayerId<PlayerColor>()
   const player = game.players.find(p => p.color === playerId)
   const players = usePlayers<PlayerColor>()
+  const animation = useAnimation<Move>()
+
+  if (animation) {
+    const move = animation.move
+    if (move.type === MoveType.DrawCards) {
+      const player = game.players.find(p => p.color === move.player)!
+      const cardsDraw:number = playerWillDraw(player)
+      if (cardsDraw !== 0){
+        return player.color === playerId ? <> {t("hunt.you.draw.cards", {cards:cardsDraw})} </> : <> {t("hunt.player.draw.cards",{player:getPseudo(player.color,players,t), cards:cardsDraw})} </>
+      } else {
+        return player.color === playerId ? <> {t("hunt.you.draw.no.card")} </> : <> {t("hunt.player.draw.no.card",{player:getPseudo(player.color,players,t)})} </>
+      }
+    }
+  }
 
   switch(game.phase){
     case Phase.Initiative:{
@@ -67,27 +84,21 @@ function HeaderOnGoingGameText({game}:{game:GameView}){
       }
     }
     case Phase.Hunt:{
-      const activePlayer = game.players.find(p => p.color === game.sortedPlayers![0])!
-      switch(activePlayer.hunting?.huntPhase){
+      const activePlayer = getHuntingPlayer(game)
+      switch(activePlayer?.hunting.huntPhase){
         case HuntPhase.Hunt:{
           return activePlayer.color === playerId ? <> {t("hunt.you.hunt.tile")} </> : <> {t("hunt.player.hunt.tile",{player:getPseudo(activePlayer.color,players,t)})} </>
         }
         case HuntPhase.Pay:{
           return activePlayer.color === playerId ? <> {t("hunt.you.pay.tile")} </> : <> {t("hunt.player.pay.tile",{player:getPseudo(activePlayer.color,players,t)})} </>
         }
-        case HuntPhase.DrawCards:{
-          const cardsDraw:number = playerWillDraw(activePlayer)
-          if (cardsDraw !== 0){
-            return activePlayer.color === playerId ? <> {t("hunt.you.draw.cards", {cards:cardsDraw})} </> : <> {t("hunt.player.draw.cards",{player:getPseudo(activePlayer.color,players,t), cards:cardsDraw})} </>
-          } else {
-            return activePlayer.color === playerId ? <> {t("hunt.you.draw.no.card")} </> : <> {t("hunt.player.draw.no.card",{player:getPseudo(activePlayer.color,players,t)})} </>
-          }
-        }
-        default:{
+        case HuntPhase.CheckObjectives:{
           return activePlayer.color === playerId ? <> {t("hunt.you.complete.objectives")} </> : <> {t("hunt.player.complete.objectives",{player:getPseudo(activePlayer.color,players,t)})} </>
         }
+        default:
+          return <> {t("Hunting the text bar...")} </>
       }
-    } 
+    }
     default:{
       return <> {t("Hunting the text bar...")} </>
     }

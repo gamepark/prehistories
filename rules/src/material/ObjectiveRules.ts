@@ -1,6 +1,4 @@
 import Objective from "./Objective";
-import PlayerState from "../PlayerState";
-import Hunting from "../types/Hunting";
 import Tile, {isLegendaryAnimalTile} from "./Tile";
 import {
   getGroupCreatedWithLastTile,
@@ -18,6 +16,7 @@ import GameView from "../GameView";
 import {getPlayers} from "../types/PlayerView";
 import {cavesSize, getHunterCoordinates, getTotemCoordinates} from "./Caves";
 import PlacedTile, {getPlacedTileCoordinates} from "../types/PlacedTile";
+import HuntingPlayer from "../types/HuntingPlayer";
 
 const {Mammoth, Buffalo, Fish, Boar, Ibex} = Painting
 
@@ -35,8 +34,6 @@ export function getObjectiveValue(objective: Objective, isFirstToFulfill?: boole
       return isFirstToFulfill ? 2 : 1
   }
 }
-
-export type HuntingPlayer = Pick<PlayerState, 'color' | 'cave' | 'totemTokens'> & { hunting: Hunting }
 
 export function getFulfilledObjectives(game: GameState | GameView): Objective[] {
   const fulfilledObjectives = []

@@ -26,8 +26,7 @@ const PrehistoriesTutorial: TutorialDescription<GameState, Move, PlayerColor> = 
         huntingBoard:huntingBoardTab,
         tilesDeck:tilesDeckTab,
         phase:Phase.Initiative,
-        tutorial:true,
-        sortedPlayers:undefined
+        tutorial:true
     }, [PlayerColor.Yellow, PlayerColor.Green, PlayerColor.White]],
     
     expectedMoves:()=> [

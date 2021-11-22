@@ -1,8 +1,8 @@
 import GameState from "../GameState";
 import GameView from "../GameView";
-import { HuntPhase } from "../types/Phase";
-import { getFirstOfSortedPlayer } from "../types/PlayerView";
+import {HuntPhase} from "../types/Phase";
 import MoveType from "./MoveType";
+import {getHuntingPlayer} from "../types/HuntingPlayer";
 
 type SetHuntPhase = {
     type:MoveType.SetHuntPhase
@@ -11,6 +11,5 @@ type SetHuntPhase = {
 export default SetHuntPhase
 
 export function setHuntPhase(state:GameState | GameView){
-    const playerHuntingProperties = getFirstOfSortedPlayer(state).hunting!
-    playerHuntingProperties.huntPhase = HuntPhase.Hunt
+    getHuntingPlayer(state)!.hunting.huntPhase = HuntPhase.Hunt
 }

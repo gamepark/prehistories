@@ -2,7 +2,7 @@
 import {css, keyframes} from "@emotion/react";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import {PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
-import {FC, HTMLAttributes, useState} from "react";
+import {FC, HTMLAttributes} from "react";
 import {caveBorder, caveLeft, caveTop, setPercentDimension, squareSize, toAbsolute} from "../utils/styles";
 import Images from "../utils/Images";
 import AnimalTile from "./AnimalTile";
@@ -10,23 +10,22 @@ import TilesDropArea from "./TilesDropArea";
 import {useAnimation, usePlayerId} from "@gamepark/react-client";
 import {cavesSize} from "@gamepark/prehistories/material/Caves";
 import Coordinates from "@gamepark/prehistories/types/Coordinates";
-import FulfillObjective, { isFulfillObjective } from "@gamepark/prehistories/moves/FulfillObjective";
+import FulfillObjective, {isFulfillObjective} from "@gamepark/prehistories/moves/FulfillObjective";
 import getObjectiveSquaresHighlight from "./ObjectiveSquaresHighlight";
 import {getPlayerColor} from "../utils/getterFunctions"
 
 type Props = {
   player: PlayerView | PlayerViewSelf
-  isActiveHuntingPlayer:boolean
-} & HTMLAttributes<HTMLDivElement>
+}
 
 enum Borders {Top = 1, Bottom, Left, Right} 
 
-const Cave: FC<Props> = ({player, isActiveHuntingPlayer, ...props}) => {
+const Cave: FC<Props> = ({player}) => {
 
   const playerId = usePlayerId()
   const fulfillObjectiveAnimation = useAnimation<FulfillObjective>(animation => isFulfillObjective(animation.move))
     
-  let caveExample:boolean[][] | undefined = fulfillObjectiveAnimation && isActiveHuntingPlayer ? getObjectiveSquaresHighlight(fulfillObjectiveAnimation?.move.objective, player) : undefined
+  let caveExample:boolean[][] | undefined = fulfillObjectiveAnimation && player.hunting ? getObjectiveSquaresHighlight(fulfillObjectiveAnimation?.move.objective, player) : undefined
   
   function getBorders(coordinates:Coordinates, cave:boolean[][]):Borders[]{
     const result:Borders[] = []
@@ -38,7 +37,7 @@ const Cave: FC<Props> = ({player, isActiveHuntingPlayer, ...props}) => {
   }
 
   return (
-    <div css={[style, background(caveBackground[player.color]), fulfillObjectiveAnimation && isActiveHuntingPlayer && scaleCaveAnimation(fulfillObjectiveAnimation.duration)]}>
+    <div css={[style, background(caveBackground[player.color]), fulfillObjectiveAnimation && player.hunting && scaleCaveAnimation(fulfillObjectiveAnimation.duration)]}>
       {playerId === player.color && <TilesDropArea player={player}/>}
       {player.cave.map((paint, index) =>
         <AnimalTile key={index} tile={paint.tile} side={paint.side} css={tilePosition(paint.x, paint.y)}/>

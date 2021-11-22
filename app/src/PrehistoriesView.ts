@@ -60,7 +60,7 @@ export default class PrehistoriesView implements Game<GameLocalView, MoveView>, 
       case MoveType.DrawCards:
         return drawCardsInView(this.state, move)
       case MoveType.ShuffleDiscardPile:
-        return shuffleDiscardPileInView(this.state)
+        return shuffleDiscardPileInView(this.state, move)
       case MoveType.ChangeActivePlayer:
         return changeActivePlayer(this.state)
       case MoveType.RefillHuntingBoard:
