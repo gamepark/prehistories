@@ -159,6 +159,12 @@ describe('Test Objectives', () => {
       {tile: Tile.Fish1, side: 0, x: 4, y: 6},
       {tile: Tile.Legendary2, side: 0, x: 5, y: 5}
     ]
+    const goodCave2: PlacedTile[] = [
+      {tile: Tile.Buffalo2, side: 0, x: 0, y: 4},
+      {tile: Tile.Buffalo2, side: 1, x: 2, y: 5},
+      {tile: Tile.Fish1, side: 0, x: 2, y: 4},
+      {tile: Tile.Legendary2, side: 0, x: 0, y: 5}
+    ]
     const wrongCave: PlacedTile[] = [
       {tile: Tile.Buffalo4A, side: 1, x: 0, y: 1},
       {tile: Tile.Buffalo4B, side: 1, x: 2, y: 3},
@@ -168,6 +174,7 @@ describe('Test Objectives', () => {
     ]
 
     expect(getFulfilledObjectives(createGameState([Objective.SurroundLegendary], goodCave))).toContain(Objective.SurroundLegendary)
+    expect(getFulfilledObjectives(createGameState([Objective.SurroundLegendary], goodCave2))).toContain(Objective.SurroundLegendary)
     expect(getFulfilledObjectives(createGameState([Objective.SurroundLegendary], wrongCave))).not.toContain(Objective.SurroundLegendary)
   })
 
@@ -344,6 +351,7 @@ function createGameState(objectives: Objective[], cave: PlacedTile[]): GameState
     sortedPlayers: [PlayerColor.Yellow, PlayerColor.Blue],
     huntingBoard: [],
     phase: Phase.Hunt,
-    tilesDeck: []
+    tilesDeck: [],
+    tutorial:false
   }
 }

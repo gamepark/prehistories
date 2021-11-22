@@ -95,7 +95,8 @@ export function isLegendaryTileSurroundedByPaintings(cave: Painting[][], placedT
     }
   }
   for (let y = placedTile.y; y < placedTile.y + 3; y++) {
-    if ((cave[y] && cave[y][placedTile.x - 1] === Painting.Empty) || (cave[y + 1] && cave[y + 1][placedTile.x + 2] === Painting.Empty)) {
+    if ((cave[y] && cave[y][placedTile.x - 1] === Painting.Empty) || (cave[y - 1] && cave[y - 1][placedTile.x + 2] === Painting.Empty)) {
+
       return false
     }
   }
