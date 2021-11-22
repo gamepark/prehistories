@@ -26,7 +26,7 @@ import MoveCardSound from "../sounds/cardMove.mp3"
 import ButtonClickSound from "../sounds/buttonClick.mp3"
 import {centerContainer, setPercentDimension, toAbsolute, toFullSize} from "../utils/styles";
 import ButtonsTab from "./ButtonsTab";
-import TakeBackPlayedCards, {isTakeBackPlayedCards, isTakeBackPlayedCardsView, TakeBackPlayedCardsView} from "@gamepark/prehistories/moves/TakeBackPlayedCards";
+import TakeBackPlayedCards, {isTakeBackPlayedCards} from "@gamepark/prehistories/moves/TakeBackPlayedCards";
 import {playerWillDraw} from "@gamepark/prehistories/Prehistories";
 
 type Props = {
@@ -54,7 +54,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, isActiveHuntin
     const spendCardAnimations = useAnimations<SpendHunter>(animation => isSpendHunter(animation.move) && isActiveHuntingPlayer)
     const shuffleDiscardAnimation = useAnimation<ShuffleDiscardPileView>(animation => isShuffleDiscardPile(animation.move)  && isActiveHuntingPlayer)
     const drawCardsAnimation = useAnimation<DrawCards|DrawCardsView>(animation => isDrawCards(animation.move)  && isActiveHuntingPlayer)
-    const takeBackCardsAnimation = useAnimation<TakeBackPlayedCards|TakeBackPlayedCardsView>(animation => isTakeBackPlayedCards(animation.move) && isActiveHuntingPlayer )
+    const takeBackCardsAnimation = useAnimation<TakeBackPlayedCards>(animation => isTakeBackPlayedCards(animation.move) && isActiveHuntingPlayer )
     let playerHand:number|number[] = isPlayerViewSelf(player) ? [...player.hand] : player.hand
     let playerPlayed:number[] = player.played
 
@@ -66,10 +66,10 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, isActiveHuntin
         }
     }
     if(takeBackCardsAnimation){
-        if (!isTakeBackPlayedCardsView(takeBackCardsAnimation.move) && Array.isArray(playerHand)){
+        if (Array.isArray(playerHand)){
             playerHand.push(...player.played)
             playerPlayed = []
-        } else if (isTakeBackPlayedCardsView(takeBackCardsAnimation.move) && typeof playerHand === 'number'){
+        } else {
             playerHand += player.played.length
             playerPlayed = []
         }
@@ -129,9 +129,9 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, isActiveHuntin
           } : ( takeBackCardsAnimation  
               ? {seconds:takeBackCardsAnimation.duration,
                  delay:0,
-                 fromNeutralPosition:(!isTakeBackPlayedCardsView(takeBackCardsAnimation.move) && Array.isArray(playerHand))
+                 fromNeutralPosition: Array.isArray(playerHand)
                     ? index >= playerHand.length - player.played.length 
-                    : isTakeBackPlayedCardsView(takeBackCardsAnimation.move) && typeof playerHand ==='number' && index >= playerHand - player.played.length
+                    : index >= playerHand - player.played.length
                 }
               : undefined))
         })

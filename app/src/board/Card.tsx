@@ -1,19 +1,19 @@
 /** @jsxImportSource @emotion/react */
-import { css, keyframes } from "@emotion/react"
+import {css, keyframes} from "@emotion/react"
 import PlayerColor from "@gamepark/prehistories/PlayerColor"
-import { FC, HTMLAttributes } from "react"
-import { BlueHunters, GreenHunters, RedHunters, WhiteHunters, YellowHunters } from "../utils/Images"
+import {FC, HTMLAttributes} from "react"
+import {BlueHunters, GreenHunters, RedHunters, WhiteHunters, YellowHunters} from "../utils/Images"
 import CardPlayed from "@gamepark/prehistories/types/appTypes/CardPlayed"
 import CardInHand from "@gamepark/prehistories/types/appTypes/CardInHand"
-import { useAnimation, usePlay, useSound } from "@gamepark/react-client"
+import {useAnimation, usePlay, useSound} from "@gamepark/react-client"
 import Move from "@gamepark/prehistories/moves/Move"
 import PlayHuntCard from "@gamepark/prehistories/moves/PlayHuntCard"
-import { Draggable } from "@gamepark/react-components"
-import { isRevealHuntCards, RevealHuntCardsView } from "@gamepark/prehistories/moves/RevealHuntCards"
+import {Draggable} from "@gamepark/react-components"
+import {isRevealHuntCards, RevealHuntCardsView} from "@gamepark/prehistories/moves/RevealHuntCards"
 import MoveCardSound from "../sounds/cardMove.mp3"
-import { placingBackground, toAbsolute, toFullSize } from "../utils/styles"
-import { getCardBack } from "../utils/getterFunctions"
-import TakeBackPlayedCards, { isTakeBackPlayedCards, isTakeBackPlayedCardsView, takeBackPlayedCards, TakeBackPlayedCardsView } from "@gamepark/prehistories/moves/TakeBackPlayedCards"
+import {placingBackground, toAbsolute, toFullSize} from "../utils/styles"
+import {getCardBack} from "../utils/getterFunctions"
+import TakeBackPlayedCards, {isTakeBackPlayedCards} from "@gamepark/prehistories/moves/TakeBackPlayedCards"
 
 type Props = {
     color:PlayerColor

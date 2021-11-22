@@ -56,7 +56,7 @@ export default class PrehistoriesView implements Game<GameLocalView, MoveView>, 
       case MoveType.EndTurn:
         return endTurn(this.state)
       case MoveType.TakeBackPlayedCards:
-        return takeBackPlayedCardsInView(this.state, move)
+        return takeBackPlayedCardsInView(this.state)
       case MoveType.DrawCards:
         return drawCardsInView(this.state, move)
       case MoveType.ShuffleDiscardPile:
@@ -73,7 +73,7 @@ export default class PrehistoriesView implements Game<GameLocalView, MoveView>, 
         return setSelectedHunters(this.state, move)
       case 'ResetSelectedHunters':
         return resetSelectedHunters(this.state)
-      
+
     }
   }
 

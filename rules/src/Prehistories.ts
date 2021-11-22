@@ -252,7 +252,6 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         this.state.players.forEach(p => result.push({color: p.color, cards: p.played}))
         return {type: MoveType.RevealHuntCards, cardsPlayed: result}
       case MoveType.RefillHuntingBoard:
-
         const newBoard: (number | null)[] = []
         this.state.huntingBoard.forEach((tile, spot) => {
           if (tile === null) {
@@ -262,16 +261,6 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
           }
         })
         return {...move, newBoard}
-
-      case MoveType.TakeBackPlayedCards:
-        if (playerId === this.state.sortedPlayers![0]) {
-          return move
-        } else {
-          return {
-            type: MoveType.TakeBackPlayedCards,
-            playedLength: this.state.players.find(p => p.color === this.state.sortedPlayers![0])!.played.length
-          }
-        }
       case MoveType.DrawCards:
         if (playerId === this.state.sortedPlayers![0]) {
           const player = this.state.players.find(p => p.color === this.state.sortedPlayers![0])!
