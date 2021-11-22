@@ -16,9 +16,9 @@ const prehistoriesAnimations : Animations<GameLocalView, MoveView, PlayerColor> 
         } else if (move.type === MoveType.SpendHunter){
             return action.playerId === playerId ? 1 : (state.caveDisplayed === action.playerId ? 1 : 0)
         } else if (move.type === MoveType.ShuffleDiscardPile){
-            return 1
+            return state.caveDisplayed === getFirstOfSortedPlayer(state).color ? 1 : 0
         } else if (move.type === MoveType.TakeBackPlayedCards){
-            return getFirstOfSortedPlayer(state).played.length !== 0 ? 2 : 0
+            return ( getFirstOfSortedPlayer(state).color === state.caveDisplayed && getFirstOfSortedPlayer(state).played.length !== 0) ? 2 : 0
         } else if(move.type === MoveType.FulfillObjective){
             return 3
         } else if(move.type === MoveType.RevealHuntCards){

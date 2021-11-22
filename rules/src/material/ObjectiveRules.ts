@@ -219,7 +219,7 @@ export function getTokensForFulfilledObjective(game: GameState | GameView, objec
     case Objective.AnyLine: {
       const lastTilePlayed = player.cave[player.cave.length - 1]
       const lastFilledCoordinates = getPlacedTileCoordinates(lastTilePlayed)
-      return columnsFillCompleted(cave, lastFilledCoordinates)
+      return linesFillCompleted(cave, lastFilledCoordinates)
     }
     case Objective.Legendary:
       return 1

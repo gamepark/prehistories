@@ -51,10 +51,10 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, isActiveHuntin
 
     const playHuntCardAnimation = useAnimation<PlayHuntCardView>(animation => isPlayHuntCardView(animation.move) && animation.move.playerId === playerId)
     const revealCardsAnimation = useAnimation<RevealHuntCardsView>(animation => isRevealHuntCards(animation.move))
-    const spendCardAnimations = useAnimations<SpendHunter>(animation => isSpendHunter(animation.move))
-    const shuffleDiscardAnimation = useAnimation<ShuffleDiscardPileView>(animation => isShuffleDiscardPile(animation.move))
-    const drawCardsAnimation = useAnimation<DrawCards|DrawCardsView>(animation => isDrawCards(animation.move))
-    const takeBackCardsAnimation = useAnimation<TakeBackPlayedCards|TakeBackPlayedCardsView>(animation => isTakeBackPlayedCards(animation.move))
+    const spendCardAnimations = useAnimations<SpendHunter>(animation => isSpendHunter(animation.move) && isActiveHuntingPlayer)
+    const shuffleDiscardAnimation = useAnimation<ShuffleDiscardPileView>(animation => isShuffleDiscardPile(animation.move)  && isActiveHuntingPlayer)
+    const drawCardsAnimation = useAnimation<DrawCards|DrawCardsView>(animation => isDrawCards(animation.move)  && isActiveHuntingPlayer)
+    const takeBackCardsAnimation = useAnimation<TakeBackPlayedCards|TakeBackPlayedCardsView>(animation => isTakeBackPlayedCards(animation.move) && isActiveHuntingPlayer )
     let playerHand:number|number[] = isPlayerViewSelf(player) ? [...player.hand] : player.hand
     let playerPlayed:number[] = player.played
 
