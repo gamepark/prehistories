@@ -6,28 +6,27 @@ import PlayerColor, {playerColors} from './PlayerColor'
 export type PrehistoriesPlayerOptions = { id: PlayerColor }
 
 export type PrehistoriesOptions = {
-  players:PrehistoriesPlayerOptions[]
-  isExpertGame:boolean      // To reduce
+  players: PrehistoriesPlayerOptions[]
+  beginner: boolean
 }
 
 export function isGameOptions(arg: GameState | PrehistoriesOptions): arg is PrehistoriesOptions {
-  return typeof (arg as GameState).tilesDecks === 'undefined'
+  return !arg.hasOwnProperty('huntingBoard')
 }
 
 export const PrehistoriesOptionsSpec: OptionsSpec<PrehistoriesOptions> = {
-  isExpertGame:{
-    label:(t:Function) => t('Cartes Objectifs Jour et Nuit'),
-    subscriberRequired:true
+  beginner: {
+    label: (t: Function) => t('Beginner game'),
+    help: t => t('beginner.help')
   },
-  
+
   players: {
     id: {
       label: (t: TFunction) => t('Color'),
       values: playerColors,
-      valueSpec: color => ({label:t => getPlayerName(color, t)})
+      valueSpec: color => ({label: t => getPlayerName(color, t)})
     }
   }
-
 }
 
 export function getPlayerName(playerId: PlayerColor, t: TFunction) {

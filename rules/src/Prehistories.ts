@@ -46,7 +46,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         objectives: []
       }
 
-      game.objectives = setupObjectives(game.players.length, arg.isExpertGame)
+      game.objectives = setupObjectives(game.players.length, arg.beginner)
       super(game)
     } else {
       super(arg)

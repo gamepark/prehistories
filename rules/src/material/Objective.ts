@@ -19,11 +19,11 @@ function getMoonSide(objective: Objective): Objective {
   return objective + 10
 }
 
-export function setupObjectives(players: number, isExpertGame: boolean): Objective[] {
+export function setupObjectives(players: number, beginner: boolean): Objective[] {
   const objectiveCardsShuffled = shuffle(sunObjectives)
   const numberOfObjectives: number = players < 4 ? 4 : 5
   const objectiveCards = objectiveCardsShuffled.slice(0, numberOfObjectives)
-  if (isExpertGame) {
+  if (!beginner) {
     for (let i = 0; i < objectiveCards.length; i++) {
       if (Math.random() < 0.5) {
         objectiveCards[i] = getMoonSide(objectiveCards[i])
