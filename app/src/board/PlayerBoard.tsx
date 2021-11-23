@@ -28,6 +28,7 @@ import {centerContainer, setPercentDimension, toAbsolute, toFullSize} from "../u
 import ButtonsTab from "./ButtonsTab";
 import TakeBackPlayedCards, {isTakeBackPlayedCards} from "@gamepark/prehistories/moves/TakeBackPlayedCards";
 import {playerWillDraw} from "@gamepark/prehistories/Prehistories";
+import { getCaveDisplayed } from "src/localMoves/setCaveDisplayed";
 
 type Props = {
     player:PlayerView | PlayerViewSelf,

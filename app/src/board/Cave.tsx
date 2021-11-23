@@ -32,9 +32,9 @@ const Cave: FC<Props> = ({player, isTutorial}) => {
   function getBorders(coordinates:Coordinates, cave:boolean[][]):Borders[]{
     const result:Borders[] = []
     if (coordinates.y === 6 || (coordinates.y<6 && cave[coordinates.y+1][coordinates.x] === false)) {result.push(Borders.Bottom)}
-    if (coordinates.y === 0 || coordinates.y>0 && cave[coordinates.y-1][coordinates.x] === false) {result.push(Borders.Top)}
-    if (coordinates.x === 6 || coordinates.x<6 && cave[coordinates.y][coordinates.x+1] === false) {result.push(Borders.Right)}
-    if (coordinates.x === 0 || coordinates.x>0 && cave[coordinates.y][coordinates.x-1] === false) {result.push(Borders.Left)}
+    if (coordinates.y === 0 || (coordinates.y>0 && cave[coordinates.y-1][coordinates.x] === false)) {result.push(Borders.Top)}
+    if (coordinates.x === 6 || (coordinates.x<6 && cave[coordinates.y][coordinates.x+1] === false)) {result.push(Borders.Right)}
+    if (coordinates.x === 0 || (coordinates.x>0 && cave[coordinates.y][coordinates.x-1] === false)) {result.push(Borders.Left)}
     return result
   }
 

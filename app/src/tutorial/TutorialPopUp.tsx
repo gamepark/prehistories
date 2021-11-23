@@ -384,6 +384,18 @@ const tutorialDescription:TutorialStepDescription[][] = [
             }
         },
         {
+          title: (t: TFunction) => t('title.how.to.win'),
+          text: 'tuto.how.to.place.tokens',
+          boxTop: 32,
+          boxLeft: 52,
+          boxWidth: 50,
+          arrow: {
+              angle: 0,
+              top: 20,
+              left: 42
+          }
+        },
+        {
             title: (t: TFunction) => t('title.your.hand'),
             text: 'tuto.your.hand',
             boxTop: 67,
