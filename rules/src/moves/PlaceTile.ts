@@ -1,7 +1,6 @@
 import GameState from '../GameState'
 import GameView from '../GameView'
 import Coordinates from '../types/Coordinates'
-import {HuntPhase} from '../types/Phase'
 import Move from './Move'
 import MoveType from './MoveType'
 import {Side} from "../material/Tile";
@@ -26,7 +25,6 @@ export function placeTile(state: GameState | GameView, move: PlaceTile) {
   if (tile === null) throw('error : trying to paint a null polyomino !')
   player.cave.push({tile: tile, side: move.side, ...move.coordinates})
   player.hunting = {
-    huntPhase: HuntPhase.Pay,
     hunt: {zone: move.huntZone, huntersValue: 0},
     injuries: player.hunting.injuries,
     tilesHunted: player.hunting.tilesHunted + 1

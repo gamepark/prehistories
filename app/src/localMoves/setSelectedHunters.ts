@@ -1,6 +1,5 @@
 import GameView from "@gamepark/prehistories/GameView";
 import {getColoredDeck} from "@gamepark/prehistories/material/Hunters";
-import {HuntPhase} from "@gamepark/prehistories/types/Phase";
 import {getHuntingPlayer} from "@gamepark/prehistories/types/HuntingPlayer";
 import getPowerLevels from "@gamepark/prehistories/utils/powerLevels";
 
@@ -24,7 +23,7 @@ export const resetSelectedHuntersMove = ():ResetSelectedHunters => ({
 
 export function setSelectedHunters(state:GameView, move:SetSelectedHunters){
     const player = getHuntingPlayer(state)!
-    if (player.hunting.huntPhase === HuntPhase.Pay){
+    if (player.hunting.hunt){
         if (state.huntersSelected === undefined){
             state.huntersSelected = [move.hunter]
         } else {

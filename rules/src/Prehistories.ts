@@ -15,7 +15,6 @@ import PlayHuntCard, {playHuntCard} from './moves/PlayHuntCard'
 import PlaceTile, {placeTile, placeTileMove} from './moves/PlaceTile'
 import {getNewTile, refillHuntingBoard} from './moves/RefillHuntingBoard'
 import {revealHuntCards} from './moves/RevealHuntCards'
-import {setHuntPhase} from './moves/SetHuntPhase'
 import {shuffleDiscardPile, shuffleDiscardPileMove} from './moves/ShuffleDiscardPile'
 import SpendHunter, {spendHunter} from './moves/SpendHunter'
 import {takeBackPlayedCards} from './moves/TakeBackPlayedCards'
@@ -23,7 +22,7 @@ import ValidateSpentHunters, {validateSpentHunters} from './moves/ValidateSpentH
 import PlayerColor from './PlayerColor'
 import PlayerState, {setupDeck} from './PlayerState'
 import {isGameOptions, PrehistoriesOptions, PrehistoriesPlayerOptions} from './PrehistoriesOptions'
-import Phase, {HuntPhase} from './types/Phase'
+import Phase from './types/Phase'
 import {isPlayerState, PlayerView, PlayerViewSelf} from './types/PlayerView'
 import getPowerLevels from './utils/powerLevels'
 import teamPower from './utils/teamPower'
@@ -90,41 +89,35 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         return playHuntCardMoves
       }
     } else if (player.hunting) {
-      switch (player.hunting.huntPhase) {
-        case HuntPhase.Hunt : {
-          const moves: (PlaceTile | EndTurn)[] = []
-          const cave = getCavePlacementSpaces(player)
-          for (let huntZone = 0; huntZone < this.state.huntingBoard.length; huntZone++) {
-            const tile = this.state.huntingBoard[huntZone]
-            if (tile === null || teamPower(player.played) < getPowerLevels(this.state.players.length, huntZone)[0]) {
-              continue
-            }
-            for (let x = 0; x < cavesSize; x++) {
-              for (let y = 0; y < cavesSize; y++) {
-                for (const side of sides) {
-                  if (canPlaceTile(cave, {tile, side, x, y})) {
-                    moves.push(placeTileMove(huntZone, side, {x, y}))
-                  }
+      if (!player.hunting.hunt) {
+        const moves: (PlaceTile | EndTurn)[] = []
+        const cave = getCavePlacementSpaces(player)
+        for (let huntZone = 0; huntZone < this.state.huntingBoard.length; huntZone++) {
+          const tile = this.state.huntingBoard[huntZone]
+          if (tile === null || teamPower(player.played) < getPowerLevels(this.state.players.length, huntZone)[0]) {
+            continue
+          }
+          for (let x = 0; x < cavesSize; x++) {
+            for (let y = 0; y < cavesSize; y++) {
+              for (const side of sides) {
+                if (canPlaceTile(cave, {tile, side, x, y})) {
+                  moves.push(placeTileMove(huntZone, side, {x, y}))
                 }
               }
             }
           }
-          moves.push(endTurnMove(player.color))
-          return moves
         }
-        case HuntPhase.Pay : {
-          const spendHuntersAndValidateMoves: (SpendHunter | ValidateSpentHunters)[] = []
-          player.played.forEach(card => {
-            spendHuntersAndValidateMoves.push({type: MoveType.SpendHunter, card})
-          })
-          if (getPowerLevels(this.state.players.length, player.hunting.hunt!.zone)[0] <= player.hunting.hunt!.huntersValue) {
-            spendHuntersAndValidateMoves.push({type: MoveType.ValidateSpentHunters})
-          }
-          return spendHuntersAndValidateMoves
+        moves.push(endTurnMove(player.color))
+        return moves
+      } else {
+        const spendHuntersAndValidateMoves: (SpendHunter | ValidateSpentHunters)[] = []
+        player.played.forEach(card => {
+          spendHuntersAndValidateMoves.push({type: MoveType.SpendHunter, card})
+        })
+        if (getPowerLevels(this.state.players.length, player.hunting.hunt!.zone)[0] <= player.hunting.hunt!.huntersValue) {
+          spendHuntersAndValidateMoves.push({type: MoveType.ValidateSpentHunters})
         }
-        default : {
-          return []
-        }
+        return spendHuntersAndValidateMoves
       }
 
     } else return []
@@ -144,8 +137,6 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         return validateSpentHunters(this.state)
       case MoveType.FulfillObjective:
         return fulfillObjective(this.state, move)
-      case MoveType.SetHuntPhase:
-        return setHuntPhase(this.state)
       case MoveType.RefillHuntingBoard:
         return refillHuntingBoard(this.state)
       case MoveType.EndTurn:
@@ -189,30 +180,23 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
           return {type: MoveType.EndGame}
         }
 
-        switch (huntingPlayer.hunting.huntPhase) {
-          case HuntPhase.Pay: {
-            if (getPowerLevels(this.state.players.length, huntingPlayer.hunting.hunt!.zone)[1] <= huntingPlayer.hunting.hunt!.huntersValue) {
-              return {type: MoveType.ValidateSpentHunters}
-            } else return
+        if (huntingPlayer.isReady) {
+          const moves: Move[] = []
+          if (huntingPlayer.played.length !== 0) {
+            moves.push({type: MoveType.TakeBackPlayedCards})
           }
-          case HuntPhase.CheckObjectives: {
-            return [...getFulfilledObjectives(this.state).map(fulfillObjectiveMove), {type: MoveType.SetHuntPhase}]
+          const cardsToDraw: number = playerCouldDraw(huntingPlayer)
+          if (huntingPlayer.deck.length < cardsToDraw && huntingPlayer.discard.length > 0) {
+            moves.push(shuffleDiscardPileMove(huntingPlayer.color, shuffle(huntingPlayer.discard)))
           }
-          case HuntPhase.DrawCards: {
-            if (huntingPlayer.played.length !== 0) {
-              return {type: MoveType.TakeBackPlayedCards}
-            } else {
-              const cardsToDraw: number = playerCouldDraw(huntingPlayer)
-              if (huntingPlayer.deck.length < cardsToDraw && huntingPlayer.discard.length > 0) {
-                return shuffleDiscardPileMove(huntingPlayer.color, shuffle(huntingPlayer.discard))
-              } else {
-                return drawCardsMove(huntingPlayer.color)
-              }
-            }
+          moves.push(drawCardsMove(huntingPlayer.color), {type: MoveType.ChangeActivePlayer})
+          return moves
+        } else if (huntingPlayer.hunting.hunt) {
+          if (getPowerLevels(this.state.players.length, huntingPlayer.hunting.hunt.zone)[1] <= huntingPlayer.hunting.hunt.huntersValue) {
+            return {type: MoveType.ValidateSpentHunters}
           }
-          case HuntPhase.ChangeActivePlayer: {
-            return {type: MoveType.ChangeActivePlayer}
-          }
+        } else if (huntingPlayer.hunting.tilesHunted > 0) {
+          return [...getFulfilledObjectives(this.state).map(fulfillObjectiveMove)]
         }
       }
     }

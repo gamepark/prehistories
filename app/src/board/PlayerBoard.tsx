@@ -12,7 +12,7 @@ import CardInHand, {isCardInHand} from "@gamepark/prehistories/types/appTypes/Ca
 import CardPlayed from "@gamepark/prehistories/types/appTypes/CardPlayed";
 import MoveType from "@gamepark/prehistories/moves/MoveType";
 import {useAnimation, useAnimations, usePlay, usePlayerId, useSound} from "@gamepark/react-client";
-import Phase, {HuntPhase} from "@gamepark/prehistories/types/Phase";
+import Phase from "@gamepark/prehistories/types/Phase";
 import {Hand, Picture} from "@gamepark/react-components";
 import Move from "@gamepark/prehistories/moves/Move";
 import {isPlayHuntCardView, PlayHuntCardView} from "@gamepark/prehistories/moves/PlayHuntCard";
@@ -75,8 +75,8 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, isTutorial}) =
     }
 
     const isDisplayValidationButton:boolean = phase === Phase.Initiative && playerId === player.color && player.isReady !== true
-    const isDisplayEndTurnButton:boolean = phase === Phase.Hunt && playerId === player.color && player.hunting?.huntPhase === HuntPhase.Hunt
-    const isDisplayHuntingButtons:boolean = phase === Phase.Hunt && playerId === player.color && player.hunting?.huntPhase === HuntPhase.Pay
+    const isDisplayEndTurnButton:boolean = phase === Phase.Hunt && playerId === player.color && player.hunting !== undefined && !player.hunting.hunt
+    const isDisplayHuntingButtons:boolean = phase === Phase.Hunt && playerId === player.color && player.hunting?.hunt !== undefined
 
     const playSelectHunter = usePlay<SetSelectedHunters>()
 
@@ -205,7 +205,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, isTutorial}) =
                 color={player.color}
                 power={getColoredDeck(player.color)[card].power}
                 speed={getColoredDeck(player.color)[card].speed}
-                onClick={() => player.color === playerId && player.hunting?.huntPhase === HuntPhase.Pay && playSelectHunter(setSelectedHunterMove(card), {local:true})}
+                onClick={() => player.color === playerId && player.hunting?.hunt !== undefined && playSelectHunter(setSelectedHunterMove(card), {local:true})}
 
                 />
 

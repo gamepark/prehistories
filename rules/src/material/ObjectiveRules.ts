@@ -1,5 +1,5 @@
 import Objective from "./Objective";
-import Tile, {isLegendaryAnimalTile} from "./Tile";
+import Tile, {isLegendaryAnimalTile, revertMatrix} from "./Tile";
 import {
   getGroupCreatedWithLastTile,
   getPaintedCave,
@@ -39,15 +39,13 @@ export function getFulfilledObjectives(game: GameState | GameView): Objective[] 
   const fulfilledObjectives = []
   const player = getPlayers(game).find(p => p.hunting) as HuntingPlayer
   const cave = getPaintedCave(player)
-  const lastTilePlayed = player.cave[player.cave.length - 1]
-  const lastFilledCoordinates = getPlacedTileCoordinates(lastTilePlayed)
-  if (columnsFillCompleted(cave, lastFilledCoordinates) > 0) {
+  if (paintedColumns(cave) > count(player.totemTokens, o => o === Objective.AnyColumn)) {
     fulfilledObjectives.push(Objective.AnyColumn)
   }
-  if (linesFillCompleted(cave, lastFilledCoordinates) > 0) {
+  if (paintedLines(cave) > count(player.totemTokens, o => o === Objective.AnyLine)) {
     fulfilledObjectives.push(Objective.AnyLine)
   }
-  if (isLegendaryAnimalTile(player.cave[player.cave.length - 1].tile) ? 1 : 0) {
+  if (count(player.cave, ({tile}) => isLegendaryAnimalTile(tile)) > count(player.totemTokens, o => o === Objective.Legendary)) {
     fulfilledObjectives.push(Objective.Legendary)
   }
   for (const objective of game.objectives) {
@@ -56,6 +54,16 @@ export function getFulfilledObjectives(game: GameState | GameView): Objective[] 
     }
   }
   return fulfilledObjectives
+}
+
+const count = <T>(array: T[], predicate: (t: T) => boolean) => array.reduce((sum, i) => predicate(i) ? sum + 1 : sum, 0)
+
+function paintedLines(cave: Painting[][]) {
+  return cave.reduce((count, line) => line.every(painting => painting !== Painting.Empty) ? count + 1 : count, 0)
+}
+
+function paintedColumns(cave: Painting[][]) {
+  return paintedLines(revertMatrix(cave))
 }
 
 function columnsFillCompleted(cave: Painting[][], lastFilledCoordinates: Coordinates[]) {

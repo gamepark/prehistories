@@ -45,6 +45,7 @@ const PrehistoriesTutorial: TutorialDescription<GameState, Move, PlayerColor> = 
         {type:MoveType.PlaceTile,coordinates:{x:0,y:1},side:0,huntZone:0},
         {type:MoveType.SpendHunter,card:6},
         {type:MoveType.EndTurn,player:PlayerColor.Yellow},
+        {type:MoveType.EndTurn,player:PlayerColor.White},
         {type:MoveType.PlaceTile,coordinates:{x:0,y:6},side:0,huntZone:1},
         {type:MoveType.SpendHunter,card:6},
         {type:MoveType.SpendHunter,card:7},

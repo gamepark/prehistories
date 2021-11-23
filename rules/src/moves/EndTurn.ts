@@ -1,6 +1,5 @@
 import GameState from "../GameState"
 import GameView from "../GameView"
-import {HuntPhase} from "../types/Phase"
 import Move from "./Move"
 import MoveType from "./MoveType"
 import PlayerColor from "../PlayerColor";
@@ -20,9 +19,6 @@ export function endTurnMove(player: PlayerColor): EndTurn {
 export function endTurn(state: GameState | GameView, move: EndTurn) {
   const player = getPlayerWithColor(state, move.player)
   player.isReady = true
-  if (player.hunting) {
-    player.hunting.huntPhase = HuntPhase.DrawCards
-  }
 }
 
 export function isEndTurn(move: Move): move is EndTurn {

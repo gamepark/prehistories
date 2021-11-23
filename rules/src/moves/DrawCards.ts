@@ -1,7 +1,6 @@
 import GameState from "../GameState"
 import GameView from "../GameView"
 import {playerWillDraw} from "../Prehistories"
-import {HuntPhase} from "../types/Phase"
 import {isPlayerViewSelf} from "../types/PlayerView"
 import Move from "./Move"
 import MoveType from "./MoveType"
@@ -24,9 +23,6 @@ export const drawCardsMove = (player: PlayerColor): DrawCards => ({type: MoveTyp
 export function drawCards(state: GameState, move: DrawCards) {
   const player = state.players.find(p => p.color === move.player)!
   player.hand.push(...player.deck.splice(0, playerWillDraw(player)))
-  if (player.hunting) {
-    player.hunting.huntPhase = HuntPhase.ChangeActivePlayer
-  }
 }
 
 export function drawCardsInView(state: GameView, move: DrawCards | DrawCardsView) {
@@ -39,9 +35,6 @@ export function drawCardsInView(state: GameView, move: DrawCards | DrawCardsView
     const numberOfCards = playerWillDraw(player);
     player.deck -= numberOfCards
     player.hand += numberOfCards
-  }
-  if (player.hunting) {
-    player.hunting.huntPhase = HuntPhase.ChangeActivePlayer
   }
 }
 

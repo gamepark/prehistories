@@ -1,6 +1,5 @@
 import GameState from "../GameState";
 import GameView from "../GameView";
-import {HuntPhase} from "../types/Phase";
 import {getPlayers} from "../types/PlayerView";
 import MoveType from "./MoveType";
 import {getNextPlayer} from "../utils/InitiativeRules";
@@ -16,6 +15,6 @@ export function changeActivePlayer(state:GameState|GameView){
     delete previousPlayer.hunting
     const nextPlayer = getNextPlayer(state);
     if (nextPlayer) {
-        nextPlayer.hunting = {huntPhase: HuntPhase.Hunt, injuries: 0, tilesHunted: 0}
+        nextPlayer.hunting = {injuries: 0, tilesHunted: 0}
     } 
 }

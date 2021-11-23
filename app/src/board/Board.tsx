@@ -6,7 +6,6 @@ import Images from '../utils/Images'
 import HuntingZone from "./HuntingZone";
 import {Animation, useAnimation, usePlayerId} from "@gamepark/react-client";
 import PlaceTile, {isPlaceTile} from "@gamepark/prehistories/moves/PlaceTile";
-import {HuntPhase} from "@gamepark/prehistories/types/Phase";
 import teamPower from "@gamepark/prehistories/utils/teamPower";
 import getPowerLevels from "@gamepark/prehistories/utils/powerLevels";
 import {isPlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
@@ -23,7 +22,7 @@ export default function Board({game}: Props) {
   const playerId = usePlayerId<PlayerColor>()
   const player = game.players.find(p => p.color === playerId)
   const animation = useAnimation<PlaceTile>(animation => isPlaceTile(animation.move))
-  const hunting = player?.hunting?.huntPhase === HuntPhase.Hunt
+  const hunting = player?.hunting && !player.hunting.hunt
   const huntZonePositions = game.players.length < 4 ? huntZonesA : huntZonesB
   return (
     <div css={[style, background(game.players.length)]}>

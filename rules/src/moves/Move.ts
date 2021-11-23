@@ -7,7 +7,6 @@ import PlayHuntCard from './PlayHuntCard'
 import PlaceTile from './PlaceTile'
 import RefillHuntingBoard from './RefillHuntingBoard'
 import RevealHuntCards from './RevealHuntCards'
-import SetHuntPhase from './SetHuntPhase'
 import ShuffleDiscardPile from './ShuffleDiscardPile'
 import SpendHunter from './SpendHunter'
 import TakeBackPlayedCards from './TakeBackPlayedCards'
@@ -19,7 +18,6 @@ type Move = PlayHuntCard |
             SpendHunter |
             ValidateSpentHunters |
             FulfillObjective |
-            SetHuntPhase |
             EndTurn |
             TakeBackPlayedCards |
             RefillHuntingBoard |

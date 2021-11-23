@@ -3,7 +3,7 @@ import PlacedTile from "../types/PlacedTile"
 import Tile from "../material/Tile";
 import GameState from "../GameState";
 import Objective from "../material/Objective";
-import Phase, {HuntPhase} from "../types/Phase";
+import Phase from "../types/Phase";
 import {getFulfilledObjectives} from "../material/ObjectiveRules";
 
 describe('Test Objectives', () => {
@@ -343,7 +343,7 @@ function createGameState(objectives: Objective[], cave: PlacedTile[]): GameState
         hand: [],
         played: [],
         totemTokens: [],
-        hunting: {tilesHunted: 0, huntPhase: HuntPhase.CheckObjectives, injuries: 0}
+        hunting: {tilesHunted: 0, injuries: 0}
       },
       {cave: [], color: PlayerColor.Blue, deck: [], discard: [], hand: [], played: [], totemTokens: []}
     ],
