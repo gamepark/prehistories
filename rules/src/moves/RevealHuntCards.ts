@@ -22,7 +22,9 @@ export type RevealHuntCardsView = RevealHuntCards & {
 
 export function revealHuntCards(state:GameState){
     state.phase = Phase.Hunt
-    state.players.forEach(p => delete p.isReady)
+    for (const p of state.players) {
+        delete p.isReady
+    }
     const firstPlayer = getNextPlayer(state);
     if (firstPlayer) {
         firstPlayer.hunting = {huntPhase: HuntPhase.Hunt, injuries: 0, tilesHunted: 0}
@@ -30,13 +32,13 @@ export function revealHuntCards(state:GameState){
 }
 
 export function revealHuntCardsInView(state:GameView, move:RevealHuntCardsView){
-    state.players.forEach(p => {
-        p.played = move.cardsPlayed.find(obj => obj.color === p.color)!.cards
-        if(!isPlayerViewSelf(p)){
-            p.hand -= p.played.length
+    for (const player of state.players) {
+        player.played = move.cardsPlayed.find(obj => obj.color === player.color)!.cards
+        if(!isPlayerViewSelf(player)){
+            player.hand -= player.played.length
         }
-        delete p.isReady
-    })
+        delete player.isReady
+    }
     state.phase = Phase.Hunt
     const firstPlayer = getNextPlayer(state);
     if (firstPlayer) {

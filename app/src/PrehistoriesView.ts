@@ -2,7 +2,6 @@ import MoveType from '@gamepark/prehistories/moves/MoveType'
 import MoveView from '@gamepark/prehistories/moves/MoveView'
 import {Action, Game, Undo} from '@gamepark/rules-api'
 import {playHuntCardInView} from '@gamepark/prehistories/moves/PlayHuntCard'
-import {tellYouAreReady} from '@gamepark/prehistories/moves/TellYouAreReady'
 import SetCaveDisplayed, {setCaveDisplayed} from './localMoves/setCaveDisplayed'
 import {revealHuntCardsInView} from '@gamepark/prehistories/moves/RevealHuntCards'
 import {placeTile} from '@gamepark/prehistories/moves/PlaceTile'
@@ -39,8 +38,6 @@ export default class PrehistoriesView implements Game<GameLocalView, MoveView>, 
     switch (move.type) {
       case MoveType.PlayHuntCard:
         return playHuntCardInView(this.state, move)
-      case MoveType.TellYouAreReady:
-        return tellYouAreReady(this.state, move)
       case MoveType.RevealHuntCards:
         return revealHuntCardsInView(this.state, move)
       case MoveType.PlaceTile:
@@ -54,7 +51,7 @@ export default class PrehistoriesView implements Game<GameLocalView, MoveView>, 
       case MoveType.SetHuntPhase:
         return setHuntPhase(this.state);
       case MoveType.EndTurn:
-        return endTurn(this.state)
+        return endTurn(this.state, move)
       case MoveType.TakeBackPlayedCards:
         return takeBackPlayedCardsInView(this.state)
       case MoveType.DrawCards:

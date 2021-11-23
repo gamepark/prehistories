@@ -47,7 +47,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters}) => {
     const clickSound = useSound(ButtonClickSound)
     clickSound.volume = 0.8
 
-    const playHuntCardAnimation = useAnimation<PlayHuntCardView>(animation => isPlayHuntCardView(animation.move) && animation.move.playerId === playerId)
+    const playHuntCardAnimation = useAnimation<PlayHuntCardView>(animation => isPlayHuntCardView(animation.move) && animation.move.player === playerId)
     const revealCardsAnimation = useAnimation<RevealHuntCardsView>(animation => isRevealHuntCards(animation.move))
     const spendCardAnimations = useAnimations<SpendHunter>(animation => isSpendHunter(animation.move) && player.hunting !== undefined)
     const shuffleDiscardAnimation = useAnimation<ShuffleDiscardPileView>(animation => isShuffleDiscardPile(animation.move) && player.hunting !== undefined)
@@ -112,7 +112,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters}) => {
             type: "CardInHand",
             item: {type:"CardInHand", card},
             canDrag: player.color === playerId && phase === Phase.Initiative ,
-            drop: () => play({type:MoveType.PlayHuntCard, card:card, playerId:player.color})
+            drop: () => play({type:MoveType.PlayHuntCard, card:card, player:player.color})
           },
           animation:revealCardsAnimation ? {
             seconds:revealCardsAnimation.duration,

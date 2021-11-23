@@ -2,25 +2,22 @@ import GameState from "../GameState";
 import GameView from "../GameView";
 import PlayerColor from "../PlayerColor";
 import PlayerState from "../PlayerState";
-import {getPlayers, getPlayerWithColor, isPlayerView, isPlayerViewSelf, PlayerViewSelf} from "../types/PlayerView";
+import {getPlayerWithColor, isPlayerViewSelf, PlayerViewSelf} from "../types/PlayerView";
 import MoveType from "./MoveType";
 import MoveView from "./MoveView";
 
 type PlayHuntCard = {
   type: MoveType.PlayHuntCard
   card: number
-  playerId: PlayerColor
+  player: PlayerColor
 }
 
 export default PlayHuntCard
 
-export type PlayHuntCardView = {
-  type: MoveType.PlayHuntCard
-  playerId: PlayerColor
-}
+export type PlayHuntCardView = Omit<PlayHuntCard, 'card'>
 
 export function playHuntCard(state: GameState, move: PlayHuntCard) {
-  const player = getPlayerWithColor(state, move.playerId) as PlayerState
+  const player = getPlayerWithColor(state, move.player) as PlayerState
   playerPlayHuntCard(player, move)
 }
 

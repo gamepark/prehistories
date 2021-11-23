@@ -3,18 +3,28 @@ import GameView from "../GameView"
 import {HuntPhase} from "../types/Phase"
 import Move from "./Move"
 import MoveType from "./MoveType"
-import {getHuntingPlayer} from "../types/HuntingPlayer";
+import PlayerColor from "../PlayerColor";
+import {getPlayerWithColor} from "../types/PlayerView";
 
 type EndTurn = {
-    type:MoveType.EndTurn
+  type: MoveType.EndTurn
+  player: PlayerColor
 }
 
 export default EndTurn
 
-export function endTurn(state:GameState|GameView){
-    getHuntingPlayer(state)!.hunting.huntPhase = HuntPhase.DrawCards
+export function endTurnMove(player: PlayerColor): EndTurn {
+  return {type: MoveType.EndTurn, player}
 }
 
-export function isEndTurn(move:Move):move is EndTurn{
-    return move.type === MoveType.EndTurn
+export function endTurn(state: GameState | GameView, move: EndTurn) {
+  const player = getPlayerWithColor(state, move.player)
+  player.isReady = true
+  if (player.hunting) {
+    player.hunting.huntPhase = HuntPhase.DrawCards
+  }
+}
+
+export function isEndTurn(move: Move): move is EndTurn {
+  return move.type === MoveType.EndTurn
 }

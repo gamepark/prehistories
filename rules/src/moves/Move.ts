@@ -11,11 +11,9 @@ import SetHuntPhase from './SetHuntPhase'
 import ShuffleDiscardPile from './ShuffleDiscardPile'
 import SpendHunter from './SpendHunter'
 import TakeBackPlayedCards from './TakeBackPlayedCards'
-import TellYouAreReady from './TellYouAreReady'
 import ValidateSpentHunters from './ValidateSpentHunters'
 
 type Move = PlayHuntCard |
-            TellYouAreReady |
             RevealHuntCards |
             PlaceTile |
             SpendHunter |

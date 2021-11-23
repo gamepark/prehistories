@@ -22,7 +22,7 @@ const PrehistoriesSounds : FC<Props> = ({audioLoader}) => {
     const drawCards = useAnimation<DrawCards>(animation => isDrawCards(animation.move))
     const playTile = useAnimation<PlaceTile>(animation => isPlaceTile(animation.move))
     const objective = useAnimation<FulfillObjective>(animation => isFulfillObjective(animation.move))
-    const playCard = useAnimation<PlayHuntCard>(animation => isPlayHuntCardView(animation.move) && animation.move.playerId === playerId)
+    const playCard = useAnimation<PlayHuntCard>(animation => isPlayHuntCardView(animation.move) && animation.move.player === playerId)
 
     useEffect(() => {
         if (revealCardsAnimation || drawCards) {

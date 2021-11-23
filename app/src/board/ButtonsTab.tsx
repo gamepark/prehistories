@@ -17,6 +17,7 @@ import { centerContent, placingBackground, setPercentDimension, toAbsolute } fro
 import ButtonClickSound from "../sounds/buttonClick.mp3"
 import MoveCardSound from "../sounds/cardMove.mp3"
 import getPowerLevels from "@gamepark/prehistories/utils/powerLevels";
+import {endTurnMove} from "@gamepark/prehistories/moves/EndTurn";
 
 type Props = {
     color:PlayerColor
@@ -66,9 +67,9 @@ const ButtonsTab : FC<Props> = ({color, hunting, isDisplayValidationButton, isDi
             spendCardAnimations.length !== 0 && disapperingAnim]}>
 
             {isDisplayValidationButton && <Button css={[toAbsolute, validationButtonPosition]}
-                                                onClick={() => {clickSound.play() ; play({type:MoveType.TellYouAreReady, playerId:color})}}
+                                                onClick={() => {clickSound.play() ; play(endTurnMove(color))}}
                                                 colorButton={color} >{t('Validate')}</Button> }
-            {isDisplayEndTurnButton && <Button css={[validationButtonPosition]} onClick={() => {clickSound.play() ; play({type:MoveType.EndTurn})}} colorButton={color} >{t('End your Turn')}</Button>}
+            {isDisplayEndTurnButton && <Button css={[validationButtonPosition]} onClick={() => {clickSound.play() ; play(endTurnMove(color))}} colorButton={color} >{t('End your Turn')}</Button>}
 
             {huntZoneValues && <div css={[toAbsolute,
                                                     placingBackground(Images.arrowBrokenIcon,"cover"),

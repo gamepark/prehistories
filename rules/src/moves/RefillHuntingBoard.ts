@@ -29,12 +29,17 @@ export function fillHuntingBoard(state:GameState){
 }
 
 export function refillHuntingBoard(state:GameState){
-    
+    for (const p of state.players) {
+      delete p.isReady
+    }
     fillHuntingBoard(state)
     state.phase = Phase.Initiative
 }
 
 export function refillHuntingBoardInView(state: GameView, move:RefillHuntingBoardView){
+    for (const p of state.players) {
+      delete p.isReady
+    }
     removeFirstTileOfEmptySlots(state);
     state.huntingBoard = move.newBoard
     state.phase = Phase.Initiative

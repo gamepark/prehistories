@@ -7,7 +7,7 @@ import {changeActivePlayer} from './moves/ChangeActivePlayer'
 import {fulfillObjective, fulfillObjectiveMove} from './moves/FulfillObjective'
 import {drawCards, drawCardsMove} from './moves/DrawCards'
 import {endGame} from './moves/EndGame'
-import EndTurn, {endTurn} from './moves/EndTurn'
+import EndTurn, {endTurn, endTurnMove} from './moves/EndTurn'
 import Move from './moves/Move'
 import MoveType from './moves/MoveType'
 import MoveView from './moves/MoveView'
@@ -19,8 +19,7 @@ import {setHuntPhase} from './moves/SetHuntPhase'
 import {shuffleDiscardPile, shuffleDiscardPileMove} from './moves/ShuffleDiscardPile'
 import SpendHunter, {spendHunter} from './moves/SpendHunter'
 import {takeBackPlayedCards} from './moves/TakeBackPlayedCards'
-import TellYouAreReady, {tellYouAreReady} from './moves/TellYouAreReady'
-import ValidateSpendedHunters, {validateSpentHunters} from './moves/ValidateSpentHunters'
+import ValidateSpentHunters, {validateSpentHunters} from './moves/ValidateSpentHunters'
 import PlayerColor from './PlayerColor'
 import PlayerState, {setupDeck} from './PlayerState'
 import {isGameOptions, PrehistoriesOptions, PrehistoriesPlayerOptions} from './PrehistoriesOptions'
@@ -83,11 +82,11 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
       if (player.isReady) {
         return []
       } else {
-        const playHuntCardMoves: (PlayHuntCard | TellYouAreReady)[] = []
+        const playHuntCardMoves: (PlayHuntCard | EndTurn)[] = []
         player.hand.forEach(card => {
-          playHuntCardMoves.push({type: MoveType.PlayHuntCard, playerId: color, card: card})
+          playHuntCardMoves.push({type: MoveType.PlayHuntCard, player: color, card: card})
         })
-        playHuntCardMoves.push({type: MoveType.TellYouAreReady, playerId: color})
+        playHuntCardMoves.push(endTurnMove(color))
         return playHuntCardMoves
       }
     } else if (player.hunting) {
@@ -110,11 +109,11 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
               }
             }
           }
-          const endTurnMove: EndTurn[] = [{type: MoveType.EndTurn}]
-          return moves.concat(endTurnMove)
+          moves.push(endTurnMove(player.color))
+          return moves
         }
         case HuntPhase.Pay : {
-          const spendHuntersAndValidateMoves: (SpendHunter | ValidateSpendedHunters)[] = []
+          const spendHuntersAndValidateMoves: (SpendHunter | ValidateSpentHunters)[] = []
           player.played.forEach(card => {
             spendHuntersAndValidateMoves.push({type: MoveType.SpendHunter, card})
           })
@@ -135,8 +134,6 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
     switch (move.type) {
       case MoveType.PlayHuntCard:
         return playHuntCard(this.state, move)
-      case MoveType.TellYouAreReady:
-        return tellYouAreReady(this.state, move)
       case MoveType.RevealHuntCards:
         return revealHuntCards(this.state)
       case MoveType.PlaceTile:
@@ -152,7 +149,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
       case MoveType.RefillHuntingBoard:
         return refillHuntingBoard(this.state)
       case MoveType.EndTurn:
-        return endTurn(this.state)
+        return endTurn(this.state, move)
       case MoveType.TakeBackPlayedCards:
         return takeBackPlayedCards(this.state)
       case MoveType.DrawCards:
@@ -245,10 +242,10 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
   getMoveView(move: Move, playerId?: PlayerColor): MoveView {
     switch (move.type) {
       case MoveType.PlayHuntCard:
-        if (playerId === move.playerId) {
+        if (playerId === move.player) {
           return move
         } else {
-          return {type: MoveType.PlayHuntCard, playerId: move.playerId}
+          return {type: MoveType.PlayHuntCard, player: move.player}
         }
       case MoveType.RevealHuntCards:
         const result: { color: PlayerColor, cards: number[] }[] = []
