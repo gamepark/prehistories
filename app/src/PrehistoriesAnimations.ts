@@ -18,7 +18,7 @@ const prehistoriesAnimations : Animations<GameLocalView, MoveView, PlayerColor> 
         } else if (move.type === MoveType.SpendHunter){
             return action.playerId === playerId ? 1 : (caveDisplayed === action.playerId ? 1 : 0)
         } else if (move.type === MoveType.ShuffleDiscardPile){
-            return caveDisplayed === getHuntingPlayer(state)!.color ? 1 : 0
+            return caveDisplayed === move.player ? 1 : 0
         } else if (move.type === MoveType.TakeBackPlayedCards){
             const huntingPlayer = getHuntingPlayer(state)!;
             return ( getHuntingPlayer(state)!.color === caveDisplayed && huntingPlayer.played.length !== 0) ? 2 : 0

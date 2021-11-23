@@ -1,6 +1,7 @@
 import GameState from "../GameState";
 import GameView from "../GameView";
 import MoveType from "./MoveType";
+import getBoardZones from "../material/BoardZones";
 
 type RefillHuntingBoard = {
     type:MoveType.RefillHuntingBoard
@@ -84,5 +85,5 @@ function isTileDeckEmpty(pile: number, tileDeck: number[][], isView: boolean, mu
 }
 
 export function canRefillBoard(game: GameState) {
-  return game.huntingBoard.some((space, index) => space === null && game.tilesDeck[index].length > 0)
+  return game.huntingBoard.some((space, index) => space === null && game.tilesDeck[getBoardZones(game.players.length)[index].type].length > 0)
 }
