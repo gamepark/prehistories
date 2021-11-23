@@ -25,7 +25,7 @@ export function revealHuntCards(state:GameState){
     state.players.forEach(p => delete p.isReady)
     const firstPlayer = getNextPlayer(state);
     if (firstPlayer) {
-        firstPlayer.hunting = {huntPhase : HuntPhase.Hunt,huntSpotTakenLevels:undefined,injuries:0,tilesHunted:0}
+        firstPlayer.hunting = {huntPhase: HuntPhase.Hunt, injuries: 0, tilesHunted: 0}
     }
 }
 
@@ -40,7 +40,7 @@ export function revealHuntCardsInView(state:GameView, move:RevealHuntCardsView){
     state.phase = Phase.Hunt
     const firstPlayer = getNextPlayer(state);
     if (firstPlayer) {
-        firstPlayer.hunting = {huntPhase: HuntPhase.Hunt, huntSpotTakenLevels: undefined, injuries: 0, tilesHunted: 0}
+        firstPlayer.hunting = {huntPhase: HuntPhase.Hunt, injuries: 0, tilesHunted: 0}
     }
 }
 

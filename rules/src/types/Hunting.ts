@@ -1,10 +1,15 @@
-import { HuntPhase } from "./Phase"
+import {HuntPhase} from "./Phase"
 
 type Hunting = {
-    huntSpotTakenLevels?:number[]
-    huntPhase:HuntPhase
-    injuries:number
-    tilesHunted:number
+  hunt?: Hunt
+  huntPhase: HuntPhase
+  injuries: number
+  tilesHunted: number
+}
+
+type Hunt = {
+  zone: number
+  huntersValue: number
 }
 
 export default Hunting

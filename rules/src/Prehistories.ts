@@ -118,7 +118,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
           player.played.forEach(card => {
             spendHuntersAndValidateMoves.push({type: MoveType.SpendHunter, card})
           })
-          if (player.hunting.huntSpotTakenLevels![0] <= 0) {
+          if (getPowerLevels(this.state.players.length, player.hunting.hunt!.zone)[0] <= player.hunting.hunt!.huntersValue) {
             spendHuntersAndValidateMoves.push({type: MoveType.ValidateSpentHunters})
           }
           return spendHuntersAndValidateMoves
@@ -194,7 +194,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
 
         switch (huntingPlayer.hunting.huntPhase) {
           case HuntPhase.Pay: {
-            if (huntingPlayer.hunting.huntSpotTakenLevels && huntingPlayer.hunting.huntSpotTakenLevels[1] <= 0) {
+            if (getPowerLevels(this.state.players.length, huntingPlayer.hunting.hunt!.zone)[1] <= huntingPlayer.hunting.hunt!.huntersValue) {
               return {type: MoveType.ValidateSpentHunters}
             } else return
           }

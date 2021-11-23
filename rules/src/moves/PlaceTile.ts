@@ -2,7 +2,6 @@ import GameState from '../GameState'
 import GameView from '../GameView'
 import Coordinates from '../types/Coordinates'
 import {HuntPhase} from '../types/Phase'
-import getPowerLevels from '../utils/powerLevels'
 import Move from './Move'
 import MoveType from './MoveType'
 import {Side} from "../material/Tile";
@@ -28,7 +27,7 @@ export function placeTile(state: GameState | GameView, move: PlaceTile) {
   player.cave.push({tile: tile, side: move.side, ...move.coordinates})
   player.hunting = {
     huntPhase: HuntPhase.Pay,
-    huntSpotTakenLevels: getPowerLevels(state.players.length, move.huntSpot),
+    hunt: {zone: move.huntSpot, huntersValue: 0},
     injuries: player.hunting.injuries,
     tilesHunted: player.hunting.tilesHunted + 1
   }

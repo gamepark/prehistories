@@ -16,6 +16,6 @@ export function changeActivePlayer(state:GameState|GameView){
     delete previousPlayer.hunting
     const nextPlayer = getNextPlayer(state);
     if (nextPlayer) {
-        nextPlayer.hunting = {huntPhase : HuntPhase.Hunt,injuries:0,tilesHunted:0,huntSpotTakenLevels:undefined}
+        nextPlayer.hunting = {huntPhase: HuntPhase.Hunt, injuries: 0, tilesHunted: 0}
     } 
 }

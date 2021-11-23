@@ -6,7 +6,7 @@ import MoveType from "@gamepark/prehistories/moves/MoveType";
 import SpendHunter, { isSpendHunter } from "@gamepark/prehistories/moves/SpendHunter";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import Hunting from "@gamepark/prehistories/types/Hunting";
-import { useAnimations, usePlay, useSound } from "@gamepark/react-client";
+import { useAnimations, usePlay, useSound, useNumberOfPlayers } from "@gamepark/react-client";
 import { FC } from "react";
 import { useTranslation } from "react-i18next/";
 import { ResetSelectedHunters, resetSelectedHuntersMove } from "../localMoves/setSelectedHunters";
@@ -16,26 +16,28 @@ import Images from "../utils/Images";
 import { centerContent, placingBackground, setPercentDimension, toAbsolute } from "../utils/styles";
 import ButtonClickSound from "../sounds/buttonClick.mp3"
 import MoveCardSound from "../sounds/cardMove.mp3"
+import getPowerLevels from "@gamepark/prehistories/utils/powerLevels";
 
 type Props = {
     color:PlayerColor
     hunting?:Hunting
-    isDisplayHuntingButtons:boolean
     isDisplayValidationButton:boolean
     isDisplayEndTurnButton:boolean
-    selectedHunters:number[]|undefined
+    selectedHunters?:number[]
 }
 
-const ButtonsTab : FC<Props> = ({color, hunting, isDisplayHuntingButtons, isDisplayValidationButton, isDisplayEndTurnButton, selectedHunters,  ...props}) => {
+const ButtonsTab : FC<Props> = ({color, hunting, isDisplayValidationButton, isDisplayEndTurnButton, selectedHunters = []}) => {
 
     const heightOfHuntingButtonsPanel:number = (isDisplayValidationButton || isDisplayEndTurnButton) ? 20 : 30
     const spendCardAnimations = useAnimations<SpendHunter>(animation => isSpendHunter(animation.move))
     const clickSound = useSound(ButtonClickSound)
+    const numberOfPlayers = useNumberOfPlayers()
+    const huntZoneValues = hunting && hunting.hunt ? getPowerLevels(numberOfPlayers, hunting.hunt.zone) : undefined
     clickSound.volume = 0.8
     const moveCardSound = useSound(MoveCardSound)
     moveCardSound.volume = 0.8
 
-    const powerOfSelectedHunters:number = selectedHunters !== undefined ? selectedHunters.reduce((acc, cv) => acc + getColoredDeck(color)[cv].power,0) : 0
+    const powerOfSelectedHunters:number = hunting?.hunt ? selectedHunters.reduce((acc, cv) => acc + getColoredDeck(color)[cv].power, hunting.hunt.huntersValue) : 0
 
     const play = usePlay<Move>()
     const playResetHunters = usePlay<ResetSelectedHunters>()
@@ -60,40 +62,40 @@ const ButtonsTab : FC<Props> = ({color, hunting, isDisplayHuntingButtons, isDisp
         <div css={[toAbsolute,
             setPercentDimension(heightOfHuntingButtonsPanel,80),
             huntingButtonsPosition(color),
-            panelAppearAnimation(heightOfHuntingButtonsPanel), 
+            panelAppearAnimation(heightOfHuntingButtonsPanel),
             spendCardAnimations.length !== 0 && disapperingAnim]}>
-     
-            {isDisplayValidationButton && <Button css={[toAbsolute, validationButtonPosition]} 
-                                                onClick={() => {clickSound.play() ; play({type:MoveType.TellYouAreReady, playerId:color})}} 
+
+            {isDisplayValidationButton && <Button css={[toAbsolute, validationButtonPosition]}
+                                                onClick={() => {clickSound.play() ; play({type:MoveType.TellYouAreReady, playerId:color})}}
                                                 colorButton={color} >{t('Validate')}</Button> }
             {isDisplayEndTurnButton && <Button css={[validationButtonPosition]} onClick={() => {clickSound.play() ; play({type:MoveType.EndTurn})}} colorButton={color} >{t('End your Turn')}</Button>}
 
-            {isDisplayHuntingButtons && <div css={[toAbsolute,
+            {huntZoneValues && <div css={[toAbsolute,
                                                     placingBackground(Images.arrowBrokenIcon,"cover"),
-                                                    setPercentDimension(95,35),
+                                                    setPercentDimension(95,44),
                                                     injuryButtonStyle("left"),
                                                     centerContent,
-                                                    (powerOfSelectedHunters < hunting!.huntSpotTakenLevels![0] || powerOfSelectedHunters >= hunting!.huntSpotTakenLevels![1]) && desactivateStyle
+                                                    (powerOfSelectedHunters < huntZoneValues[0] || powerOfSelectedHunters >= huntZoneValues[1]) && desactivateStyle
                                                 ]}
-                                            onClick={() => powerOfSelectedHunters >= hunting!.huntSpotTakenLevels![0] && powerOfSelectedHunters < hunting!.huntSpotTakenLevels![1] && validateHunters(selectedHunters, true)}>
-                <span>{Math.max(hunting!.huntSpotTakenLevels![0] - powerOfSelectedHunters,0)}</span>
+                                            onClick={() => powerOfSelectedHunters >= huntZoneValues[0] && powerOfSelectedHunters < huntZoneValues[1] && validateHunters(selectedHunters, true)}>
+                <span>{powerOfSelectedHunters}/{huntZoneValues[0]}</span>
             </div>}
 
-            {isDisplayHuntingButtons && <div css={[toAbsolute,
-                                                    placingBackground(Images.arrowCleanIcon,"cover"), 
-                                                    setPercentDimension(95,35),
-                                                    injuryButtonStyle("right"),
-                                                    centerContent,
-                                                    powerOfSelectedHunters < hunting!.huntSpotTakenLevels![1] && desactivateStyle
-                                                ]}
-                                            onClick={() => powerOfSelectedHunters >= hunting!.huntSpotTakenLevels![1] && validateHunters(selectedHunters, false)}>
-                <span>{Math.max(hunting!.huntSpotTakenLevels![1] - powerOfSelectedHunters,0)}</span>
+            {huntZoneValues && <div css={[toAbsolute,
+                                          placingBackground(Images.arrowCleanIcon,"cover"),
+                                          setPercentDimension(95,44),
+                                          injuryButtonStyle("right"),
+                                          centerContent,
+                                          powerOfSelectedHunters < huntZoneValues[1] && desactivateStyle
+                                          ]}
+                                     onClick={() => powerOfSelectedHunters >= huntZoneValues[1] && validateHunters(selectedHunters, false)}>
+                <span>{powerOfSelectedHunters}/{huntZoneValues[1]}</span>
             </div>}
-     
+
         </div>
 
     )
-    
+
 }
 
 const desactivateStyle = css`
@@ -109,7 +111,7 @@ const desactivateStyle = css`
 const injuryButtonStyle = (positionFromSide:string) => css`
     cursor:pointer;
     top:2.5%;
-    ${positionFromSide === "left" ? `left:10%;` : `right:10%;`};
+    ${positionFromSide === "left" ? `left:4%;` : `right:4%;`};
     border:0.5em solid orange;
     border-radius:15%;
     box-shadow:0 0.2em 0.5em black;
@@ -119,7 +121,7 @@ const injuryButtonStyle = (positionFromSide:string) => css`
         top:4%;
     }
     span{
-        font-size:6em;
+        font-size:5em;
         font-family:'Reggae One', sans-serif;
         color:black;
     }

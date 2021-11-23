@@ -343,7 +343,7 @@ function createGameState(objectives: Objective[], cave: PlacedTile[]): GameState
         hand: [],
         played: [],
         totemTokens: [],
-        hunting: {tilesHunted: 0, huntPhase: HuntPhase.CheckObjectives, huntSpotTakenLevels: [], injuries: 0}
+        hunting: {tilesHunted: 0, huntPhase: HuntPhase.CheckObjectives, injuries: 0}
       },
       {cave: [], color: PlayerColor.Blue, deck: [], discard: [], hand: [], played: [], totemTokens: []}
     ],

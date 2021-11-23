@@ -187,7 +187,6 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters}) => {
                 <ButtonsTab color={player.color}
                             hunting={player.hunting}
                             isDisplayEndTurnButton={isDisplayEndTurnButton}
-                            isDisplayHuntingButtons={isDisplayHuntingButtons}
                             isDisplayValidationButton={isDisplayValidationButton}
                             selectedHunters={selectedHunters}
                 />
