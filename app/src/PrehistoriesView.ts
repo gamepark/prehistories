@@ -7,7 +7,7 @@ import {revealHuntCardsInView} from '@gamepark/prehistories/moves/RevealHuntCard
 import {placeTile} from '@gamepark/prehistories/moves/PlaceTile'
 import {spendHunter} from '@gamepark/prehistories/moves/SpendHunter'
 import {validateSpentHunters} from '@gamepark/prehistories/moves/ValidateSpentHunters'
-import {fulfillObjective} from '@gamepark/prehistories/moves/FulfillObjective'
+import {fulfillObjective, fulfillObjectiveMove} from '@gamepark/prehistories/moves/FulfillObjective'
 import {refillHuntingBoardInView} from '@gamepark/prehistories/moves/RefillHuntingBoard'
 import {endTurn} from '@gamepark/prehistories/moves/EndTurn'
 import {takeBackPlayedCardsInView} from '@gamepark/prehistories/moves/TakeBackPlayedCards'
@@ -17,6 +17,9 @@ import SetSelectedHunters, {resetSelectedHunters, ResetSelectedHunters, setSelec
 import PlayerColor from '@gamepark/prehistories/PlayerColor'
 import canUndo from '@gamepark/prehistories/canUndo'
 import GameLocalView from "./GameLocalView";
+import {getHuntingPlayer} from "@gamepark/prehistories/types/HuntingPlayer";
+import getBoardZones from "@gamepark/prehistories/material/BoardZones";
+import {getFulfilledObjectives} from "@gamepark/prehistories/material/ObjectiveRules";
 
 type LocalMove = MoveView | SetCaveDisplayed | SetSelectedHunters | ResetSelectedHunters
 
@@ -27,8 +30,20 @@ export default class PrehistoriesView implements Game<GameLocalView, MoveView>, 
     this.state = state
   }
 
-  getAutomaticMove(): void | MoveView {
-    return
+  getAutomaticMove(): void | MoveView | MoveView[] {
+    const huntingPlayer = getHuntingPlayer(this.state)
+    if (!huntingPlayer) return
+    if (huntingPlayer.isReady) {
+      if (huntingPlayer.played.length !== 0) {
+        return {type: MoveType.TakeBackPlayedCards}
+      }
+    } else if (huntingPlayer.hunting.hunt) {
+      if (getBoardZones(this.state.players.length)[huntingPlayer.hunting.hunt.zone].safe <= huntingPlayer.hunting.hunt.huntersValue) {
+        return {type: MoveType.ValidateSpentHunters}
+      }
+    } else if (huntingPlayer.hunting.tilesHunted > 0) {
+      return [...getFulfilledObjectives(this.state).map(fulfillObjectiveMove)]
+    }
   }
 
   play(move: LocalMove): void {
