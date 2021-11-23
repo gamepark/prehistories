@@ -12,6 +12,8 @@ import Button from "../utils/Button";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import GameView from "@gamepark/prehistories/GameView";
 import Move from "@gamepark/prehistories/moves/Move";
+import Phase from "@gamepark/prehistories/types/Phase";
+import { getHuntingPlayer } from "@gamepark/prehistories/types/HuntingPlayer";
 
 
 const TutorialPopup : FC<{game:GameView, tutorial:Tutorial}> = ({game, tutorial}) => {
@@ -83,7 +85,20 @@ const TutorialPopup : FC<{game:GameView, tutorial:Tutorial}> = ({game, tutorial}
 
     const currentMessage = tutorialMessage(tutorialIndex)
 
-    const displayPopup = tutorialDisplay && !animation && currentMessage && !failures.length
+    const isPlayerActive = (game:GameView) => {
+      switch(game.phase){
+        case Phase.Initiative:{
+          return game.players.find(p => p.color === playerId)!.isReady !== true
+        }
+        case Phase.Hunt:{
+          return game.players.find(p => p.color === playerId)!.color === getHuntingPlayer(game)!.color
+        }
+        default:
+          return true
+      } 
+    }
+
+    const displayPopup = tutorialDisplay && !animation && currentMessage && !failures.length && isPlayerActive(game)
 
     return (
         <>

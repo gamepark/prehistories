@@ -13,14 +13,16 @@ import Coordinates from "@gamepark/prehistories/types/Coordinates";
 import FulfillObjective, {isFulfillObjective} from "@gamepark/prehistories/moves/FulfillObjective";
 import getObjectiveSquaresHighlight from "./ObjectiveSquaresHighlight";
 import {getPlayerColor} from "../utils/getterFunctions"
+import { getPaintedCave, Painting } from "@gamepark/prehistories/material/PaintedCave";
 
 type Props = {
   player: PlayerView | PlayerViewSelf
+  isTutorial:boolean
 }
 
 enum Borders {Top = 1, Bottom, Left, Right} 
 
-const Cave: FC<Props> = ({player}) => {
+const Cave: FC<Props> = ({player, isTutorial}) => {
 
   const playerId = usePlayerId()
   const fulfillObjectiveAnimation = useAnimation<FulfillObjective>(animation => isFulfillObjective(animation.move))
@@ -38,7 +40,7 @@ const Cave: FC<Props> = ({player}) => {
 
   return (
     <div css={[style, background(caveBackground[player.color]), fulfillObjectiveAnimation && player.hunting && scaleCaveAnimation(fulfillObjectiveAnimation.duration)]}>
-      {playerId === player.color && <TilesDropArea player={player}/>}
+      {playerId === player.color && <TilesDropArea player={player} isTutorialPhase1={isTutorial && getPaintedCave(player)[1][0] === Painting.Empty} isTutorialPhase2={isTutorial && getPaintedCave(player)[1][0] !== Painting.Empty && getPaintedCave(player)[1][2] === Painting.Empty} />}
       {player.cave.map((paint, index) =>
         <AnimalTile key={index} tile={paint.tile} side={paint.side} css={tilePosition(paint.x, paint.y)}/>
       )}

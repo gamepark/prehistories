@@ -35,9 +35,10 @@ type Props = {
     players:(PlayerView | PlayerViewSelf)[]
     objectives:number[]
     selectedHunters:number[]|undefined
+    isTutorial:boolean
 }
 
-const PlayerBoard : FC<Props> = ({player, phase, selectedHunters}) => {
+const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, isTutorial}) => {
 
     const {t} = useTranslation()
     const playerId = usePlayerId<PlayerColor>()
@@ -114,7 +115,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters}) => {
             canDrag: player.color === playerId && phase === Phase.Initiative ,
             drop: () => play({type:MoveType.PlayHuntCard, card:card, player:player.color})
           },
-          animation:revealCardsAnimation ? {
+          animation:(revealCardsAnimation) ? {
             seconds:revealCardsAnimation.duration,
             delay:0,
             fromNeutralPosition:false
@@ -138,7 +139,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters}) => {
     const playerCardsInRevealAnimation = revealCardsAnimation ? revealCardsAnimation.move.cardsPlayed.find(obj => obj.color === player.color)!.cards : undefined
   return (
     <>
-      <Cave player={player}/>
+      <Cave player={player} isTutorial={isTutorial}/>
 
       <div css={[toAbsolute, setPercentDimension(93, 56), playerBoardPosition]}>
 

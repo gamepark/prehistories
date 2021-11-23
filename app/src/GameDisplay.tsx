@@ -62,6 +62,7 @@ export default function GameDisplay({game, audioLoader}: Props) {
                      phase={game.phase}
                      objectives={game.objectives}
                      selectedHunters={game.huntersSelected}
+                     isTutorial={game.tutorial}
         />
 
         {showWelcomePopup && <WelcomePopUp player={playerId} game={game} close={() => setWelcomePopUpClosed(true)} />}

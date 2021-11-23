@@ -3,7 +3,7 @@ import Coordinates from "@gamepark/prehistories/types/Coordinates"
 import {HTMLAttributes, useCallback, useMemo, useRef} from "react"
 import {DropTargetMonitor, useDrop, XYCoord} from "react-dnd"
 import {PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
-import {css} from "@emotion/react"
+import {css, keyframes} from "@emotion/react"
 import useEfficientDragLayer from '@gamepark/react-components/dist/Draggable/useEfficientDragLayer'
 import {useSound} from "@gamepark/react-client"
 import MoveTileSound from "../sounds/moveTile.mp3"
@@ -11,16 +11,19 @@ import {placeTileMove} from "@gamepark/prehistories/moves/PlaceTile";
 import {canPlaceTile, getCavePlacementSpaces, PlacementSpace} from "@gamepark/prehistories/utils/PlacementRules";
 import {getPolyomino, Side} from "@gamepark/prehistories/material/Tile";
 import {getPlacedTileCoordinates} from "@gamepark/prehistories/types/PlacedTile";
-import {caveBorder, squareSize} from "../utils/styles";
+import {caveBorder, centerContent, squareSize, toFullSize} from "../utils/styles";
 import {DraggedTile, HuntTile} from "./DraggableTile";
 import {cavesSize} from "@gamepark/prehistories/material/Caves";
+import { useTranslation } from "react-i18next";
 
 
 type Props = {
   player: PlayerView | PlayerViewSelf
+  isTutorialPhase1:boolean
+  isTutorialPhase2:boolean
 } & HTMLAttributes<HTMLDivElement>
 
-export default function TilesDropArea({player, ...props}: Props) {
+export default function TilesDropArea({player, isTutorialPhase1, isTutorialPhase2, ...props}: Props) {
   const ref = useRef<HTMLDivElement>(null)
   const moveTileSound = useSound(MoveTileSound)
   moveTileSound.volume = 0.8
@@ -34,6 +37,7 @@ export default function TilesDropArea({player, ...props}: Props) {
   }, [])
 
   const cave = useMemo(() => getCavePlacementSpaces(player), [player])
+  const {t} = useTranslation()
 
   const [{draggedTile, over}, dropRef] = useDrop({
     accept: HuntTile,
@@ -59,11 +63,21 @@ export default function TilesDropArea({player, ...props}: Props) {
 
   return (
     <div ref={ref} css={style} {...props}>
-      {draggedTile && <ValidDropAreaHighlight cave={cave} item={draggedTile}/>}
+      {isTutorialPhase1 && draggedTile && draggedTile.tile !== 19 && <div css={[toFullSize, centerContent, wrongWayStyle]}> {t("wrong.tile")} </div>}
+      {isTutorialPhase2 && draggedTile && (draggedTile.tile !== 8 || draggedTile.side !== 1) && <div css={[toFullSize, centerContent, wrongWayStyle]}> {t( draggedTile.tile !== 8 ? "wrong.tile" : "wrong.orientation")} </div>}
+      {draggedTile && <ValidDropAreaHighlight cave={cave} item={draggedTile} isTutorialPhase1={isTutorialPhase1 && draggedTile && draggedTile.tile === 19} isTutorialPhase2={isTutorialPhase2 && draggedTile && (draggedTile.tile === 8 && draggedTile.side === 1)} />}
       {draggedTile && over && <DropShadow cave={cave} item={draggedTile} getAreaPosition={getAreaPosition}/>}
     </div>
   )
 }
+
+const wrongWayStyle = css`
+  background-color:rgba(222,0,0,0.5);
+  z-index:10;
+  font-size:4em;
+  font-family:'Reggae One', sans-serif;
+  text-align:center;
+`
 
 const style = css`
   position: absolute;
@@ -76,13 +90,15 @@ const style = css`
 type ValidDropAreaHighlightProps = {
   cave: PlacementSpace[][]
   item: DraggedTile
+  isTutorialPhase1:boolean
+  isTutorialPhase2:boolean
 }
 
-function ValidDropAreaHighlight({cave, item}: ValidDropAreaHighlightProps) {
+function ValidDropAreaHighlight({cave, item, isTutorialPhase1, isTutorialPhase2}: ValidDropAreaHighlightProps) {
   const area = useMemo(() => getValidDropArea(cave, item.tile, item.side), [cave, item])
   return <>{
     area.map((row, y) =>
-      row.map((space, x) => space && <div key={`${x}_${y}`} css={[squareCss, squarePosition(x, y), highlight]}/>)
+      row.map((space, x) => space && <div key={`${x}_${y}`} css={[squareCss, squarePosition(x, y), highlight, isTutorialPhase1 && item.tile === 19 && x === 0 && y === 1 && highlightTutorial, isTutorialPhase2 && ((x === 2 && y === 1) || (x === 2 && y === 2)) && highlightTutorial]}/>)
     )
   }</>
 }
@@ -122,6 +138,16 @@ function DropShadow({cave, item, getAreaPosition}: DropShadowProps) {
   }</>
 
 }
+
+const animateBGColorKeyframes = keyframes`
+from{background-color: rgba(0, 128, 0, 0.3);}
+70%{background-color: rgba(0, 128, 0, 0.3);}
+to{background-color: rgba(0, 222, 0, 0.8);}
+`
+
+const highlightTutorial = css`
+  animation:${animateBGColorKeyframes} 1.5s linear alternate infinite;
+`
 
 const highlight = css`
   background-color: rgba(0, 128, 0, 0.3);
