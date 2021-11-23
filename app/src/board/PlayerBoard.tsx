@@ -76,7 +76,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, isTutorial}) =
     }
 
     const isDisplayValidationButton:boolean = phase === Phase.Initiative && playerId === player.color && player.isReady !== true
-    const isDisplayEndTurnButton:boolean = phase === Phase.Hunt && playerId === player.color && player.hunting !== undefined && !player.hunting.hunt
+    const isDisplayEndTurnButton:boolean = phase === Phase.Hunt && playerId === player.color && player.hunting !== undefined && !player.hunting.hunt && player.isReady !== true
     const isDisplayHuntingButtons:boolean = phase === Phase.Hunt && playerId === player.color && player.hunting?.hunt !== undefined
 
     const playSelectHunter = usePlay<SetSelectedHunters>()

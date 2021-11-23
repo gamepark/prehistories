@@ -9,7 +9,6 @@ type GameState = {
   huntingBoard: (Tile | null)[],
   objectives: Objective[],
   phase?: Phase,
-  tutorial:boolean
 }
 
 export default GameState

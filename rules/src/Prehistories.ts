@@ -48,7 +48,6 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         huntingBoard: [],
         objectives: [],
         phase: Phase.Initiative,
-        tutorial: false
       }
 
       game.huntingBoard = setupHuntingBoard(game)

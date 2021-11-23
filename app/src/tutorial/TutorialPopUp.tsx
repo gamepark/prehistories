@@ -91,7 +91,7 @@ const TutorialPopup : FC<{game:GameView, tutorial:Tutorial}> = ({game, tutorial}
           return game.players.find(p => p.color === playerId)!.isReady !== true
         }
         case Phase.Hunt:{
-          return game.players.find(p => p.color === playerId)!.color === getHuntingPlayer(game)!.color
+          return game.players.find(p => p.color === playerId)!.color === getHuntingPlayer(game)!.color && game.players.find(p => p.color === playerId)!.isReady !== true
         }
         default:
           return true
@@ -754,6 +754,30 @@ const tutorialDescription:TutorialStepDescription[][] = [
             angle: 0,
             top: 16,
             left: 42
+        }
+      },
+      {
+        title: (t: TFunction) => t('title.variable.objectives.how.many.tokens'),
+        text: 'tuto.variable.objectives.how.many.tokens.1',
+        boxTop: 40,
+        boxLeft: 48,
+        boxWidth: 60,
+        arrow: {
+            angle: 0,
+            top: 27,
+            left: 23
+        }
+      },
+      {
+        title: (t: TFunction) => t('title.variable.objectives.how.many.tokens'),
+        text: 'tuto.variable.objectives.how.many.tokens.2',
+        boxTop: 40,
+        boxLeft: 48,
+        boxWidth: 60,
+        arrow: {
+            angle: 0,
+            top: 27,
+            left: 30
         }
       },
       {

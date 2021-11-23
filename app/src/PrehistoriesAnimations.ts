@@ -23,7 +23,7 @@ const prehistoriesAnimations : Animations<GameLocalView, MoveView, PlayerColor> 
             const huntingPlayer = getHuntingPlayer(state)!;
             return ( getHuntingPlayer(state)!.color === caveDisplayed && huntingPlayer.played.length !== 0) ? 2 : 0
         } else if(move.type === MoveType.FulfillObjective){
-            return 3
+            return 3.5
         } else if(move.type === MoveType.RevealHuntCards){
             return caveDisplayed === playerId ? 0 : 2
         }
