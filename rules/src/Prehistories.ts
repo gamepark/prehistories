@@ -95,16 +95,16 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         case HuntPhase.Hunt : {
           const moves: (PlaceTile | EndTurn)[] = []
           const cave = getCavePlacementSpaces(player)
-          for (let huntSpot = 0; huntSpot < this.state.huntingBoard.length; huntSpot++) {
-            const tile = this.state.huntingBoard[huntSpot]
-            if (tile === null || teamPower(player.played) < getPowerLevels(this.state.players.length, huntSpot)[0]) {
+          for (let huntZone = 0; huntZone < this.state.huntingBoard.length; huntZone++) {
+            const tile = this.state.huntingBoard[huntZone]
+            if (tile === null || teamPower(player.played) < getPowerLevels(this.state.players.length, huntZone)[0]) {
               continue
             }
             for (let x = 0; x < cavesSize; x++) {
               for (let y = 0; y < cavesSize; y++) {
                 for (const side of sides) {
                   if (canPlaceTile(cave, {tile, side, x, y})) {
-                    moves.push(placeTileMove(huntSpot, side, {x, y}))
+                    moves.push(placeTileMove(huntZone, side, {x, y}))
                   }
                 }
               }
@@ -256,9 +256,9 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         return {type: MoveType.RevealHuntCards, cardsPlayed: result}
       case MoveType.RefillHuntingBoard:
         const newBoard: (number | null)[] = []
-        this.state.huntingBoard.forEach((tile, spot) => {
+        this.state.huntingBoard.forEach((tile, zone) => {
           if (tile === null) {
-            newBoard.push(getNewTile(this.state.players.length, spot, this.state.tilesDeck, true, this.state.huntingBoard))
+            newBoard.push(getNewTile(this.state.players.length, zone, this.state.tilesDeck, true, this.state.huntingBoard))
           } else {
             newBoard.push(tile)
           }

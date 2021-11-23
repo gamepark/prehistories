@@ -45,7 +45,7 @@ export default function TilesDropArea({player, ...props}: Props) {
     drop: (item: DraggedTile, monitor) => {
       moveTileSound.play()
       const position = getAreaPosition(monitor.getSourceClientOffset()!, item)
-      return placeTileMove(item.huntSpot, item.side, position)
+      return placeTileMove(item.huntZone, item.side, position)
     },
     collect: (monitor: DropTargetMonitor<DraggedTile>) => {
       return ({

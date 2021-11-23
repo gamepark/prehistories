@@ -30,9 +30,9 @@ const HuntingZone: FC<Props> = ({game, tile, position, animation, ...props}) => 
   }
 }
 
-const huntPosition = (spot: HuntZonePosition, polyomino: boolean[][]) => css`
-  left: ${spot.left - polyomino[0].length * squareSize / 2}em;
-  top: ${spot.top - polyomino.length * squareSize / 2}em;
+const huntPosition = (zone: HuntZonePosition, polyomino: boolean[][]) => css`
+  left: ${zone.left - polyomino[0].length * squareSize / 2}em;
+  top: ${zone.top - polyomino.length * squareSize / 2}em;
 `
 
 export default HuntingZone

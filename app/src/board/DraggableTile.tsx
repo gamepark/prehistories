@@ -14,7 +14,7 @@ export const HuntTile = 'HuntTile'
 export type DraggedTile = {
   tile: Tile
   side: Side
-  huntSpot: number
+  huntZone: number
 }
 
 type Props = {

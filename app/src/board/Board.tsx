@@ -27,11 +27,11 @@ export default function Board({game}: Props) {
   const huntZonePositions = game.players.length < 4 ? huntZonesA : huntZonesB
   return (
     <div css={[style, background(game.players.length)]}>
-      {game.huntingBoard.map((tile, zone) =>
-        tile && <HuntingZone key={zone} game={game} position={huntZonePositions[zone]} tile={tile}
-                             canDrag={hunting && player !== undefined && isPlayerViewSelf(player) && teamPower(player.played) >= getPowerLevels(game.players.length, zone)[0]}
-                             item={{huntSpot: zone, tile, side: 0}} animation={animation?.move.huntSpot === zone ? animation : undefined}
-                             css={animation?.move.huntSpot === zone && placeTileAnimation(game, animation, huntZonePositions[zone], playerId)}/>
+      {game.huntingBoard.map((tile, huntZone) =>
+        tile && <HuntingZone key={huntZone} game={game} position={huntZonePositions[huntZone]} tile={tile}
+                             canDrag={hunting && player !== undefined && isPlayerViewSelf(player) && teamPower(player.played) >= getPowerLevels(game.players.length, huntZone)[0]}
+                             item={{huntZone, tile, side: 0}} animation={animation?.move.huntZone === huntZone ? animation : undefined}
+                             css={animation?.move.huntZone === huntZone && placeTileAnimation(game, animation, huntZonePositions[huntZone], playerId)}/>
       )}
     </div>
 
@@ -111,7 +111,7 @@ function createTileAnimationKeyframes(game: GameLocalView, animation: Animation<
       y: caveTop + caveBorder - headerHeight + animation.move.coordinates.y * squareSize
     } :
     {x: 151, y: 25 + getPanelIndex(game, huntingPlayer.color, playerId) * 15.42}
-  const polyomino = getPolyomino(game.huntingBoard[animation.move.huntSpot]!, animation.move.side)
+  const polyomino = getPolyomino(game.huntingBoard[animation.move.huntZone]!, animation.move.side)
   translation.x -= initialPosition.left - polyomino[0].length * squareSize / 2
   translation.y -= initialPosition.top - polyomino.length * squareSize / 2
   return keyframes`

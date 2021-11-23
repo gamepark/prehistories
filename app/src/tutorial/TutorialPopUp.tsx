@@ -534,8 +534,8 @@ const tutorialDescription:TutorialStepDescription[][] = [
             }
         },
         {
-          title: (t: TFunction) => t('title.spend.cost.huntspot'),
-          text: 'tuto.spend.cost.huntspot',
+          title: (t: TFunction) => t('title.spend.cost.zone'),
+          text: 'tuto.spend.cost.zone',
           boxTop: 25,
           boxLeft: 30,
           boxWidth: 60,

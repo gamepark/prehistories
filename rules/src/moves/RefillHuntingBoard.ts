@@ -20,9 +20,9 @@ export function isRefillHuntingBoardView(move: RefillHuntingBoard | RefillHuntin
 export function fillHuntingBoard(state:GameState){
     const newBoard = state.huntingBoard
     const tilesDeck = state.tilesDeck
-    newBoard.forEach((tile, spot) => {
+    newBoard.forEach((tile, zone) => {
       if (tile === null){
-        newBoard[spot] = getNewTile(state.players.length, spot, tilesDeck, false, undefined)
+        newBoard[zone] = getNewTile(state.players.length, zone, tilesDeck, false, undefined)
       }
     })
     state.huntingBoard = newBoard
@@ -41,8 +41,8 @@ export function refillHuntingBoardInView(state: GameView, move:RefillHuntingBoar
 }
 
 function removeFirstTileOfEmptySlots(state: GameView) {
-  state.huntingBoard.forEach((spot, index) => {
-    if (spot === null && state.tilesDeck[index] !== 0) {
+  state.huntingBoard.forEach((zone, index) => {
+    if (zone === null && state.tilesDeck[index] !== 0) {
       if (state.players.length < 4) {
         state.tilesDeck[index]--;
       } else {
@@ -58,8 +58,8 @@ function removeFirstTileOfEmptySlots(state: GameView) {
   });
 }
 
-export function getNewTile(nbPlayers:number, spot:number, tilesDeck:number[][], isView:boolean, previousState:undefined|(number|null)[]):number|null{
-    switch(spot){
+export function getNewTile(nbPlayers:number, zone:number, tilesDeck:number[][], isView:boolean, previousState:undefined|(number|null)[]):number|null{
+    switch(zone){
       case 0 :
         return nbPlayers < 4 ? isTileDeckEmpty(0, tilesDeck, isView, false) : isTileDeckEmpty(0, tilesDeck, isView, false)
       case 1 :
