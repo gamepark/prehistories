@@ -7,12 +7,13 @@ import HuntingZone from "./HuntingZone";
 import {Animation, useAnimation, usePlayerId} from "@gamepark/react-client";
 import PlaceTile, {isPlaceTile} from "@gamepark/prehistories/moves/PlaceTile";
 import teamPower from "@gamepark/prehistories/utils/teamPower";
-import getPowerLevels from "@gamepark/prehistories/utils/powerLevels";
 import {isPlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
 import {boardHeight, caveBorder, caveLeft, caveTop, getPanelIndex, headerHeight, margin, squareSize} from "../utils/styles";
 import {getPolyomino} from "@gamepark/prehistories/material/Tile";
 import GameLocalView from "../GameLocalView";
 import {getHuntingPlayer} from "@gamepark/prehistories/types/HuntingPlayer";
+import getBoardZones from "@gamepark/prehistories/material/BoardZones";
+import {useMemo} from "react";
 
 type Props = {
   game: GameView
@@ -24,11 +25,12 @@ export default function Board({game}: Props) {
   const animation = useAnimation<PlaceTile>(animation => isPlaceTile(animation.move))
   const hunting = player?.hunting && !player.hunting.hunt
   const huntZonePositions = game.players.length < 4 ? huntZonesA : huntZonesB
+  const zones = useMemo(() => getBoardZones(game.players.length), [game.players.length])
   return (
     <div css={[style, background(game.players.length)]}>
       {game.huntingBoard.map((tile, huntZone) =>
         tile && <HuntingZone key={huntZone} game={game} position={huntZonePositions[huntZone]} tile={tile}
-                             canDrag={hunting && player !== undefined && isPlayerViewSelf(player) && teamPower(player.played) >= getPowerLevels(game.players.length, huntZone)[0]}
+                             canDrag={hunting && player !== undefined && isPlayerViewSelf(player) && teamPower(player.played) >= zones[huntZone].injury}
                              item={{huntZone, tile, side: 0}} animation={animation?.move.huntZone === huntZone ? animation : undefined}
                              css={animation?.move.huntZone === huntZone && placeTileAnimation(game, animation, huntZonePositions[huntZone], playerId)}/>
       )}

@@ -1,7 +1,7 @@
 import GameView from "@gamepark/prehistories/GameView";
 import {getColoredDeck} from "@gamepark/prehistories/material/Hunters";
 import {getHuntingPlayer} from "@gamepark/prehistories/types/HuntingPlayer";
-import getPowerLevels from "@gamepark/prehistories/utils/powerLevels";
+import getBoardZones from "@gamepark/prehistories/material/BoardZones";
 
 export default interface SetSelectedHunters{
     type:'SetSelectedHunters'
@@ -29,7 +29,7 @@ export function setSelectedHunters(state:GameView, move:SetSelectedHunters){
         } else {
             if (state.huntersSelected.find(card => card === move.hunter) !== undefined){
                 state.huntersSelected.splice(state.huntersSelected.findIndex(card => card === move.hunter),1)
-            } else if (getPowerLevels(state.players.length, player.hunting.hunt!.zone)[1] > state.huntersSelected.reduce((acc, cv) => acc + getColoredDeck(player.color)[cv].power,0)){
+            } else if (getBoardZones(state.players.length)[player.hunting.hunt!.zone].safe > state.huntersSelected.reduce((acc, cv) => acc + getColoredDeck(player.color)[cv].power,0)){
                 state.huntersSelected.push(move.hunter)
             }
         }

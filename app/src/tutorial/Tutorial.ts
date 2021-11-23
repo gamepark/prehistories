@@ -23,7 +23,7 @@ const PrehistoriesTutorial: TutorialDescription<GameState, Move, PlayerColor> = 
         players:playersTab,
         objectives:objectivesTab,
         huntingBoard:huntingBoardTab,
-        tilesDeck:tilesDeckTab,
+        tilesDecks:tilesDeckTab,
     }, [PlayerColor.Yellow, PlayerColor.Green, PlayerColor.White]],
     
     expectedMoves:()=> [

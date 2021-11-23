@@ -4,7 +4,7 @@ import Objective from "./material/Objective";
 
 type GameState = {
   players: PlayerState[],
-  tilesDeck: Tile[][],
+  tilesDecks: Tile[][],
   huntingBoard: (Tile | null)[],
   objectives: Objective[],
 }

@@ -11,7 +11,7 @@ export type PrehistoriesOptions = {
 }
 
 export function isGameOptions(arg: GameState | PrehistoriesOptions): arg is PrehistoriesOptions {
-  return typeof (arg as GameState).tilesDeck === 'undefined'
+  return typeof (arg as GameState).tilesDecks === 'undefined'
 }
 
 export const PrehistoriesOptionsSpec: OptionsSpec<PrehistoriesOptions> = {

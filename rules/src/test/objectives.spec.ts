@@ -348,6 +348,6 @@ function createGameState(objectives: Objective[], cave: PlacedTile[]): GameState
     ],
     objectives,
     huntingBoard: [],
-    tilesDeck: []
+    tilesDecks: []
   }
 }
