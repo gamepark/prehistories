@@ -1,26 +1,23 @@
 /** @jsxImportSource @emotion/react */
-
-import { css, keyframes } from "@emotion/react";
+import {css, keyframes} from "@emotion/react";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
-import { getPlayerName } from "@gamepark/prehistories/PrehistoriesOptions";
-import Phase from "@gamepark/prehistories/types/Phase";
-import { PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView";
-import { PlayerTimer, usePlayer } from "@gamepark/react-client";
-import { Picture } from "@gamepark/react-components";
-import { FC, HTMLAttributes } from "react";
-import { useTranslation } from "react-i18next";
-import { placingBackground, setPercentDimension, toAbsolute } from "../utils/styles";
-import Images, { bluePowerBanners, greenPowerBanners, redPowerBanners, whitePowerBanners, yellowPowerBanners } from "../utils/Images";
+import {getPlayerName} from "@gamepark/prehistories/PrehistoriesOptions";
+import {PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
+import {PlayerTimer, usePlayer} from "@gamepark/react-client";
+import {Picture} from "@gamepark/react-components";
+import {FC, HTMLAttributes} from "react";
+import {useTranslation} from "react-i18next";
+import {placingBackground, setPercentDimension, toAbsolute} from "../utils/styles";
+import Images, {bluePowerBanners, greenPowerBanners, redPowerBanners, whitePowerBanners, yellowPowerBanners} from "../utils/Images";
 import AvatarPanel from "./AvatarPanel";
 
 type Props = {
     player: PlayerView | PlayerViewSelf,
-    phase?:Phase
     position:number
     noOfPassage?: number
 } & HTMLAttributes<HTMLDivElement>
 
-const PlayerPanel : FC<Props> = ({player:{color, totemTokens, hunting}, position, phase, noOfPassage, ...props}) => {
+const PlayerPanel : FC<Props> = ({player:{color, totemTokens, hunting}, position, noOfPassage, ...props}) => {
 
     const playerInfo = usePlayer(color)
     const {t} = useTranslation()

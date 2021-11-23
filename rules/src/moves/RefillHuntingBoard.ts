@@ -1,6 +1,5 @@
 import GameState from "../GameState";
 import GameView from "../GameView";
-import Phase from "../types/Phase";
 import MoveType from "./MoveType";
 
 type RefillHuntingBoard = {
@@ -29,20 +28,12 @@ export function fillHuntingBoard(state:GameState){
 }
 
 export function refillHuntingBoard(state:GameState){
-    for (const p of state.players) {
-      delete p.isReady
-    }
     fillHuntingBoard(state)
-    state.phase = Phase.Initiative
 }
 
 export function refillHuntingBoardInView(state: GameView, move:RefillHuntingBoardView){
-    for (const p of state.players) {
-      delete p.isReady
-    }
     removeFirstTileOfEmptySlots(state);
     state.huntingBoard = move.newBoard
-    state.phase = Phase.Initiative
 }
 
 function removeFirstTileOfEmptySlots(state: GameView) {
@@ -83,11 +74,15 @@ export function getNewTile(nbPlayers:number, zone:number, tilesDeck:number[][], 
         return null
     }
   }
-  
-  function isTileDeckEmpty(pile:number, tileDeck:number[][], isView:boolean, mustTakeSecond:boolean):number|null{
-    if (isView === false){
-      return tileDeck[pile].length !== 0 ? tileDeck[pile].pop()! : null
-    } else {
-      return tileDeck[pile].length !== 0 ? ( mustTakeSecond === false ? tileDeck[pile][tileDeck[pile].length-1] : tileDeck[pile][tileDeck[pile].length-2]) : null
-    }
+
+function isTileDeckEmpty(pile: number, tileDeck: number[][], isView: boolean, mustTakeSecond: boolean): number | null {
+  if (isView === false) {
+    return tileDeck[pile].length !== 0 ? tileDeck[pile].pop()! : null
+  } else {
+    return tileDeck[pile].length !== 0 ? (mustTakeSecond === false ? tileDeck[pile][tileDeck[pile].length - 1] : tileDeck[pile][tileDeck[pile].length - 2]) : null
   }
+}
+
+export function canRefillBoard(game: GameState) {
+  return game.huntingBoard.some((space, index) => space === null && game.tilesDeck[index].length > 0)
+}

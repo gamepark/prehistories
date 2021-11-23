@@ -14,7 +14,6 @@ import {takeBackPlayedCardsInView} from '@gamepark/prehistories/moves/TakeBackPl
 import {drawCardsInView} from '@gamepark/prehistories/moves/DrawCards'
 import {shuffleDiscardPileInView} from '@gamepark/prehistories/moves/ShuffleDiscardPile'
 import {changeActivePlayer} from '@gamepark/prehistories/moves/ChangeActivePlayer'
-import {endGame} from '@gamepark/prehistories/moves/EndGame'
 import SetSelectedHunters, {resetSelectedHunters, ResetSelectedHunters, setSelectedHunters} from './localMoves/setSelectedHunters'
 import PlayerColor from '@gamepark/prehistories/PlayerColor'
 import canUndo from '@gamepark/prehistories/canUndo'
@@ -59,8 +58,6 @@ export default class PrehistoriesView implements Game<GameLocalView, MoveView>, 
         return changeActivePlayer(this.state)
       case MoveType.RefillHuntingBoard:
         return refillHuntingBoardInView(this.state, move)
-      case MoveType.EndGame:
-        return endGame(this.state)
       case 'SetCaveDisplayed':
         return setCaveDisplayed(this.state, move)
       case 'SetSelectedHunters':

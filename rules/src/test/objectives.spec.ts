@@ -3,7 +3,6 @@ import PlacedTile from "../types/PlacedTile"
 import Tile from "../material/Tile";
 import GameState from "../GameState";
 import Objective from "../material/Objective";
-import Phase from "../types/Phase";
 import {getFulfilledObjectives} from "../material/ObjectiveRules";
 
 describe('Test Objectives', () => {
@@ -349,8 +348,6 @@ function createGameState(objectives: Objective[], cave: PlacedTile[]): GameState
     ],
     objectives,
     huntingBoard: [],
-    phase: Phase.Hunt,
-    tilesDeck: [],
-    tutorial:false
+    tilesDeck: []
   }
 }

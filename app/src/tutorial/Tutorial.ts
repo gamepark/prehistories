@@ -5,9 +5,8 @@ import Move from "@gamepark/prehistories/moves/Move";
 import MoveType from "@gamepark/prehistories/moves/MoveType";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import PlayerState from "@gamepark/prehistories/PlayerState";
-import { setupPlayers } from "@gamepark/prehistories/Prehistories";
-import Phase from "@gamepark/prehistories/types/Phase";
-import { TutorialDescription } from "@gamepark/react-client";
+import {setupPlayers} from "@gamepark/prehistories/Prehistories";
+import {TutorialDescription} from "@gamepark/react-client";
 
 const playersTab:PlayerState[] = setupPlayers([{id:PlayerColor.Yellow}, {id:PlayerColor.Green}, {id:PlayerColor.White}], true)
 const objectivesTab:Objective[] = [Objective.Column5Same,Objective.PaintMiddle9,Objective.SurroundLegendary,Objective.ConnectTotemAnimals]
@@ -25,7 +24,6 @@ const PrehistoriesTutorial: TutorialDescription<GameState, Move, PlayerColor> = 
         objectives:objectivesTab,
         huntingBoard:huntingBoardTab,
         tilesDeck:tilesDeckTab,
-        phase:Phase.Initiative,
     }, [PlayerColor.Yellow, PlayerColor.Green, PlayerColor.White]],
     
     expectedMoves:()=> [

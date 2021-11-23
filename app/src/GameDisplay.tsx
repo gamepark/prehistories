@@ -15,9 +15,9 @@ import WelcomePopUp from './utils/WelcomePopUp'
 import Board from "./board/Board";
 import TutorialPopup from './tutorial/TutorialPopUp'
 import GameLocalView from "./GameLocalView";
-import Phase from "@gamepark/prehistories/types/Phase";
 import {compareInitiative} from "@gamepark/prehistories/utils/InitiativeRules";
 import {PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
+import {getHuntingPlayer} from "@gamepark/prehistories/types/HuntingPlayer";
 
 type Props = {
   game: GameLocalView
@@ -35,6 +35,7 @@ export default function GameDisplay({game, audioLoader}: Props) {
 
   const [welcomePopUpClosed, setWelcomePopUpClosed] = useState(tutorial ? true : playerDisplayed.cave.length > 0)
   const showWelcomePopup = !welcomePopUpClosed
+  const huntingPlayer = getHuntingPlayer(game)
 
   return (
     <Letterbox id="letterbox" css={letterBoxStyle} top={0}>
@@ -52,15 +53,12 @@ export default function GameDisplay({game, audioLoader}: Props) {
                        position={index}
                        player = {player}
                        onClick = {() => playSetCaveDisplayed(setCaveDisplayedMove(player.color), {local:true})}
-                       phase = {game.phase}
-                       noOfPassage={game.phase === Phase.Hunt && player.played.length ? countPlayersWithLowerInitiative(game, player) : undefined}
+                       noOfPassage={huntingPlayer !== undefined && player.played.length ? countPlayersWithLowerInitiative(game, player) : undefined}
           />
         )}
 
         <PlayerBoard player={playerDisplayed}
-                     players={game.players}
-                     phase={game.phase}
-                     objectives={game.objectives}
+                     huntPhase={huntingPlayer !== undefined}
                      selectedHunters={game.huntersSelected}
                      isTutorial={tutorial ? true : false}
         />

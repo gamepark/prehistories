@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import GameView from '@gamepark/prehistories/GameView'
 import PlayerColor from '@gamepark/prehistories/PlayerColor'
-import {playerWillDraw} from '@gamepark/prehistories/Prehistories'
+import {isWinner, playerWillDraw} from '@gamepark/prehistories/Prehistories'
 import {getPlayerName} from '@gamepark/prehistories/PrehistoriesOptions'
 import {Player as PlayerInfo, useAnimation, usePlayerId, usePlayers} from '@gamepark/react-client'
 import {TFunction} from 'i18next'
@@ -9,6 +9,7 @@ import {useTranslation} from 'react-i18next'
 import {getHuntingPlayer} from "@gamepark/prehistories/types/HuntingPlayer";
 import Move from "@gamepark/prehistories/moves/Move";
 import MoveType from "@gamepark/prehistories/moves/MoveType";
+import {PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
 
 type Props = {
   loading: boolean
@@ -18,9 +19,9 @@ type Props = {
 export default function HeaderText({loading, game}: Props) {
   const {t} = useTranslation()
   if (loading || !game) return <>{t('Game loading...')}</>
-
-  if (!game.phase){
-    return <HeaderGameOverText game={game} />
+  const winner = game.players.find(isWinner)
+  if (winner){
+    return <HeaderGameOverText winner={winner} />
   } else {
     return <HeaderOnGoingGameText game={game} />
   }
@@ -35,11 +36,10 @@ function getPseudo(player: PlayerColor, players: PlayerInfo<PlayerColor>[], t: T
   }
 }
 
-function HeaderGameOverText({game}:{game:GameView}){
+function HeaderGameOverText({winner}:{winner: PlayerView | PlayerViewSelf}){
   const {t} = useTranslation()
   const playerId = usePlayerId<PlayerColor>()
   const players = usePlayers<PlayerColor>()
-  const winner = game.players.find(p => p.totemTokens.length >= 8)!
   if(winner.color === playerId){
     return <> {t("game.over.you.win")} </>
   } else {

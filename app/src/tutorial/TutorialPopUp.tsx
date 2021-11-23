@@ -12,8 +12,8 @@ import Button from "../utils/Button";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import GameView from "@gamepark/prehistories/GameView";
 import Move from "@gamepark/prehistories/moves/Move";
-import Phase from "@gamepark/prehistories/types/Phase";
 import { getHuntingPlayer } from "@gamepark/prehistories/types/HuntingPlayer";
+import {isWinner} from "@gamepark/prehistories/Prehistories";
 
 
 const TutorialPopup : FC<{game:GameView, tutorial:Tutorial}> = ({game, tutorial}) => {
@@ -27,6 +27,7 @@ const TutorialPopup : FC<{game:GameView, tutorial:Tutorial}> = ({game, tutorial}
     const [tutorialDisplay, setTutorialDisplay] = useState(tutorialDescription.length > actionsNumber)
     const [failures] = useFailures()
     const [hideEndInfo, setHideEndInfo] = useState(false)
+    const winner = game.players.find(isWinner)
 
     const platformUri = process.env.REACT_APP_PLATFORM_URI ?? 'https://game-park.com'
     const discordUri = 'https://discord.gg/nMSDRag'
@@ -47,7 +48,7 @@ const TutorialPopup : FC<{game:GameView, tutorial:Tutorial}> = ({game, tutorial}
     }
     
     const resetTutorialDisplay = () => {
-      if (game.phase !== undefined){
+      if (winner){
             setTutorialIndex(0)
             setTutorialDisplay(true)
         } else {
@@ -86,16 +87,12 @@ const TutorialPopup : FC<{game:GameView, tutorial:Tutorial}> = ({game, tutorial}
     const currentMessage = tutorialMessage(tutorialIndex)
 
     const isPlayerActive = (game:GameView) => {
-      switch(game.phase){
-        case Phase.Initiative:{
-          return game.players.find(p => p.color === playerId)!.isReady !== true
-        }
-        case Phase.Hunt:{
-          return game.players.find(p => p.color === playerId)!.color === getHuntingPlayer(game)!.color && game.players.find(p => p.color === playerId)!.isReady !== true
-        }
-        default:
-          return true
-      } 
+      const huntingPlayer = getHuntingPlayer(game)
+      if (!huntingPlayer) {
+        return game.players.find(p => p.color === playerId)!.isReady !== true
+      } else {
+        return playerId === huntingPlayer.color && game.players.find(p => p.color === playerId)!.isReady !== true
+      }
     }
 
     const displayPopup = tutorialDisplay && !animation && currentMessage && !failures.length && isPlayerActive(game)
@@ -132,7 +129,7 @@ const TutorialPopup : FC<{game:GameView, tutorial:Tutorial}> = ({game, tutorial}
         }
 
         {
-          game.phase === undefined && !hideEndInfo &&
+          winner && !hideEndInfo &&
           <div css={[popupStyle, popupPosition(tutorialEndGame)]}>
             <div css={closePopupStyle} onClick={() => setHideEndInfo(true)}><FontAwesomeIcon icon={faTimes}/></div>
             <h2 css={textEndStyle} >{tutorialEndGame.title(t)}</h2>

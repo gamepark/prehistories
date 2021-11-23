@@ -1,7 +1,6 @@
 import GameState from "../GameState";
 import GameView from "../GameView";
 import PlayerColor from "../PlayerColor";
-import Phase from "../types/Phase";
 import {isPlayerViewSelf} from "../types/PlayerView";
 import Move from "./Move";
 import MoveType from "./MoveType";
@@ -21,7 +20,6 @@ export type RevealHuntCardsView = RevealHuntCards & {
 }
 
 export function revealHuntCards(state:GameState){
-    state.phase = Phase.Hunt
     for (const p of state.players) {
         delete p.isReady
     }
@@ -39,7 +37,6 @@ export function revealHuntCardsInView(state:GameView, move:RevealHuntCardsView){
         }
         delete player.isReady
     }
-    state.phase = Phase.Hunt
     const firstPlayer = getNextPlayer(state);
     if (firstPlayer) {
         firstPlayer.hunting = {injuries: 0, tilesHunted: 0}

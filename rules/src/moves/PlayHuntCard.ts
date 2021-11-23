@@ -8,13 +8,17 @@ import MoveView from "./MoveView";
 
 type PlayHuntCard = {
   type: MoveType.PlayHuntCard
-  card: number
   player: PlayerColor
+  card: number
 }
 
 export default PlayHuntCard
 
 export type PlayHuntCardView = Omit<PlayHuntCard, 'card'>
+
+export function playHuntCardMove(player: PlayerColor, card: number): PlayHuntCard {
+  return {type: MoveType.PlayHuntCard, player, card}
+}
 
 export function playHuntCard(state: GameState, move: PlayHuntCard) {
   const player = getPlayerWithColor(state, move.player) as PlayerState

@@ -12,7 +12,6 @@ import CardInHand, {isCardInHand} from "@gamepark/prehistories/types/appTypes/Ca
 import CardPlayed from "@gamepark/prehistories/types/appTypes/CardPlayed";
 import MoveType from "@gamepark/prehistories/moves/MoveType";
 import {useAnimation, useAnimations, usePlay, usePlayerId, useSound} from "@gamepark/react-client";
-import Phase from "@gamepark/prehistories/types/Phase";
 import {Hand, Picture} from "@gamepark/react-components";
 import Move from "@gamepark/prehistories/moves/Move";
 import {isPlayHuntCardView, PlayHuntCardView} from "@gamepark/prehistories/moves/PlayHuntCard";
@@ -28,18 +27,15 @@ import {centerContainer, setPercentDimension, toAbsolute, toFullSize} from "../u
 import ButtonsTab from "./ButtonsTab";
 import TakeBackPlayedCards, {isTakeBackPlayedCards} from "@gamepark/prehistories/moves/TakeBackPlayedCards";
 import {playerWillDraw} from "@gamepark/prehistories/Prehistories";
-import { getCaveDisplayed } from "src/localMoves/setCaveDisplayed";
 
 type Props = {
     player:PlayerView | PlayerViewSelf,
-    phase:Phase | undefined,
-    players:(PlayerView | PlayerViewSelf)[]
-    objectives:number[]
+    huntPhase?:boolean,
     selectedHunters:number[]|undefined
     isTutorial:boolean
 }
 
-const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, isTutorial}) => {
+const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial}) => {
 
     const {t} = useTranslation()
     const playerId = usePlayerId<PlayerColor>()
@@ -75,9 +71,9 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, isTutorial}) =
         }
     }
 
-    const isDisplayValidationButton:boolean = phase === Phase.Initiative && playerId === player.color && player.isReady !== true
-    const isDisplayEndTurnButton:boolean = phase === Phase.Hunt && playerId === player.color && player.hunting !== undefined && !player.hunting.hunt && player.isReady !== true
-    const isDisplayHuntingButtons:boolean = phase === Phase.Hunt && playerId === player.color && player.hunting?.hunt !== undefined
+    const isDisplayValidationButton:boolean = !huntPhase && playerId === player.color && player.isReady !== true
+    const isDisplayEndTurnButton:boolean = player.hunting !== undefined && !player.hunting.hunt && player.isReady !== true
+    const isDisplayHuntingButtons:boolean = player.hunting?.hunt !== undefined
 
     const playSelectHunter = usePlay<SetSelectedHunters>()
 
@@ -113,7 +109,7 @@ const PlayerBoard : FC<Props> = ({player, phase, selectedHunters, isTutorial}) =
           drag: {
             type: "CardInHand",
             item: {type:"CardInHand", card},
-            canDrag: player.color === playerId && phase === Phase.Initiative ,
+            canDrag: player.color === playerId && !huntPhase,
             drop: () => play({type:MoveType.PlayHuntCard, card:card, player:player.color})
           },
           animation:(revealCardsAnimation) ? {
