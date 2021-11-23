@@ -22,7 +22,7 @@ export function refillHuntingBoard(game: GameState) {
   for (let zone = 0; zone < game.huntingBoard.length; zone++) {
     if (game.huntingBoard[zone] === null) {
       const tilesDeck = game.tilesDecks[getBoardZones(game.players.length)[zone].type]
-      game.huntingBoard[zone] = tilesDeck.pop() ?? null
+      game.huntingBoard[zone] = tilesDeck.shift() ?? null
     }
   }
 }
