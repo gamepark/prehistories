@@ -9,10 +9,7 @@ enum MoveType {
   TakeBackPlayedCards,
   DrawCards,
   ShuffleDiscardPile,
-  ChangeActivePlayer,
-  RefillHuntingBoard,
-  EndGame
-
+  RefillHuntingBoard
 }
 
 export default MoveType

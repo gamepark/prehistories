@@ -1,4 +1,3 @@
-import ChangeActivePlayer from './ChangeActivePlayer'
 import FulfillObjective from './FulfillObjective'
 import DrawCards from './DrawCards'
 import EndTurn from './EndTurn'
@@ -21,7 +20,6 @@ type Move = PlayHuntCard |
             TakeBackPlayedCards |
             RefillHuntingBoard |
             DrawCards |
-            ShuffleDiscardPile |
-            ChangeActivePlayer
+            ShuffleDiscardPile
 
 export default Move

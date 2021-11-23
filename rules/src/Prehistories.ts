@@ -3,7 +3,6 @@ import {shuffle} from 'lodash'
 import canUndo from './canUndo'
 import GameState from './GameState'
 import GameView from './GameView'
-import {changeActivePlayer} from './moves/ChangeActivePlayer'
 import {fulfillObjective, fulfillObjectiveMove} from './moves/FulfillObjective'
 import {drawCards, drawCardsMove} from './moves/DrawCards'
 import EndTurn, {endTurn, endTurnMove} from './moves/EndTurn'
@@ -135,8 +134,6 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         return drawCards(this.state, move)
       case MoveType.ShuffleDiscardPile:
         return shuffleDiscardPile(this.state, move)
-      case MoveType.ChangeActivePlayer:
-        return changeActivePlayer(this.state)
       default:
         return
     }
@@ -166,7 +163,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
       if (huntingPlayer.deck.length < cardsToDraw && huntingPlayer.discard.length > 0) {
         moves.push(shuffleDiscardPileMove(huntingPlayer.color, shuffle(huntingPlayer.discard)))
       }
-      moves.push(drawCardsMove(huntingPlayer.color), {type: MoveType.ChangeActivePlayer})
+      moves.push(drawCardsMove(huntingPlayer.color))
       return moves
     } else if (huntingPlayer.hunting.hunt) {
       if (getBoardZones(this.state.players.length)[huntingPlayer.hunting.hunt.zone].safe <= huntingPlayer.hunting.hunt.huntersValue) {

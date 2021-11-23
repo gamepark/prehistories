@@ -6,6 +6,8 @@ import Move from "./Move"
 import MoveType from "./MoveType"
 import MoveView from "./MoveView"
 import PlayerColor from "../PlayerColor";
+import {getNextPlayer} from "../utils/InitiativeRules";
+import PlayerState from "../PlayerState";
 
 type DrawCards = {
   type: MoveType.DrawCards
@@ -18,17 +20,29 @@ export type DrawCardsView = DrawCards & {
   cards: number[]
 }
 
-export const drawCardsMove = (player: PlayerColor): DrawCards => ({type: MoveType.DrawCards, player})
+export function drawCardsMove(player: PlayerColor): DrawCards {
+  return {type: MoveType.DrawCards, player}
+}
 
 export function drawCards(state: GameState, move: DrawCards) {
   const player = state.players.find(p => p.color === move.player)!
   player.hand.push(...player.deck.splice(0, playerWillDraw(player)))
-  delete player.isReady
+  changeHuntingPlayer(state, player)
+}
+
+function changeHuntingPlayer(state: GameState | GameView, player: Pick<PlayerState, 'isReady' | 'hunting'>) {
+  if (player.hunting) {
+    delete player.isReady
+    delete player.hunting
+    const nextPlayer = getNextPlayer(state);
+    if (nextPlayer) {
+      nextPlayer.hunting = {injuries: 0, tilesHunted: 0}
+    }
+  }
 }
 
 export function drawCardsInView(state: GameView, move: DrawCards | DrawCardsView) {
   const player = state.players.find(p => p.color === move.player)!
-  delete player.isReady
   if (isPlayerViewSelf(player)) {
     if (!isDrawCardsView(move)) throw 'Error: I should receive the information about the cards that I draw'
     player.deck -= move.cards.length
@@ -38,6 +52,7 @@ export function drawCardsInView(state: GameView, move: DrawCards | DrawCardsView
     player.deck -= numberOfCards
     player.hand += numberOfCards
   }
+  changeHuntingPlayer(state, player)
 }
 
 export function isDrawCards(move: Move | MoveView): move is DrawCards {
