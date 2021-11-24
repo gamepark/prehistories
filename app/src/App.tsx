@@ -8,7 +8,6 @@ import HTML5ToTouch from 'react-dnd-multi-backend/dist/cjs/HTML5toTouch'
 import GameDisplay from './GameDisplay'
 import HeaderText from './HeaderText'
 import Images from './utils/Images'
-import Box from '@gamepark/prehistories-app/public/box.png'
 import { AudioLoader } from './sounds/AudioLoader'
 import { SoundLoader } from './sounds/SoundLoader'
 import buttonClick from './sounds/buttonClick.mp3'
@@ -32,7 +31,6 @@ export default function App() {
     <DndProvider options={HTML5ToTouch}>
       {!loading && game && audioLoader && <GameDisplay game={game} audioLoader={audioLoader}/>}
       <LoadingScreen display={loading} 
-                     gameBox={Box} 
                      author="Alexandre Emerit & Benoit Turpin" 
                      artist="Camille Chaussy" 
                      publisher="The Flying Games" 

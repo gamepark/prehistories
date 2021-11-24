@@ -32,27 +32,19 @@ const TutorialPopup : FC<{game:GameView, tutorial:Tutorial}> = ({game, tutorial}
     const platformUri = process.env.REACT_APP_PLATFORM_URI ?? 'https://game-park.com'
     const discordUri = 'https://discord.gg/nMSDRag'
 
-    const play = usePlay<Move>()
     const animation = useAnimation<Move>()
 
     const moveTutorial = (deltaMessage: number) => {
       setTutorialIndex(tutorialIndex + deltaMessage)
       setTutorialDisplay(true)
-      if (deltaMessage > 0){
-        playMoves()
-      }
-    }
-
-    function playMoves():void{
-
     }
     
     const resetTutorialDisplay = () => {
-      if (winner){
+      if (!winner){
             setTutorialIndex(0)
             setTutorialDisplay(true)
         } else {
-            setHideEndInfo(false)
+            setHideEndInfo(true)
         }
     }
 
