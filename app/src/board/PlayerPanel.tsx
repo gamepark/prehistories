@@ -24,7 +24,7 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, hunting}, position
 
     return (
 
-        <div {...props} css={[placingBackground(getBG(color),"cover"), playerPanelBorder, toAbsolute, setPercentDimension(15,20), playerPanelPosition(position)]}>
+        <div {...props} css={[placingBackground(getBG(color),"cover"), playerPanelBorder, toAbsolute, setPercentDimension(15,20), playerPanelPosition(position, color)]}>
 
             {noOfPassage !== undefined && <div css={[toAbsolute, setPercentDimension(40,18), powerPosition, placingBackground(getPowerBanner(color)[noOfPassage],"contain"), powerShadow, entryBannerAnim]}> </div>}
 
@@ -36,7 +36,7 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, hunting}, position
                 {[...Array(8 - totemTokens.length)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(color)} css={totemStyle(8 - totemTokens.length)} draggable={false} />)}
 
             </div>
-            <PlayerTimer playerId={color} css={[TimerStyle]}/>
+            <PlayerTimer playerId={color} css={[toAbsolute,TimerStyle]}/>
 
             {(hunting && hunting.injuries !== 0) &&
                 <div css={[toAbsolute, setPercentDimension(32,50), injuriesIndicatorPosition]}>
@@ -108,9 +108,10 @@ const powerPosition = css`
 const powerShadow = css`
     filter:drop-shadow(0 0 0.2em black);
 `
-const playerPanelPosition = (position:number) => css`
+const playerPanelPosition = (position:number, color:PlayerColor) => css`
     top:${7+15.9+15.42*position+0.42}%;
     right:0;
+    ${color !== PlayerColor.White ? `color:white;` : `color:white;`}
     z-index:0;
 `
 
@@ -127,9 +128,12 @@ const nameStyle = css`
 `
 
 const TimerStyle = css`
+    top:24%;
+    right:2%;
     display: block;
     font-size: 2.5em;
     padding-top: 0.5em;
+    font-family:'Reggae One', sans-serif;
 `
 
 const totemRemainingPosition = css`

@@ -1,4 +1,4 @@
-import {Action, SecretInformation, SimultaneousGame, Undo} from '@gamepark/rules-api'
+import {Action, SecretInformation, SimultaneousGame, TimeLimit, Undo} from '@gamepark/rules-api'
 import {shuffle} from 'lodash'
 import canUndo from './canUndo'
 import GameState from './GameState'
@@ -32,7 +32,7 @@ import {getHuntingPlayer} from "./types/HuntingPlayer";
 import getBoardZones from "./material/BoardZones";
 
 export default class Prehistories extends SimultaneousGame<GameState, Move, PlayerColor>
-  implements SecretInformation<GameState, GameView, Move, MoveView, PlayerColor>, Undo<GameState, Move, PlayerColor> {
+  implements SecretInformation<GameState, GameView, Move, MoveView, PlayerColor>, Undo<GameState, Move, PlayerColor>, TimeLimit<GameState, Move, PlayerColor> {
 
   constructor(state: GameState)
   constructor(options: PrehistoriesOptions)
@@ -227,6 +227,14 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
 
   canUndo(action: Action<Move, PlayerColor>, consecutiveActions: Action<Move, PlayerColor>[]): boolean {
     return canUndo(action, consecutiveActions)
+  }
+
+  giveTime(playerId: PlayerColor): number {
+    if(!getHuntingPlayer(this.state)){
+      return 60
+    } else {
+      return 120
+    }
   }
 
   getPlayerMoveView(move: Move, playerId: PlayerColor): MoveView {
