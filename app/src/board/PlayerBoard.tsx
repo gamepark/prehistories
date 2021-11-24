@@ -181,7 +181,7 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
 
             <div css={[toAbsolute, setPercentDimension(45,53), cardPlayedPanelPosition(player.color), canDropPlayed && canDropStyle, canDropPlayed && isOverPlayed && isOverStyle]} ref = {dropRefPlayed}>
 
-            {(isDisplayHuntingButtons || isDisplayValidationButton || isDisplayEndTurnButton) &&
+            {(isDisplayHuntingButtons || isDisplayValidationButton || isDisplayEndTurnButton) && player.color === playerId &&
                 <ButtonsTab color={player.color}
                             hunting={player.hunting}
                             isDisplayEndTurnButton={isDisplayEndTurnButton}
