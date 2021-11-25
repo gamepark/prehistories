@@ -42,7 +42,7 @@ const WelcomePopUp : FC<{player:PlayerColor | undefined, game:GameView, close: (
                     <ObjectiveCard key={objective}
                                    objective={objective}
                                    players={game.players}
-                                   css={[objectiveSize, objectiveSelected === objective && selectEffect(objective > 8)]}
+                                   css={[objectiveSize, objectiveSelected === objective && selectEffect(objective > 20)]}
                                    onClick={() => setObjectiveSelected(objective)}
                     />
                   )}

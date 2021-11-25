@@ -25,7 +25,7 @@ const HuntingZone: FC<Props> = ({game, tile, position, animation, ...props}) => 
                          css={[huntPosition(position, polyomino)]} {...props}/>
   } else {
     return (
-      <DraggableTile tile={tile} rotation={animation ? 0 : position.rotation(polyomino)} css={huntPosition(position, polyomino)} {...props}/>
+      <DraggableTile tile={tile} rotation={animation ? 0 : position.rotation(polyomino)} css={huntPosition(position, polyomino)} {...props} />
     )
   }
 }

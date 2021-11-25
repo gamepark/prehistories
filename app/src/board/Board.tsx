@@ -23,7 +23,7 @@ export default function Board({game}: Props) {
   const playerId = usePlayerId<PlayerColor>()
   const player = game.players.find(p => p.color === playerId)
   const animation = useAnimation<PlaceTile>(animation => isPlaceTile(animation.move))
-  const hunting = player?.hunting && !player.hunting.hunt
+  const hunting = player?.hunting !== undefined && !player.hunting.hunt
   const huntZonePositions = game.players.length < 4 ? huntZonesA : huntZonesB
   const zones = useMemo(() => getBoardZones(game.players.length), [game.players.length])
   return (

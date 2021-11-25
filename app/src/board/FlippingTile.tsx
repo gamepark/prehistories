@@ -38,7 +38,7 @@ const FlippingTile: FC<Props> = ({game, tile, position, item, animation, ...prop
 
   return (
     <Draggable type={HuntTile} draggingChange={setDragging} drop={play} onClick={toggleSide} item={{...item, side}}
-               css={[style(polyomino0)]} {...props}>
+               css={[style(polyomino0)]} canDrag={false} {...props}>
       <div css={[flipWrapper(polyomino0.length !== polyomino1.length), style(polyomino0),
         rotation(dragging || animation ? 0 : position.rotation(side === 0 ? polyomino0 : polyomino1), animation?.move.side ?? side)]}>
         <AnimalTile tile={tile} side={0} css={!dragging && props.canDrag && glowingAnimation}/>
