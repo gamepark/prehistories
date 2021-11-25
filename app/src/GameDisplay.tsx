@@ -61,6 +61,7 @@ export default function GameDisplay({game, audioLoader}: Props) {
                      huntPhase={huntingPlayer !== undefined}
                      selectedHunters={game.huntersSelected}
                      isTutorial={tutorial ? true : false}
+                     huntBoard={game.huntingBoard}
         />
 
         {showWelcomePopup && <WelcomePopUp player={playerId} game={game} close={() => setWelcomePopUpClosed(true)} />}

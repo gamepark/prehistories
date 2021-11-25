@@ -27,15 +27,17 @@ import {centerContainer, setPercentDimension, toAbsolute, toFullSize} from "../u
 import ButtonsTab from "./ButtonsTab";
 import TakeBackPlayedCards, {isTakeBackPlayedCards} from "@gamepark/prehistories/moves/TakeBackPlayedCards";
 import {playerWillDraw} from "@gamepark/prehistories/Prehistories";
+import Tile from "@gamepark/prehistories/material/Tile";
 
 type Props = {
     player:PlayerView | PlayerViewSelf,
     huntPhase?:boolean,
     selectedHunters:number[]|undefined
     isTutorial:boolean
+    huntBoard:(Tile|null)[]
 }
 
-const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial}) => {
+const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial, huntBoard}) => {
 
     const {t} = useTranslation()
     const playerId = usePlayerId<PlayerColor>()
@@ -187,6 +189,8 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
                             isDisplayEndTurnButton={isDisplayEndTurnButton}
                             isDisplayValidationButton={isDisplayValidationButton}
                             selectedHunters={selectedHunters}
+                            playedPower={player.played.reduce((pv, cv) => pv + cv,0)}
+                            huntBoard={huntBoard}
                 />
             }
 

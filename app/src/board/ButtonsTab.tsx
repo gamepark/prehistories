@@ -6,8 +6,8 @@ import MoveType from "@gamepark/prehistories/moves/MoveType";
 import SpendHunter, {isSpendHunter} from "@gamepark/prehistories/moves/SpendHunter";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import Hunting from "@gamepark/prehistories/types/Hunting";
-import {useAnimations, useNumberOfPlayers, usePlay, useSound} from "@gamepark/react-client";
-import {FC} from "react";
+import {menuButtonCss, useAnimations, useNumberOfPlayers, usePlay, useSound} from "@gamepark/react-client";
+import {FC, useState} from "react";
 import {useTranslation} from "react-i18next/";
 import {ResetSelectedHunters, resetSelectedHuntersMove} from "../localMoves/setSelectedHunters";
 import Button from "../utils/Button";
@@ -18,6 +18,8 @@ import ButtonClickSound from "../sounds/buttonClick.mp3"
 import MoveCardSound from "../sounds/cardMove.mp3"
 import {endTurnMove} from "@gamepark/prehistories/moves/EndTurn";
 import getBoardZones from "@gamepark/prehistories/material/BoardZones";
+import { Dialog } from "@gamepark/react-components";
+import Tile from "@gamepark/prehistories/material/Tile";
 
 type Props = {
     color:PlayerColor
@@ -25,9 +27,11 @@ type Props = {
     isDisplayValidationButton:boolean
     isDisplayEndTurnButton:boolean
     selectedHunters?:number[]
+    playedPower:number
+    huntBoard:(Tile|null)[]
 }
 
-const ButtonsTab : FC<Props> = ({color, hunting, isDisplayValidationButton, isDisplayEndTurnButton, selectedHunters = []}) => {
+const ButtonsTab : FC<Props> = ({color, hunting, isDisplayValidationButton, isDisplayEndTurnButton, selectedHunters = [], playedPower, huntBoard}) => {
 
     const heightOfHuntingButtonsPanel:number = (isDisplayValidationButton || isDisplayEndTurnButton) ? 20 : 30
     const spendCardAnimations = useAnimations<SpendHunter>(animation => isSpendHunter(animation.move))
@@ -43,6 +47,9 @@ const ButtonsTab : FC<Props> = ({color, hunting, isDisplayValidationButton, isDi
     const play = usePlay<Move>()
     const playResetHunters = usePlay<ResetSelectedHunters>()
     const {t} = useTranslation()
+    const nbPlayers = useNumberOfPlayers()
+    const [warningNoCardPlayedClosed, setWarningNoCardPlayedClosed] = useState(true)
+    const [warningNoTilePickedClosed, setWarningNoTilePickedClosed] = useState(true)
 
     function validateHunters(hunters:number[]|undefined, injury:boolean){
         clickSound.play()
@@ -58,6 +65,11 @@ const ButtonsTab : FC<Props> = ({color, hunting, isDisplayValidationButton, isDi
         }
     }
 
+    function playValidateMove(){
+        clickSound.play()
+        play(endTurnMove(color))
+    }
+
     return(
 
         <div css={[toAbsolute,
@@ -67,9 +79,9 @@ const ButtonsTab : FC<Props> = ({color, hunting, isDisplayValidationButton, isDi
             spendCardAnimations.length !== 0 && disapperingAnim]}>
 
             {isDisplayValidationButton && <Button css={[toAbsolute, validationButtonPosition]}
-                                                onClick={() => {clickSound.play() ; play(endTurnMove(color))}}
+                                                onClick={() => {playedPower === 0 ? setWarningNoCardPlayedClosed(false) : playValidateMove()}}
                                                 colorButton={color} >{t('Validate')}</Button> }
-            {isDisplayEndTurnButton && <Button css={[validationButtonPosition]} onClick={() => {clickSound.play() ; play(endTurnMove(color))}} colorButton={color} >{t('End your Turn')}</Button>}
+            {isDisplayEndTurnButton && <Button css={[validationButtonPosition]} onClick={() => {huntBoard.some((tile, index) => tile !== null && getBoardZones(nbPlayers)[index].injury <= playedPower) && hunting?.tilesHunted === 0 ? setWarningNoTilePickedClosed(false) :  playValidateMove()}} colorButton={color} >{t('End your Turn')}</Button>}
 
             {huntZone && <div css={[toAbsolute,
                                                     placingBackground(Images.arrowBrokenIcon,"cover"),
@@ -93,11 +105,39 @@ const ButtonsTab : FC<Props> = ({color, hunting, isDisplayValidationButton, isDi
                 <span>{powerOfSelectedHunters}/{huntZone.safe}</span>
             </div>}
 
+            {warningNoCardPlayedClosed === false && 
+                <Dialog open={!warningNoCardPlayedClosed} css={css`width:50%;`}> 
+                    <h1 css={css`margin:0.2em;text-align:center;`}>{t("title.warning.no.hunter.played")}</h1>
+                    <p css={css`text-align:center;`}>{t("text.warning.no.hunter.played")}</p>
+                    <div css={buttonLineCss}>
+                        <button css={[menuButtonCss]} onClick={() => playValidateMove()} >{t("warning.yes")}</button>
+                        <button css={[menuButtonCss]} onClick={() => setWarningNoCardPlayedClosed(true)} >{t("warning.no")}</button>
+                    </div>
+                </Dialog>
+            }
+
+            {warningNoTilePickedClosed === false && 
+                <Dialog open={!warningNoTilePickedClosed} css={css`width:50%;`}> 
+                    <h1 css={css`margin:0.2em;text-align:center;`}>{t("title.warning.no.tile.pick")}</h1>
+                    <p css={css`text-align:center;`}>{t("text.warning.no.tile.pick")}</p>
+                    <div css={buttonLineCss}>
+                        <button css={[menuButtonCss]} onClick={() => playValidateMove()} >{t("warning.yes")}</button>
+                        <button css={[menuButtonCss]} onClick={() => setWarningNoTilePickedClosed(true)} >{t("warning.no")}</button>
+                    </div>
+                </Dialog>
+            }
+
         </div>
 
     )
 
 }
+
+const buttonLineCss = css`
+  margin-top: 1em;
+  display: flex;
+  justify-content: space-evenly;
+`
 
 const desactivateStyle = css`
     filter: grayscale(80%);
