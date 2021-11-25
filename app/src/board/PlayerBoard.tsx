@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes} from "@emotion/react";
-import {FC} from "react";
+import {FC, useState} from "react";
 import {useTranslation} from "react-i18next";
 import Cave from "./Cave";
 import Card from './Card'
@@ -28,6 +28,7 @@ import ButtonsTab from "./ButtonsTab";
 import TakeBackPlayedCards, {isTakeBackPlayedCards} from "@gamepark/prehistories/moves/TakeBackPlayedCards";
 import {playerWillDraw} from "@gamepark/prehistories/Prehistories";
 import Tile from "@gamepark/prehistories/material/Tile";
+import FocusedCardOptions from "./FocusedCardOptions";
 
 type Props = {
     player:PlayerView | PlayerViewSelf,
@@ -55,6 +56,7 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
     const takeBackCardsAnimation = useAnimation<TakeBackPlayedCards>(animation => isTakeBackPlayedCards(animation.move) && player.hunting !== undefined )
     let playerHand:number|number[] = isPlayerViewSelf(player) ? [...player.hand] : player.hand
     let playerPlayed:number[] = player.played
+    const [focusedCard, setFocusedCard] = useState<number>()
 
     if(drawCardsAnimation){
         if (isDrawCardsView(drawCardsAnimation.move) && Array.isArray(playerHand)){
@@ -131,13 +133,26 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
                     ? index >= playerHand.length - player.played.length 
                     : index >= playerHand - player.played.length
                 }
-              : undefined))
+              : undefined)),
+              onClick: () => player.color === playerId && setFocusedCard(card)
         })
       }
 
     const playerCardsInRevealAnimation = revealCardsAnimation ? revealCardsAnimation.move.cardsPlayed.find(obj => obj.color === player.color)!.cards : undefined
   return (
     <>
+
+      {focusedCard !== undefined &&
+      <>
+        <div css={popupBackgroundStyle} onClick={() => setFocusedCard(undefined)}/>
+        <Card color={player.color} 
+              css={[focusCardStyle]} 
+              power={getColoredDeck(player.color)[focusedCard].power}
+              speed={getColoredDeck(player.color)[focusedCard].speed} />
+        <FocusedCardOptions onClose={() => setFocusedCard(undefined)} />
+      </>
+      }
+
       <Cave player={player} isTutorial={isTutorial}/>
 
       <div css={[toAbsolute, setPercentDimension(93, 56), playerBoardPosition]}>
@@ -238,6 +253,30 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
   )
 
 }
+
+const focusCardStyle = css`
+  position: absolute;
+  width: ${26}%;
+  height: ${63}%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+
+  h3 {
+    font-size: 2.55em;
+  }
+`
+
+export const popupBackgroundStyle = css`
+  position: fixed;
+  top: -100%;
+  bottom: -100%;
+  left: -100%;
+  right: -100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+`
 
 const takeBackCardsKeyframes = (index:number) => keyframes`
 from{transform:translate(${38+Math.floor(index/3)*68.5 }%,${-195+(index%3)*43.5}%) scale(0.94);}
