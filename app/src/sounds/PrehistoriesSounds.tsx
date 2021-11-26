@@ -9,13 +9,18 @@ import cardFlipSound from "./cardFlip.mp3";
 import cardMoveSound from "./cardMove.mp3";
 import moveTileSound from "./moveTile.mp3";
 import objectiveSound from "./objective.mp3"
+import objectiveOpponentSound1 from './objectiveOpponent1.mp3';
+import objectiveOpponentSound2 from './objectiveOpponent2.mp3';
+
 import PlayHuntCard, {isPlayHuntCardView} from "@gamepark/prehistories/moves/PlayHuntCard"
+import GameView from "@gamepark/prehistories/GameView"
 
 type Props = {
     audioLoader: AudioLoader
+    game:GameView
 }
 
-const PrehistoriesSounds : FC<Props> = ({audioLoader}) => {
+const PrehistoriesSounds : FC<Props> = ({audioLoader, game}) => {
 
     const playerId = usePlayerId()
     const revealCardsAnimation = useAnimation<RevealHuntCardsView>(animation => isRevealHuntCards(animation.move))
@@ -26,25 +31,33 @@ const PrehistoriesSounds : FC<Props> = ({audioLoader}) => {
 
     useEffect(() => {
         if (revealCardsAnimation || drawCards) {
-          audioLoader.play(cardFlipSound, false, 0.8)
+          audioLoader.play(cardFlipSound, false, 0.6)
         }
       }, [revealCardsAnimation?.move, drawCards?.move])
 
       useEffect(() => {
         if (playCard) {
-          audioLoader.play(cardMoveSound, false, 0.8)
+          audioLoader.play(cardMoveSound, false, 0.6)
         }
       }, [playCard?.move])
 
       useEffect(() => {
         if (playTile) {
-          audioLoader.play(moveTileSound, false, 0.8)
+          audioLoader.play(moveTileSound, false, 0.4)
         }
       }, [playTile?.move])
 
       useEffect(() => {
         if (objective) {
-            audioLoader.play(objectiveSound, false, 0.8)
+          if(game.players.find(p => p.hunting !== undefined)!.color === playerId){
+            audioLoader.play(objectiveSound, false, 0.2)
+          } else {
+            if(objective.move.objective < 4){
+              audioLoader.play(objectiveOpponentSound1, false, 0.2)
+            } else {
+              audioLoader.play(objectiveOpponentSound2, false, 0.2)
+            }
+          }
         }
       }, [objective?.move])
 

@@ -16,6 +16,8 @@ import cardMoveSound from "./sounds/cardMove.mp3";
 import moveTileSound from "./sounds/moveTile.mp3";
 import playerTurnSound from "./sounds/playerTurn.mp3";
 import objectiveSound from "./sounds/objective.mp3"
+import objectiveOpponentSound1 from './sounds/objectiveOpponent1.mp3';
+import objectiveOpponentSound2 from './sounds/objectiveOpponent2.mp3';
 
 export default function App() {
   const game = useGame<GameView>()
@@ -37,7 +39,7 @@ export default function App() {
                      developer="Théo Gregorio"/>
       <Header><HeaderText loading={loading} game={game}/></Header>
       <ImagesLoader images={Object.values(Images)} onImagesLoad={() => setImagesLoading(false)} />
-      <SoundLoader sounds={[buttonClick, cardFlipSound, cardMoveSound, moveTileSound, playerTurnSound, objectiveSound]} onSoundLoad={() => setSoundLoading(false)} onSoundsPrepared={ (audioLoader) => setAudioLoader(audioLoader) }/>
+      <SoundLoader sounds={[buttonClick, cardFlipSound, cardMoveSound, moveTileSound, playerTurnSound, objectiveSound, objectiveOpponentSound1, objectiveOpponentSound2]} onSoundLoad={() => setSoundLoading(false)} onSoundsPrepared={ (audioLoader) => setAudioLoader(audioLoader) }/>
       <Menu/>
       <FailuresDialog/>
       <FullscreenDialog/>

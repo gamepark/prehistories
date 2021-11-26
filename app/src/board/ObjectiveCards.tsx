@@ -34,7 +34,13 @@ const ObjectiveCards : FC<Props> = ({objectives,players, ...props}) => {
 
         <div css={[toAbsolute, permanentObjectivePosition, setPercentDimension(15.9,20), placingBackground(Images.permanentObjectives, "cover")]}>
             {players.map((player, indexPlayer) => 
-                [...Array(player.totemTokens.filter(o => permanentObjectives.includes(o)).length)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[toAbsolute, totemStyle(indexPlayer,i), incomingAnimation]} draggable={false} />)
+                [...Array(player.totemTokens.filter(o => o === 1).length)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[toAbsolute, totemStyle, totemColumnPosition(indexPlayer,i, player.totemTokens.filter(o => o === 1).length, players.length), incomingAnimation]} draggable={false} />)
+            )}
+            {players.map((player, indexPlayer) => 
+                [...Array(player.totemTokens.filter(o => o === 2).length)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[toAbsolute, totemStyle,  totemLinePosition(indexPlayer,i, player.totemTokens.filter(o => o === 2).length, players.length), incomingAnimation]} draggable={false} />)
+            )}
+            {players.map((player, indexPlayer) => 
+                [...Array(player.totemTokens.filter(o => o === 3).length)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[toAbsolute, totemStyle, totemLegendaryPosition(indexPlayer,i,player.totemTokens.filter(o => o === 3).length, players.length), incomingAnimation]} draggable={false} />)
             )}
 
         </div>
@@ -53,9 +59,22 @@ const incomingAnimation = css`
     animation:${incomingKeyframes} 1s linear ;
 `
 
-const totemStyle = (iPlayer:number, iToken:number) => css`
-    top:${-0.2+iPlayer*2.8 + ((iPlayer === 0 || iPlayer === 3) ? (iToken%2)*1.2 : (iPlayer === 1 || iPlayer === 4) ? (-iToken%2)*1.2: 0)}em;
-    left:${iPlayer%2 === 1 ? 85 - iToken*7 : 2 + iToken * 7}%;
+const totemColumnPosition = (iPlayer:number, iToken:number, maxTokens:number, nbPlayers:number) => css`
+top:${iPlayer*(80/nbPlayers)}%;
+left:${1+iToken*(21/maxTokens)}%;
+`
+
+const totemLinePosition = (iPlayer:number, iToken:number, maxTokens:number, nbPlayers:number) => css`
+top:${iPlayer*(80/nbPlayers)}%;
+left:${36+iToken*(21/maxTokens)}%;
+`
+
+const totemLegendaryPosition = (iPlayer:number, iToken:number, maxTokens:number, nbPlayers:number) => css`
+top:${iPlayer*(80/nbPlayers)}%;
+left:${71+iToken*(21/maxTokens)}%;
+`
+
+const totemStyle = css`
     height:4em;
     width:4em;
     box-shadow:0 0 0.5em black;

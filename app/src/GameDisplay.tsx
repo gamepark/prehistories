@@ -72,7 +72,7 @@ export default function GameDisplay({game, audioLoader}: Props) {
 
       {tutorial && <TutorialPopup game={game} tutorial={tutorial}/>}
 
-      <PrehistoriesSounds audioLoader={audioLoader} />
+      <PrehistoriesSounds audioLoader={audioLoader} game={game} />
 
     </Letterbox>
   )
