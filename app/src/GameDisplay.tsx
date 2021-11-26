@@ -18,6 +18,7 @@ import GameLocalView from "./GameLocalView";
 import {compareInitiative} from "@gamepark/prehistories/utils/InitiativeRules";
 import {PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
 import {getHuntingPlayer} from "@gamepark/prehistories/types/HuntingPlayer";
+import { isWinner } from '@gamepark/prehistories/Prehistories'
 
 type Props = {
   game: GameLocalView
@@ -62,6 +63,7 @@ export default function GameDisplay({game, audioLoader}: Props) {
                      selectedHunters={game.huntersSelected}
                      isTutorial={tutorial ? true : false}
                      huntBoard={game.huntingBoard}
+                     isWinner={game.players.some(p => isWinner(p))}
         />
 
         {showWelcomePopup && <WelcomePopUp player={playerId} game={game} close={() => setWelcomePopUpClosed(true)} />}

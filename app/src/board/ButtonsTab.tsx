@@ -118,8 +118,8 @@ const ButtonsTab : FC<Props> = ({color, hunting, isDisplayValidationButton, isDi
 
             {warningNoTilePickedClosed === false && 
                 <Dialog open={!warningNoTilePickedClosed} css={css`width:50%;`}> 
-                    <h1 css={css`margin:0.2em;text-align:center;`}>{t("title.warning.no.tile.pick")}</h1>
-                    <p css={css`text-align:center;`}>{t("text.warning.no.tile.pick")}</p>
+                    <h1 css={css`margin:0.2em;text-align:center;`}>{t("title.warning.no.tile.picked")}</h1>
+                    <p css={css`text-align:center;`}>{t("text.warning.no.tile.picked")}</p>
                     <div css={buttonLineCss}>
                         <button css={[menuButtonCss]} onClick={() => playValidateMove()} >{t("warning.yes")}</button>
                         <button css={[menuButtonCss]} onClick={() => setWarningNoTilePickedClosed(true)} >{t("warning.no")}</button>

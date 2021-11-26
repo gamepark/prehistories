@@ -36,9 +36,10 @@ type Props = {
     selectedHunters:number[]|undefined
     isTutorial:boolean
     huntBoard:(Tile|null)[]
+    isWinner:boolean
 }
 
-const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial, huntBoard}) => {
+const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial, huntBoard, isWinner}) => {
 
     const {t} = useTranslation()
     const playerId = usePlayerId<PlayerColor>()
@@ -198,7 +199,7 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
 
             <div css={[toAbsolute, setPercentDimension(45,53), cardPlayedPanelPosition(player.color), canDropPlayed && canDropStyle, canDropPlayed && isOverPlayed && isOverStyle]} ref = {dropRefPlayed}>
 
-            {(isDisplayHuntingButtons || isDisplayValidationButton || isDisplayEndTurnButton) && player.color === playerId &&
+            {(isDisplayHuntingButtons || isDisplayValidationButton || isDisplayEndTurnButton) && player.color === playerId && !isWinner && 
                 <ButtonsTab color={player.color}
                             hunting={player.hunting}
                             isDisplayEndTurnButton={isDisplayEndTurnButton}
