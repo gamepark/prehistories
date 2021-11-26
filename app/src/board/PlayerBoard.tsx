@@ -114,7 +114,7 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
           drag: {
             type: "CardInHand",
             item: {type:"CardInHand", card},
-            canDrag: player.color === playerId && !huntPhase,
+            canDrag: player.color === playerId && !huntPhase && player.isReady !== true,
             drop: () => play({type:MoveType.PlayHuntCard, card:card, player:player.color})
           },
           animation:(revealCardsAnimation) ? {
