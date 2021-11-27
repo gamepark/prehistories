@@ -15,6 +15,7 @@ export default interface PlayerState {
   played:number[]
   isReady?:boolean
   hunting?:Hunting
+  order?: number // Convenient for display usage only
 }
 
 export function setupDeck(color:PlayerColor, isTutorial:boolean):number[]{

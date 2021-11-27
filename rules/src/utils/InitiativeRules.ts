@@ -7,10 +7,9 @@ import PlayerColor from "../PlayerColor";
 import teamPower from "./teamPower";
 
 export function compareInitiative(playerA: Pick<PlayerState, 'played' | 'color'>, playerB: Pick<PlayerState, 'played' | 'color'>) {
-  const powerComparison = teamPower(playerA.played) - teamPower(playerB.played);
+  const powerComparison = teamPower(playerA.played) - teamPower(playerB.played)
   if (powerComparison !== 0) return powerComparison
-  else {
-    return teamSpeed(playerB.played, playerB.color) - teamSpeed(playerA.played, playerA.color)}
+  else return teamSpeed(playerB.played, playerB.color) - teamSpeed(playerA.played, playerA.color)
 }
 
 export function getNextPlayer(state: GameState | GameView) {

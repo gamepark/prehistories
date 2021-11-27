@@ -19,6 +19,9 @@ export function isRefillHuntingBoardView(move: RefillHuntingBoard | RefillHuntin
 }
 
 export function refillHuntingBoard(game: GameState) {
+  for (const player of game.players) {
+    delete player.order
+  }
   for (let zone = 0; zone < game.huntingBoard.length; zone++) {
     if (game.huntingBoard[zone] === null) {
       const tilesDeck = game.tilesDecks[getBoardZones(game.players.length)[zone].type]
@@ -28,6 +31,9 @@ export function refillHuntingBoard(game: GameState) {
 }
 
 export function refillHuntingBoardInView(game: GameView, move: RefillHuntingBoardView) {
+  for (const player of game.players) {
+    delete player.order
+  }
   for (let zone = 0; zone < game.huntingBoard.length; zone++) {
     if (game.huntingBoard[zone] === null) {
       const tilesType = getBoardZones(game.players.length)[zone].type;

@@ -14,10 +14,9 @@ import AvatarPanel from "./AvatarPanel";
 type Props = {
     player: PlayerView | PlayerViewSelf,
     position:number
-    noOfPassage?: number
 } & HTMLAttributes<HTMLDivElement>
 
-const PlayerPanel : FC<Props> = ({player:{color, totemTokens, hunting}, position, noOfPassage, ...props}) => {
+const PlayerPanel : FC<Props> = ({player:{color, totemTokens, hunting, order, played}, position, ...props}) => {
 
     const playerInfo = usePlayer(color)
     const {t} = useTranslation()
@@ -26,7 +25,7 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, hunting}, position
 
         <div {...props} css={[placingBackground(getBG(color),"cover"), playerPanelBorder, toAbsolute, setPercentDimension(15,20), playerPanelPosition(position, color)]}>
 
-            {noOfPassage !== undefined && <div css={[toAbsolute, setPercentDimension(40,18), powerPosition, placingBackground(getPowerBanner(color)[noOfPassage],"contain"), powerShadow, entryBannerAnim]}> </div>}
+            {order !== undefined && <div css={[toAbsolute, setPercentDimension(40,18), powerPosition, placingBackground(getPowerBanner(played.length ? color : PlayerColor.Yellow)[order],"contain"), powerShadow, entryBannerAnim, !played.length && grayscale]}> </div>}
 
             <AvatarPanel playerInfo={playerInfo} color={color} css={css`z-index:5;`}/>
 
@@ -121,6 +120,10 @@ const playerPanelBorder = css`
     cursor:pointer;
 `
 
+const grayscale = css`
+    filter: grayscale();
+`
+
 const nameStyle = css`
     font-size:2.9em;
     font-family:'Reggae One', sans-serif;
@@ -146,7 +149,7 @@ const totemRemainingPosition = css`
 const totemStyle = (spread:number) => css`
     height:3em;
     width:3em;
-    margin : 0em ${-0.0625*spread+(8-spread)/10}em;
+    margin : 0 ${-0.0625*spread+(8-spread)/10}em;
     border-radius:100%;
 `
 

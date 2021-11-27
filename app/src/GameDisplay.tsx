@@ -15,10 +15,8 @@ import WelcomePopUp from './utils/WelcomePopUp'
 import Board from "./board/Board";
 import TutorialPopup from './tutorial/TutorialPopUp'
 import GameLocalView from "./GameLocalView";
-import {compareInitiative} from "@gamepark/prehistories/utils/InitiativeRules";
-import {PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
 import {getHuntingPlayer} from "@gamepark/prehistories/types/HuntingPlayer";
-import { isWinner } from '@gamepark/prehistories/Prehistories'
+import {isWinner} from '@gamepark/prehistories/Prehistories'
 
 type Props = {
   game: GameLocalView
@@ -54,14 +52,13 @@ export default function GameDisplay({game, audioLoader}: Props) {
                        position={index}
                        player = {player}
                        onClick = {() => playSetCaveDisplayed(setCaveDisplayedMove(player.color), {local:true})}
-                       noOfPassage={huntingPlayer !== undefined && player.played.length ? countPlayersWithLowerInitiative(game, player) : undefined}
           />
         )}
 
         <PlayerBoard player={playerDisplayed}
                      huntPhase={huntingPlayer !== undefined}
                      selectedHunters={game.huntersSelected}
-                     isTutorial={tutorial ? true : false}
+                     isTutorial={!!tutorial}
                      huntBoard={game.huntingBoard}
                      isWinner={game.players.some(p => isWinner(p))}
         />
@@ -103,7 +100,3 @@ const fadeIn = keyframes`
 const letterBoxStyle = css`
   animation: ${fadeIn} 3s ease-in forwards;
 `
-
-function countPlayersWithLowerInitiative(game: GameLocalView, player: PlayerView | PlayerViewSelf) {
-  return game.players.reduce((count, p) => compareInitiative(p, player) < 0 ? count + 1 : count, 0)
-}
