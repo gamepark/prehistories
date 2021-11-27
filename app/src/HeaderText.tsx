@@ -10,6 +10,7 @@ import {getHuntingPlayer} from "@gamepark/prehistories/types/HuntingPlayer";
 import Move from "@gamepark/prehistories/moves/Move";
 import MoveType from "@gamepark/prehistories/moves/MoveType";
 import {PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
+import {getTokensForFulfilledObjective} from "@gamepark/prehistories/material/ObjectiveRules";
 
 type Props = {
   loading: boolean
@@ -67,7 +68,8 @@ function HeaderOnGoingGameText({game}:{game:GameView}){
       }
     } else if (move.type === MoveType.FulfillObjective) {
       const activePlayer = getHuntingPlayer(game)!
-      return activePlayer.color === playerId ? <> {t("hunt.you.complete.objectives")} </> : <> {t("hunt.player.complete.objectives",{player:getPseudo(activePlayer.color,players,t)})} </>
+      const tokens = getTokensForFulfilledObjective(game, move.objective)
+      return activePlayer.color === playerId ? <> {t("hunt.you.complete.objectives", {tokens})} </> : <> {t("hunt.player.complete.objectives",{tokens, player:getPseudo(activePlayer.color,players,t)})} </>
     }
   }
 

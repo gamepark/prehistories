@@ -810,7 +810,7 @@ const tutorialDescription:TutorialStepDescription[][] = [
         boxWidth: 60,
       },
       {
-        title: (t: TFunction) => t('title.handprints.1'),
+        title: (t: TFunction) => t('title.handprints'),
         text: 'tuto.handprints.1',
         boxTop: 55,
         boxLeft: 68,
@@ -822,7 +822,7 @@ const tutorialDescription:TutorialStepDescription[][] = [
         }
       },
       {
-        title: (t: TFunction) => t('title.handprints.2'),
+        title: (t: TFunction) => t('title.handprints'),
         text: 'tuto.handprints.2',
         boxTop: 55,
         boxLeft: 73,
