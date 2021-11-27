@@ -8,7 +8,6 @@ import {centerContent, placingBackground, setPercentDimension, toAbsolute} from 
 import Images from "../utils/Images"
 import ObjectiveCard from "./ObjectiveCard"
 import {getTotem} from "./PlayerPanel"
-import {permanentObjectives} from "@gamepark/prehistories/material/Objective";
 
 type Props = {
     objectives:number[],
