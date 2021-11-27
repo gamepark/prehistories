@@ -3,15 +3,14 @@ import {css, keyframes} from "@emotion/react"
 import {PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView"
 import {Picture} from "@gamepark/react-components"
 import {FC, HTMLAttributes} from "react"
-import {useTranslation} from "react-i18next/"
+import {Trans, useTranslation} from "react-i18next/"
 import {placingBackground, setPercentDimension, toAbsolute, toFullSize} from "../utils/styles"
 import Images from "../utils/Images"
 import {getTotem} from "./PlayerPanel"
 import Objective from "@gamepark/prehistories/material/Objective";
-import {TFunction} from "i18next";
-import { useAnimation, usePlayerId } from "@gamepark/react-client"
+import {useAnimation, usePlayerId} from "@gamepark/react-client"
 import PlayerColor from "@gamepark/prehistories/PlayerColor"
-import FulfillObjective, { fulfillObjective, isFulfillObjective } from "@gamepark/prehistories/moves/FulfillObjective"
+import FulfillObjective, {isFulfillObjective} from "@gamepark/prehistories/moves/FulfillObjective"
 
 type Props = {
     objective: Objective
@@ -47,10 +46,10 @@ const ObjectiveCard : FC<Props> = ({objective, players, ...props}) => {
 }
 
 const fulfillingEffect = (isExpert:boolean) => css`
-box-shadow:0 0 0.5em 1em ${isExpert ? `#1991d3` : `#f7ab01` };
-transition:box-shadow 0.5s linear;
-z-index:2;
-transition:box-shadow 0.5s linear;`
+  box-shadow:0 0 0.5em 1em ${isExpert ? `#1991d3` : `#f7ab01` };
+  transition:box-shadow 0.5s linear;
+  z-index:2;
+`
 
 const desaturate = css`
     transition:filter 1s linear;
@@ -127,44 +126,44 @@ function getObjectiveCardImage(objective: Objective): string {
     }
 }
 
-export function getObjectiveText(objective: Objective, t: TFunction) {
+export function getObjectiveText(objective: Objective) {
     switch (objective) {
         case Objective.ConnectTotemAnimals:
-            return t('objectiveA1')
+            return <Trans defaults="objectiveA1" components={[<strong/>]}/>
         case Objective.PaintMiddle9:
-            return t('objectiveA2')
+            return <Trans defaults="objectiveA2" components={[<strong/>]}/>
         case Objective.Column5Different:
-            return t('objectiveA3')
+            return <Trans defaults="objectiveA3" components={[<strong/>]}/>
         case Objective.AnimalArea8:
-            return t('objectiveA4')
+            return <Trans defaults="objectiveA4" components={[<strong/>]}/>
         case Objective.SurroundHunter:
-            return t('objectiveA5')
+            return <Trans defaults="objectiveA5" components={[<strong/>]}/>
         case Objective.Column5Same:
-            return t('objectiveA6')
+            return <Trans defaults="objectiveA6" components={[<strong/>]}/>
         case Objective.ConnectDiagonalCorners:
-            return t('objectiveA7')
+            return <Trans defaults="objectiveA7" components={[<strong/>]}/>
         case Objective.Paint5SmallestTiles:
-            return t('objectiveA8')
+            return <Trans defaults="objectiveA8" components={[<strong/>]}/>
         case Objective.SurroundLegendary:
-            return t('objectiveA9')
+            return <Trans defaults="objectiveA9" components={[<strong/>]}/>
         case Objective.SurroundTotemAnimals:
-            return t('objectiveB1')
+            return <Trans defaults="objectiveB1" components={[<strong/>]}/>
         case Objective.PaintLastColumn:
-            return t('objectiveB2')
+            return <Trans defaults="objectiveB2" components={[<strong/>]}/>
         case Objective.Line5Different:
-            return t('objectiveB3')
+            return <Trans defaults="objectiveB3" components={[<strong/>]}/>
         case Objective.AnimalArea10:
-            return t('objectiveB4')
+            return <Trans defaults="objectiveB4" components={[<strong/>]}/>
         case Objective.SurroundHunterDifferent:
-            return t('objectiveB5')
+            return <Trans defaults="objectiveB5" components={[<strong/>]}/>
         case Objective.Line5Same:
-            return t('objectiveB6')
+            return <Trans defaults="objectiveB6" components={[<strong/>]}/>
         case Objective.PaintAllCorners:
-            return t('objectiveB7')
+            return <Trans defaults="objectiveB7" components={[<strong/>]}/>
         case Objective.Collect3Tiles:
-            return t('objectiveB8')
+            return <Trans defaults="objectiveB8" components={[<strong/>]}/>
         case Objective.PaintAdjacentLegendary:
-            return t('objectiveB9')
+            return <Trans defaults="objectiveB9" components={[<strong/>]}/>
         default:
             return ''
     }

@@ -48,7 +48,7 @@ const WelcomePopUp : FC<{player:PlayerColor | undefined, game:GameView, close: (
                   )}
               </div>
 
-              <p> {objectiveSelected ? getObjectiveText(objectiveSelected, t) : t("objective.default.text")} </p>
+              <p> {objectiveSelected ? getObjectiveText(objectiveSelected) : t("objective.default.text")} </p>
 
               <Button css={buttonPosition} colorButton={player ?? PlayerColor.White} onClick={close}>{t("Let's Hunt !")}</Button>
 
