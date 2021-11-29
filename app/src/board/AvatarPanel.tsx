@@ -34,8 +34,8 @@ const AvatarPanel : FC<Props> = ({playerInfo, color, ...props}) => {
 const avatarStyle = css`
     float:left;
     margin:1em 1em;
-    height:8em;
-    width:8em;
+    height:7.5em;
+    width:7.5em;
 `
 
 const roundBorders = css`

@@ -4,22 +4,24 @@ import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import {getPlayerName} from "@gamepark/prehistories/PrehistoriesOptions";
 import {PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
 import {PlayerTimer, usePlayer} from "@gamepark/react-client";
-import {Picture} from "@gamepark/react-components";
+import {Hand, Picture} from "@gamepark/react-components";
 import {FC, HTMLAttributes} from "react";
 import {useTranslation} from "react-i18next";
-import {placingBackground, setPercentDimension, toAbsolute} from "../utils/styles";
+import {placingBackground, setPercentDimension, toAbsolute, toFullSize} from "../utils/styles";
 import Images, {bluePowerBanners, greenPowerBanners, redPowerBanners, whitePowerBanners, yellowPowerBanners} from "../utils/Images";
 import AvatarPanel from "./AvatarPanel";
+import Card from './Card';
 
 type Props = {
     player: PlayerView | PlayerViewSelf,
     position:number
 } & HTMLAttributes<HTMLDivElement>
 
-const PlayerPanel : FC<Props> = ({player:{color, totemTokens, hunting, order, played}, position, ...props}) => {
+const PlayerPanel : FC<Props> = ({player:{color, totemTokens, hunting, order, hand, played}, position, ...props}) => {
 
     const playerInfo = usePlayer(color)
     const {t} = useTranslation()
+    const handLength = Array.isArray(hand) ? hand.length : hand 
 
     return (
 
@@ -37,9 +39,11 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, hunting, order, pl
             </div>
             <PlayerTimer playerId={color} css={[toAbsolute,TimerStyle]}/>
 
+            <Hand maxAngle={20} css={handPosition(handLength)}>{[...Array(handLength)].map((_, index) => <Card key={index} color={color} />)}</Hand>
+
             {(hunting && hunting.injuries !== 0) &&
-                <div css={[toAbsolute, setPercentDimension(32,50), injuriesIndicatorPosition]}>
-                    {[...Array(hunting.injuries)].map((_, i) => <Picture key={i} alt={t('injuries')} src={Images.arrowBrokenIcon} draggable={false} css={[toAbsolute, setPercentDimension(100,38), brokenArrowIconStyle(i)]} /> )}
+                <div css={[toAbsolute, setPercentDimension(30,17), injuriesIndicatorPosition]}>
+                    {[...Array(hunting.injuries)].map((_, i) => <Picture key={i} alt={t('injuries')} src={Images.arrowBrokenIcon} draggable={false} css={[toAbsolute, toFullSize, brokenArrowIconStyle, brokenArrowIconOffSet(i)]} /> )}
                 </div>}
 
         </div>
@@ -48,19 +52,30 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, hunting, order, pl
 
 }
 
+const brokenArrowIconOffSet = (i:number) => css`
+    transform:translateX(${-i*20}%) rotateZ(10deg);
+`
+
+const handPosition = (length:number) => css`
+  font-size: 0.4em;
+  left: ${25+((length-1)*(length > 9 ? 1.9 : 2.8))}%;
+  bottom: 10%;
+  width: ${8}em;
+  height: ${11}em;
+  transition:all 1s ease-in-out;
+`
+
 const injuriesIndicatorPosition = css`
-    bottom:7%;
-    left:25%;
+    bottom:5%;
+    right:10%;
     text-align:center;
 `
 
-const brokenArrowIconStyle = (index:number) => css`
-    top:0;
-    left:${index*25}%;
+const brokenArrowIconStyle = css`
     border:0.1em solid orange;
     border-radius:15%;
     box-shadow:0 0 0.5em black;
-    transform:rotateZ(-10deg);
+    transform:rotateZ(10deg);
 `
 
 const entryBannerKeyframes = keyframes`
