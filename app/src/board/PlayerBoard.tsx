@@ -23,7 +23,7 @@ import {getCardBack, getPlayerColor} from "../utils/getterFunctions";
 import SetSelectedHunters, {setSelectedHunterMove} from "../localMoves/setSelectedHunters";
 import MoveCardSound from "../sounds/cardMove.mp3"
 import ButtonClickSound from "../sounds/buttonClick.mp3"
-import {centerContainer, setPercentDimension, toAbsolute, toFullSize} from "../utils/styles";
+import {centerContainer, glowingAnimation, setPercentDimension, toAbsolute, toFullSize} from "../utils/styles";
 import ButtonsTab from "./ButtonsTab";
 import TakeBackPlayedCards, {isTakeBackPlayedCards} from "@gamepark/prehistories/moves/TakeBackPlayedCards";
 import {playerWillDraw} from "@gamepark/prehistories/Prehistories";
@@ -167,6 +167,7 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
                             <Card key={index}
                             color={player.color}
                             css={[smoothAngles,
+                                  huntPhase === false && player.isReady !== true && glowingAnimation,
                                   playHuntCardAnimation && index === 0 && playHuntCardAnimationStyle(playHuntCardAnimation.duration,player.played.length),
                                   drawCardsAnimation && isDrawCardsView(drawCardsAnimation.move) && drawCardsAnimation.move.cards.find(c => c === card) && drawCardsAnimStyle(drawCardsAnimation.duration, false),
                                   takeBackCardsAnimation && Array.isArray(playerHand) && index >= playerHand.length - player.played.length && takeBackCardsAnimationStyle(index - player.hand.length, takeBackCardsAnimation.duration)
