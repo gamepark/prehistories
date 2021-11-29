@@ -37,6 +37,10 @@ function changeHuntingPlayer(state: GameState | GameView, player: Pick<PlayerSta
     const nextPlayer = getNextPlayer(state);
     if (nextPlayer) {
       nextPlayer.hunting = {injuries: 0, tilesHunted: 0}
+    } else {
+      for (const player of state.players) {
+        delete player.order
+      }
     }
   }
 }
