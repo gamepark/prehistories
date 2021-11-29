@@ -107,22 +107,22 @@ const ButtonsTab : FC<Props> = ({color, hunting, isDisplayValidationButton, isDi
 
             {warningNoCardPlayedClosed === false && 
                 <Dialog open={!warningNoCardPlayedClosed} css={css`width:50%;`}> 
-                    <h1 css={css`margin:0.2em;text-align:center;`}>{t("title.warning.no.hunter.played")}</h1>
-                    <p css={css`text-align:center;`}>{t("text.warning.no.hunter.played")}</p>
+                    <h1 css={css`margin:0.2em;text-align:center;`}>{t("warning.no.hunter")}</h1>
+                    <p css={css`text-align:center;`}>{t("warning.no.hunter.text")}</p>
                     <div css={buttonLineCss}>
-                        <button css={[menuButtonCss]} onClick={() => playValidateMove()} >{t("warning.yes")}</button>
-                        <button css={[menuButtonCss]} onClick={() => setWarningNoCardPlayedClosed(true)} >{t("warning.no")}</button>
+                        <button css={[menuButtonCss]} onClick={() => playValidateMove()} >{t("warning.no.hunter.continue")}</button>
+                        <button css={[menuButtonCss]} onClick={() => setWarningNoCardPlayedClosed(true)} >{t("Cancel")}</button>
                     </div>
                 </Dialog>
             }
 
             {warningNoTilePickedClosed === false && 
                 <Dialog open={!warningNoTilePickedClosed} css={css`width:50%;`}> 
-                    <h1 css={css`margin:0.2em;text-align:center;`}>{t("title.warning.no.tile.picked")}</h1>
-                    <p css={css`text-align:center;`}>{t("text.warning.no.tile.picked")}</p>
+                    <h1 css={css`margin:0.2em;text-align:center;`}>{t("warning.no.tile")}</h1>
+                    <p css={css`text-align:center;`}>{t("warning.no.tile.text")}</p>
                     <div css={buttonLineCss}>
-                        <button css={[menuButtonCss]} onClick={() => playValidateMove()} >{t("warning.yes")}</button>
-                        <button css={[menuButtonCss]} onClick={() => setWarningNoTilePickedClosed(true)} >{t("warning.no")}</button>
+                        <button css={[menuButtonCss]} onClick={() => playValidateMove()} >{t("warning.no.tile.continue")}</button>
+                        <button css={[menuButtonCss]} onClick={() => setWarningNoTilePickedClosed(true)} >{t("Cancel")}</button>
                     </div>
                 </Dialog>
             }
