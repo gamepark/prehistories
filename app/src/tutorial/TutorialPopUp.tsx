@@ -520,12 +520,12 @@ const tutorialDescription:TutorialStepDescription[][] = [
         {
             title: (t: TFunction) => t('title.place.1x1.tile'),
             text: 'tuto.place.1x1.tile',
-            boxTop: 40,
+            boxTop: 60,
             boxLeft: 53,
             boxWidth: 40,
             arrow: {
                 angle: 270,
-                top: 36,
+                top: 58,
                 left: 22
             }
         }
@@ -644,12 +644,12 @@ const tutorialDescription:TutorialStepDescription[][] = [
     {
       title: (t: TFunction) => t('title.place.2x1.tile'),
       text: 'tuto.place.2x1.tile',
-      boxTop: 40,
+      boxTop: 55,
       boxLeft: 58,
       boxWidth: 40,
       arrow: {
           angle: 270,
-          top: 36,
+          top: 55,
           left: 27
       }
     }
@@ -789,7 +789,7 @@ const tutorialDescription:TutorialStepDescription[][] = [
         boxWidth: 50,
         arrow: {
             angle: 270,
-            top: 50,
+            top: 45,
             left: 32
         }
       }
@@ -817,20 +817,20 @@ const tutorialDescription:TutorialStepDescription[][] = [
         boxWidth: 45,
         arrow: {
             angle: 270,
-            top: 53,
+            top: 47,
             left: 34
         }
       },
       {
         title: (t: TFunction) => t('title.handprints'),
         text: 'tuto.handprints.2',
-        boxTop: 55,
-        boxLeft: 73,
+        boxTop: 45,
+        boxLeft: 65,
         boxWidth: 51,
         arrow: {
             angle: 270,
-            top: 42,
-            left: 36
+            top: 37,
+            left: 28
         }
       },
       {

@@ -8,12 +8,14 @@ import {Animation, useAnimation, usePlayerId} from "@gamepark/react-client";
 import PlaceTile, {isPlaceTile} from "@gamepark/prehistories/moves/PlaceTile";
 import teamPower from "@gamepark/prehistories/utils/teamPower";
 import {isPlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
-import {boardHeight, caveBorder, caveLeft, caveTop, getPanelIndex, headerHeight, margin, squareSize} from "../utils/styles";
+import {boardHeight, caveBorder, caveLeft, caveTop, getPanelIndex, headerHeight, margin, placingBackground, setPercentDimension, squareSize, toAbsolute} from "../utils/styles";
 import {getPolyomino} from "@gamepark/prehistories/material/Tile";
 import GameLocalView from "../GameLocalView";
 import {getHuntingPlayer} from "@gamepark/prehistories/types/HuntingPlayer";
 import getBoardZones from "@gamepark/prehistories/material/BoardZones";
-import {useMemo} from "react";
+import {useMemo, useState} from "react";
+import { popupBackgroundStyle } from './PlayerBoard';
+import FocusedHuntSignOptions from './FocusedHuntSignOptions';
 
 type Props = {
   game: GameView
@@ -26,17 +28,156 @@ export default function Board({game}: Props) {
   const hunting = player?.hunting !== undefined && !player.hunting.hunt
   const huntZonePositions = game.players.length < 4 ? huntZonesA : huntZonesB
   const zones = useMemo(() => getBoardZones(game.players.length), [game.players.length])
+  const [focusedSign, setFocusedSign] = useState<number>()
   return (
+
+    <>
+
+      {focusedSign !== undefined &&
+      <>
+        <div css={[popupBackgroundStyle]} onClick={() => setFocusedSign(undefined)}/>
+        <div css={[placingBackground(Images.helpCard,"cover"), focusHelpCardStyle]}> </div>
+        <div css={[placingBackground(Images.huntSign,"cover"), focusSignStyle]}>
+          <span css={[toAbsolute, injurySpanPosition, spanStyle]}>{getBoardZones(game.players.length)[focusedSign].injury}-{getBoardZones(game.players.length)[focusedSign].safe-1} </span>
+          <span css={[toAbsolute, noInjurySpanPosition, spanStyle]}>{getBoardZones(game.players.length)[focusedSign].safe}+</span>
+        </div>
+        <FocusedHuntSignOptions onClose={() => setFocusedSign(undefined)} />
+      </>
+      }
+
     <div css={[style, background(game.players.length)]}>
+
       {game.huntingBoard.map((tile, huntZone) =>
         tile && <HuntingZone key={huntZone} game={game} position={huntZonePositions[huntZone]} tile={tile}
                              canDrag={hunting && player !== undefined && isPlayerViewSelf(player) && teamPower(player.played) >= zones[huntZone].injury}
                              item={{huntZone, tile, side: 0}} animation={animation?.move.huntZone === huntZone ? animation : undefined}
                              css={animation?.move.huntZone === huntZone && placeTileAnimation(game, animation, huntZonePositions[huntZone], playerId)}/>
       )}
+      {game.huntingBoard.map((_, huntZone) => 
+        <div key={huntZone} css={[toAbsolute, zoomSignPosition(huntZone, game.players.length), setPercentDimension(6,15)]} onClick={() => setFocusedSign(huntZone)} >  </div>
+      )}
     </div>
 
+    </>
+
   )
+}
+
+const focusHelpCardStyle = css`
+  position: absolute;
+  width: ${18}%;
+  height: ${43}%;
+  left: 36%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  border-radius:8%;
+  box-shadow:0 0 0.5em black;
+
+  h3 {
+    font-size: 2.55em;
+  }
+`
+
+const injurySpanPosition = css`
+top:20%;
+left:50%;
+`
+
+const noInjurySpanPosition = css`
+top:60%;
+left:50%;
+`
+
+const spanStyle = css`
+color:#e9cc90;
+font-family:'Luckiest Guy', sans-serif;
+font-size:8em;
+-webkit-text-stroke: 0.04em #8e5d1a;
+`
+
+const focusSignStyle = css`
+  position: absolute;
+  width: ${30}%;
+  height: ${43}%;
+  left: 60%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+
+  h3 {
+    font-size: 2.55em;
+  }
+`
+
+const zoomSignPosition = (huntZone:number, nbPlayers:number) => css`
+  top:${getZoomSignTop(huntZone, nbPlayers)}em;
+  left:${getZoomSignLeft(huntZone, nbPlayers)}em;
+  transform: rotateZ(${getZoomSignRotate(huntZone, nbPlayers)}deg);
+  cursor:pointer;
+`
+
+function getZoomSignTop(huntZone:number, nbPlayers:number):number{
+  switch(huntZone){
+    case 0:
+      return nbPlayers <4 ? 3.5 : 0.3
+    case 1:
+      return nbPlayers <4 ? 10.9 : 19.2
+    case 2:
+      return nbPlayers <4 ? 39.3 : 6.5
+    case 3:
+      return nbPlayers <4 ? 63.3 : 13.1
+    case 4:
+      return nbPlayers <4 ? 86.3 : 39.3
+    case 5:
+      return nbPlayers <4 ? 0 : 63.3
+    case 6:
+      return nbPlayers <4 ? 0 : 86.3
+    default:
+      return 0
+  }
+}
+
+function getZoomSignLeft(huntZone:number, nbPlayers:number):number{
+  switch(huntZone){
+    case 0:
+      return nbPlayers <4 ? 8.8 : 8.2
+    case 1:
+      return nbPlayers <4 ? 33.9 : 3.1
+    case 2:
+      return nbPlayers <4 ? 28.7 : 29.7
+    case 3:
+      return nbPlayers <4 ? 17.4 : 33.7
+    case 4:
+      return nbPlayers <4 ? 33.8 : 28.7
+    case 5:
+      return nbPlayers <4 ? 0 : 17.4
+    case 6:
+      return nbPlayers <4 ? 0 : 33.8
+    default:
+      return 0
+  }
+}
+
+function getZoomSignRotate(huntZone:number, nbPlayers:number):number{
+  switch(huntZone){
+    case 0:
+      return nbPlayers <4 ? 17 : -9
+    case 1:
+      return nbPlayers <4 ? 5 : -5
+    case 2:
+      return nbPlayers <4 ? 13 : 3
+    case 3:
+      return nbPlayers <4 ? -7 : -9
+    case 4:
+      return nbPlayers <4 ? -7 : 13
+    case 5:
+      return nbPlayers <4 ? 0 : -7
+    case 6:
+      return nbPlayers <4 ? 0 : -7
+    default:
+      return 0
+  }
 }
 
 const style = css`

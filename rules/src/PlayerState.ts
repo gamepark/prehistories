@@ -24,7 +24,7 @@ export function setupDeck(color:PlayerColor, isTutorial:boolean):number[]{
 
 function getTutoColoredDeck(color:PlayerColor):number[]{
   switch(color){
-    case PlayerColor.Yellow:
+    case PlayerColor.Blue:
       return [2,4,6,3,8,10,0,5,7,1,9,11]
     case PlayerColor.Green:
       return [0,6,7,1,11,4,2,8,10,9,5,3]

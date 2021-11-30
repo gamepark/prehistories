@@ -98,7 +98,7 @@ function ValidDropAreaHighlight({cave, item, isTutorialPhase1, isTutorialPhase2}
   const area = useMemo(() => getValidDropArea(cave, item.tile, item.side), [cave, item])
   return <>{
     area.map((row, y) =>
-      row.map((space, x) => space && <div key={`${x}_${y}`} css={[squareCss, squarePosition(x, y), highlight, isTutorialPhase1 && item.tile === 19 && x === 0 && y === 1 && highlightTutorial, isTutorialPhase2 && ((x === 2 && y === 1) || (x === 2 && y === 2)) && highlightTutorial]}/>)
+      row.map((space, x) => space && <div key={`${x}_${y}`} css={[squareCss, squarePosition(x, y), highlight, isTutorialPhase1 && item.tile === 19 && x === 0 && y === 5 && highlightTutorial, isTutorialPhase2 && ((x === 2 && y === 4) || (x === 2 && y === 5)) && highlightTutorial]}/>)
     )
   }</>
 }
