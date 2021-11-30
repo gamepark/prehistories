@@ -258,6 +258,7 @@ const closePopupStyle = css`
   margin-right: -0%;
   font-size: 4em;
   color:white;
+  z-index:1;
   &:hover{
     cursor: pointer;
     color: black;
@@ -746,14 +747,62 @@ const tutorialDescription:TutorialStepDescription[][] = [
         boxWidth: 50,
       },
       {
-        title: (t: TFunction) => t('title.permanent.objectives'),
-        text: 'tuto.permanent.objectives',
+        title: (t: TFunction) => t('title.how.to.discard.tokens'),
+        text: 'tuto.your.tokens',
+        boxTop: 41,
+        boxLeft: 73,
+        boxWidth: 50,
+        arrow: {
+            angle: 0,
+            top: 28,
+            left: 80
+        }
+      },
+      {
+        title: (t: TFunction) => t('title.how.to.discard.tokens'),
+        text: 'tuto.permanent.objectives.intro',
         boxTop: 29,
+        boxLeft: 73,
+        boxWidth: 50,
+        arrow: {
+            angle: 0,
+            top: 16,
+            left: 80
+        }
+      },
+      {
+        title: (t: TFunction) => t('title.how.to.discard.tokens'),
+        text: 'tuto.variable.objectives.intro',
+        boxTop: 37,
+        boxLeft: 51,
+        boxWidth: 60,
+        arrow: {
+            angle: 0,
+            top: 24,
+            left: 42
+        }
+      },
+      {
+        title: (t: TFunction) => t('title.permanent.objectives'),
+        text: 'tuto.permanent.objectives.1',
+        boxTop: 27,
         boxLeft: 68,
         boxWidth: 60,
         arrow: {
             angle: 0,
-            top: 16,
+            top: 14,
+            left: 80
+        }
+      },
+      {
+        title: (t: TFunction) => t('title.permanent.objectives'),
+        text: 'tuto.permanent.objectives.2',
+        boxTop: 32,
+        boxLeft: 68,
+        boxWidth: 60,
+        arrow: {
+            angle: 0,
+            top: 19,
             left: 80
         }
       },
@@ -772,37 +821,37 @@ const tutorialDescription:TutorialStepDescription[][] = [
       {
         title: (t: TFunction) => t('title.variable.objectives.how.many.tokens'),
         text: 'tuto.variable.objectives.how.many.tokens.1',
-        boxTop: 40,
+        boxTop: 41,
         boxLeft: 48,
         boxWidth: 60,
         arrow: {
             angle: 0,
-            top: 27,
+            top: 29,
             left: 23
         }
       },
       {
         title: (t: TFunction) => t('title.variable.objectives.how.many.tokens'),
         text: 'tuto.variable.objectives.how.many.tokens.2',
-        boxTop: 40,
+        boxTop: 41,
         boxLeft: 48,
         boxWidth: 60,
         arrow: {
             angle: 0,
-            top: 27,
-            left: 30
+            top: 29,
+            left: 29.4
         }
       },
       {
         title: (t: TFunction) => t('title.link.totems.objective'),
         text: 'tuto.link.totems.objective',
-        boxTop: 30,
+        boxTop: 37,
         boxLeft: 34,
-        boxWidth: 45,
+        boxWidth: 60,
         arrow: {
-            angle: 90,
-            top: 12,
-            left: 52
+            angle: 0,
+            top: 24,
+            left: 37
         }
       },
       {
@@ -822,7 +871,7 @@ const tutorialDescription:TutorialStepDescription[][] = [
         text: 'tuto.play.legendary.tile.2',
         boxTop: 73,
         boxLeft: 29,
-        boxWidth: 50,
+        boxWidth: 60,
         arrow: {
             angle: 180,
             top: 73,
