@@ -66,15 +66,15 @@ export default function TilesDropArea({player, isTutorialPhase1, isTutorialPhase
     <div ref={ref} css={style} {...props}>
       {isTutorialPhase1 && draggedTile && draggedTile.tile !== 19 && <div css={[toFullSize, centerContent, wrongWayStyle]}> {t("wrong.tile")} </div>}
       {isTutorialPhase2 && draggedTile && (draggedTile.tile !== 8 || draggedTile.side !== 1) && <div css={[toFullSize, centerContent, wrongWayStyle]}> {t( draggedTile.tile !== 8 ? "wrong.tile" : "wrong.orientation")} </div>}
-      {draggedTile && <ValidDropAreaHighlight cave={cave} item={draggedTile} isTutorialPhase1={isTutorialPhase1 && draggedTile && draggedTile.tile === 19} isTutorialPhase2={isTutorialPhase2 && draggedTile && (draggedTile.tile === 8 && draggedTile.side === 1)} isTutorialPhase3={isTutorialPhase3 && draggedTile && (draggedTile.tile === 33)} />}
-      {draggedTile && over && <DropShadow cave={cave} item={draggedTile} getAreaPosition={getAreaPosition}/>}
+      {draggedTile && ((isTutorialPhase2 === false && isTutorialPhase1 === false) || (isTutorialPhase1 && draggedTile.tile === 19) || (isTutorialPhase2 && draggedTile.tile === 8 && draggedTile.side === 1)) && <ValidDropAreaHighlight cave={cave} item={draggedTile} isTutorialPhase1={isTutorialPhase1 && draggedTile && draggedTile.tile === 19} isTutorialPhase2={isTutorialPhase2 && draggedTile && (draggedTile.tile === 8 && draggedTile.side === 1)} isTutorialPhase3={isTutorialPhase3 && draggedTile && (draggedTile.tile === 33)} />}
+      {draggedTile && over && ((isTutorialPhase2 === false && isTutorialPhase1 === false) || (isTutorialPhase1 && draggedTile.tile === 19) || (isTutorialPhase2 && draggedTile.tile === 8 && draggedTile.side === 1)) &&<DropShadow cave={cave} item={draggedTile} getAreaPosition={getAreaPosition}/>}
     </div>
   )
 }
 
 const wrongWayStyle = css`
-  background-color:rgba(222,0,0,0.5);
-  z-index:10;
+  background-color:rgba(222,0,0,1);
+  z-index:20;
   font-size:4em;
   font-family:'Reggae One', sans-serif;
   text-align:center;
