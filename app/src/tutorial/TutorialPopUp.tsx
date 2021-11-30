@@ -519,7 +519,7 @@ const tutorialDescription:TutorialStepDescription[][] = [
         },
         {
             title: (t: TFunction) => t('title.place.1x1.tile'),
-            text: 'tuto.place.1x1.tile',
+            text: 'tuto.place.1x1.tile.1',
             boxTop: 60,
             boxLeft: 53,
             boxWidth: 40,
@@ -528,7 +528,19 @@ const tutorialDescription:TutorialStepDescription[][] = [
                 top: 58,
                 left: 22
             }
-        }
+        },
+        {
+          title: (t: TFunction) => t('title.place.1x1.tile'),
+          text: 'tuto.place.1x1.tile.2',
+          boxTop: 26,
+          boxLeft: 31,
+          boxWidth: 40,
+          arrow: {
+              angle: 270,
+              top: 13,
+              left: 0
+          }
+      }
     ],[
         {
           title: (t: TFunction) => t('title.spend.mecanics'),
@@ -643,7 +655,7 @@ const tutorialDescription:TutorialStepDescription[][] = [
     },
     {
       title: (t: TFunction) => t('title.place.2x1.tile'),
-      text: 'tuto.place.2x1.tile',
+      text: 'tuto.place.2x1.tile.1',
       boxTop: 55,
       boxLeft: 58,
       boxWidth: 40,
@@ -651,6 +663,18 @@ const tutorialDescription:TutorialStepDescription[][] = [
           angle: 270,
           top: 55,
           left: 27
+      }
+    },
+    {
+      title: (t: TFunction) => t('title.place.2x1.tile'),
+      text: 'tuto.place.2x1.tile.2',
+      boxTop: 27,
+      boxLeft: 44,
+      boxWidth: 40,
+      arrow: {
+          angle: 270,
+          top: 21,
+          left: 13
       }
     }
         
@@ -674,12 +698,12 @@ const tutorialDescription:TutorialStepDescription[][] = [
         title: (t: TFunction) => t('title.injury.hunt'),
         text: 'tuto.injury.hunt',
         boxTop: 35,
-        boxLeft: 50,
+        boxLeft: 61,
         boxWidth: 55,
         arrow: {
             angle: 90,
             top: 28,
-            left: 73
+            left: 84
         }
       },
       {
@@ -783,7 +807,7 @@ const tutorialDescription:TutorialStepDescription[][] = [
       },
       {
         title: (t: TFunction) => t('title.play.legendary.tile'),
-        text: 'tuto.play.legendary.tile',
+        text: 'tuto.play.legendary.tile.1',
         boxTop: 55,
         boxLeft: 68,
         boxWidth: 50,
@@ -791,6 +815,18 @@ const tutorialDescription:TutorialStepDescription[][] = [
             angle: 270,
             top: 45,
             left: 32
+        }
+      },
+      {
+        title: (t: TFunction) => t('title.play.legendary.tile'),
+        text: 'tuto.play.legendary.tile.2',
+        boxTop: 73,
+        boxLeft: 29,
+        boxWidth: 50,
+        arrow: {
+            angle: 180,
+            top: 73,
+            left: 8
         }
       }
     ],[

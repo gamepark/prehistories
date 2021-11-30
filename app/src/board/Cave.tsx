@@ -40,7 +40,12 @@ const Cave: FC<Props> = ({player, isTutorial}) => {
 
   return (
     <div css={[style, background(caveBackground[player.color]), fulfillObjectiveAnimation && player.hunting && scaleCaveAnimation(fulfillObjectiveAnimation.duration)]}>
-      {playerId === player.color && <TilesDropArea player={player} isTutorialPhase1={isTutorial && getPaintedCave(player)[5][0] === Painting.Empty} isTutorialPhase2={isTutorial && getPaintedCave(player)[5][0] !== Painting.Empty && getPaintedCave(player)[4][2] === Painting.Empty} />}
+      {playerId === player.color && <TilesDropArea player={player} 
+                                                   isTutorialPhase1={isTutorial && getPaintedCave(player)[5][0] === Painting.Empty} 
+                                                   isTutorialPhase2={isTutorial && getPaintedCave(player)[5][0] !== Painting.Empty && getPaintedCave(player)[4][2] === Painting.Empty}
+                                                   isTutorialPhase3={isTutorial && getPaintedCave(player)[5][0] !== Painting.Empty && getPaintedCave(player)[4][2] !== Painting.Empty && getPaintedCave(player)[2][3] === Painting.Empty}
+                                                   />
+      }
       {player.cave.map((paint, index) =>
         <AnimalTile key={index} tile={paint.tile} side={paint.side} css={tilePosition(paint.x, paint.y)}/>
       )}
