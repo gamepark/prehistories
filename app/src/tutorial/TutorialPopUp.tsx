@@ -889,10 +889,27 @@ const tutorialDescription:TutorialStepDescription[][] = [
     ],[],[],[],[
       {
         title: (t: TFunction) => t('title.objectives.validate'),
-        text: 'tuto.objectives.validate',
-        boxTop: 50,
+        text: 'tuto.objectives.validate.1',
+        boxTop: 24,
+        boxLeft: 67,
+        boxWidth: 60,
+        arrow: {
+          angle: 0,
+          top: 10,
+          left: 85
+      }
+      },
+      {
+        title: (t: TFunction) => t('title.objectives.validate'),
+        text: 'tuto.objectives.validate.2',
+        boxTop: 41,
         boxLeft: 50,
         boxWidth: 60,
+        arrow: {
+          angle: 0,
+          top: 28,
+          left: 34
+      }
       },
       {
         title: (t: TFunction) => t('title.handprints'),
