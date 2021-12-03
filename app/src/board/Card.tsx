@@ -7,13 +7,16 @@ import CardPlayed from "@gamepark/prehistories/types/appTypes/CardPlayed"
 import CardInHand from "@gamepark/prehistories/types/appTypes/CardInHand"
 import {useAnimation, usePlay, useSound} from "@gamepark/react-client"
 import Move from "@gamepark/prehistories/moves/Move"
-import PlayHuntCard from "@gamepark/prehistories/moves/PlayHuntCard"
+import PlayHuntCard, { isPlayHuntCard } from "@gamepark/prehistories/moves/PlayHuntCard"
 import {Draggable} from "@gamepark/react-components"
 import {isRevealHuntCards, RevealHuntCardsView} from "@gamepark/prehistories/moves/RevealHuntCards"
 import MoveCardSound from "../sounds/cardMove.mp3"
 import {placingBackground, toAbsolute, toFullSize} from "../utils/styles"
 import {getCardBack} from "../utils/getterFunctions"
 import TakeBackPlayedCards, {isTakeBackPlayedCards} from "@gamepark/prehistories/moves/TakeBackPlayedCards"
+import SpendHunter from "@gamepark/prehistories/moves/SpendHunter"
+import MoveType from "@gamepark/prehistories/moves/MoveType"
+import { ResetSelectedHunters, resetSelectedHunters, resetSelectedHuntersMove } from "../localMoves/setSelectedHunters"
 
 type Props = {
     color:PlayerColor
@@ -23,17 +26,38 @@ type Props = {
     type?:'CardInHand' | 'CardPlayed'
     draggableItem?: CardInHand | CardPlayed
     isTakeBackAnimation?:boolean
+    selectedHunters?:number[]|undefined
 } & Omit<HTMLAttributes<HTMLDivElement>, 'color'>
 
-const Card : FC<Props> = ({color, power, speed, draggable=false, type='', draggableItem, isTakeBackAnimation, ...props}) => {
+const Card : FC<Props> = ({color, power, speed, draggable=false, type='', draggableItem, isTakeBackAnimation, selectedHunters, ...props}) => {
 
     const play = usePlay<Move>()
+    const playResetHunters = usePlay<ResetSelectedHunters>()
     const moveCardSound = useSound(MoveCardSound)
     const item = {...draggableItem}
-    const onDrop = (move:PlayHuntCard) => {
-        moveCardSound.volume = 0.8
-        moveCardSound.play()
-        play(move)
+    const onDrop = (move:PlayHuntCard|SpendHunter) => {
+        if(isPlayHuntCard(move)){
+            moveCardSound.volume = 0.8
+            moveCardSound.play()
+            play(move)
+        } else {
+            if (selectedHunters === undefined || selectedHunters.find(card => card === move.card) === undefined){
+                moveCardSound.volume = 0.8
+                moveCardSound.play()
+                play(move)
+            }
+            if (selectedHunters !== undefined){
+                for(const card of selectedHunters){
+                    moveCardSound.volume = 0.8
+                    moveCardSound.play()
+                    play({type:MoveType.SpendHunter, card:card})
+                }
+
+                playResetHunters(resetSelectedHuntersMove(), {local:true})
+            }
+
+        }
+
     }
 
     const revealCardsAnimation = useAnimation<RevealHuntCardsView>(animation => isRevealHuntCards(animation.move))

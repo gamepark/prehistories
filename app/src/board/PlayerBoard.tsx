@@ -82,8 +82,22 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
 
     const playSelectHunter = usePlay<SetSelectedHunters>()
 
+    const [{canDropDiscard, isOverDiscard}, dropRefDiscard] = useDrop({
+        accept: ['CardPlayed'],
+        canDrop: (item: CardPlayed) => {
+            return player.hunting?.hunt !== undefined
+        },
+        collect: monitor => ({
+          canDropDiscard: monitor.canDrop(),
+          isOverDiscard: monitor.isOver()
+        }),
+        drop: (item: CardPlayed) => {
+            return {type:MoveType.SpendHunter, card:item.card }
+        }
+      })
+
     const [{canDropPlayed, isOverPlayed}, dropRefPlayed] = useDrop({
-        accept: ["CardInHand", 'CardPlayed'],
+        accept: ["CardInHand"],
         canDrop: (item: CardInHand | CardPlayed) => {
 
             if(isCardInHand(item)){
@@ -216,13 +230,19 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
             {playerPlayed.map((card, index) => {
                 const spendCardAnimation = spendCardAnimations.find(a => a.move.card === card)
                 return <Card key={index}
-                css = {[toAbsolute, setPercentDimension(52,30), cardPlayedPosition(index), smoothAngles,
+                css = {[toAbsolute, setPercentDimension(52,30), cardPlayedPosition(index),
+                        smoothAngles,
+                        huntPhase === true && player.hunting?.hunt !== undefined && selectedHunters?.includes(card) === false && glowingAnimation,
                         spendCardAnimation && index === (playerPlayed as number[]).findIndex(card => card === spendCardAnimation.move.card) && spendAnimation(player.discard.length, spendCardAnimation.duration),
                         selectedHunters?.find(c => c === card) !== undefined && selectedCard
                     ]}
                 color={player.color}
                 power={getColoredDeck(player.color)[card].power}
                 speed={getColoredDeck(player.color)[card].speed}
+                draggable={player.color === playerId && player.hunting?.hunt !== undefined && player.isReady !== true}
+                draggableItem={{type:"CardPlayed", card:card}}
+                type={"CardPlayed"}
+                selectedHunters={selectedHunters}
                 onClick={() => player.color === playerId && player.hunting?.hunt !== undefined && playSelectHunter(setSelectedHunterMove(card), {local:true})}
 
                 />
@@ -231,7 +251,7 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
 
         </div>
 
-            <div css={[toAbsolute, setPercentDimension(23,16), discardZonePosition]}>
+            <div css={[toAbsolute, setPercentDimension(23,16), discardZonePosition]} >
 
                 {player.discard.map((card, index) =>
                     <Card key={index}
@@ -239,9 +259,14 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
                           power={getColoredDeck(player.color)[card].power}
                           speed={getColoredDeck(player.color)[card].speed}
                           css={[toAbsolute, deckOffset(index), smoothAngles, shuffleDiscardAnimation && shufflingAnimation(index, shuffleDiscardAnimation.duration, player.discard.length)]}
-                    />)}
+                    />
+                )}
 
             </div>
+
+            {canDropDiscard && <div css={[toAbsolute, setPercentDimension(23,16), discardZonePosition, canDropDiscard && canDropDiscardStyle, canDropDiscard && isOverDiscard && isOverDiscardStyle]} ref = {dropRefDiscard} >
+                <span css={[toAbsolute, centerContainer, spanDropDisplay(canDropDiscard)]}>{t("Drag Here")}</span>
+            </div>}
 
             <div css={[toAbsolute, setPercentDimension(24,16), deckZonePosition]}>
 
@@ -310,7 +335,7 @@ const drawCardsAnimStyle = (duration:number, isHidden:boolean) => css`
 `
 
 const selectedCard = css`
-    box-shadow:0 0 1em 0.2em lime;
+    box-shadow:0 0 2em gold, 0 0 2em gold, 0 0 2em gold, 0 0 2em gold;
     transform-origin:bottom left;
     transform:rotateZ(-20deg);
 `
@@ -368,6 +393,20 @@ const spanDropDisplay = (canDrop:boolean) => css`
     text-align:center;
 `
 
+const canDropDiscardStyle = css`
+    background-color:rgba(131, 180, 65,0.8);
+    border: 0.5em solid white;
+    border-radius:8%;
+    transition:all 0.2s linear;
+`
+
+const isOverDiscardStyle = css`
+    background-color:rgba(131, 180, 65, 1);
+    border: 0.4em solid white;
+    border-radius:8%;
+    transition:all 0.2s linear;
+`
+
 const canDropStyle = css`
     background-color:rgba(131, 180, 65,0.5);
     transition:all 0.2s linear;
@@ -375,6 +414,7 @@ const canDropStyle = css`
 
 const isOverStyle = css`
     background-color:rgba(131, 180, 65,0.8);
+    transition:all 0.2s linear;
 `
 
 const cardPlayedPanelPosition = (color:PlayerColor) => css`
