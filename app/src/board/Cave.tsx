@@ -111,7 +111,7 @@ const style = css`
   height: 42.5em;
   background-size: contain;
   background-repeat: no-repeat;
-  filter: drop-shadow(0 0 2em black);
+  filter: drop-shadow(0 0 1em black) drop-shadow(0 0 1em black) drop-shadow(0 0 1em black);
   border-radius: 10%;
 `
 
