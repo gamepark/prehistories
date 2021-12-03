@@ -44,6 +44,7 @@ const WelcomePopUp : FC<{player:PlayerColor | undefined, game:GameView, close: (
                                    players={game.players}
                                    css={[objectiveSize, objectiveSelected === objective && selectEffect(objective > 20)]}
                                    onClick={() => setObjectiveSelected(objective)}
+                                   isWelcomePopUp={true}
                     />
                   )}
               </div>

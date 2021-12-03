@@ -206,7 +206,7 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
                             isDisplayEndTurnButton={isDisplayEndTurnButton}
                             isDisplayValidationButton={isDisplayValidationButton}
                             selectedHunters={selectedHunters}
-                            playedPower={player.played.reduce((pv, cv) => pv + cv,0)}
+                            playedPower={player.played.reduce((pv, cv) => getColoredDeck(player.color)[pv].power + getColoredDeck(player.color)[cv].power,0)}
                             huntBoard={huntBoard}
                 />
             }

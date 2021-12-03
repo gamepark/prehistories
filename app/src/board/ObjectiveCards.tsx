@@ -26,20 +26,21 @@ const ObjectiveCards : FC<Props> = ({objectives,players, ...props}) => {
             {objectives.map((objective, index) => 
                 <div key={index} css={[setPercentDimension(100,18), objectiveMargin]}>  
                     <ObjectiveCard objective={objective}
-                                   players={players}/>
+                                   players={players}
+                                   isWelcomePopUp={false} />
                 </div>
             )}
         </div>
 
         <div css={[toAbsolute, permanentObjectivePosition, setPercentDimension(15.9,20), placingBackground(Images.permanentObjectives, "cover")]}>
             {players.map((player, indexPlayer) => 
-                [...Array(player.totemTokens.filter(o => o === 1).length)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[toAbsolute, totemStyle, totemColumnPosition(indexPlayer,i, player.totemTokens.filter(o => o === 1).length, players.length), incomingAnimation]} draggable={false} />)
+                [...Array(player.totemTokens.filter(o => o === 1).length)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[toAbsolute, totemStyle, totemColumnPosition(indexPlayer,i, player.totemTokens.filter(o => o === 1).length, players.length)]} draggable={false} />)
             )}
             {players.map((player, indexPlayer) => 
-                [...Array(player.totemTokens.filter(o => o === 2).length)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[toAbsolute, totemStyle,  totemLinePosition(indexPlayer,i, player.totemTokens.filter(o => o === 2).length, players.length), incomingAnimation]} draggable={false} />)
+                [...Array(player.totemTokens.filter(o => o === 2).length)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[toAbsolute, totemStyle,  totemLinePosition(indexPlayer,i, player.totemTokens.filter(o => o === 2).length, players.length)]} draggable={false} />)
             )}
             {players.map((player, indexPlayer) => 
-                [...Array(player.totemTokens.filter(o => o === 3).length)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[toAbsolute, totemStyle, totemLegendaryPosition(indexPlayer,i,player.totemTokens.filter(o => o === 3).length, players.length), incomingAnimation]} draggable={false} />)
+                [...Array(player.totemTokens.filter(o => o === 3).length)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[toAbsolute, totemStyle, totemLegendaryPosition(indexPlayer,i,player.totemTokens.filter(o => o === 3).length, players.length)]} draggable={false} />)
             )}
 
         </div>
@@ -48,15 +49,6 @@ const ObjectiveCards : FC<Props> = ({objectives,players, ...props}) => {
 
     )    
 }
-
-const incomingKeyframes = keyframes`
-    from,20%{top:-150%;}
-    to{}
-`
-
-const incomingAnimation = css`
-    animation:${incomingKeyframes} 1s linear ;
-`
 
 const totemColumnPosition = (iPlayer:number, iToken:number, maxTokens:number, nbPlayers:number) => css`
 top:${iPlayer*(80/nbPlayers)}%;

@@ -3,7 +3,7 @@ import {css, keyframes} from "@emotion/react";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import {getPlayerName} from "@gamepark/prehistories/PrehistoriesOptions";
 import {PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
-import {PlayerTimer, usePlayer} from "@gamepark/react-client";
+import {PlayerTimer, useAnimation, usePlayer} from "@gamepark/react-client";
 import {Hand, Picture} from "@gamepark/react-components";
 import {FC, HTMLAttributes} from "react";
 import {useTranslation} from "react-i18next";
@@ -11,30 +11,53 @@ import {placingBackground, setPercentDimension, toAbsolute, toFullSize} from "..
 import Images, {bluePowerBanners, greenPowerBanners, redPowerBanners, whitePowerBanners, yellowPowerBanners} from "../utils/Images";
 import AvatarPanel from "./AvatarPanel";
 import Card from './Card';
+import FulfillObjective, { isFulfillObjective } from "@gamepark/prehistories/moves/FulfillObjective";
+import GameView from "@gamepark/prehistories/GameView";
+import { getHuntingPlayer } from "@gamepark/prehistories/types/HuntingPlayer";
+import {getTokensForFulfilledObjective} from "@gamepark/prehistories/material/ObjectiveRules"
+import Objective from "@gamepark/prehistories/material/Objective";
 
 type Props = {
     player: PlayerView | PlayerViewSelf,
     position:number
+    game:GameView
+    playerListDisplayed: (PlayerView | PlayerViewSelf)[]
 } & HTMLAttributes<HTMLDivElement>
 
-const PlayerPanel : FC<Props> = ({player:{color, totemTokens, hunting, order, hand, played}, position, ...props}) => {
+const PlayerPanel : FC<Props> = ({player:{color, totemTokens, hunting, order, hand, played}, position, game, playerListDisplayed, ...props}) => {
 
     const playerInfo = usePlayer(color)
     const {t} = useTranslation()
     const handLength = Array.isArray(hand) ? hand.length : hand 
+    const tokensAnimation = useAnimation<FulfillObjective>(animation => isFulfillObjective(animation.move))
+
+    const getSortedObjectivesPlayers = (objective:Objective):(PlayerView|PlayerViewSelf)[] => {
+        return [...playerListDisplayed].sort((a,b) => -a.totemTokens.filter(g => g === objective).length+b.totemTokens.filter(g => g === objective).length)
+    }
+
+    const tokenHasToMove = (index:number):boolean => {
+        return tokensAnimation !== undefined && color === getHuntingPlayer(game)?.color && index >= 8 - totemTokens.length - getTokensForFulfilledObjective(game, tokensAnimation.move.objective)
+    } 
 
     return (
 
         <div {...props} css={[placingBackground(getBG(color),"cover"), playerPanelBorder, toAbsolute, setPercentDimension(15,20), playerPanelPosition(position, color)]}>
 
-            {order !== undefined && <div css={[toAbsolute, setPercentDimension(40,18), powerPosition, placingBackground(getPowerBanner(played.length ? color : PlayerColor.Yellow)[order],"contain"), powerShadow, entryBannerAnim, !played.length && grayscale]}> </div>}
+            {order !== undefined && <div css={[toAbsolute, setPercentDimension(33,14), powerPosition, placingBackground(getPowerBanner(played.length ? color : PlayerColor.Yellow)[order],"contain"), powerShadow, entryBannerAnim, !played.length && grayscale]}> </div>}
 
             <AvatarPanel playerInfo={playerInfo} color={color} css={css`z-index:5;`}/>
 
             <h1 css={[nameStyle]}>{playerInfo?.name === undefined ? getPlayerName(color, t) : playerInfo?.name}</h1>
             <div css={totemRemainingPosition}>
 
-                {[...Array(8 - totemTokens.length)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(color)} css={totemStyle(8 - totemTokens.length)} draggable={false} />)}
+                {[...Array(8 - totemTokens.length)].map((_, i) => <Picture 
+                    key={i} 
+                    alt={t('token')} 
+                    src={getTotem(color)} 
+                    css={[totemStyle(8 - totemTokens.length),
+                        tokensAnimation && tokenHasToMove(i) && animateToken(tokensAnimation.duration,tokensAnimation.move.objective, 7-totemTokens.length-i, playerListDisplayed.findIndex(p => p.color === color), playerListDisplayed.length, getSortedObjectivesPlayers(tokensAnimation.move.objective).findIndex(p => p.color === color), game.objectives, totemTokens)]} 
+                    draggable={false} 
+                />)}
 
             </div>
             <PlayerTimer playerId={color} css={[toAbsolute,TimerStyle]}/>
@@ -52,6 +75,30 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, hunting, order, ha
 
 }
 
+const animatePermanentTokenKeyframes = (objective:Objective, index:number, totemsPlaced:number, playerIndex:number, nbPlayers:number) => keyframes`
+from{}
+50%,to{transform:translateX(${-28+(objective-1)*12.2+index*5.5+totemsPlaced*2.5}em) translateY(${-20.1-15.5*playerIndex*((nbPlayers-0.8)/nbPlayers)}em);}
+`
+
+const animateVariableTokenKeyframes45P = (objective:number, index:number, playerIndex:number, sortedObjPlayerRank:number) => keyframes`
+from{}
+50%,to{transform:translateX(${-124.5+index*4.9 + (sortedObjPlayerRank === 0 ? 0 : 8.5) + objective*19}em) translateY(${-19.7-playerIndex*15.3+(sortedObjPlayerRank !== 0 ? (sortedObjPlayerRank-1)*2.4 : 0)}em);}
+`
+
+const animateVariableTokenKeyframes23P = (objective:number, index:number, playerIndex:number, sortedObjPlayerRank:number) => keyframes`
+from{}
+50%,to{transform:translateX(${-114.8+index*4.9 + (sortedObjPlayerRank === 0? 0 : 8.5) + objective*19}em) translateY(${-19.7-playerIndex*15.3+(sortedObjPlayerRank !== 0 ? (sortedObjPlayerRank-1)*2.4 : 0)}em);}
+`
+
+const animateToken = (duration:number, objective:Objective, index:number, playerIndex:number, nbPlayers:number, sortedObjPlayerRank:number, objectiveList:Objective[], totemsPlacedList:Objective[]) => css`
+animation : ${objective <= 3 
+    ? animatePermanentTokenKeyframes(objective, index, totemsPlacedList.filter(o => o === objective).length, playerIndex,nbPlayers) 
+    : nbPlayers < 4 
+        ? animateVariableTokenKeyframes23P(objectiveList.findIndex(o => o === objective)!, index, playerIndex, sortedObjPlayerRank) 
+        : animateVariableTokenKeyframes45P(objectiveList.findIndex(o => o === objective)!, index, playerIndex, sortedObjPlayerRank)
+    } ${duration}s ease-in-out forwards;
+`
+
 const brokenArrowIconOffSet = (i:number) => css`
     transform:translateX(${-i*20}%) rotateZ(10deg);
 `
@@ -59,7 +106,7 @@ const brokenArrowIconOffSet = (i:number) => css`
 const handPosition = (length:number) => css`
   font-size: 0.4em;
   left: ${25+((length-1)*(length > 9 ? 1.9 : 2.8))}%;
-  bottom: 10%;
+  bottom: 8%;
   width: ${8}em;
   height: ${11}em;
   transition:all 1s ease-in-out;
@@ -113,10 +160,10 @@ function getPowerBanner(color:PlayerColor):string[]{
 }
 
 const powerPosition = css`
-    top:55%;
-    left:3%;
+    top:43%;
+    left:4%;
     z-index:-1;
-    transform:rotateZ(5deg);
+    transform:rotateZ(0deg);
 `
 
 const powerShadow = css`
@@ -146,26 +193,27 @@ const nameStyle = css`
 `
 
 const TimerStyle = css`
-    top:24%;
-    right:2%;
+    top:69%;
+    left:2%;
     display: block;
-    font-size: 2.5em;
+    font-size: 2.3em;
     padding-top: 0.5em;
     font-family:'Reggae One', sans-serif;
 `
 
 const totemRemainingPosition = css`
     height:3.5em;
-    margin:1em 1em;
+    margin:0.5em 1em;
     display:flex;
     flex-direction:row;
 `
 
 const totemStyle = (spread:number) => css`
-    height:3em;
-    width:3em;
+    height:4em;
+    width:4em;
     margin : 0 ${-0.0625*spread+(8-spread)/10}em;
     border-radius:100%;
+    box-shadow:0 0 0.4em black;
 `
 
 export function getTotem(color:PlayerColor):string{

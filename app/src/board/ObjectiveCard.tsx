@@ -4,7 +4,7 @@ import {PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerVie
 import {Picture} from "@gamepark/react-components"
 import {FC, HTMLAttributes} from "react"
 import {Trans, useTranslation} from "react-i18next/"
-import {placingBackground, setPercentDimension, toAbsolute, toFullSize} from "../utils/styles"
+import {placingBackground, toAbsolute, toFullSize} from "../utils/styles"
 import Images from "../utils/Images"
 import {getTotem} from "./PlayerPanel"
 import Objective from "@gamepark/prehistories/material/Objective";
@@ -15,9 +15,10 @@ import FulfillObjective, {isFulfillObjective} from "@gamepark/prehistories/moves
 type Props = {
     objective: Objective
     players:(PlayerView | PlayerViewSelf)[]
+    isWelcomePopUp:boolean
 } & HTMLAttributes<HTMLDivElement>
 
-const ObjectiveCard : FC<Props> = ({objective, players, ...props}) => {
+const ObjectiveCard : FC<Props> = ({objective, players, isWelcomePopUp, ...props}) => {
     
     const playerNewArray = players.filter(p => p)
     const sortedPlayers = playerNewArray.sort((a,b) => -a.totemTokens.filter(g => g === objective).length+b.totemTokens.filter(g => g === objective).length)
@@ -35,8 +36,8 @@ const ObjectiveCard : FC<Props> = ({objective, players, ...props}) => {
 
             </div>
 
-            {sortedPlayers.map((player, indexPlayer) => 
-                [...Array(player.totemTokens.filter(g => g === objective).length)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[toAbsolute, setPercentDimension(12.3,17), totemStyle(indexPlayer,i), incomingAnimation]} draggable={false} />)
+            {isWelcomePopUp === false && sortedPlayers.map((player, indexPlayer) => 
+                [...Array(player.totemTokens.filter(g => g === objective).length)].map((_, i) => <Picture key={i} alt={t('token')} src={getTotem(player.color)} css={[toAbsolute, totemStyle(indexPlayer,i)]} draggable={false} />)
             )}
 
         </div>
@@ -56,21 +57,14 @@ const desaturate = css`
     filter:saturate(40%);
 `
 
-const incomingKeyframes = keyframes`
-    from{bottom:150%;}
-    to{}
-`
-
-const incomingAnimation = css`
-    animation:${incomingKeyframes} 1s linear;
-`
-
 const totemStyle = (iPlayer:number, iToken:number) => css`
-    bottom:${iPlayer === 0 ? 2 : 2 + (iPlayer - 1)*10}%;
-    left:${iPlayer === 0 ? 9.5+iToken*10 : 73.5-iToken*10}%;
+    top:${iPlayer === 0 ? 2 : 2 + (iPlayer - 1)*10}%;
+    left:${iPlayer === 0 ? 5.5+iToken*10 : 73.5-iToken*10}%;
     box-shadow:0 0 0.5em black;
     border-radius:100%;
     margin:0.5em auto;
+    width:4em;
+    height:4em;
 `
 
 const objectivePosition = css`

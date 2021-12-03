@@ -51,6 +51,8 @@ export default function GameDisplay({game, audioLoader}: Props) {
           <PlayerPanel key={player.color}
                        position={index}
                        player = {player}
+                       playerListDisplayed={players}
+                       game={game}
                        onClick = {() => playSetCaveDisplayed(setCaveDisplayedMove(player.color), {local:true})}
           />
         )}
