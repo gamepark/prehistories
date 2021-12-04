@@ -2,7 +2,7 @@
 import {css} from "@emotion/react";
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {Tutorial, useActions, useAnimation, useFailures, usePlay, usePlayerId} from "@gamepark/react-client";
+import {Tutorial, useActions, useAnimation, useFailures, usePlayerId} from "@gamepark/react-client";
 import {Picture} from '@gamepark/react-components'
 import {TFunction} from "i18next";
 import {FC, useEffect, useRef, useState} from "react";
@@ -12,11 +12,12 @@ import Button from "../utils/Button";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import GameView from "@gamepark/prehistories/GameView";
 import Move from "@gamepark/prehistories/moves/Move";
-import { getHuntingPlayer } from "@gamepark/prehistories/types/HuntingPlayer";
+import {getHuntingPlayer} from "@gamepark/prehistories/types/HuntingPlayer";
 import {isWinner} from "@gamepark/prehistories/Prehistories";
+import {useClickAway} from "react-use";
 
 
-const TutorialPopup : FC<{game:GameView, tutorial:Tutorial}> = ({game, tutorial}) => {
+const TutorialPopup: FC<{ game: GameView, tutorial: Tutorial }> = ({game, tutorial}) => {
 
     const {t} = useTranslation()
     const playerId = usePlayerId<PlayerColor>()
@@ -34,13 +35,16 @@ const TutorialPopup : FC<{game:GameView, tutorial:Tutorial}> = ({game, tutorial}
 
     const animation = useAnimation<Move>()
 
+    const ref = useRef(null)
+    useClickAway(ref, () => setTutorialDisplay(false))
+
     const moveTutorial = (deltaMessage: number) => {
-      setTutorialIndex(tutorialIndex + deltaMessage)
-      setTutorialDisplay(true)
+        setTutorialIndex(tutorialIndex + deltaMessage)
+        setTutorialDisplay(true)
     }
-    
+
     const resetTutorialDisplay = () => {
-      if (!winner){
+        if (!winner) {
             setTutorialIndex(0)
             setTutorialDisplay(true)
         } else {
@@ -51,24 +55,24 @@ const TutorialPopup : FC<{game:GameView, tutorial:Tutorial}> = ({game, tutorial}
     const tutorialMessage = (index: number) => {
         let currentStep = actionsNumber
         while (!tutorialDescription[currentStep]) {
-          currentStep--
+            currentStep--
         }
         return tutorialDescription[currentStep][index]
-      }
-
-      useEffect(() => {
-        if (previousActionNumber.current > actionsNumber) {
-          setTutorialDisplay(false)
-        } else if (tutorialDescription[actionsNumber]) {
-          resetTutorialDisplay()
-        }
-        previousActionNumber.current = actionsNumber
-      }, [actionsNumber])
+    }
 
     useEffect(() => {
-      if (failures.length) {
-        setTutorialIndex(tutorialDescription[actionsNumber].length - 1)  
-        setTutorialDisplay(true)
+        if (previousActionNumber.current > actionsNumber) {
+            setTutorialDisplay(false)
+        } else if (tutorialDescription[actionsNumber]) {
+            resetTutorialDisplay()
+        }
+        previousActionNumber.current = actionsNumber
+    }, [actionsNumber])
+
+    useEffect(() => {
+        if (failures.length) {
+            setTutorialIndex(tutorialDescription[actionsNumber].length - 1)
+            setTutorialDisplay(true)
         }
     }, [actionsNumber, failures])
 
@@ -78,13 +82,13 @@ const TutorialPopup : FC<{game:GameView, tutorial:Tutorial}> = ({game, tutorial}
 
     const currentMessage = tutorialMessage(tutorialIndex)
 
-    const isPlayerActive = (game:GameView) => {
-      const huntingPlayer = getHuntingPlayer(game)
-      if (!huntingPlayer) {
-        return game.players.find(p => p.color === playerId)!.isReady !== true
-      } else {
-        return playerId === huntingPlayer.color && game.players.find(p => p.color === playerId)!.isReady !== true
-      }
+    const isPlayerActive = (game: GameView) => {
+        const huntingPlayer = getHuntingPlayer(game)
+        if (!huntingPlayer) {
+            return game.players.find(p => p.color === playerId)!.isReady !== true
+        } else {
+            return playerId === huntingPlayer.color && game.players.find(p => p.color === playerId)!.isReady !== true
+        }
     }
 
     const displayPopup = tutorialDisplay && !animation && currentMessage && !failures.length && isPlayerActive(game)
@@ -92,45 +96,45 @@ const TutorialPopup : FC<{game:GameView, tutorial:Tutorial}> = ({game, tutorial}
     return (
         <>
 
-        <div css={[popupOverlayStyle, displayPopup ? showPopupOverlayStyle : hidePopupOverlayStyle(85, 90), style]}
-            onClick={() => setTutorialDisplay(false)}>
+            <div ref={ref} css={[popupStyle, currentMessage && popupWidth(currentMessage.boxWidth), displayPopup ? popupPosition(currentMessage) : hidePopupStyle]}
+                 onClick={event => event.stopPropagation()}>
 
-            <div css={[popupStyle, displayPopup ? popupPosition(currentMessage) : hidePopupStyle]}
-                onClick={event => event.stopPropagation()}>
+                <div css={closePopupStyle} onClick={() => setTutorialDisplay(false)}><FontAwesomeIcon icon={faTimes}/></div>
 
-              <div css={closePopupStyle} onClick={() => setTutorialDisplay(false)}><FontAwesomeIcon icon={faTimes}/></div>
-
-              {currentMessage && <h2>{currentMessage.title(t)} {currentMessage && currentMessage.image && <Picture css={[imageStyle]} src={currentMessage.image} alt={t("steal Token")} />}</h2>}
-              {currentMessage && <p> <Trans defaults={currentMessage.text} components={[<strong/>]} /> </p>}
-              {tutorialIndex > 0 && <Button css={buttonTutoStyle} colorButton={PlayerColor.Yellow} onClick={() => moveTutorial(-1)}>{'<<'}</Button>}
-              <Button css={buttonTutoStyle} colorButton={PlayerColor.Yellow} onClick={() => moveTutorial(1)}>{t('OK')}</Button>
+                {currentMessage && <h2>{currentMessage.title(t)} {currentMessage && currentMessage.image &&
+                <Picture css={[imageStyle]} src={currentMessage.image} alt={t("steal Token")}/>}</h2>}
+                {currentMessage && <p><Trans defaults={currentMessage.text} components={[<strong/>]}/></p>}
+                {tutorialIndex > 0 && <Button css={buttonTutoStyle} colorButton={PlayerColor.Yellow} onClick={() => moveTutorial(-1)}>{'<<'}</Button>}
+                <Button css={buttonTutoStyle} colorButton={PlayerColor.Yellow} onClick={() => moveTutorial(1)}>{t('OK')}</Button>
 
             </div>
 
-        </div>
+            {
+                !displayPopup &&
+                <Button css={[buttonTutoStyle, resetStyle]} colorButton={PlayerColor.Yellow}
+                        onClick={() => resetTutorialDisplay()}>{t('Display tutorial')}</Button>
+            }
 
-        {
-        !displayPopup && 
-        <Button css={[buttonTutoStyle, resetStyle]} colorButton={PlayerColor.Yellow} onClick={() => resetTutorialDisplay()}>{t('Display tutorial')}</Button>
-        }
+            {
+                currentMessage && currentMessage.arrow &&
+                <Picture alt='Arrow pointing toward current tutorial interest' src={Arrow} draggable="false"
+                         css={[arrowStyle(currentMessage.arrow.angle), displayPopup ? showArrowStyle(currentMessage.arrow.top, currentMessage.arrow.left) : hideArrowStyle]}/>
+            }
 
-        {
-          currentMessage && currentMessage.arrow &&
-          <Picture alt='Arrow pointing toward current tutorial interest' src={Arrow} draggable="false"
-                   css={[arrowStyle(currentMessage.arrow.angle), displayPopup ? showArrowStyle(currentMessage.arrow.top, currentMessage.arrow.left) : hideArrowStyle]}/>
-        }
-
-        {
-          winner && !hideEndInfo &&
-          <div css={[popupStyle, popupPosition(tutorialEndGame)]}>
-            <div css={closePopupStyle} onClick={() => setHideEndInfo(true)}><FontAwesomeIcon icon={faTimes}/></div>
-            <h2 css={textEndStyle} >{tutorialEndGame.title(t)}</h2>
-            <p css={textEndStyle} >{t(tutorialEndGame.text)}</p>
-            <Button css={[buttonTutoStyle, endSize]} colorButton={PlayerColor.Yellow} onClick={() => resetTutorial()}>{t('Restart the tutorial')}</Button>
-            <Button css={[buttonTutoStyle, endSize]} colorButton={PlayerColor.Yellow} onClick={() => window.location.href = platformUri}>{t('Play with friends')}</Button>
-            <Button css={[buttonTutoStyle, endSize]} colorButton={PlayerColor.Yellow} onClick={() => window.location.href = discordUri}>{t('Find players')}</Button>
-          </div>
-        }
+            {
+                winner && !hideEndInfo &&
+                <div css={[popupStyle, popupWidth(tutorialEndGame.boxWidth), popupPosition(tutorialEndGame)]}>
+                    <div css={closePopupStyle} onClick={() => setHideEndInfo(true)}><FontAwesomeIcon icon={faTimes}/></div>
+                    <h2 css={textEndStyle}>{tutorialEndGame.title(t)}</h2>
+                    <p css={textEndStyle}>{t(tutorialEndGame.text)}</p>
+                    <Button css={[buttonTutoStyle, endSize]} colorButton={PlayerColor.Yellow}
+                            onClick={() => resetTutorial()}>{t('Restart the tutorial')}</Button>
+                    <Button css={[buttonTutoStyle, endSize]} colorButton={PlayerColor.Yellow}
+                            onClick={() => window.location.href = platformUri}>{t('Play with friends')}</Button>
+                    <Button css={[buttonTutoStyle, endSize]} colorButton={PlayerColor.Yellow}
+                            onClick={() => window.location.href = discordUri}>{t('Find players')}</Button>
+                </div>
+            }
 
         </>
     )
@@ -138,180 +142,152 @@ const TutorialPopup : FC<{game:GameView, tutorial:Tutorial}> = ({game, tutorial}
 }
 
 export function resetTutorial() {
-  localStorage.removeItem('prehistories')
-  window.location.reload()
+    localStorage.removeItem('prehistories')
+    window.location.reload()
 }
 
 export const hidePopupStyle = css`
-  top: 85%;
-  left: 90%;
-  width: 0;
-  height: 0;
-  margin: 0;
-  padding: 0;
-  border: solid 0 #FFF;
-  font-size: 0;
-`
-
-export const hidePopupOverlayStyle = (boxTop: number, boxLeft: number) => css`
-  top: ${boxTop}%;
-  left: ${boxLeft}%;
-  width: 0;
-  height: 0;
-  overflow: hidden;
+    transform: translate(157em, 72.5em) translate(-50%, -50%) scale(0.1);
 `
 
 const buttonTutoStyle = css`
-width:5em;
-height:1.5em;
-margin-right: 1em;
-font-family:'Reggae One', sans-serif;
+    width: 5em;
+    height: 1.5em;
+    margin-right: 1em;
+    font-family: 'Reggae One', sans-serif;
+    z-index: 103;
 `
 
 const endSize = css`
-width:auto;
+    width: auto;
 `
 
 const textEndStyle = css`
-color: black;
-`
-
-const popupOverlayStyle = css`
-  position: absolute;
-  transform: translateZ(30em);
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 99;
-  transition: all .5s ease;
-`
-const showPopupOverlayStyle = css`
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
+    color: black;
 `
 
 const popupStyle = css`
-  position: absolute;
-  text-align: center;
-  z-index : 102;
-  border-radius: 1em;
-  box-sizing: border-box;
-  align-self: center;
-  padding: 2%;
-  margin: 0 2%;
-  outline: none;
-  box-shadow: 1em 2em 2.5em -1.5em hsla(0, 0%, 0%, 0.95);
-  border:1em black solid;
-  background: url();
-  background-color: rgba(254,165,0,0.95);
-  border-radius: 40em 3em 40em 3em/3em 40em 3em 40em;
-  color:black;
-  font-family: 'Mulish', sans-serif;
-
-  &:before {
-    content: '';
-    display: block;
     position: absolute;
-    left: 0;
     top: 0;
-    width: 100%;
-    height: 100%; 
-    border-radius: 40em 1.5em 40em 1.5em/1.5em 40em 1.5em 40em;
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-  
-  &:hover{
-      box-shadow: 2em 4em 5em -3em hsla(0,0%,0%,0.5);
-    }
-  & > h2 {
-    position:relative;
-    font-size: 5em;
-    margin:0 1em;
-  }
-  & > p {
-    position:relative;
+    left: 0;
     text-align: center;
-    font-size: 3.5em;
-    white-space: break-spaces;
+    z-index: 102;
+    border-radius: 1em;
+    box-sizing: border-box;
+    align-self: center;
+    padding: 2%;
+    margin: 0 2%;
+    outline: none;
+    box-shadow: 1em 2em 2.5em -1.5em hsla(0, 0%, 0%, 0.95);
+    border: 1em black solid;
+    background-color: rgba(254, 165, 0, 0.95);
+    border-radius: 40em 3em 40em 3em/3em 40em 3em 40em;
+    color: black;
+    font-family: 'Mulish', sans-serif;
+    transition-property: transform, opacity;
+    transition-duration: 0.7s;
+    transition-timing-function: ease-in-out;
 
-    strong {
-      font-weight:bold;
+    &:before {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 40em 1.5em 40em 1.5em/1.5em 40em 1.5em 40em;
+        background-color: rgba(255, 255, 255, 0.1);
     }
 
-  }
-  & > button {
-    font-size: 3.5em;
-  }
-`
+    &:hover {
+        box-shadow: 2em 4em 5em -3em hsla(0, 0%, 0%, 0.5);
+    }
 
-const style = css`
-  background-color: transparent;
+    & > h2 {
+        position: relative;
+        font-size: 5em;
+        margin: 0 1em;
+    }
+
+    & > p {
+        position: relative;
+        text-align: center;
+        font-size: 3.5em;
+        white-space: break-spaces;
+
+        strong {
+            font-weight: bold;
+        }
+
+    }
+
+    & > button {
+        font-size: 3.5em;
+    }
 `
 
 const closePopupStyle = css`
-  position: relative;
-  float: right;
-  text-align: center;
-  margin-top: -2%;
-  margin-right: -0%;
-  font-size: 4em;
-  color:white;
-  z-index:1;
-  &:hover{
-    cursor: pointer;
-    color: black;
-  }
+    position: relative;
+    float: right;
+    text-align: center;
+    margin-top: -2%;
+    margin-right: -0%;
+    font-size: 4em;
+    color: white;
+    z-index: 1;
+
+    &:hover {
+        cursor: pointer;
+        color: black;
+    }
 `
 
-export const popupPosition = ({boxWidth, boxTop, boxLeft, arrow}: TutorialStepDescription) => css`
-  transition-property: width, top, left, transform;
-  transition-duration: 0.7s;
-  transition-timing-function: ease-in-out;
-  width: ${boxWidth}%;
-  top: ${boxTop}%;
-  left: ${boxLeft}%;
-  transform: translate(-50%, ${!arrow || arrow.angle % 180 !== 0 ? '-50%' : arrow.angle % 360 === 0 ? '0%' : '-100%'}) translateZ(30em);
+export const popupWidth = (boxWidth: number) => css`
+    width: ${boxWidth}%;
+`
+
+export const popupPosition = ({boxTop, boxLeft, arrow}: TutorialStepDescription) => css`
+    transform: translate(${boxLeft * 16 / 9}em, ${boxTop}em) translate(-50%, ${!arrow || arrow.angle % 180 !== 0 ? -50 : arrow.angle % 360 === 0 ? 0 : -100}%) translateZ(30em);
 `
 
 const arrowStyle = (angle: number) => css`
-  position: absolute;
-  transform: rotate(${angle}deg) translateZ(30em);
-  will-change: transform;
-  z-index: 102;
-  transition-property: top, left, transform;
-  transition-duration: 0.7s;
-  transition-timing-function: ease-in-out;
+    position: absolute;
+    transform: rotate(${angle}deg) translateZ(30em);
+    will-change: transform;
+    z-index: 102;
+    transition-property: top, left, transform;
+    transition-duration: 0.7s;
+    transition-timing-function: ease-in-out;
 `
 
 const showArrowStyle = (top: number, left: number) => css`
-  top: ${top}%;
-  left: ${left}%;
-  width: 20%;
+    top: ${top}%;
+    left: ${left}%;
+    width: 20%;
 `
 
 const hideArrowStyle = css`
-  top: 90%;
-  left: 90%;
-  width: 0;
+    top: 90%;
+    left: 90%;
+    width: 0;
 `
 
 const imageStyle = css`
-border-radius:100%;
-box-shadow:0 0 0.1em 0.02em black;
-vertical-align: bottom;
+    border-radius: 100%;
+    box-shadow: 0 0 0.1em 0.02em black;
+    vertical-align: bottom;
 `
 
 const resetStyle = css`
-  position: absolute;
-  text-align: center;
-  top: 70%;
-  right: -1%;
-  font-size: 3em;
-  width:11em;
-  height:fit-content;
-  font-family:'Reggae One', sans-serif;
+    position: absolute;
+    text-align: center;
+    top: 70%;
+    right: -1%;
+    font-size: 3em;
+    width: 11em;
+    height: fit-content;
+    font-family: 'Reggae One', sans-serif;
 `
 
 type TutorialStepDescription = {
@@ -321,14 +297,14 @@ type TutorialStepDescription = {
     boxLeft: number
     boxWidth: number
     arrow?: {
-      angle: number
-      top: number
-      left: number
+        angle: number
+        top: number
+        left: number
     }
-    image?:string
-  }
+    image?: string
+}
 
-const tutorialDescription:TutorialStepDescription[][] = [
+const tutorialDescription: TutorialStepDescription[][] = [
     [
         {
             title: (t: TFunction) => t('title.welcome'),
@@ -338,7 +314,7 @@ const tutorialDescription:TutorialStepDescription[][] = [
             boxWidth: 70
         },
         {
-          title: (t: TFunction) => t('title.your.tribe'),
+            title: (t: TFunction) => t('title.your.tribe'),
             text: 'tuto.your.tribe',
             boxTop: 33,
             boxLeft: 48,
@@ -374,16 +350,16 @@ const tutorialDescription:TutorialStepDescription[][] = [
             }
         },
         {
-          title: (t: TFunction) => t('title.how.to.win'),
-          text: 'tuto.how.to.place.tokens',
-          boxTop: 32,
-          boxLeft: 52,
-          boxWidth: 50,
-          arrow: {
-              angle: 0,
-              top: 20,
-              left: 42
-          }
+            title: (t: TFunction) => t('title.how.to.win'),
+            text: 'tuto.how.to.place.tokens',
+            boxTop: 32,
+            boxLeft: 52,
+            boxWidth: 50,
+            arrow: {
+                angle: 0,
+                top: 20,
+                left: 42
+            }
         },
         {
             title: (t: TFunction) => t('title.your.hand'),
@@ -398,11 +374,11 @@ const tutorialDescription:TutorialStepDescription[][] = [
             }
         },
         {
-          title: (t: TFunction) => t('title.phases'),
-          text: 'tuto.phases',
-          boxTop: 50,
-          boxLeft: 50,
-          boxWidth: 50,
+            title: (t: TFunction) => t('title.phases'),
+            text: 'tuto.phases',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
         },
         {
             title: (t: TFunction) => t('title.initiative.phase'),
@@ -423,7 +399,7 @@ const tutorialDescription:TutorialStepDescription[][] = [
                 left: 44
             }
         }
-    ],[
+    ], [
         {
             title: (t: TFunction) => t('title.playing.zone'),
             text: 'tuto.playing.zone',
@@ -448,7 +424,7 @@ const tutorialDescription:TutorialStepDescription[][] = [
                 left: 48
             }
         }
-    ],[
+    ], [
         {
             title: (t: TFunction) => t('title.reveal'),
             text: 'tuto.reveal',
@@ -481,12 +457,12 @@ const tutorialDescription:TutorialStepDescription[][] = [
             }
         },
         {
-          title: (t: TFunction) => t('title.hunt.phase'),
-          text: 'tuto.hunt.phase',
-          boxTop: 50,
-          boxLeft: 50,
-          boxWidth: 60,
-        }, 
+            title: (t: TFunction) => t('title.hunt.phase'),
+            text: 'tuto.hunt.phase',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 60,
+        },
         {
             title: (t: TFunction) => t('title.huntBoard'),
             text: 'tuto.huntBoard',
@@ -498,7 +474,7 @@ const tutorialDescription:TutorialStepDescription[][] = [
                 top: 40,
                 left: 15
             }
-        }, 
+        },
         {
             title: (t: TFunction) => t('title.your.cave'),
             text: 'tuto.your.cave',
@@ -531,47 +507,47 @@ const tutorialDescription:TutorialStepDescription[][] = [
             }
         },
         {
-          title: (t: TFunction) => t('title.place.1x1.tile'),
-          text: 'tuto.place.1x1.tile.2',
-          boxTop: 26,
-          boxLeft: 31,
-          boxWidth: 40,
-          arrow: {
-              angle: 270,
-              top: 13,
-              left: 0
-          }
-      }
-    ],[
+            title: (t: TFunction) => t('title.place.1x1.tile'),
+            text: 'tuto.place.1x1.tile.2',
+            boxTop: 26,
+            boxLeft: 31,
+            boxWidth: 40,
+            arrow: {
+                angle: 270,
+                top: 13,
+                left: 0
+            }
+        }
+    ], [
         {
-          title: (t: TFunction) => t('title.spend.mecanics'),
-          text: 'tuto.spend.mecanics',
-          boxTop: 50,
-          boxLeft: 50,
-          boxWidth: 50,
+            title: (t: TFunction) => t('title.spend.mecanics'),
+            text: 'tuto.spend.mecanics',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
         },
         {
-          title: (t: TFunction) => t('title.spend.costs'),
-          text: 'tuto.spend.costs',
-          boxTop: 25,
-          boxLeft: 30,
-          boxWidth: 60,
-          arrow: {
-              angle: 0,
-              top: 13,
-              left: -3
+            title: (t: TFunction) => t('title.spend.costs'),
+            text: 'tuto.spend.costs',
+            boxTop: 25,
+            boxLeft: 30,
+            boxWidth: 60,
+            arrow: {
+                angle: 0,
+                top: 13,
+                left: -3
             }
         },
         {
-          title: (t: TFunction) => t('title.spend.cost.zone'),
-          text: 'tuto.spend.cost.zone',
-          boxTop: 25,
-          boxLeft: 30,
-          boxWidth: 60,
-          arrow: {
-              angle: 0,
-              top: 13,
-              left: -3
+            title: (t: TFunction) => t('title.spend.cost.zone'),
+            text: 'tuto.spend.cost.zone',
+            boxTop: 25,
+            boxLeft: 30,
+            boxWidth: 60,
+            arrow: {
+                angle: 0,
+                top: 13,
+                left: -3
             }
         },
         {
@@ -586,7 +562,7 @@ const tutorialDescription:TutorialStepDescription[][] = [
                 left: 40
             }
         }
-    ],[
+    ], [
         {
             title: (t: TFunction) => t('title.no.injury.hunting'),
             text: 'tuto.no.injury.hunting',
@@ -606,7 +582,7 @@ const tutorialDescription:TutorialStepDescription[][] = [
                 left: 55
             }
         }
-    ],[
+    ], [
         {
             title: (t: TFunction) => t('title.draw.cards'),
             text: 'tuto.draw.cards',
@@ -626,7 +602,7 @@ const tutorialDescription:TutorialStepDescription[][] = [
             boxLeft: 50,
             boxWidth: 50,
         }
-    ],[],[],[],[
+    ], [], [], [], [
         {
             title: (t: TFunction) => t('title.turn2.validate'),
             text: 'tuto.turn2.validate',
@@ -639,330 +615,330 @@ const tutorialDescription:TutorialStepDescription[][] = [
                 left: 48
             }
         }
-    ],[
-      {
-        title: (t: TFunction) => t('title.placement.rules.2'),
-        text: 'tuto.placement.rules.2',
-        boxTop: 50,
-        boxLeft: 50,
-        boxWidth: 50,
-      },
-      {
-        title: (t: TFunction) => t('title.turn.tiles'),
-        text: 'tuto.turn.tiles',
-        boxTop: 50,
-        boxLeft: 50,
-        boxWidth: 60,
-    },
-    {
-      title: (t: TFunction) => t('title.place.2x1.tile'),
-      text: 'tuto.place.2x1.tile.1',
-      boxTop: 55,
-      boxLeft: 58,
-      boxWidth: 40,
-      arrow: {
-          angle: 270,
-          top: 55,
-          left: 27
-      }
-    },
-    {
-      title: (t: TFunction) => t('title.place.2x1.tile'),
-      text: 'tuto.place.2x1.tile.2',
-      boxTop: 27,
-      boxLeft: 44,
-      boxWidth: 40,
-      arrow: {
-          angle: 270,
-          top: 21,
-          left: 13
-      }
-    }
-        
-    ],[
-      {
-        title: (t: TFunction) => t('title.spend.hunters'),
-        text: 'tuto.spend.hunters',
-        boxTop: 55,
-        boxLeft: 25,
-        boxWidth: 45,
-      },
-      {
-        title: (t: TFunction) => t('title.spend.two.hunters'),
-        text: 'tuto.spend.two.hunters',
-        boxTop: 55,
-        boxLeft: 25,
-        boxWidth: 45,
-      }
-    ],[],[],[
-      {
-        title: (t: TFunction) => t('title.injury.hunt'),
-        text: 'tuto.injury.hunt',
-        boxTop: 35,
-        boxLeft: 61,
-        boxWidth: 55,
-        arrow: {
-            angle: 90,
-            top: 28,
-            left: 84
+    ], [
+        {
+            title: (t: TFunction) => t('title.placement.rules.2'),
+            text: 'tuto.placement.rules.2',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+        },
+        {
+            title: (t: TFunction) => t('title.turn.tiles'),
+            text: 'tuto.turn.tiles',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 60,
+        },
+        {
+            title: (t: TFunction) => t('title.place.2x1.tile'),
+            text: 'tuto.place.2x1.tile.1',
+            boxTop: 55,
+            boxLeft: 58,
+            boxWidth: 40,
+            arrow: {
+                angle: 270,
+                top: 55,
+                left: 27
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.place.2x1.tile'),
+            text: 'tuto.place.2x1.tile.2',
+            boxTop: 27,
+            boxLeft: 44,
+            boxWidth: 40,
+            arrow: {
+                angle: 270,
+                top: 21,
+                left: 13
+            }
         }
-      },
-      {
-        title: (t: TFunction) => t('title.drawing.rules'),
-        text: 'tuto.drawing.rules',
-        boxTop: 50,
-        boxLeft: 50,
-        boxWidth: 75,
-      },
-      {
-        title: (t: TFunction) => t('title.end.turn'),
-        text: 'tuto.end.turn',
-        boxTop: 50,
-        boxLeft: 25,
-        boxWidth: 45,
-      }
-      
-    ],[
-      {
-        title: (t: TFunction) => t('title.play.big.hunters'),
-        text: 'tuto.play.big.hunters',
-        boxTop: 50,
-        boxLeft: 50,
-        boxWidth: 50,
-      }
-    ],[],[],[
-      {
-        title: (t: TFunction) => t('title.turn3.validate'),
-        text: 'tuto.turn3.validate',
-        boxTop: 50,
-        boxLeft: 50,
-        boxWidth: 50,
-      }
-    ],[
-      {
-        title: (t: TFunction) => t('title.how.to.discard.tokens'),
-        text: 'tuto.how.to.discard.tokens',
-        boxTop: 50,
-        boxLeft: 50,
-        boxWidth: 50,
-      },
-      {
-        title: (t: TFunction) => t('title.how.to.discard.tokens'),
-        text: 'tuto.your.tokens',
-        boxTop: 41,
-        boxLeft: 73,
-        boxWidth: 50,
-        arrow: {
-            angle: 0,
-            top: 28,
-            left: 80
+
+    ], [
+        {
+            title: (t: TFunction) => t('title.spend.hunters'),
+            text: 'tuto.spend.hunters',
+            boxTop: 55,
+            boxLeft: 25,
+            boxWidth: 45,
+        },
+        {
+            title: (t: TFunction) => t('title.spend.two.hunters'),
+            text: 'tuto.spend.two.hunters',
+            boxTop: 55,
+            boxLeft: 25,
+            boxWidth: 45,
         }
-      },
-      {
-        title: (t: TFunction) => t('title.how.to.discard.tokens'),
-        text: 'tuto.permanent.objectives.intro',
-        boxTop: 29,
-        boxLeft: 73,
-        boxWidth: 50,
-        arrow: {
-            angle: 0,
-            top: 16,
-            left: 80
+    ], [], [], [
+        {
+            title: (t: TFunction) => t('title.injury.hunt'),
+            text: 'tuto.injury.hunt',
+            boxTop: 35,
+            boxLeft: 61,
+            boxWidth: 55,
+            arrow: {
+                angle: 90,
+                top: 28,
+                left: 84
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.drawing.rules'),
+            text: 'tuto.drawing.rules',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 75,
+        },
+        {
+            title: (t: TFunction) => t('title.end.turn'),
+            text: 'tuto.end.turn',
+            boxTop: 50,
+            boxLeft: 25,
+            boxWidth: 45,
         }
-      },
-      {
-        title: (t: TFunction) => t('title.how.to.discard.tokens'),
-        text: 'tuto.variable.objectives.intro',
-        boxTop: 37,
-        boxLeft: 51,
-        boxWidth: 60,
-        arrow: {
-            angle: 0,
-            top: 24,
-            left: 42
+
+    ], [
+        {
+            title: (t: TFunction) => t('title.play.big.hunters'),
+            text: 'tuto.play.big.hunters',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
         }
-      },
-      {
-        title: (t: TFunction) => t('title.permanent.objectives'),
-        text: 'tuto.permanent.objectives.1',
-        boxTop: 27,
-        boxLeft: 68,
-        boxWidth: 60,
-        arrow: {
-            angle: 0,
-            top: 14,
-            left: 80
+    ], [], [], [
+        {
+            title: (t: TFunction) => t('title.turn3.validate'),
+            text: 'tuto.turn3.validate',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
         }
-      },
-      {
-        title: (t: TFunction) => t('title.permanent.objectives'),
-        text: 'tuto.permanent.objectives.2',
-        boxTop: 32,
-        boxLeft: 68,
-        boxWidth: 60,
-        arrow: {
-            angle: 0,
-            top: 19,
-            left: 80
+    ], [
+        {
+            title: (t: TFunction) => t('title.how.to.discard.tokens'),
+            text: 'tuto.how.to.discard.tokens',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50,
+        },
+        {
+            title: (t: TFunction) => t('title.how.to.discard.tokens'),
+            text: 'tuto.your.tokens',
+            boxTop: 41,
+            boxLeft: 73,
+            boxWidth: 50,
+            arrow: {
+                angle: 0,
+                top: 28,
+                left: 80
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.how.to.discard.tokens'),
+            text: 'tuto.permanent.objectives.intro',
+            boxTop: 29,
+            boxLeft: 73,
+            boxWidth: 50,
+            arrow: {
+                angle: 0,
+                top: 16,
+                left: 80
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.how.to.discard.tokens'),
+            text: 'tuto.variable.objectives.intro',
+            boxTop: 37,
+            boxLeft: 51,
+            boxWidth: 60,
+            arrow: {
+                angle: 0,
+                top: 24,
+                left: 42
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.permanent.objectives'),
+            text: 'tuto.permanent.objectives.1',
+            boxTop: 27,
+            boxLeft: 68,
+            boxWidth: 60,
+            arrow: {
+                angle: 0,
+                top: 14,
+                left: 80
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.permanent.objectives'),
+            text: 'tuto.permanent.objectives.2',
+            boxTop: 32,
+            boxLeft: 68,
+            boxWidth: 60,
+            arrow: {
+                angle: 0,
+                top: 19,
+                left: 80
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.variable.objectives'),
+            text: 'tuto.variable.objectives',
+            boxTop: 29,
+            boxLeft: 58,
+            boxWidth: 60,
+            arrow: {
+                angle: 0,
+                top: 16,
+                left: 42
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.variable.objectives.how.many.tokens'),
+            text: 'tuto.variable.objectives.how.many.tokens.1',
+            boxTop: 41,
+            boxLeft: 48,
+            boxWidth: 60,
+            arrow: {
+                angle: 0,
+                top: 29,
+                left: 23
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.variable.objectives.how.many.tokens'),
+            text: 'tuto.variable.objectives.how.many.tokens.2',
+            boxTop: 41,
+            boxLeft: 48,
+            boxWidth: 60,
+            arrow: {
+                angle: 0,
+                top: 29,
+                left: 29.4
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.link.totems.objective'),
+            text: 'tuto.link.totems.objective',
+            boxTop: 37,
+            boxLeft: 34,
+            boxWidth: 60,
+            arrow: {
+                angle: 0,
+                top: 24,
+                left: 37
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.play.legendary.tile'),
+            text: 'tuto.play.legendary.tile.1',
+            boxTop: 55,
+            boxLeft: 68,
+            boxWidth: 50,
+            arrow: {
+                angle: 270,
+                top: 45,
+                left: 32
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.play.legendary.tile'),
+            text: 'tuto.play.legendary.tile.2',
+            boxTop: 73,
+            boxLeft: 29,
+            boxWidth: 60,
+            arrow: {
+                angle: 180,
+                top: 73,
+                left: 8
+            }
         }
-      },
-      {
-        title: (t: TFunction) => t('title.variable.objectives'),
-        text: 'tuto.variable.objectives',
-        boxTop: 29,
-        boxLeft: 58,
-        boxWidth: 60,
-        arrow: {
-            angle: 0,
-            top: 16,
-            left: 42
+    ], [
+        {
+            title: (t: TFunction) => t('title.spend.all.hunters'),
+            text: 'tuto.spend.all.hunters',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 50
         }
-      },
-      {
-        title: (t: TFunction) => t('title.variable.objectives.how.many.tokens'),
-        text: 'tuto.variable.objectives.how.many.tokens.1',
-        boxTop: 41,
-        boxLeft: 48,
-        boxWidth: 60,
-        arrow: {
-            angle: 0,
-            top: 29,
-            left: 23
-        }
-      },
-      {
-        title: (t: TFunction) => t('title.variable.objectives.how.many.tokens'),
-        text: 'tuto.variable.objectives.how.many.tokens.2',
-        boxTop: 41,
-        boxLeft: 48,
-        boxWidth: 60,
-        arrow: {
-            angle: 0,
-            top: 29,
-            left: 29.4
-        }
-      },
-      {
-        title: (t: TFunction) => t('title.link.totems.objective'),
-        text: 'tuto.link.totems.objective',
-        boxTop: 37,
-        boxLeft: 34,
-        boxWidth: 60,
-        arrow: {
-            angle: 0,
-            top: 24,
-            left: 37
-        }
-      },
-      {
-        title: (t: TFunction) => t('title.play.legendary.tile'),
-        text: 'tuto.play.legendary.tile.1',
-        boxTop: 55,
-        boxLeft: 68,
-        boxWidth: 50,
-        arrow: {
-            angle: 270,
-            top: 45,
-            left: 32
-        }
-      },
-      {
-        title: (t: TFunction) => t('title.play.legendary.tile'),
-        text: 'tuto.play.legendary.tile.2',
-        boxTop: 73,
-        boxLeft: 29,
-        boxWidth: 60,
-        arrow: {
-            angle: 180,
-            top: 73,
-            left: 8
-        }
-      }
-    ],[
-      {
-        title: (t: TFunction) => t('title.spend.all.hunters'),
-        text: 'tuto.spend.all.hunters',
-        boxTop: 50,
-        boxLeft: 50,
-        boxWidth: 50
-      }
-    ],[],[],[],[
-      {
-        title: (t: TFunction) => t('title.objectives.validate'),
-        text: 'tuto.objectives.validate.1',
-        boxTop: 24,
-        boxLeft: 67,
-        boxWidth: 60,
-        arrow: {
-          angle: 0,
-          top: 10,
-          left: 85
-      }
-      },
-      {
-        title: (t: TFunction) => t('title.objectives.validate'),
-        text: 'tuto.objectives.validate.2',
-        boxTop: 41,
-        boxLeft: 50,
-        boxWidth: 60,
-        arrow: {
-          angle: 0,
-          top: 28,
-          left: 34
-      }
-      },
-      {
-        title: (t: TFunction) => t('title.handprints'),
-        text: 'tuto.handprints.1',
-        boxTop: 55,
-        boxLeft: 68,
-        boxWidth: 45,
-        arrow: {
-            angle: 270,
-            top: 47,
-            left: 34
-        }
-      },
-      {
-        title: (t: TFunction) => t('title.handprints'),
-        text: 'tuto.handprints.2',
-        boxTop: 45,
-        boxLeft: 65,
-        boxWidth: 51,
-        arrow: {
-            angle: 270,
-            top: 37,
-            left: 28
-        }
-      },
-      {
-        title: (t: TFunction) => t('title.review.objectives'),
-        text: 'tuto.review.objectives',
-        boxTop: 29,
-        boxLeft: 58,
-        boxWidth: 60,
-        arrow: {
-            angle: 0,
-            top: 16,
-            left: 42
-        }
-      },
-      {
-        title: (t: TFunction) => t('title.end.tuto'),
-        text: 'tuto.end.tuto',
-        boxTop: 50,
-        boxLeft: 50,
-        boxWidth: 60,
-      },
+    ], [], [], [], [
+        {
+            title: (t: TFunction) => t('title.objectives.validate'),
+            text: 'tuto.objectives.validate.1',
+            boxTop: 24,
+            boxLeft: 67,
+            boxWidth: 60,
+            arrow: {
+                angle: 0,
+                top: 10,
+                left: 85
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.objectives.validate'),
+            text: 'tuto.objectives.validate.2',
+            boxTop: 41,
+            boxLeft: 50,
+            boxWidth: 60,
+            arrow: {
+                angle: 0,
+                top: 28,
+                left: 34
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.handprints'),
+            text: 'tuto.handprints.1',
+            boxTop: 55,
+            boxLeft: 68,
+            boxWidth: 45,
+            arrow: {
+                angle: 270,
+                top: 47,
+                left: 34
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.handprints'),
+            text: 'tuto.handprints.2',
+            boxTop: 45,
+            boxLeft: 65,
+            boxWidth: 51,
+            arrow: {
+                angle: 270,
+                top: 37,
+                left: 28
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.review.objectives'),
+            text: 'tuto.review.objectives',
+            boxTop: 29,
+            boxLeft: 58,
+            boxWidth: 60,
+            arrow: {
+                angle: 0,
+                top: 16,
+                left: 42
+            }
+        },
+        {
+            title: (t: TFunction) => t('title.end.tuto'),
+            text: 'tuto.end.tuto',
+            boxTop: 50,
+            boxLeft: 50,
+            boxWidth: 60,
+        },
     ]
 ]
 
 const tutorialEndGame = {
-  title: (t: TFunction) => t('Congratulations'),
-  text: 'You have finished your first game! You can now play with your friends, or meet other players via our chat room on Discord.',
-  boxTop: 80,
-  boxLeft: 50,
-  boxWidth: 90
+    title: (t: TFunction) => t('Congratulations'),
+    text: 'You have finished your first game! You can now play with your friends, or meet other players via our chat room on Discord.',
+    boxTop: 80,
+    boxLeft: 50,
+    boxWidth: 90
 }
 
 
