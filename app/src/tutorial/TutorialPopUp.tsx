@@ -2,7 +2,7 @@
 import {css} from "@emotion/react";
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {Failure, Tutorial, useActions, useAnimation, useFailures, usePlayerId} from "@gamepark/react-client";
+import {Failure, Tutorial, useActions, useAnimation, useFailures, usePlay, usePlayerId} from "@gamepark/react-client";
 import {Picture} from '@gamepark/react-components'
 import {TFunction} from "i18next";
 import {FC, useEffect, useRef, useState} from "react";
@@ -15,6 +15,7 @@ import Move from "@gamepark/prehistories/moves/Move";
 import {getHuntingPlayer} from "@gamepark/prehistories/types/HuntingPlayer";
 import {isWinner} from "@gamepark/prehistories/Prehistories";
 import {useClickAway} from "react-use";
+import SetCaveDisplayed, { setCaveDisplayedMove } from "../localMoves/setCaveDisplayed";
 
 
 const TutorialPopup: FC<{ game: GameView, tutorial: Tutorial }> = ({game, tutorial}) => {
@@ -34,6 +35,7 @@ const TutorialPopup: FC<{ game: GameView, tutorial: Tutorial }> = ({game, tutori
     const discordUri = 'https://discord.gg/nMSDRag'
 
     const animation = useAnimation<Move>()
+    const playSetCaveDisplayed = usePlay<SetCaveDisplayed>()
 
     const ref = useRef(null)
     useClickAway(ref, () => setTutorialDisplay(false))
@@ -88,6 +90,12 @@ const TutorialPopup: FC<{ game: GameView, tutorial: Tutorial }> = ({game, tutori
     useEffect(() => {
         tutorial.setOpponentsPlayAutomatically(true)
     }, [])
+
+    useEffect(() => {
+        if(actionsNumber === 2 && tutorialIndex === 5){
+            playSetCaveDisplayed(setCaveDisplayedMove(PlayerColor.Blue), {local:true})
+        }
+    },[actionsNumber,tutorialIndex])
 
     const currentMessage = tutorialMessage(tutorialIndex)
 
