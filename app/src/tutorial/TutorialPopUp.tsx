@@ -883,12 +883,12 @@ const tutorialDescription: TutorialStepDescription[][] = [
         {
             title: (t: TFunction) => t('title.objectives.validate'),
             text: 'tuto.objectives.validate.2',
-            boxTop: 41,
+            boxTop: 22,
             boxLeft: 50,
             boxWidth: 60,
             arrow: {
                 angle: 0,
-                top: 28,
+                top: 10,
                 left: 34
             }
         },

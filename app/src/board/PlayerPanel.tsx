@@ -77,17 +77,17 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, hunting, order, ha
 
 const animatePermanentTokenKeyframes = (objective:Objective, index:number, totemsPlaced:number, playerIndex:number, nbPlayers:number) => keyframes`
 from{}
-50%,to{transform:translateX(${-28+(objective-1)*12.2+index*5.5+totemsPlaced*2.5}em) translateY(${-20.1-15.5*playerIndex*((nbPlayers-0.8)/nbPlayers)}em);}
+to{transform:translateX(${-28+(objective-1)*12.2+index*5.5+totemsPlaced*2.5}em) translateY(${-20.1-15.5*playerIndex*((nbPlayers-0.8)/nbPlayers)}em);}
 `
 
 const animateVariableTokenKeyframes45P = (objective:number, index:number, playerIndex:number, sortedObjPlayerRank:number) => keyframes`
 from{}
-50%,to{transform:translateX(${-124.5+index*4.9 + (sortedObjPlayerRank === 0 ? 0 : 8.5) + objective*19}em) translateY(${-19.7-playerIndex*15.3+(sortedObjPlayerRank !== 0 ? (sortedObjPlayerRank-1)*2.4 : 0)}em);}
+to{transform:translateX(${-124.5+index*4.9 + (sortedObjPlayerRank === 0 ? 0 : 8.5) + objective*19}em) translateY(${-19.7-playerIndex*15.3+(sortedObjPlayerRank !== 0 ? (sortedObjPlayerRank-1)*2.4 : 0)}em);}
 `
 
 const animateVariableTokenKeyframes23P = (objective:number, index:number, playerIndex:number, sortedObjPlayerRank:number) => keyframes`
 from{}
-50%,to{transform:translateX(${-114.8+index*4.9 + (sortedObjPlayerRank === 0? 0 : 8.5) + objective*19}em) translateY(${-19.7-playerIndex*15.3+(sortedObjPlayerRank !== 0 ? (sortedObjPlayerRank-1)*2.4 : 0)}em);}
+to{transform:translateX(${-114.8+index*4.9 + (sortedObjPlayerRank === 0? 0 : 8.5) + objective*19}em) translateY(${-19.7-playerIndex*15.3+(sortedObjPlayerRank !== 0 ? (sortedObjPlayerRank-1)*2.4 : 0)}em);}
 `
 
 const animateToken = (duration:number, objective:Objective, index:number, playerIndex:number, nbPlayers:number, sortedObjPlayerRank:number, objectiveList:Objective[], totemsPlacedList:Objective[]) => css`

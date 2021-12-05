@@ -95,7 +95,7 @@ const ButtonsTab : FC<Props> = ({color, hunting, isDisplayValidationButton, isDi
                                         validationButtonPosition,
                                         powerOfSelectedHunters < huntZone.injury && desactivateStyle
                                       ]}
-                                 onClick={() => powerOfSelectedHunters >= huntZone.injury && powerOfSelectedHunters < huntZone.safe && validateHunters(selectedHunters, true)}
+                                 onClick={() => powerOfSelectedHunters >= huntZone.injury && validateHunters(selectedHunters, powerOfSelectedHunters < huntZone.safe)}
                                  colorButton={color}>
 
                                 {t(huntingButtonText)} <br/>

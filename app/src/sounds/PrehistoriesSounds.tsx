@@ -53,9 +53,9 @@ const PrehistoriesSounds : FC<Props> = ({audioLoader, game}) => {
             audioLoader.play(objectiveSound, false, 0.2)
           } else {
             if(objective.move.objective < 4){
-              audioLoader.play(objectiveOpponentSound1, false, 0.2)
+              audioLoader.play(objectiveOpponentSound1, false, 0.3)
             } else {
-              audioLoader.play(objectiveOpponentSound2, false, 0.2)
+              audioLoader.play(objectiveOpponentSound2, false, 0.3)
             }
           }
         }
