@@ -2,7 +2,7 @@
 import {css} from "@emotion/react";
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {Tutorial, useActions, useAnimation, useFailures, usePlayerId} from "@gamepark/react-client";
+import {Failure, Tutorial, useActions, useAnimation, useFailures, usePlayerId} from "@gamepark/react-client";
 import {Picture} from '@gamepark/react-components'
 import {TFunction} from "i18next";
 import {FC, useEffect, useRef, useState} from "react";
@@ -39,7 +39,7 @@ const TutorialPopup: FC<{ game: GameView, tutorial: Tutorial }> = ({game, tutori
     useClickAway(ref, () => setTutorialDisplay(false))
 
     const moveTutorial = (deltaMessage: number) => {
-        if(tutorialDescription[actionsNumber][tutorialIndex+deltaMessage] !== undefined){
+        if (tutorialDescription[actionsNumber][tutorialIndex + deltaMessage] !== undefined) {
             setTutorialIndex(tutorialIndex + deltaMessage)
             setTutorialDisplay(true)
         } else {
@@ -74,12 +74,16 @@ const TutorialPopup: FC<{ game: GameView, tutorial: Tutorial }> = ({game, tutori
         previousActionNumber.current = actionsNumber
     }, [actionsNumber])
 
+    const [unexpectedMove, setUnexpectedMove] = useState(false)
     useEffect(() => {
-        if (failures.length) {
+        if (failures.some(failure => failure === Failure.TUTORIAL_MOVE_EXPECTED)) {
+            setUnexpectedMove(true)
+        } else if (unexpectedMove) {
             setTutorialIndex(tutorialDescription[actionsNumber].length - 1)
             setTutorialDisplay(true)
+            setUnexpectedMove(false)
         }
-    }, [actionsNumber, failures])
+    }, [actionsNumber, failures, unexpectedMove])
 
     useEffect(() => {
         tutorial.setOpponentsPlayAutomatically(true)
