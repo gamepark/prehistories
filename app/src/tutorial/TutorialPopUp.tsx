@@ -39,8 +39,13 @@ const TutorialPopup: FC<{ game: GameView, tutorial: Tutorial }> = ({game, tutori
     useClickAway(ref, () => setTutorialDisplay(false))
 
     const moveTutorial = (deltaMessage: number) => {
-        setTutorialIndex(tutorialIndex + deltaMessage)
-        setTutorialDisplay(true)
+        if(tutorialDescription[actionsNumber][tutorialIndex+deltaMessage] !== undefined){
+            setTutorialIndex(tutorialIndex + deltaMessage)
+            setTutorialDisplay(true)
+        } else {
+            setTutorialDisplay(false)
+        }
+
     }
 
     const resetTutorialDisplay = () => {
@@ -91,7 +96,7 @@ const TutorialPopup: FC<{ game: GameView, tutorial: Tutorial }> = ({game, tutori
         }
     }
 
-    const displayPopup = tutorialDisplay && !animation && currentMessage && !failures.length && isPlayerActive(game)
+    const displayPopup = tutorialDisplay && !animation && currentMessage !== undefined && !failures.length && isPlayerActive(game)
 
     return (
         <>
