@@ -11,7 +11,7 @@ import {useDrop} from "react-dnd";
 import CardInHand, {isCardInHand} from "@gamepark/prehistories/types/appTypes/CardInHand";
 import CardPlayed from "@gamepark/prehistories/types/appTypes/CardPlayed";
 import MoveType from "@gamepark/prehistories/moves/MoveType";
-import {useAnimation, useAnimations, usePlay, usePlayerId, useSound} from "@gamepark/react-client";
+import {useAnimation, useAnimations, useNumberOfPlayers, usePlay, usePlayerId, useSound} from "@gamepark/react-client";
 import {Hand, Picture} from "@gamepark/react-components";
 import Move from "@gamepark/prehistories/moves/Move";
 import {isPlayHuntCardView, PlayHuntCardView} from "@gamepark/prehistories/moves/PlayHuntCard";
@@ -29,6 +29,7 @@ import TakeBackPlayedCards, {isTakeBackPlayedCards} from "@gamepark/prehistories
 import {playerWillDraw} from "@gamepark/prehistories/Prehistories";
 import Tile from "@gamepark/prehistories/material/Tile";
 import FocusedCardOptions from "./FocusedCardOptions";
+import getBoardZones from "@gamepark/prehistories/material/BoardZones";
 
 type Props = {
     player:PlayerView | PlayerViewSelf,
@@ -48,6 +49,7 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
     moveCardSound.volume = 0.8
     const clickSound = useSound(ButtonClickSound)
     clickSound.volume = 0.8
+    const nbPlayers = useNumberOfPlayers()
 
     const playHuntCardAnimation = useAnimation<PlayHuntCardView>(animation => isPlayHuntCardView(animation.move) && animation.move.player === playerId)
     const revealCardsAnimation = useAnimation<RevealHuntCardsView>(animation => isRevealHuntCards(animation.move))
@@ -154,7 +156,18 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
       }
 
     const playerCardsInRevealAnimation = revealCardsAnimation ? revealCardsAnimation.move.cardsPlayed.find(obj => obj.color === player.color)!.cards : undefined
-  return (
+  
+    function canDragUnselectedHunter(card:number):boolean{
+        if(selectedHunters === undefined){
+            return true
+        } else if (player.hunting === undefined || player.hunting.hunt === undefined){
+            return false
+        } else {
+            return getBoardZones(nbPlayers)[player.hunting.hunt.zone].safe > selectedHunters.reduce((acc, cv) => acc + getColoredDeck(player.color)[cv].power, player.hunting.hunt.huntersValue)
+        }
+    }
+  
+    return (
     <>
 
       {focusedCard !== undefined &&
@@ -239,7 +252,7 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
                 color={player.color}
                 power={getColoredDeck(player.color)[card].power}
                 speed={getColoredDeck(player.color)[card].speed}
-                draggable={player.color === playerId && player.hunting?.hunt !== undefined && player.isReady !== true}
+                draggable={player.color === playerId && player.hunting?.hunt !== undefined && player.isReady !== true && (selectedHunters?.find(c => card === c) !== undefined ? true : canDragUnselectedHunter(card))}
                 draggableItem={{type:"CardPlayed", card:card}}
                 type={"CardPlayed"}
                 selectedHunters={selectedHunters}
@@ -361,7 +374,7 @@ const spendHunterKeyFrames = (discardLength:number) => keyframes`
 `
 
 const spendAnimation = (discardLength:number, duration:number) => css`
-    animation: ${spendHunterKeyFrames(discardLength)} ${duration}s ease-in forwards;
+    animation: ${spendHunterKeyFrames(discardLength)} ${duration}s ease-in-out forwards;
 `
 
 const playHuntCardKeyframes = (lengthPlayed:number) => keyframes`

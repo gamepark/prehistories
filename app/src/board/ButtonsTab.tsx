@@ -33,7 +33,7 @@ type Props = {
 
 const ButtonsTab : FC<Props> = ({color, hunting, isDisplayValidationButton, isDisplayEndTurnButton, selectedHunters = [], playedPower, huntBoard}) => {
 
-    const heightOfHuntingButtonsPanel:number = (isDisplayValidationButton || isDisplayEndTurnButton) ? 20 : 30
+    const heightOfHuntingButtonsPanel:number = (isDisplayValidationButton || isDisplayEndTurnButton) ? 20 : 25
     const spendCardAnimations = useAnimations<SpendHunter>(animation => isSpendHunter(animation.move))
     const clickSound = useSound(ButtonClickSound)
     const numberOfPlayers = useNumberOfPlayers()
@@ -47,7 +47,6 @@ const ButtonsTab : FC<Props> = ({color, hunting, isDisplayValidationButton, isDi
     const play = usePlay<Move>()
     const playResetHunters = usePlay<ResetSelectedHunters>()
     const {t} = useTranslation()
-    const nbPlayers = useNumberOfPlayers()
     const [warningNoCardPlayedClosed, setWarningNoCardPlayedClosed] = useState(true)
     const [warningNoTilePickedClosed, setWarningNoTilePickedClosed] = useState(true)
 
@@ -70,6 +69,14 @@ const ButtonsTab : FC<Props> = ({color, hunting, isDisplayValidationButton, isDi
         play(endTurnMove(color))
     }
 
+    const huntingButtonText:string = huntZone === undefined ? "" : powerOfSelectedHunters < huntZone.injury
+        ? "button.not.enough.hunters"
+        : powerOfSelectedHunters < huntZone!.safe
+            ? "button.hunt.with.injury"
+            : "button.hunt.safe"
+
+    
+
     return(
 
         <div css={[toAbsolute,
@@ -81,29 +88,22 @@ const ButtonsTab : FC<Props> = ({color, hunting, isDisplayValidationButton, isDi
             {isDisplayValidationButton && <Button css={[toAbsolute, validationButtonPosition]}
                                                 onClick={() => {playedPower === 0 ? setWarningNoCardPlayedClosed(false) : playValidateMove()}}
                                                 colorButton={color} >{t('Validate')}</Button> }
-            {isDisplayEndTurnButton && <Button css={[validationButtonPosition]} onClick={() => {huntBoard.some((tile, index) => tile !== null && getBoardZones(nbPlayers)[index].injury <= playedPower) && hunting?.tilesHunted === 0 ? setWarningNoTilePickedClosed(false) :  playValidateMove()}} colorButton={color} >{t('End your Turn')}</Button>}
+            {isDisplayEndTurnButton && <Button css={[validationButtonPosition]} onClick={() => {huntBoard.some((tile, index) => tile !== null && getBoardZones(numberOfPlayers)[index].injury <= playedPower) && hunting?.tilesHunted === 0 ? setWarningNoTilePickedClosed(false) :  playValidateMove()}} colorButton={color} >{t('End your Turn')}</Button>}
 
-            {huntZone && <div css={[toAbsolute,
-                                                    placingBackground(Images.arrowBrokenIcon,"cover"),
-                                                    setPercentDimension(95,44),
-                                                    injuryButtonStyle("left"),
-                                                    centerContent,
-                                                    (powerOfSelectedHunters < huntZone.injury || powerOfSelectedHunters >= huntZone.safe) && desactivateStyle
-                                                ]}
-                                            onClick={() => powerOfSelectedHunters >= huntZone.injury && powerOfSelectedHunters < huntZone.safe && validateHunters(selectedHunters, true)}>
-                <span>{powerOfSelectedHunters}/{huntZone.injury}</span>
-            </div>}
+            {huntZone && <Button css={[ toAbsolute,
+                                        centerContent,
+                                        validationButtonPosition,
+                                        powerOfSelectedHunters < huntZone.injury && desactivateStyle
+                                      ]}
+                                 onClick={() => powerOfSelectedHunters >= huntZone.injury && powerOfSelectedHunters < huntZone.safe && validateHunters(selectedHunters, true)}
+                                 colorButton={color}>
 
-            {huntZone && <div css={[toAbsolute,
-                                          placingBackground(Images.arrowCleanIcon,"cover"),
-                                          setPercentDimension(95,44),
-                                          injuryButtonStyle("right"),
-                                          centerContent,
-                                          powerOfSelectedHunters < huntZone.safe && desactivateStyle
-                                          ]}
-                                     onClick={() => powerOfSelectedHunters >= huntZone.safe && validateHunters(selectedHunters, false)}>
-                <span>{powerOfSelectedHunters}/{huntZone.safe}</span>
-            </div>}
+                                {t(huntingButtonText)} <br/>
+                                {powerOfSelectedHunters}/{powerOfSelectedHunters<huntZone.injury ? huntZone.injury : huntZone.safe}
+
+                        </Button>
+                
+            }
 
             {warningNoCardPlayedClosed === false && 
                 <Dialog open={!warningNoCardPlayedClosed} css={css`width:50%;`}> 
@@ -143,10 +143,6 @@ const desactivateStyle = css`
     filter: grayscale(80%);
     transition:filter 0.2s linear;
     cursor:not-allowed;
-    &:active{
-        box-shadow:0 0.2em 0.5em black;
-        top:2.5%;
-    }
 `
 
 const injuryButtonStyle = (positionFromSide:string) => css`
@@ -210,6 +206,7 @@ const validationButtonPosition = css`
     top:10%;
     transform:translateX(-50%);
     width:fit-content;
+    max-width:98%;
     height:80%;
     font-size:3em;
     font-family:'Reggae One', sans-serif;
