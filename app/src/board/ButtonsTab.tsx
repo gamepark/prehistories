@@ -12,8 +12,7 @@ import {useTranslation} from "react-i18next/";
 import {ResetSelectedHunters, resetSelectedHuntersMove} from "../localMoves/setSelectedHunters";
 import Button from "../utils/Button";
 import {getPlayerColor} from "../utils/getterFunctions";
-import Images from "../utils/Images";
-import {centerContent, placingBackground, setPercentDimension, toAbsolute} from "../utils/styles";
+import {centerContent, setPercentDimension, toAbsolute} from "../utils/styles";
 import ButtonClickSound from "../sounds/buttonClick.mp3"
 import MoveCardSound from "../sounds/cardMove.mp3"
 import {endTurnMove} from "@gamepark/prehistories/moves/EndTurn";
@@ -98,7 +97,7 @@ const ButtonsTab : FC<Props> = ({color, hunting, isDisplayValidationButton, isDi
                                  onClick={() => powerOfSelectedHunters >= huntZone.injury && validateHunters(selectedHunters, powerOfSelectedHunters < huntZone.safe)}
                                  colorButton={color}>
 
-                                {t(huntingButtonText)} <br/>
+                                <span>{t(huntingButtonText)}</span>
                                 {powerOfSelectedHunters}/{powerOfSelectedHunters<huntZone.injury ? huntZone.injury : huntZone.safe}
 
                         </Button>
@@ -206,7 +205,6 @@ const validationButtonPosition = css`
     top:10%;
     transform:translateX(-50%);
     width:fit-content;
-    max-width:98%;
     height:80%;
     font-size:3em;
     font-family:'Reggae One', sans-serif;
