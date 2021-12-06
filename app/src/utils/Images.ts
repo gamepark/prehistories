@@ -190,6 +190,7 @@ import arrowCleanIcon from '../images/arrow.jpg'
 import arrowBrokenIcon from '../images/brokenArrow.jpg'
 import huntSign from '../images/huntSign.png'
 import helpCard from '../images/helpCard.jpg'
+import tutoSignHelp from '../images/tutoSignHelp.png';
 
 const Images = {
 
@@ -223,7 +224,7 @@ const Images = {
   powerWhite1, powerWhite2, powerWhite3, powerWhite4, powerWhite5,
   powerGreen1, powerGreen2, powerGreen3, powerGreen4, powerGreen5,
   powerYellow1, powerYellow2, powerYellow3, powerYellow4, powerYellow5,
-  arrowCleanIcon, arrowBrokenIcon, huntSign, helpCard
+  arrowCleanIcon, arrowBrokenIcon, huntSign, helpCard, tutoSignHelp
 
 }
 

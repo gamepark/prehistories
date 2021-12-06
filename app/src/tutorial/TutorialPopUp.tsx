@@ -16,6 +16,7 @@ import {getHuntingPlayer} from "@gamepark/prehistories/types/HuntingPlayer";
 import {isWinner} from "@gamepark/prehistories/Prehistories";
 import {useClickAway} from "react-use";
 import SetCaveDisplayed, { setCaveDisplayedMove } from "../localMoves/setCaveDisplayed";
+import Images from "../utils/Images";
 
 
 const TutorialPopup: FC<{ game: GameView, tutorial: Tutorial }> = ({game, tutorial}) => {
@@ -119,7 +120,7 @@ const TutorialPopup: FC<{ game: GameView, tutorial: Tutorial }> = ({game, tutori
                 <div css={closePopupStyle} onClick={() => setTutorialDisplay(false)}><FontAwesomeIcon icon={faTimes}/></div>
 
                 {currentMessage && <h2>{currentMessage.title(t)} {currentMessage && currentMessage.image &&
-                <Picture css={[imageStyle]} src={currentMessage.image} alt={t("steal Token")}/>}</h2>}
+                <Picture css={[imageStyle]} src={currentMessage.image} alt={t("help image")}/>}</h2>}
                 {currentMessage && <p><Trans defaults={currentMessage.text} components={[<strong/>]}/></p>}
                 {tutorialIndex > 0 && <Button css={buttonTutoStyle} colorButton={PlayerColor.Yellow} onClick={() => moveTutorial(-1)}>{'<<'}</Button>}
                 <Button css={buttonTutoStyle} colorButton={PlayerColor.Yellow} onClick={() => moveTutorial(1)}>{t('OK')}</Button>
@@ -291,9 +292,9 @@ const hideArrowStyle = css`
 `
 
 const imageStyle = css`
-    border-radius: 100%;
-    box-shadow: 0 0 0.1em 0.02em black;
-    vertical-align: bottom;
+    height:2.5em;
+    filter:drop-shadow(0 0 0.1em black);
+    vertical-align: middle;
 `
 
 const resetStyle = css`
@@ -565,7 +566,8 @@ const tutorialDescription: TutorialStepDescription[][] = [
                 angle: 0,
                 top: 13,
                 left: -3
-            }
+            },  
+            image:Images.tutoSignHelp
         },
         {
             title: (t: TFunction) => t('title.spend.hunter'),
