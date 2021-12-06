@@ -187,9 +187,12 @@ const grayscale = css`
 `
 
 const nameStyle = css`
-    font-size:2.9em;
-    font-family:'Reggae One', sans-serif;
-    margin : 0.2em 1em;
+    font-size: 2.8em;
+    font-family: 'Reggae One', sans-serif;
+    margin: 0.2em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `
 
 const TimerStyle = css`
