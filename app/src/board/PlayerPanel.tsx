@@ -50,7 +50,7 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, hunting, order, ha
             <h1 css={[nameStyle]}>{playerInfo?.name === undefined ? getPlayerName(color, t) : playerInfo?.name}</h1>
             <div css={totemRemainingPosition}>
 
-                {[...Array(8 - totemTokens.length)].map((_, i) => <Picture 
+                {[...Array(Math.max(8 - totemTokens.length, 0))].map((_, i) => <Picture
                     key={i} 
                     alt={t('token')} 
                     src={getTotem(color)} 
