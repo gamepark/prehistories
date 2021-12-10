@@ -209,7 +209,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         return {type: MoveType.RevealHuntCards, cardsPlayed: result}
       case MoveType.RefillHuntingBoard:
         const zones = getBoardZones(this.state.players.length)
-        return {...move, newBoard: this.state.huntingBoard.map((tile, zone) => tile !== null ? tile : this.state.tilesDecks[zones[zone].type][0] ?? null)}
+        return {...move, newBoard: this.state.huntingBoard.map((tile, zone) => tile !== null ? tile : this.state.tilesDecks[zones[zone].type][(this.state.players.length>3 && zone<4)? zone%2 : 0] ?? null)}
       case MoveType.DrawCards: {
         if (playerId === move.player) {
           const player = this.state.players.find(p => p.color === playerId)!
