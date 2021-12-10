@@ -44,7 +44,7 @@ export default function GameDisplay({game, audioLoader}: Props) {
         <Board game={game}/>
 
         <ObjectiveCards objectives={game.objectives}
-                        players={game.players}
+                        players={players}
                         onClick={() => setWelcomePopUpClosed(false)}
         />
         {players.map((player, index) =>
