@@ -22,18 +22,18 @@ cursor:pointer;
 --color: #000000;
 --background-color: ${color};
 --border-color: darken(${color}, 7.5%);
-padding: 0.6rem 0.9rem;
-border-radius: 0.5rem;
+padding: 0.6em 0.9em;
+border-radius: 0.5em;
 color: var(--color);
 font-family: inherit;
 background-color: var(--background-color);
-border: solid 1px var(--border-color);
+border: solid 0.1em var(--border-color);
 outline: none;
 position: relative;
 user-select: none;
 box-shadow:
-  0 0.2rem 0.4rem rgba(0, 0, 0, 0.4),
-  0 -0.3rem 0.6rem rgba(0, 0, 0, 0.2) inset;
+  0 0.2em 0.4em rgba(0, 0, 0, 0.4),
+  0 -0.3em 0.6em rgba(0, 0, 0, 0.2) inset;
 transition: box-shadow 65ms ease-out;
 &:after {
   content: "";
@@ -41,16 +41,16 @@ transition: box-shadow 65ms ease-out;
   width: 75%;
   height: 12.5%;
   position: absolute;
-  top: 0.15rem;
+  top: 0.15em;
   left: 12.5%;
   border-radius: 50%;
-  filter: blur(0.15rem);
+  filter: blur(0.15em);
   transition: opacity 65ms ease-out;
 }
 &:active {
   box-shadow:
     0 0 0 rgba(0, 0, 0, 0.4),
-    0 0.4rem 1rem rgba(0, 0, 0, 0.3) inset;
+    0 0.4em 1em rgba(0, 0, 0, 0.3) inset;
   &:after {
     opacity: 0;
   }
