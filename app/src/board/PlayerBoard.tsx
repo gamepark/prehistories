@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import {css, keyframes} from "@emotion/react";
-import {FC, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import Cave from "./Cave";
 import Card from './Card'
@@ -8,7 +8,7 @@ import {getColoredDeck} from "@gamepark/prehistories/material/Hunters";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import {isPlayerView, isPlayerViewSelf, PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
 import {useDrop} from "react-dnd";
-import CardInHand, {isCardInHand} from "@gamepark/prehistories/types/appTypes/CardInHand";
+import CardInHand from "@gamepark/prehistories/types/appTypes/CardInHand";
 import CardPlayed from "@gamepark/prehistories/types/appTypes/CardPlayed";
 import MoveType from "@gamepark/prehistories/moves/MoveType";
 import {useAnimation, useAnimations, useNumberOfPlayers, usePlay, usePlayerId, useSound} from "@gamepark/react-client";
@@ -23,7 +23,7 @@ import {getCardBack, getPlayerColor} from "../utils/getterFunctions";
 import SetSelectedHunters, {setSelectedHunterMove} from "../localMoves/setSelectedHunters";
 import MoveCardSound from "../sounds/cardMove.mp3"
 import ButtonClickSound from "../sounds/buttonClick.mp3"
-import {centerContainer, glowingAnimation, setPercentDimension, toAbsolute, toFullSize} from "../utils/styles";
+import {centerContainer, glowingCardAnimation, setPercentDimension, toAbsolute, toFullSize} from "../utils/styles";
 import ButtonsTab from "./ButtonsTab";
 import TakeBackPlayedCards, {isTakeBackPlayedCards} from "@gamepark/prehistories/moves/TakeBackPlayedCards";
 import {playerWillDraw} from "@gamepark/prehistories/Prehistories";
@@ -61,7 +61,14 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
     let playerPlayed:number[] = player.played
     const [focusedCard, setFocusedCard] = useState<number>()
 
-    if(drawCardsAnimation){
+    // drawCardsAnimation is not applied immediately: we force react to "redraw" once before applying it to prevent the cards taken back
+    // inside takeBackCardsAnimation to "jump" instead of moving smoothly during the drawCardsAnimation
+    const [temporizeDrawCards, setTemporizeDrawCards] = useState(true)
+    useEffect(() => {
+        setTemporizeDrawCards(!drawCardsAnimation)
+    }, [drawCardsAnimation])
+
+    if(drawCardsAnimation && !temporizeDrawCards){
         if (isDrawCardsView(drawCardsAnimation.move) && Array.isArray(playerHand)){
             playerHand.push(...drawCardsAnimation.move.cards)
         } else if (!isDrawCardsView(drawCardsAnimation.move) && typeof playerHand === 'number'){
@@ -99,26 +106,14 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
       })
 
     const [{canDropPlayed, isOverPlayed}, dropRefPlayed] = useDrop({
-        accept: ["CardInHand"],
-        canDrop: (item: CardInHand | CardPlayed) => {
-
-            if(isCardInHand(item)){
-                return player.color === playerId
-            } else {
-                return false
-            }
-        },
+        accept: "CardInHand",
         collect: monitor => ({
           canDropPlayed: monitor.canDrop(),
           isOverPlayed: monitor.isOver()
         }),
         drop: (item: CardInHand | CardPlayed) => {
-            if(isCardInHand(item)){
-                moveCardSound.play()
-                return {type:MoveType.PlayHuntCard, card:item.card, playerId:player.color }
-            } else {
-                return
-            }
+            moveCardSound.play()
+            return {type:MoveType.PlayHuntCard, card:item.card, playerId:player.color }
         }
       })
 
@@ -129,7 +124,7 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
           hoverStyle: isPlayerViewSelf(player) ? css`transform: translateY(-25%) scale(1.7);` : undefined,
           drag: {
             type: "CardInHand",
-            item: {type:"CardInHand", card},
+            item: {card},
             canDrag: player.color === playerId && !huntPhase && player.isReady !== true,
             drop: () => play({type:MoveType.PlayHuntCard, card:card, player:player.color})
           },
@@ -137,17 +132,17 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
             seconds:revealCardsAnimation.duration,
             delay:0,
             fromNeutralPosition:false
-          } : ( drawCardsAnimation ? {
+          } : ( drawCardsAnimation && !temporizeDrawCards ? {
             seconds:drawCardsAnimation.duration,
             delay:0,
             fromNeutralPosition:(isDrawCardsView(drawCardsAnimation.move) && Array.isArray(playerHand))
                 ? index > playerHand.length - drawCardsAnimation.move.cards.length -1
                 : !isDrawCardsView(drawCardsAnimation.move) && typeof playerHand ==='number' && index > playerHand - playerWillDraw(player) -1
-          } : ( takeBackCardsAnimation  
+          } : ( takeBackCardsAnimation
               ? {seconds:takeBackCardsAnimation.duration,
                  delay:0,
                  fromNeutralPosition: Array.isArray(playerHand)
-                    ? index >= playerHand.length - player.played.length 
+                    ? index >= playerHand.length - player.played.length
                     : index >= playerHand - player.played.length
                 }
               : undefined)),
@@ -156,7 +151,7 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
       }
 
     const playerCardsInRevealAnimation = revealCardsAnimation ? revealCardsAnimation.move.cardsPlayed.find(obj => obj.color === player.color)!.cards : undefined
-  
+
     function canDragUnselectedHunter(card:number):boolean{
         if(selectedHunters === undefined){
             return true
@@ -166,15 +161,15 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
             return getBoardZones(nbPlayers)[player.hunting.hunt.zone].safe > selectedHunters.reduce((acc, cv) => acc + getColoredDeck(player.color)[cv].power, player.hunting.hunt.huntersValue)
         }
     }
-  
+
     return (
     <>
 
       {focusedCard !== undefined &&
       <>
         <div css={popupBackgroundStyle} onClick={() => setFocusedCard(undefined)}/>
-        <Card color={player.color} 
-              css={[focusCardStyle]} 
+        <Card color={player.color}
+              css={[focusCardStyle]}
               power={getColoredDeck(player.color)[focusedCard].power}
               speed={getColoredDeck(player.color)[focusedCard].speed} />
         <FocusedCardOptions onClose={() => setFocusedCard(undefined)} />
@@ -191,12 +186,12 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
 
                     {(isPlayerViewSelf(player) && Array.isArray(playerHand))
                         ? playerHand.map((card, index) =>
-                            <Card key={index}
+                            <Card key={card}
                             color={player.color}
                             css={[smoothAngles,
-                                  huntPhase === false && player.isReady !== true && glowingAnimation,
+                                  huntPhase === false && player.isReady !== true && glowingCardAnimation,
                                   playHuntCardAnimation && index === 0 && playHuntCardAnimationStyle(playHuntCardAnimation.duration,player.played.length),
-                                  drawCardsAnimation && isDrawCardsView(drawCardsAnimation.move) && drawCardsAnimation.move.cards.find(c => c === card) && drawCardsAnimStyle(drawCardsAnimation.duration, false),
+                                  drawCardsAnimation && !temporizeDrawCards && isDrawCardsView(drawCardsAnimation.move) && drawCardsAnimation.move.cards.find(c => c === card) && drawCardsAnimStyle(drawCardsAnimation.duration, false),
                                   takeBackCardsAnimation && Array.isArray(playerHand) && index >= playerHand.length - player.played.length && takeBackCardsAnimationStyle(index - player.hand.length, takeBackCardsAnimation.duration)
                                 ]}
                             power={getColoredDeck(player.color)[card].power}
@@ -227,7 +222,7 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
 
             <div css={[toAbsolute, setPercentDimension(45,53), cardPlayedPanelPosition(player.color), canDropPlayed && canDropStyle, canDropPlayed && isOverPlayed && isOverStyle]} ref = {dropRefPlayed}>
 
-            {(isDisplayHuntingButtons || isDisplayValidationButton || isDisplayEndTurnButton) && player.color === playerId && !isWinner && 
+            {(isDisplayHuntingButtons || isDisplayValidationButton || isDisplayEndTurnButton) && player.color === playerId && !isWinner &&
                 <ButtonsTab color={player.color}
                             hunting={player.hunting}
                             isDisplayEndTurnButton={isDisplayEndTurnButton}
@@ -245,7 +240,7 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
                 return <Card key={index}
                 css = {[toAbsolute, setPercentDimension(52,30), cardPlayedPosition(index),
                         smoothAngles,
-                        huntPhase === true && player.hunting?.hunt !== undefined && selectedHunters?.includes(card) === false && glowingAnimation,
+                        huntPhase === true && player.hunting?.hunt !== undefined && !selectedHunters?.includes(card) && glowingCardAnimation,
                         spendCardAnimation && index === (playerPlayed as number[]).findIndex(card => card === spendCardAnimation.move.card) && spendAnimation(player.discard.length, spendCardAnimation.duration),
                         selectedHunters?.find(c => c === card) !== undefined && selectedCard
                     ]}
@@ -283,7 +278,7 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
 
             <div css={[toAbsolute, setPercentDimension(24,16), deckZonePosition]}>
 
-                {[...Array(player.deck - (drawCardsAnimation ? ((isDrawCardsView(drawCardsAnimation.move) && player.color === playerId) ? drawCardsAnimation.move.cards.length : 0) : 0))].map((_, i) => <Picture key={i} alt={t('token')} src={getCardBack(player.color)} css={[toAbsolute, smoothAngles, deckOffset(i), toFullSize, deckCardShadow]} draggable={false} />)}
+                {[...Array(player.deck - (drawCardsAnimation && !temporizeDrawCards ? ((isDrawCardsView(drawCardsAnimation.move) && player.color === playerId) ? drawCardsAnimation.move.cards.length : 0) : 0))].map((_, i) => <Picture key={i} alt={t('token')} src={getCardBack(player.color)} css={[toAbsolute, smoothAngles, deckOffset(i), toFullSize, deckCardShadow]} draggable={false} />)}
 
             </div>
 

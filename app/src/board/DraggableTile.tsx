@@ -6,7 +6,7 @@ import {Draggable} from '@gamepark/react-components'
 import Tile, {Side} from "@gamepark/prehistories/material/Tile";
 import {DraggableProps} from "@gamepark/react-components/dist/Draggable/Draggable";
 import AnimalTile from "./AnimalTile";
-import {glowingAnimation} from "../utils/styles";
+import {glowingTileAnimation} from "../utils/styles";
 import {useState} from "react";
 
 export const HuntTile = 'HuntTile'
@@ -27,7 +27,7 @@ export default function DraggableTile({tile, rotation, ...props}: Props) {
   const [dragging, setDragging] = useState(false)
   return (
     <Draggable type={HuntTile} drop={play} css={style} draggingChange={setDragging} {...props}>
-      <AnimalTile tile={tile} side={0} css={[!dragging && rotationCss(rotation), !dragging && props.canDrag && glowingAnimation]}/>
+      <AnimalTile tile={tile} side={0} css={[!dragging && rotationCss(rotation), !dragging && props.canDrag && glowingTileAnimation]}/>
     </Draggable>
   )
 

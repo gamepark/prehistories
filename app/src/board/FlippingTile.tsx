@@ -6,7 +6,7 @@ import {FC, useMemo, useState} from 'react'
 import MoveTileSound from '../sounds/moveTile.mp3'
 import {HuntTile} from './DraggableTile'
 import Tile, {getPolyomino, Side} from "@gamepark/prehistories/material/Tile";
-import {glowingAnimation, squareSize} from "../utils/styles";
+import {glowingTileAnimation, squareSize} from "../utils/styles";
 import {Draggable} from "@gamepark/react-components";
 import Move from "@gamepark/prehistories/moves/Move";
 import {DraggableProps} from "@gamepark/react-components/dist/Draggable/Draggable";
@@ -41,8 +41,8 @@ const FlippingTile: FC<Props> = ({game, tile, position, item, animation, ...prop
                css={[style(polyomino0)]} canDrag={false} {...props}>
       <div css={[flipWrapper(polyomino0.length !== polyomino1.length), style(polyomino0),
         rotation(dragging || animation ? 0 : position.rotation(side === 0 ? polyomino0 : polyomino1), animation?.move.side ?? side)]}>
-        <AnimalTile tile={tile} side={0} css={!dragging && props.canDrag && glowingAnimation}/>
-        <AnimalTile tile={tile} side={1} css={!dragging && props.canDrag && glowingAnimation}/>
+        <AnimalTile tile={tile} side={0} css={!dragging && props.canDrag && glowingTileAnimation}/>
+        <AnimalTile tile={tile} side={1} css={!dragging && props.canDrag && glowingTileAnimation}/>
       </div>
     </Draggable>
   )

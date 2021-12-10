@@ -52,8 +52,29 @@ const glowingKeyframes = keyframes`
   }
 `
 
-export const glowingAnimation = css`
+export const glowingTileAnimation = css`
   animation: ${glowingKeyframes} 1s alternate infinite linear;
+`
+
+const opacityKeyframes = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`
+
+export const glowingCardAnimation = css`
+  &:before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    box-shadow: 0 0 0.8em lime, 0 0 0.8em lime, 0 0 0.8em lime;
+    animation: ${opacityKeyframes} 1s alternate infinite linear;
+  }
 `
 
 export function getPanelIndex(game: GameView, panelId: PlayerColor, playerId?: PlayerColor) {
