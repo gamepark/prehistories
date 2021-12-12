@@ -79,7 +79,7 @@ const ButtonsTab : FC<Props> = ({color, hunting, isDisplayValidationButton, isDi
     return(
 
         <div css={[toAbsolute,
-            setPercentDimension(heightOfHuntingButtonsPanel,80),
+            setPercentDimension(heightOfHuntingButtonsPanel,90),
             huntingButtonsPosition(color),
             panelAppearAnimation(heightOfHuntingButtonsPanel),
             spendCardAnimations.length !== 0 && disapperingAnim]}>
@@ -97,7 +97,7 @@ const ButtonsTab : FC<Props> = ({color, hunting, isDisplayValidationButton, isDi
                                  onClick={() => powerOfSelectedHunters >= huntZone.injury && validateHunters(selectedHunters, powerOfSelectedHunters < huntZone.safe)}
                                  colorButton={color}>
 
-                                <span>{t(huntingButtonText)}</span>
+                                <span css={css`margin-right:0.2em`}>{t(huntingButtonText)}</span>
                                 {powerOfSelectedHunters}/{powerOfSelectedHunters<huntZone.injury ? huntZone.injury : huntZone.safe}
 
                         </Button>
@@ -206,7 +206,7 @@ const validationButtonPosition = css`
     transform:translateX(-50%);
     width:fit-content;
     height:80%;
-    font-size:3em;
+    font-size:2.9em;
     font-family:'Reggae One', sans-serif;
     z-index:1;
     animation:${appearContentPanel} 0.8s linear;

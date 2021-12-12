@@ -66,6 +66,9 @@ const spanBorder = (color:PlayerColor) => css`
     display: flex;
     align-items: center;
     justify-content: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `
 
 function isDarkColor(color:PlayerColor):boolean{
