@@ -40,7 +40,7 @@ export default function FocusedHuntSignOptions({onClose}:Props){
             transform: rotate(18deg);`]}
             />
 
-            <div css={[helpText, css`top: 15%; left: 23%`]}>
+            <div css={[helpText, css`top: 10%; left: 23%`]}>
                 <p>{t('help.draw.3.cards')}</p>
             </div>
 
@@ -50,7 +50,7 @@ export default function FocusedHuntSignOptions({onClose}:Props){
             transform: rotate(80deg);`]}
             />
 
-            <div css={[helpText, css`bottom: 15%; left: 23%`]}>
+            <div css={[helpText, css`bottom: 10%; left: 23%`]}>
                 <p>{t('help.draw.0.card')}</p>
             </div>
 
