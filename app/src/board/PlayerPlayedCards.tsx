@@ -66,7 +66,7 @@ const PlayerPlayedCards : FC<Props> = ({player, huntPhase, huntBoard, selectedHu
         }),
         drop: (item: CardInHand | CardPlayed) => {
             moveCardSound.play()
-            return {type:MoveType.PlayHuntCard, card:item.card, playerId:player.color }
+            return {type:MoveType.PlayHuntCard, card:item.card, player:player.color }
         }
       })
 

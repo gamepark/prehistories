@@ -7,7 +7,7 @@ import {Picture} from '@gamepark/react-components'
 import {TFunction} from "i18next";
 import {FC, useEffect, useRef, useState} from "react";
 import {Trans, useTranslation} from "react-i18next";
-import Arrow from "../images/tutorial-arrow-white.png"
+import Arrow from "../images/tutorial-arrow-black.png"
 import Button from "../utils/Button";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import GameView from "@gamepark/prehistories/GameView";
@@ -130,7 +130,7 @@ const TutorialPopup: FC<{ game: GameView, tutorial: Tutorial }> = ({game, tutori
             {
                 !displayPopup &&
                 <Button css={[buttonTutoStyle, resetStyle]} colorButton={PlayerColor.Yellow}
-                        onClick={() => resetTutorialDisplay()}>{t('Display tutorial')}</Button>
+                        onClick={() => setTutorialDisplay(true)}>{t('Display tutorial')}</Button>
             }
 
             {

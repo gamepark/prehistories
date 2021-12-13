@@ -3,14 +3,36 @@ import { useTranslation } from "react-i18next"
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import { css } from "@emotion/react"
+import Button from "../utils/Button"
+import PlayerColor from "@gamepark/prehistories/PlayerColor"
+import { usePlay, useSound } from "@gamepark/react-client"
+import MoveCardSound from "../sounds/cardMove.mp3"
+import Move from "@gamepark/prehistories/moves/Move"
+import MoveType from "@gamepark/prehistories/moves/MoveType"
+import { centerContent, toAbsolute } from "../utils/styles"
+
 
 type Props = {
     onClose:() => void
+    card:number
+    playerColor:undefined|PlayerColor
 }
 
-export default function FocusedCardOptions({onClose}:Props){
+export default function FocusedCardOptions({onClose, card, playerColor}:Props){
     
     const {t} = useTranslation()
+    const play = usePlay<Move>()
+
+    const moveCardSound = useSound(MoveCardSound)
+    moveCardSound.volume = 0.8
+    
+    function playHuntingCard():void{
+      if(playerColor !== undefined){
+        moveCardSound.play()
+        play({type:MoveType.PlayHuntCard, card:card, player:playerColor})
+        onClose()
+      }
+    }
     
     return(
         <>
@@ -38,11 +60,22 @@ export default function FocusedCardOptions({onClose}:Props){
             top: 15.5%;
             right: 33%;
             transform: rotate(-18deg);`]}
-        />
+            />
+
+            {playerColor !== undefined && <Button colorButton={playerColor} onClick={() => playHuntingCard()} css={[toAbsolute, centerContent, playButtonPosition]}> {t("button.play.hunt.card")} </Button>}
 
         </>
     )
 }
+
+const playButtonPosition = css`
+  z-index: 100;
+  font-family:'Reggae One', sans-serif;
+  font-size: 3.5em;
+  top:83%;
+  left:50%;
+  transform:translateX(-50%);
+`
 
 const button = css`
   position: absolute;
