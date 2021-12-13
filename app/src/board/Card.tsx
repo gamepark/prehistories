@@ -16,7 +16,7 @@ import {getCardBack} from "../utils/getterFunctions"
 import TakeBackPlayedCards, {isTakeBackPlayedCards} from "@gamepark/prehistories/moves/TakeBackPlayedCards"
 import SpendHunter from "@gamepark/prehistories/moves/SpendHunter"
 import MoveType from "@gamepark/prehistories/moves/MoveType"
-import { ResetSelectedHunters, resetSelectedHunters, resetSelectedHuntersMove } from "../localMoves/setSelectedHunters"
+import { ResetSelectedHunters, resetSelectedHuntersMove } from "../localMoves/setSelectedHunters"
 
 type Props = {
     color:PlayerColor

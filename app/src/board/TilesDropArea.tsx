@@ -3,7 +3,7 @@ import Coordinates from "@gamepark/prehistories/types/Coordinates"
 import {HTMLAttributes, useCallback, useMemo, useRef} from "react"
 import {DropTargetMonitor, useDrop, XYCoord} from "react-dnd"
 import {PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
-import {css, keyframes} from "@emotion/react"
+import {css} from "@emotion/react"
 import useEfficientDragLayer from '@gamepark/react-components/dist/Draggable/useEfficientDragLayer'
 import {useSound} from "@gamepark/react-client"
 import MoveTileSound from "../sounds/moveTile.mp3"

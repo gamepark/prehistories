@@ -2,7 +2,7 @@
 import {css, keyframes} from "@emotion/react";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import {PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
-import {FC, HTMLAttributes} from "react";
+import {FC} from "react";
 import {caveBorder, caveLeft, caveTop, setPercentDimension, squareSize, toAbsolute} from "../utils/styles";
 import Images from "../utils/Images";
 import AnimalTile from "./AnimalTile";

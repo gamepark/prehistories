@@ -144,25 +144,6 @@ const desactivateStyle = css`
     cursor:not-allowed;
 `
 
-const injuryButtonStyle = (positionFromSide:string) => css`
-    cursor:pointer;
-    top:2.5%;
-    ${positionFromSide === "left" ? `left:4%;` : `right:4%;`};
-    border:0.5em solid orange;
-    border-radius:15%;
-    box-shadow:0 0.2em 0.5em black;
-    transition:filter 0.2s linear;
-    &:active{
-        box-shadow:0 0.2em 0.2em black;
-        top:4%;
-    }
-    span{
-        font-size:5em;
-        font-family:'Reggae One', sans-serif;
-        color:black;
-    }
-`
-
 const panelAppear = (height:number) => keyframes`
     from{height:0%;}
     to{height:${height}%;}

@@ -22,7 +22,7 @@ cursor:pointer;
 --color: #000000;
 --background-color: ${color};
 --border-color: darken(${color}, 7.5%);
-padding: 0.6em 0.9em;
+padding: 0.2em 0.5em;
 border-radius: 0.5em;
 color: var(--color);
 font-family: inherit;

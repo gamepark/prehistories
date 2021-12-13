@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import {css, keyframes} from "@emotion/react"
+import {css} from "@emotion/react"
 import {PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView"
 import {Picture} from "@gamepark/react-components"
 import {FC, HTMLAttributes} from "react"
