@@ -16,9 +16,10 @@ type Props = {
     onClose:() => void
     card:number
     playerColor:undefined|PlayerColor
+    isHuntingPhase:boolean|undefined
 }
 
-export default function FocusedCardOptions({onClose, card, playerColor}:Props){
+export default function FocusedCardOptions({onClose, card, playerColor, isHuntingPhase}:Props){
     
     const {t} = useTranslation()
     const play = usePlay<Move>()
@@ -62,7 +63,7 @@ export default function FocusedCardOptions({onClose, card, playerColor}:Props){
             transform: rotate(-18deg);`]}
             />
 
-            {playerColor !== undefined && <Button colorButton={playerColor} onClick={() => playHuntingCard()} css={[toAbsolute, centerContent, playButtonPosition]}> {t("button.play.hunt.card")} </Button>}
+            {playerColor !== undefined && isHuntingPhase === false && <Button colorButton={playerColor} onClick={() => playHuntingCard()} css={[toAbsolute, centerContent, playButtonPosition]}> {t("button.play.hunt.card")} </Button>}
 
         </>
     )

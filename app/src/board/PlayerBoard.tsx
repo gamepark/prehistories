@@ -54,7 +54,7 @@ const PlayerBoard : FC<Props> = ({player, huntPhase, selectedHunters, isTutorial
               css={[focusCardStyle]}
               power={getColoredDeck(player.color)[focusedCard].power}
               speed={getColoredDeck(player.color)[focusedCard].speed} />
-        <FocusedCardOptions onClose={() => setFocusedCard(undefined)} card={focusedCard} playerColor={playerId} />
+        <FocusedCardOptions onClose={() => setFocusedCard(undefined)} card={focusedCard} playerColor={playerId} isHuntingPhase={huntPhase} />
       </>
       }
 
