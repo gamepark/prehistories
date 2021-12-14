@@ -1,4 +1,4 @@
-import {Action, SecretInformation, SimultaneousGame, TimeLimit, Undo} from '@gamepark/rules-api'
+import {Action, Competitive, SecretInformation, SimultaneousGame, TimeLimit, Undo} from '@gamepark/rules-api'
 import {shuffle} from 'lodash'
 import canUndo from './canUndo'
 import GameState from './GameState'
@@ -24,7 +24,7 @@ import {isPlayerState, PlayerView, PlayerViewSelf} from './types/PlayerView'
 import teamPower from './utils/teamPower'
 import {canPlaceTile, getCavePlacementSpaces} from "./utils/PlacementRules";
 import caves, {cavesSize, Space} from "./material/Caves";
-import {setupTilesDeck, sides} from "./material/Tile";
+import Tile, {setupTilesDeck, sides} from "./material/Tile";
 import {getPlacedTileCoordinates} from "./types/PlacedTile";
 import {setupObjectives} from "./material/Objective";
 import {getFulfilledObjectives} from "./material/ObjectiveRules";
@@ -32,7 +32,10 @@ import {getHuntingPlayer} from "./types/HuntingPlayer";
 import getBoardZones from "./material/BoardZones";
 
 export default class Prehistories extends SimultaneousGame<GameState, Move, PlayerColor>
-  implements SecretInformation<GameState, GameView, Move, MoveView, PlayerColor>, Undo<GameState, Move, PlayerColor>, TimeLimit<GameState, Move, PlayerColor> {
+  implements SecretInformation<GameState, GameView, Move, MoveView, PlayerColor>, 
+             Undo<GameState, Move, PlayerColor>,
+             TimeLimit<GameState, Move, PlayerColor>,
+             Competitive<GameState, Move, PlayerColor>  {
 
   constructor(state: GameState)
   constructor(options: PrehistoriesOptions)
@@ -209,7 +212,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         return {type: MoveType.RevealHuntCards, cardsPlayed: result}
       case MoveType.RefillHuntingBoard:
         const zones = getBoardZones(this.state.players.length)
-        return {...move, newBoard: this.state.huntingBoard.map((tile, zone) => tile !== null ? tile : this.state.tilesDecks[zones[zone].type][(this.state.players.length>3 && zone<4)? zone%2 : 0] ?? null)}
+        return {...move, newBoard: this.state.huntingBoard.map((tile, zone) => tile !== null ? tile : this.state.tilesDecks[zones[zone].type][(this.state.players.length>3 && zone<4)? (getRightRefillTile(this.state, zone)) : 0] ?? null)}
       case MoveType.DrawCards: {
         if (playerId === move.player) {
           const player = this.state.players.find(p => p.color === playerId)!
@@ -239,6 +242,27 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
 
   getPlayerMoveView(move: Move, playerId: PlayerColor): MoveView {
     return this.getMoveView(move, playerId)
+  }
+
+  rankPlayers(playerA:PlayerColor, playerB:PlayerColor):number{
+    const scoreA = 8 - Math.min(8,this.state.players.find(p => p.color === playerA)!.totemTokens.length)
+    const scoreB = 8 - Math.min(8,this.state.players.find(p => p.color === playerB)!.totemTokens.length)
+
+    if (scoreA !== scoreB){
+      return scoreB - scoreA
+    } else {
+      return 0
+    }
+
+  }
+}
+
+function getRightRefillTile(state:GameState, zone:number):number{
+  const huntingBoard = state.huntingBoard
+  if(zone % 2 === 0){
+    return 0
+  } else {
+    return huntingBoard[zone-1] === null  ? 1 : 0
   }
 }
 

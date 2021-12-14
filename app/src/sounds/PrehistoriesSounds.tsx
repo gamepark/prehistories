@@ -11,6 +11,7 @@ import moveTileSound from "./moveTile.mp3";
 import objectiveSound from "./objective.mp3"
 import objectiveOpponentSound1 from './objectiveOpponent1.mp3';
 import objectiveOpponentSound2 from './objectiveOpponent2.mp3';
+import {playerWillDraw} from '@gamepark/prehistories/Prehistories';
 
 import PlayHuntCard, {isPlayHuntCardView} from "@gamepark/prehistories/moves/PlayHuntCard"
 import GameView from "@gamepark/prehistories/GameView"
@@ -30,7 +31,7 @@ const PrehistoriesSounds : FC<Props> = ({audioLoader, game}) => {
     const playCard = useAnimation<PlayHuntCard>(animation => isPlayHuntCardView(animation.move) && animation.move.player === playerId)
 
     useEffect(() => {
-        if (revealCardsAnimation || drawCards) {
+        if (revealCardsAnimation || (drawCards && playerWillDraw(game.players.find(p => p.color === drawCards.move.player)!) !== 0)) {
           audioLoader.play(cardFlipSound, false, 0.6)
         }
       }, [revealCardsAnimation?.move, drawCards?.move])
