@@ -245,15 +245,9 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
   }
 
   rankPlayers(playerA:PlayerColor, playerB:PlayerColor):number{
-    const scoreA = 8 - Math.min(8,this.state.players.find(p => p.color === playerA)!.totemTokens.length)
-    const scoreB = 8 - Math.min(8,this.state.players.find(p => p.color === playerB)!.totemTokens.length)
-
-    if (scoreA !== scoreB){
-      return scoreB - scoreA
-    } else {
-      return 0
-    }
-
+    const playedTokensA = this.state.players.find(p => p.color === playerA)!.totemTokens.length
+    const playedTokenB = this.state.players.find(p => p.color === playerB)!.totemTokens.length
+    return playedTokenB - playedTokensA
   }
 }
 
