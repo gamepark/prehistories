@@ -24,7 +24,7 @@ import {isPlayerState, PlayerView, PlayerViewSelf} from './types/PlayerView'
 import teamPower from './utils/teamPower'
 import {canPlaceTile, getCavePlacementSpaces} from "./utils/PlacementRules";
 import caves, {cavesSize, Space} from "./material/Caves";
-import Tile, {setupTilesDeck, sides} from "./material/Tile";
+import {setupTilesDeck, sides} from "./material/Tile";
 import {getPlacedTileCoordinates} from "./types/PlacedTile";
 import {setupObjectives} from "./material/Objective";
 import {getFulfilledObjectives} from "./material/ObjectiveRules";
@@ -32,7 +32,7 @@ import {getHuntingPlayer} from "./types/HuntingPlayer";
 import getBoardZones from "./material/BoardZones";
 
 export default class Prehistories extends SimultaneousGame<GameState, Move, PlayerColor>
-  implements SecretInformation<GameState, GameView, Move, MoveView, PlayerColor>, 
+  implements SecretInformation<GameState, GameView, Move, MoveView, PlayerColor>,
              Undo<GameState, Move, PlayerColor>,
              TimeLimit<GameState, Move, PlayerColor>,
              Competitive<GameState, Move, PlayerColor>  {
@@ -212,7 +212,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         return {type: MoveType.RevealHuntCards, cardsPlayed: result}
       case MoveType.RefillHuntingBoard:
         const zones = getBoardZones(this.state.players.length)
-        return {...move, newBoard: this.state.huntingBoard.map((tile, zone) => tile !== null ? tile : this.state.tilesDecks[zones[zone].type][(this.state.players.length>3 && zone<4)? (getRightRefillTile(this.state, zone)) : 0] ?? null)}
+        return {...move, newBoard: this.state.huntingBoard.map((tile, zone) => tile !== null ? tile : this.state.tilesDecks[zones[zone].type][getRefillTileIndex(this.state, zone)] ?? null)}
       case MoveType.DrawCards: {
         if (playerId === move.player) {
           const player = this.state.players.find(p => p.color === playerId)!
@@ -251,13 +251,8 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
   }
 }
 
-function getRightRefillTile(state:GameState, zone:number):number{
-  const huntingBoard = state.huntingBoard
-  if(zone % 2 === 0){
-    return 0
-  } else {
-    return huntingBoard[zone-1] === null  ? 1 : 0
-  }
+function getRefillTileIndex(state:GameState, zone:number):number {
+  return state.players.length > 3 && (zone === 1 || zone === 3) && state.huntingBoard[zone - 1] === null ? 1 : 0
 }
 
 export function setupPlayers(players: PrehistoriesPlayerOptions[], isTutorial: boolean): PlayerState[] {
