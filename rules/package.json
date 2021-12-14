@@ -1,6 +1,6 @@
 {
   "name": "@gamepark/prehistories",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Prehistories rules for Game Park",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
