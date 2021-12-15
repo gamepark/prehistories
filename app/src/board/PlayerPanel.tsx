@@ -70,8 +70,9 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, hunting, order, ha
                         key={i} 
                         alt={t('token')} 
                         src={getTotem(color)} 
-                        css={[totemStyle(8 - totemTokens.length),
-                            tokensAnimation && tokenHasToMove(i) && animateToken(tokensAnimation.duration,tokensAnimation.move.objective, 7-totemTokens.length-i, playerListDisplayed.findIndex(p => p.color === color), playerListDisplayed.length, getSortedObjectivesPlayers(tokensAnimation.move.objective).findIndex(p => p.color === color), game.objectives, totemTokens)]} 
+                        css={[totemStyle,
+                            toAbsolute, totemPosition(i, 8-totemTokens.length),
+                            tokensAnimation && tokenHasToMove(i) && animateToken(tokensAnimation.duration, tokensAnimation.move.objective, 7-totemTokens.length-i, playerListDisplayed.findIndex(p => p.color === color), playerListDisplayed.length, getSortedObjectivesPlayers(tokensAnimation.move.objective).findIndex(p => p.color === color), game.objectives, totemTokens, getTokensForFulfilledObjective(game, tokensAnimation.move.objective))]} //HowManyTotemsMoved
                         draggable={false} 
                     />)}
 
@@ -122,24 +123,24 @@ const winBanner = (rank:number) => css`
     ${rank === 2 && `border:0.5em sienna solid;box-shadow:0 0 0.7em sienna,0 0 0.7em sienna;`}
 `
 
-const animatePermanentTokenKeyframes = (objective:Objective, index:number, totemsPlaced:number, playerIndex:number, nbPlayers:number) => keyframes`
+const animatePermanentTokenKeyframes = (objective:Objective, index:number, totemsPlaced:number, playerIndex:number, nbPlayers:number, howManyTotemsMoved:number) => keyframes`
 from{}
-to{transform:translateX(${-25.5+(objective-1)*12.2+index*5.5+totemsPlaced*2.5}em) translateY(${-20.1-15.5*playerIndex*((nbPlayers-0.8)/nbPlayers)}em);}
+to{top:${0 - playerIndex*15.4 - 16.2 + 0.3 + playerIndex*(12.5/nbPlayers) }em; left:${0 + (objective === 1 ? 1 : (objective-1)*12.5) + (totemsPlaced === 0 ? 0 : (index+1)*(8/(totemsPlaced+howManyTotemsMoved))) }em;}
 `
 
 const animateVariableTokenKeyframes45P = (objective:number, index:number, playerIndex:number, sortedObjPlayerRank:number) => keyframes`
 from{}
-to{transform:translateX(${-121.5+index*4.9 + (sortedObjPlayerRank === 0 ? 0 : 8.5) + objective*19}em) translateY(${-19.7-playerIndex*15.3+(sortedObjPlayerRank !== 0 ? (sortedObjPlayerRank-1)*2.4 : 0)}em);}
+70%,to{top:${0 - playerIndex*15.4 - 15.2 + (sortedObjPlayerRank === 0 ? 0 : (sortedObjPlayerRank-1)*2.4) }em; left:${-95.8 + objective*19 + (sortedObjPlayerRank === 0 ? 0 : 12.2) + (sortedObjPlayerRank === 0 ? index*1.9 : -index*1.9 ) }em; z-index:${index}}
 `
 
 const animateVariableTokenKeyframes23P = (objective:number, index:number, playerIndex:number, sortedObjPlayerRank:number) => keyframes`
 from{}
-to{transform:translateX(${-114.8+index*4.9 + (sortedObjPlayerRank === 0? 0 : 8.5) + objective*19}em) translateY(${-19.7-playerIndex*15.3+(sortedObjPlayerRank !== 0 ? (sortedObjPlayerRank-1)*2.4 : 0)}em);}
+70%,to{top:${0 - playerIndex*15.4 - 15.2 + (sortedObjPlayerRank === 0 ? 0 : (sortedObjPlayerRank-1)*2.4) }em; left:${-86.2 + objective*19 + (sortedObjPlayerRank === 0 ? 0 : 12.2) + (sortedObjPlayerRank === 0 ? index*1.9 : -index*1.9 ) }em; z-index:${index}}
 `
 
-const animateToken = (duration:number, objective:Objective, index:number, playerIndex:number, nbPlayers:number, sortedObjPlayerRank:number, objectiveList:Objective[], totemsPlacedList:Objective[]) => css`
+const animateToken = (duration:number, objective:Objective, index:number, playerIndex:number, nbPlayers:number, sortedObjPlayerRank:number, objectiveList:Objective[], totemsPlacedList:Objective[], howManyTotemsMoved:number) => css`
 animation : ${objective <= 3 
-    ? animatePermanentTokenKeyframes(objective, index, totemsPlacedList.filter(o => o === objective).length, playerIndex,nbPlayers) 
+    ? animatePermanentTokenKeyframes(objective, index, totemsPlacedList.filter(o => o === objective).length, playerIndex,nbPlayers, howManyTotemsMoved) 
     : nbPlayers < 4 
         ? animateVariableTokenKeyframes23P(objectiveList.findIndex(o => o === objective)!, index, playerIndex, sortedObjPlayerRank) 
         : animateVariableTokenKeyframes45P(objectiveList.findIndex(o => o === objective)!, index, playerIndex, sortedObjPlayerRank)
@@ -254,16 +255,19 @@ const TimerStyle = css`
 const totemRemainingPosition = css`
     height:3.5em;
     margin:0.5em 1em;
-    display:flex;
-    flex-direction:row;
 `
 
-const totemStyle = (spread:number) => css`
+const totemPosition = (index:number, total:number) => css`
+    top:4em;
+    left:${8+index*3 + (8-total)*(index/4)}em;
+`
+
+const totemStyle = css`
     height:4em;
     width:4em;
-    margin : 0 ${-0.0625*spread+(8-spread)/10}em;
     border-radius:100%;
     box-shadow:0 0 0.4em black;
+    transition:top 0.5s ease-in-out, left 0.5s ease-in-out;
 `
 
 export function getTotem(color:PlayerColor):string{

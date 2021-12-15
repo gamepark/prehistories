@@ -78,18 +78,18 @@ const focusObjectiveStyle = css`
 `
 
 const totemColumnPosition = (iPlayer:number, iToken:number, maxTokens:number, nbPlayers:number) => css`
-top:${iPlayer*(80/nbPlayers)}%;
-left:${1+iToken*(21/maxTokens)}%;
+top:${iPlayer*(12.5/nbPlayers)}em;
+left:${1+iToken*(8/maxTokens)}em;
 `
 
 const totemLinePosition = (iPlayer:number, iToken:number, maxTokens:number, nbPlayers:number) => css`
-top:${iPlayer*(80/nbPlayers)}%;
-left:${36+iToken*(21/maxTokens)}%;
+top:${iPlayer*(12.5/nbPlayers)}em;
+left:${12.5+iToken*(8/maxTokens)}em;
 `
 
 const totemLegendaryPosition = (iPlayer:number, iToken:number, maxTokens:number, nbPlayers:number) => css`
-top:${iPlayer*(80/nbPlayers)}%;
-left:${71+iToken*(21/maxTokens)}%;
+top:${iPlayer*(12.5/nbPlayers)}em;
+left:${25+iToken*(8/maxTokens)}em;
 `
 
 const totemStyle = css`
