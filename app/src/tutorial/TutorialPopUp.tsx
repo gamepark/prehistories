@@ -114,7 +114,7 @@ const TutorialPopup: FC<{ game: GameView, tutorial: Tutorial }> = ({game, tutori
     return (
         <>
 
-            <div ref={ref} css={[popupStyle, currentMessage && popupWidth(currentMessage.boxWidth), displayPopup ? popupPosition(currentMessage) : hidePopupStyle]}
+            {!winner && actionsNumber <25 && <div ref={ref} css={[popupStyle, currentMessage && popupWidth(currentMessage.boxWidth), displayPopup ? popupPosition(currentMessage) : hidePopupStyle]}
                  onClick={event => event.stopPropagation()}>
 
                 <div css={closePopupStyle} onClick={() => setTutorialDisplay(false)}><FontAwesomeIcon icon={faTimes}/></div>
@@ -125,10 +125,10 @@ const TutorialPopup: FC<{ game: GameView, tutorial: Tutorial }> = ({game, tutori
                 {tutorialIndex > 0 && <Button css={buttonTutoStyle} colorButton={PlayerColor.Yellow} onClick={() => moveTutorial(-1)}>{'<<'}</Button>}
                 <Button css={buttonTutoStyle} colorButton={PlayerColor.Yellow} onClick={() => moveTutorial(1)}>{t('OK')}</Button>
 
-            </div>
+            </div>}
 
             {
-                !displayPopup &&
+                !displayPopup && !winner && actionsNumber < 25 &&
                 <Button css={[buttonTutoStyle, resetStyle]} colorButton={PlayerColor.Yellow}
                         onClick={() => setTutorialDisplay(true)}>{t('Display tutorial')}</Button>
             }
@@ -954,7 +954,7 @@ const tutorialDescription: TutorialStepDescription[][] = [
 
 const tutorialEndGame = {
     title: (t: TFunction) => t('Congratulations'),
-    text: 'You have finished your first game! You can now play with your friends, or meet other players via our chat room on Discord.',
+    text: 'tuto.complete',
     boxTop: 80,
     boxLeft: 50,
     boxWidth: 90
