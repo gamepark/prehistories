@@ -39,7 +39,7 @@ const PlayerDiscard : FC<Props> = ({player}) => {
 
         <>
 
-        <div css={[toAbsolute, setPercentDimension(23,16), discardZonePosition]}>
+        <div css={[toAbsolute, setPercentDimension(23,16), discardZonePosition, css`pointer-events: none;`]}>
 
             {player.discard.map((card, index) =>
                 <Card key={index}
