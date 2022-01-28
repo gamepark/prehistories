@@ -3,7 +3,7 @@ import {css, keyframes} from "@emotion/react";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import {getPlayerName} from "@gamepark/prehistories/PrehistoriesOptions";
 import {PlayerView, PlayerViewSelf} from "@gamepark/prehistories/types/PlayerView";
-import {PlayerTimer, useAnimation, usePlayer} from "@gamepark/react-client";
+import {GamePoints, PlayerTimer, useAnimation, usePlayer} from "@gamepark/react-client";
 import {Hand, Picture} from "@gamepark/react-components";
 import {FC, HTMLAttributes} from "react";
 import {useTranslation} from "react-i18next";
@@ -77,7 +77,9 @@ const PlayerPanel : FC<Props> = ({player:{color, totemTokens, hunting, order, ha
                     />)}
 
                 </div>
-                <PlayerTimer playerId={color} css={[toAbsolute,TimerStyle]}/>
+
+                {game.players.every(p => !isWinner(p)) && <PlayerTimer playerId={color} css={[toAbsolute,TimerStyle]}/>}
+                {game.players.some(isWinner) && <GamePoints playerId={color} css={[toAbsolute, TimerStyle]}/>}
 
                 <Hand maxAngle={20} css={handPosition(handLength)}>{[...Array(handLength)].map((_, index) => <Card key={index} color={color} />)}</Hand>
 
