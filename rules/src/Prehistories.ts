@@ -61,6 +61,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
   }
 
   isActive(playerId: PlayerColor): boolean {
+    if(this.state.players.some(isWinner)) return false
     const huntingPlayer = getHuntingPlayer(this.state)
     if (!huntingPlayer) {
       return !this.state.players.find(p => p.color === playerId)?.isReady
