@@ -1,4 +1,4 @@
-import {Action, Competitive, SecretInformation, SimultaneousGame, TimeLimit, Undo} from '@gamepark/rules-api'
+import {Action, Competitive, RandomMove, SecretInformation, SimultaneousGame, TimeLimit, Undo} from '@gamepark/rules-api'
 import {shuffle} from 'lodash'
 import canUndo from './canUndo'
 import GameState from './GameState'
@@ -30,12 +30,14 @@ import {setupObjectives} from "./material/Objective";
 import {getFulfilledObjectives} from "./material/ObjectiveRules";
 import {getHuntingPlayer} from "./types/HuntingPlayer";
 import getBoardZones from "./material/BoardZones";
+import MoveRandomized from "./moves/MoveRandomized";
 
 export default class Prehistories extends SimultaneousGame<GameState, Move, PlayerColor>
   implements SecretInformation<GameState, GameView, Move, MoveView, PlayerColor>,
              Undo<GameState, Move, PlayerColor>,
              TimeLimit<GameState, Move, PlayerColor>,
-             Competitive<GameState, Move, PlayerColor>  {
+             Competitive<GameState, Move, PlayerColor>,
+             RandomMove<GameState, Move, MoveRandomized> {
 
   constructor(state: GameState)
   constructor(options: PrehistoriesOptions)
@@ -114,7 +116,15 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
     } else return []
   }
 
-  play(move: Move): void {
+  randomize(move: Move): Move & MoveRandomized {
+    if (move.type === MoveType.ShuffleDiscardPile) {
+      const player = this.state.players.find(p => p.color === move.player)!
+      return {...move, shuffledCards: shuffle(player.discard)}
+    }
+    return move
+  }
+
+  play(move: MoveRandomized): void {
     switch (move.type) {
       case MoveType.PlayHuntCard:
         return playHuntCard(this.state, move)
@@ -143,17 +153,17 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
     }
   }
 
-  getAutomaticMove(): void | Move | Move[] {
+  getAutomaticMoves(): Move[] {
     const huntingPlayer = getHuntingPlayer(this.state)
     if (!huntingPlayer) {
       if (canRefillBoard(this.state)) {
-        return {type: MoveType.RefillHuntingBoard}
+        return [{type: MoveType.RefillHuntingBoard}]
       }
       if (this.state.players.every(p => p.isReady)) {
         const playersNotHunting = this.state.players.filter(p => !p.played.length)
         return [{type: MoveType.RevealHuntCards}, ...playersNotHunting.flatMap(p => {
           if (p.deck.length < 3 && p.discard.length > 0) {
-            return [shuffleDiscardPileMove(p.color, shuffle(p.discard)), drawCardsMove(p.color)]
+            return [shuffleDiscardPileMove(p.color), drawCardsMove(p.color)]
           }
           return [drawCardsMove(p.color)]
         })]
@@ -165,18 +175,18 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
       }
       const cardsToDraw: number = playerCouldDraw(huntingPlayer)
       if (huntingPlayer.deck.length < cardsToDraw && huntingPlayer.discard.length > 0) {
-        moves.push(shuffleDiscardPileMove(huntingPlayer.color, shuffle(huntingPlayer.discard)))
+        moves.push(shuffleDiscardPileMove(huntingPlayer.color))
       }
       moves.push(drawCardsMove(huntingPlayer.color))
       return moves
     } else if (huntingPlayer.hunting.hunt) {
       if (getBoardZones(this.state.players.length)[huntingPlayer.hunting.hunt.zone].safe <= huntingPlayer.hunting.hunt.huntersValue) {
-        return {type: MoveType.ValidateSpentHunters}
+        return [{type: MoveType.ValidateSpentHunters}]
       }
     } else if (huntingPlayer.hunting.tilesHunted > 0) {
       return [...getFulfilledObjectives(this.state).map(fulfillObjectiveMove)]
     }
-    return
+    return []
   }
 
   getView(playerId?: PlayerColor): GameView {
@@ -199,7 +209,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
     return this.getView(playerId)
   }
 
-  getMoveView(move: Move, playerId?: PlayerColor): MoveView {
+  getMoveView(move: MoveRandomized, playerId?: PlayerColor): MoveView {
     switch (move.type) {
       case MoveType.PlayHuntCard:
         if (playerId === move.player) {
@@ -223,7 +233,8 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
         }
       }
       case MoveType.ShuffleDiscardPile:
-        return {type: MoveType.ShuffleDiscardPile, player: move.player}
+        const {shuffledCards, ...moveView} = move
+        return moveView
       default :
         return move
     }
@@ -241,7 +252,7 @@ export default class Prehistories extends SimultaneousGame<GameState, Move, Play
     }
   }
 
-  getPlayerMoveView(move: Move, playerId: PlayerColor): MoveView {
+  getPlayerMoveView(move: MoveRandomized, playerId: PlayerColor): MoveView {
     return this.getMoveView(move, playerId)
   }
 

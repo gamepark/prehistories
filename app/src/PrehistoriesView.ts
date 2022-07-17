@@ -30,20 +30,21 @@ export default class PrehistoriesView implements Game<GameLocalView, MoveView>, 
     this.state = state
   }
 
-  getAutomaticMove(): void | MoveView | MoveView[] {
+  getAutomaticMoves(): MoveView[] {
     const huntingPlayer = getHuntingPlayer(this.state)
-    if (!huntingPlayer) return
+    if (!huntingPlayer) return []
     if (huntingPlayer.isReady) {
       if (huntingPlayer.played.length !== 0) {
-        return {type: MoveType.TakeBackPlayedCards}
+        return [{type: MoveType.TakeBackPlayedCards}]
       }
     } else if (huntingPlayer.hunting.hunt) {
       if (getBoardZones(this.state.players.length)[huntingPlayer.hunting.hunt.zone].safe <= huntingPlayer.hunting.hunt.huntersValue) {
-        return {type: MoveType.ValidateSpentHunters}
+        return [{type: MoveType.ValidateSpentHunters}]
       }
     } else if (huntingPlayer.hunting.tilesHunted > 0) {
       return [...getFulfilledObjectives(this.state).map(fulfillObjectiveMove)]
     }
+    return []
   }
 
   play(move: LocalMove): void {

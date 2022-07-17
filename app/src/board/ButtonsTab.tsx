@@ -6,7 +6,7 @@ import MoveType from "@gamepark/prehistories/moves/MoveType";
 import SpendHunter, {isSpendHunter} from "@gamepark/prehistories/moves/SpendHunter";
 import PlayerColor from "@gamepark/prehistories/PlayerColor";
 import Hunting from "@gamepark/prehistories/types/Hunting";
-import {menuButtonCss, useAnimations, useNumberOfPlayers, usePlay, useSound} from "@gamepark/react-client";
+import {useAnimations, useNumberOfPlayers, usePlay, useSound} from "@gamepark/react-client";
 import {FC, useState} from "react";
 import {useTranslation} from "react-i18next/";
 import {ResetSelectedHunters, resetSelectedHuntersMove} from "../localMoves/setSelectedHunters";
@@ -17,8 +17,9 @@ import ButtonClickSound from "../sounds/buttonClick.mp3"
 import MoveCardSound from "../sounds/cardMove.mp3"
 import {endTurnMove} from "@gamepark/prehistories/moves/EndTurn";
 import getBoardZones from "@gamepark/prehistories/material/BoardZones";
-import { Dialog } from "@gamepark/react-components";
+import {Dialog} from "@gamepark/react-components";
 import Tile from "@gamepark/prehistories/material/Tile";
+import {getBG} from "./PlayerPanel";
 
 type Props = {
     color:PlayerColor
@@ -104,27 +105,23 @@ const ButtonsTab : FC<Props> = ({color, hunting, isDisplayValidationButton, isDi
                 
             }
 
-            {warningNoCardPlayedClosed === false && 
-                <Dialog open={!warningNoCardPlayedClosed} css={css`width:50%;`}> 
-                    <h1 css={css`margin:0.2em;text-align:center;`}>{t("warning.no.hunter")}</h1>
-                    <p css={css`text-align:center;`}>{t("warning.no.hunter.text")}</p>
-                    <div css={buttonLineCss}>
-                        <button css={[menuButtonCss]} onClick={() => playValidateMove()} >{t("warning.no.hunter.continue")}</button>
-                        <button css={[menuButtonCss]} onClick={() => setWarningNoCardPlayedClosed(true)} >{t("Cancel")}</button>
-                    </div>
-                </Dialog>
-            }
+            <Dialog open={!warningNoCardPlayedClosed} css={dialogCss(color)}>
+                <h2 css={css`margin:0.2em;text-align:center;`}>{t("warning.no.hunter")}</h2>
+                <p css={css`text-align:center;`}>{t("warning.no.hunter.text")}</p>
+                <div css={buttonLineCss}>
+                    <Button colorButton={color} onClick={() => playValidateMove()} >{t("warning.no.hunter.continue")}</Button>
+                    <Button colorButton={color} onClick={() => setWarningNoCardPlayedClosed(true)} >{t("Cancel")}</Button>
+                </div>
+            </Dialog>
 
-            {warningNoTilePickedClosed === false && 
-                <Dialog open={!warningNoTilePickedClosed} css={css`width:50%;`}> 
-                    <h1 css={css`margin:0.2em;text-align:center;`}>{t("warning.no.tile")}</h1>
-                    <p css={css`text-align:center;`}>{t("warning.no.tile.text")}</p>
-                    <div css={buttonLineCss}>
-                        <button css={[menuButtonCss]} onClick={() => playValidateMove()} >{t("warning.no.tile.continue")}</button>
-                        <button css={[menuButtonCss]} onClick={() => setWarningNoTilePickedClosed(true)} >{t("Cancel")}</button>
-                    </div>
-                </Dialog>
-            }
+            <Dialog open={!warningNoTilePickedClosed} css={dialogCss(color)}>
+                <h2 css={css`margin:0.2em;text-align:center;`}>{t("warning.no.tile")}</h2>
+                <p css={css`text-align:center;`}>{t("warning.no.tile.text")}</p>
+                <div css={buttonLineCss}>
+                    <Button colorButton={color} onClick={() => playValidateMove()} >{t("warning.no.tile.continue")}</Button>
+                    <Button colorButton={color} onClick={() => setWarningNoTilePickedClosed(true)} >{t("Cancel")}</Button>
+                </div>
+            </Dialog>
 
         </div>
 
@@ -191,6 +188,27 @@ const validationButtonPosition = css`
     font-family:'Reggae One', sans-serif;
     z-index:1;
     animation:${appearContentPanel} 0.8s linear;
+`
+
+const dialogCss = (player:PlayerColor) => css`
+    width: 80em;
+    padding: 3em;
+    box-shadow: black 0 0 1em;
+    background: center/cover url(${getBG(player)}) no-repeat;
+    border-radius: 1em;
+    color: black;
+
+    h2 {
+        font-size: 5em;
+    }
+    
+    p {
+        font-size: 3.2em;
+    }
+    
+    button {
+        font-size: 3.5em;
+    }
 `
 
 export default ButtonsTab

@@ -2,7 +2,7 @@
 import { css, keyframes } from "@emotion/react";
 import { getColoredDeck } from "@gamepark/prehistories/material/Hunters";
 import MoveType from "@gamepark/prehistories/moves/MoveType";
-import { isShuffleDiscardPile, ShuffleDiscardPileView } from "@gamepark/prehistories/moves/ShuffleDiscardPile";
+import ShuffleDiscardPile, { isShuffleDiscardPile } from "@gamepark/prehistories/moves/ShuffleDiscardPile";
 import CardPlayed from "@gamepark/prehistories/types/appTypes/CardPlayed";
 import { PlayerView, PlayerViewSelf } from "@gamepark/prehistories/types/PlayerView"
 import { useAnimation } from "@gamepark/react-client";
@@ -19,7 +19,7 @@ type Props = {
 const PlayerDiscard : FC<Props> = ({player}) => {
 
     const {t} = useTranslation()
-    const shuffleDiscardAnimation = useAnimation<ShuffleDiscardPileView>(animation => isShuffleDiscardPile(animation.move) && player.hunting !== undefined)
+    const shuffleDiscardAnimation = useAnimation<ShuffleDiscardPile>(animation => isShuffleDiscardPile(animation.move) && player.hunting !== undefined)
 
     const [{canDropDiscard, isOverDiscard}, dropRefDiscard] = useDrop({
         accept: ['CardPlayed'],
